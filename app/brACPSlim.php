@@ -24,6 +24,10 @@ class brACPSlim extends Slim\Slim
 {
     public function __construct($userSettings = [])
     {
+        // Initialize session for this app.
+        session_cache_limiter(false);
+        session_start();
+
         // Loads the default settings for this app.
         parent::__construct($userSettings);
 
