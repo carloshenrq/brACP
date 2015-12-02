@@ -17,9 +17,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Model\Entity;
+namespace Model;
 
-use Model\Entity;
 use Doctrine\ORM\Mapping;
 
 /**

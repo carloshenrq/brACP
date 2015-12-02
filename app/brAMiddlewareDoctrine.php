@@ -17,15 +17,25 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-DEFINE('BRACP_DEVELOP_MODE', true, false);
-DEFINE('BRACP_TEMPLATE_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR, false);
-DEFINE('BRACP_ENTITY_DIR', __DIR__ . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'Model' . DIRECTORY_SEPARATOR . 'Entity', false);
-DEFINE('BRACP_DEFAULT_TIMEZONE', 'America/Sao_Paulo', false);
+use Doctrine\ORM\Tools\Setup;
+use Doctrine\ORM\EntityManager;
 
-DEFINE('BRACP_SQL_DRIVER', 'pdo_mysql', false);
-DEFINE('BRACP_SQL_HOST', '127.0.0.1', false);
-DEFINE('BRACP_SQL_USER', 'ragnarok', false);
-DEFINE('BRACP_SQL_PASS', 'ragnarok', false);
-DEFINE('BRACP_SQL_DBNAME', 'ragnarok', false);
+class brAMiddlewareDoctrine extends Slim\Middleware
+{
+    public function call()
+    {
+        // Creates the EntityManager for the panel.
+        brACPSlim::getInstance()->setEntityManager(EntityManager::create([
+            'driver' => BRACP_SQL_DRIVER,
+            'host' => BRACP_SQL_HOST,
+            'user' => BRACP_SQL_USER,
+            'pass' => BRACP_SQL_PASS,
+            'dbname' => BRACP_SQL_DBNAME,
+        ], Setup::createAnnotationMetadataConfiguration([ BRACP_ENTITY_DIR ], BRACP_DEVELOP_MODE)));
 
-date_default_timezone_set (BRACP_DEFAULT_TIMEZONE);
+        // var_dump(brACPSlim::getInstance()->getEntityManager());
+
+        // Calls next middleware.
+        $this->next->call();
+    }
+}

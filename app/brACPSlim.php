@@ -17,11 +17,18 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+use Doctrine\ORM\EntityManager;
+
 /**
  *
  */
 class brACPSlim extends Slim\Slim
 {
+    /**
+     * @var Doctrine\ORM\EntityManager
+     */
+    protected $em;
+
     public function __construct($userSettings = [])
     {
         // Initialize session for this app.
@@ -36,7 +43,24 @@ class brACPSlim extends Slim\Slim
 
         // Add the new middleware to run.
         $this->add(new \Slim\Middleware\ContentTypes());
+        $this->add(new \brAMiddlewareDoctrine());
         $this->add(new \brAMiddlewareRoutes());
+    }
+
+    /**
+     * @param $em Doctrine\ORM\EntityManager
+     */
+    public function setEntityManager(EntityManager $em)
+    {
+        $this->em = $em;
+    }
+
+    /**
+     * @return Doctrine\ORM\EntityManager
+     */
+    public function getEntityManager()
+    {
+        return $this->em;
     }
 }
 
