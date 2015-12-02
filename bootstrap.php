@@ -17,6 +17,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Verify if the dependencies from composer are installed.
+if(!is_dir(__DIR__ . DIRECTORY_SEPARATOR . '_dependences'))
+{
+    echo 'Dependencies not found. (Run \'composer install\')';
+    exit;
+}
+
 // Mostly important file from the server. This loads all libs needed to run this panel.
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'config.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . '_dependences' . DIRECTORY_SEPARATOR . 'autoload.php';
