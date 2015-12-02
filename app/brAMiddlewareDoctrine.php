@@ -29,7 +29,7 @@ class brAMiddlewareDoctrine extends Slim\Middleware
             'driver' => BRACP_SQL_DRIVER,
             'host' => BRACP_SQL_HOST,
             'user' => BRACP_SQL_USER,
-            'pass' => BRACP_SQL_PASS,
+            'password' => BRACP_SQL_PASS,
             'dbname' => BRACP_SQL_DBNAME,
         ], Setup::createAnnotationMetadataConfiguration([ BRACP_ENTITY_DIR ], BRACP_DEVELOP_MODE)));
 

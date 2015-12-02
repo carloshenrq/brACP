@@ -45,7 +45,7 @@ class Login
     protected $user_pass;
 
     /**
-     * @Column(name="sex", type="string", columnDefinition="ENUM('M','F','S'), options={"default":"M"}")
+     * @Column(name="sex", type="string", options={"default":"M"})
      */
     protected $sex;
 
@@ -95,11 +95,6 @@ class Login
     protected $birthdate;
 
     /**
-     * @Column(name="birthdate", type="string", length=10, options={"default":"0000-00-00"}")
-     */
-    protected $birthdate;
-
-    /**
      * @Column(name="character_slots", type="integer")
      */
     protected $character_slots;
@@ -123,5 +118,185 @@ class Login
      * @Column(name="old_group", type="integer")
      */
     protected $old_group;
+
+    public function getAccount_id()
+    {
+        return $this->account_id;
+    }
+    
+    public function setAccount_id($account_id)
+    {
+        return $this->account_id = $account_id;
+    }
+
+    public function getUserid()
+    {
+        return $this->userid;
+    }
+    
+    public function setUserid($userid)
+    {
+        return $this->userid = $userid;
+    }
+
+    public function getUser_pass()
+    {
+        return $this->user_pass;
+    }
+    
+    public function setUser_pass($user_pass)
+    {
+        return $this->user_pass = $user_pass;
+    }
+
+    public function getSex()
+    {
+        return $this->sex;
+    }
+    
+    public function setSex($sex)
+    {
+        return $this->sex = $sex;
+    }
+
+    public function getEmail()
+    {
+        return $this->email;
+    }
+    
+    public function setEmail($email)
+    {
+        return $this->email = $email;
+    }
+
+    public function getGroup_id()
+    {
+        return $this->group_id;
+    }
+    
+    public function setGroup_id($group_id)
+    {
+        return $this->group_id = $group_id;
+    }
+
+    public function getState()
+    {
+        return $this->state;
+    }
+    
+    public function setState($state)
+    {
+        return $this->state = $state;
+    }
+
+    public function getUnban_time()
+    {
+        return $this->unban_time;
+    }
+    
+    public function setUnban_time($unban_time)
+    {
+        return $this->unban_time = $unban_time;
+    }
+
+    public function getExpiration_time()
+    {
+        return $this->expiration_time;
+    }
+    
+    public function setExpiration_time($expiration_time)
+    {
+        return $this->expiration_time = $expiration_time;
+    }
+
+    public function getLogincount()
+    {
+        return $this->logincount;
+    }
+    
+    public function setLogincount($logincount)
+    {
+        return $this->logincount = $logincount;
+    }
+
+    public function getLastlogin()
+    {
+        return $this->lastlogin;
+    }
+    
+    public function setLastlogin($lastlogin)
+    {
+        return $this->lastlogin = $lastlogin;
+    }
+
+    public function getLast_ip()
+    {
+        return $this->last_ip;
+    }
+    
+    public function setLast_ip($last_ip)
+    {
+        return $this->last_ip = $last_ip;
+    }
+
+    public function getBirthdate()
+    {
+        return $this->birthdate;
+    }
+    
+    public function setBirthdate($birthdate)
+    {
+        return $this->birthdate = $birthdate;
+    }
+
+    public function getCharacter_slots()
+    {
+        return $this->character_slots;
+    }
+    
+    public function setCharacter_slots($character_slots)
+    {
+        return $this->character_slots = $character_slots;
+    }
+
+    public function getPincode()
+    {
+        return $this->pincode;
+    }
+    
+    public function setPincode($pincode)
+    {
+        return $this->pincode = $pincode;
+    }
+
+    public function getPincode_change()
+    {
+        return $this->pincode_change;
+    }
+    
+    public function setPincode_change($pincode_change)
+    {
+        return $this->pincode_change = $pincode_change;
+    }
+
+    public function getVip_time()
+    {
+        return $this->vip_time;
+    }
+    
+    public function setVip_time($vip_time)
+    {
+        return $this->vip_time = $vip_time;
+    }
+
+    public function getOld_group()
+    {
+        return $this->old_group;
+    }
+    
+    public function setOld_group($old_group)
+    {
+        return $this->old_group = $old_group;
+    }
 }
 
