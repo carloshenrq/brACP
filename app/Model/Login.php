@@ -47,7 +47,7 @@ class Login
     /**
      * @Column(name="sex", type="string", options={"default":"M"})
      */
-    protected $sex;
+    protected $sex = 'M';
 
     /**
      * @Column(name="email", type="string", length=39)
@@ -55,69 +55,69 @@ class Login
     protected $email;
 
     /**
-     * @Column(name="group_id", type="integer")
+     * @Column(name="group_id", type="integer", options={"default":0})
      */
-    protected $group_id;
+    protected $group_id = 0;
 
     /**
-     * @Column(name="state", type="integer")
+     * @Column(name="state", type="integer", options={"default":0})
      */
-    protected $state;
+    protected $state = 0;
 
     /**
-     * @Column(name="unban_time", type="integer")
+     * @Column(name="unban_time", type="integer", options={"default":0})
      */
-    protected $unban_time;
+    protected $unban_time = 0;
 
     /**
-     * @Column(name="expiration_time", type="integer")
+     * @Column(name="expiration_time", type="integer", options={"default":0})
      */
-    protected $expiration_time;
+    protected $expiration_time = 0;
 
     /**
-     * @Column(name="logincount", type="integer")
+     * @Column(name="logincount", type="integer", options={"default":0})
      */
-    protected $logincount;
+    protected $logincount = 0;
 
     /**
-     * @Column(name="lastlogin", type="datetime")
+     * @Column(name="lastlogin", type="string", length=18, options={"default":"0000-00-00 00:00:00"})
      */
-    protected $lastlogin;
+    protected $lastlogin = '0000-00-00 00:00:00';
 
     /**
-     * @Column(name="last_ip", type="string", length=100)
+     * @Column(name="last_ip", type="string", length=100, options={"default":"127.0.0.1"})
      */
-    protected $last_ip;
+    protected $last_ip = '127.0.0.1';
 
     /**
-     * @Column(name="birthdate", type="string", length=10)
+     * @Column(name="birthdate", type="string", length=10, options={"default":"0000-00-00"})
      */
-    protected $birthdate;
+    protected $birthdate = '0000-00-00';
 
     /**
-     * @Column(name="character_slots", type="integer")
+     * @Column(name="character_slots", type="integer", options={"default":0})
      */
-    protected $character_slots;
+    protected $character_slots = 0;
 
     /**
-     * @Column(name="pincode", type="string", length=4)
+     * @Column(name="pincode", type="string", length=4, options={"default":""})
      */
-    protected $pincode;
+    protected $pincode = '';
 
     /**
-     * @Column(name="pincode_change", type="integer")
+     * @Column(name="pincode_change", type="integer", options={"default":0})
      */
-    protected $pincode_change;
+    protected $pincode_change = 0;
 
     /**
-     * @Column(name="vip_time", type="integer")
+     * @Column(name="vip_time", type="integer", options={"default":0})
      */
-    protected $vip_time;
+    protected $vip_time = 0;
 
     /**
-     * @Column(name="old_group", type="integer")
+     * @Column(name="old_group", type="integer", options={"default":0})
      */
-    protected $old_group;
+    protected $old_group = 0;
 
     public function getAccount_id()
     {
