@@ -26,5 +26,126 @@ html, body
 {
     margin: 0px;
     padding: 0px;
+    background-color: #5E732E;
 }
 
+.bracp-content
+{
+    width: 80%;
+    margin: auto;
+    box-shadow: 0px 0px 30px 4px white;
+}
+
+.bracp-body, .bracp-footer
+{
+    padding: 10px;
+}
+
+.bracp-header
+{
+    background-image: url(../img/background-header.png);
+    background-repeat: none;
+    background-position: 0px -100px;
+    height: 150px;
+}
+
+.bracp-header .bracp-logo
+{
+    background-image: url(../img/logo.png);
+    background-repeat: none;
+    background-position: 0px -30px;
+
+    height: 150px;
+    width: 420px;
+}
+
+.bracp-link
+{
+    cursor: pointer;
+}
+
+.bracp-menu
+{
+    background-color: rgba(45, 55, 22, 1);
+    box-shadow: 0px 0px 1px 1px rgba(45, 55, 22, 1) inset;
+}
+
+.bracp-menu ul
+{
+    list-style: none;
+    position: relative;
+    display: inline-table;
+    padding: 8px;
+    margin: 0px;
+    border-radius: 2px;
+}
+
+.bracp-menu ul:after
+{
+    content: "";
+    clear: both;
+    display: block;
+}
+
+.bracp-menu ul ul
+{
+    visibility: hidden;
+    opacity: 0;
+    background-color: white;
+    color: black;
+    position: absolute;
+    top: 80%;
+    margin: 0px;
+    padding: 3px;
+    width: 200px;
+    transition: visibility .35s ease-in-out, opacity .35s ease-in-out;
+    box-shadow: 0px 0px 1px black;
+}
+
+.bracp-menu ul li
+{
+    float: left;
+    padding: 8px;
+    cursor: pointer;
+    color: white;
+    border-radius: 2px;
+
+    font-weight: bold;
+
+    transition: background-color .35s ease-in-out, color .35s ease-in-out;
+    -moz-transition: background-color .35s ease-in-out, color .35s ease-in-out .35s ease-in-out;
+    -webkit-transition: background-color .35s ease-in-out, color .35s ease-in-out .35s ease-in-out;
+}
+
+.bracp-menu ul li:hover
+{
+    background-color: white;
+    color: rgba(45, 55, 22, 1);
+}
+
+.bracp-menu ul li:hover > ul
+{
+    visibility: visible;
+    opacity: 1;
+}
+
+.bracp-menu ul li > ul li
+{
+    float: none;
+    color: rgba(45, 55, 22, 1);
+    border-bottom: 1px dotted rgba(45, 55, 22, 1);
+}
+
+.bracp-menu ul li > ul li:hover
+{
+    background-color: rgba(45, 55, 22, 1);
+    color: white;
+}
+
+
+.bracp-menu ul ul ul
+{
+    position: absolute;
+    top: 0px;
+    left: 95%;
+}

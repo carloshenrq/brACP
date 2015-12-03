@@ -20,8 +20,9 @@
     <head>
         <title>brACP - {block name="brACP_Title"}Welcome{/block} {if $smarty.const.BRACP_DEVELOP_MODE eq true}(DEVELOPER MODE){/if}</title>
 
+        <link rel="shortcut icon" href="fav.ico">
         <!-- Here loads all CSS files. -->
-        <link rel="stylesheet" type="text/css" href="css/system.css"/>
+        <link rel="stylesheet" type="text/css" href="{$smarty.const.BRACP_DIR_INSTALL_URL}css/system.css"/>
         <style>
         {block name="brACP_StyleCss"}
         {/block}
@@ -29,10 +30,12 @@
 
         <!-- Here loads all JAVASCRIPTS files -->
         {if $smarty.const.BRACP_DEVELOP_MODE eq true}
-            <script src="js/jquery-2.1.4.js"></script>
+            <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/jquery-2.1.4.js"></script>
         {else}
-            <script src="js/jquery-2.1.4.min.js"></script>
+            <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/jquery-2.1.4.min.js"></script>
         {/if}
+        <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/jquery.ajax.js"></script>
+        <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/jquery.bracp.js"></script>
 
         <script>
         {if $smarty.const.BRACP_DEVELOP_MODE eq true}
@@ -47,7 +50,62 @@
         </script>
     </head>
     <body>
-        {block name="brACP_Body"}
-        {/block}
+    {block name="brACP_HtmlBody"}
+        <div class="bracp-content">
+            <div class="bracp-header">
+                <div class="bracp-logo bracp-link" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}"></div>
+                <div class="bracp-menu">
+                    <ul>
+                        <li class="bracp-link" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}">Principal</li>
+                        {if isset($smarty.session.BRACP_ISLOGGEDIN) eq false or $smarty.session.BRACP_ISLOGGEDIN eq false}
+                            <li class="bracp-link" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/register">Criar Conta</li>
+                            <li>Minha Conta
+                                <ul>
+                                    <li class="bracp-link" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/login">Entrar</li>
+                                    <li class="bracp-link" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/recover">Recuperar</li>
+                                </ul>
+                            </li>
+                        {else}
+                            <li class="bracp-link" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/loggout">Sair ({$smarty.session.BRACP_USERID})</li>
+                        {/if}
+                        <li>Rankings
+                            <ul>
+                                <li>Guerra do Emperium
+                                    <ul>
+                                        <li>Clãs</li>
+                                        <li>Castelos
+                                            <ul>
+                                                <li>Geral</li>
+                                                <li>Econômia</li>
+                                                <li>Defesa</li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>Personagens
+                                    <ul>
+                                        <li>Geral</li>
+                                        <li>Econômia</li>
+                                        <li>Player vs Player (PvP)</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>Sobre
+                            <ul>
+                                <li>Equipe</li>
+                                <li>brAthena</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="bracp-body">
+                {block name="brACP_Body"}
+                {/block}
+            </div>
+            <div class="bracp-footer"></div>
+        </div>
+    {/block}
     </body>
 </html>
