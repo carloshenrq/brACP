@@ -66,86 +66,85 @@ html, body
 
 .bracp-menu
 {
-    background-color: rgba(45, 55, 22, 1);
-    box-shadow: 0px 0px 1px 1px rgba(45, 55, 22, 1) inset;
+    background-color: #2d3716;
+    height: 35px;
 }
+
 
 .bracp-menu ul
 {
     list-style: none;
     position: relative;
-    display: inline-table;
-    padding: 8px;
-    margin: 0px;
-    border-radius: 2px;
+    margin: 0;
+    padding: 0;
 }
 
-.bracp-menu ul:after
+
+.bracp-menu ul li
 {
-    content: "";
-    clear: both;
-    display: block;
+    position: relative;
+    float: left;
+    margin: 0;
+    padding: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    color: white;
+
+    -webkit-transition: color .35s ease-in-out, background-color .35s ease-in-out;
+    -moz-transition: color .35s ease-in-out, background-color .35s ease-in-out;
+    -o-transition: color .35s ease-in-out, background-color .35s ease-in-out;
+    transition: color .35s ease-in-out, background-color .35s ease-in-out;
+}
+
+.bracp-menu ul li > ul li
+{
+    color: #2d3716;
+    background-color: #e6e6e6;
+}
+
+.bracp-menu ul li > ul li:hover
+{
+    color: white;
+    background-color: #2d3716;
+}
+
+.bracp-menu ul li:hover
+{
+    color: #2d3716;
+    background-color: #e6e6e6;
 }
 
 .bracp-menu ul ul
 {
     visibility: hidden;
     opacity: 0;
-    background-color: white;
-    color: black;
     position: absolute;
-    top: 80%;
-    margin: 0px;
-    padding: 3px;
-    width: 200px;
-    transition: visibility .35s ease-in-out, opacity .35s ease-in-out;
-    box-shadow: 0px 0px 1px black;
-}
-
-.bracp-menu ul li
-{
-    float: left;
-    padding: 8px;
-    cursor: pointer;
-    color: white;
-    border-radius: 2px;
-
-    font-weight: bold;
-
-    transition: background-color .35s ease-in-out, color .35s ease-in-out;
-    -moz-transition: background-color .35s ease-in-out, color .35s ease-in-out .35s ease-in-out;
-    -webkit-transition: background-color .35s ease-in-out, color .35s ease-in-out .35s ease-in-out;
-}
-
-.bracp-menu ul li:hover
-{
+    top: 100%;
+    left: 0;
     background-color: white;
-    color: rgba(45, 55, 22, 1);
+    box-shadow: 0px 0px 2px 1px black;
+    padding: 0;
+
+    -webkit-transition: opacity .35s ease-in-out, visibility .35s ease-in-out;
+    -moz-transition: opacity .35s ease-in-out, visibility .35s ease-in-out;
+    -o-transition: opacity .35s ease-in-out, visibility .35s ease-in-out;
+    transition: opacity .35s ease-in-out, visibility .35s ease-in-out;
+}
+
+.bracp-menu ul ul li
+{
+    float: none;
+    width: 200px;
+}
+
+.bracp-menu ul ul ul
+{
+    top:0;
+    left:100%;
 }
 
 .bracp-menu ul li:hover > ul
 {
     visibility: visible;
     opacity: 1;
-}
-
-.bracp-menu ul li > ul li
-{
-    float: none;
-    color: rgba(45, 55, 22, 1);
-    border-bottom: 1px dotted rgba(45, 55, 22, 1);
-}
-
-.bracp-menu ul li > ul li:hover
-{
-    background-color: rgba(45, 55, 22, 1);
-    color: white;
-}
-
-
-.bracp-menu ul ul ul
-{
-    position: absolute;
-    top: 0px;
-    left: 95%;
 }
