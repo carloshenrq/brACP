@@ -148,3 +148,17 @@ html, body
     visibility: visible;
     opacity: 1;
 }
+
+
+.bracp-body
+{
+    clear: both;
+    background-color: white;
+    min-height: 250px;
+    max-height: 250px;
+}
+
+.bracp-footer
+{
+    background-color: #2d3716;
+}

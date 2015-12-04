@@ -53,7 +53,8 @@
     {block name="brACP_HtmlBody"}
         <div class="bracp-content">
             <div class="bracp-header">
-                <div class="bracp-logo bracp-link" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}"></div>
+                <div class="bracp-logo bracp-link" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}">
+                </div>
                 <div class="bracp-menu">
                     <ul>
                         <li class="bracp-link" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}">Principal</li>
