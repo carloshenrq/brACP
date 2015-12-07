@@ -35,8 +35,6 @@
         }
 
         objToggle.stop(true, true).slideToggle('fast');
-
-        // $($(this).data('toggle')).html(menuHtml).slideToggle('fast');
     });
 
     // Ao clicar em um item que possua sub-menu adiciona o menu seguinte como html atual.
@@ -55,5 +53,6 @@
     $(document).on('ready', function() {
 
     });
+
 } (window.jQuery);
 

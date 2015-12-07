@@ -19,8 +19,8 @@
 
 @viewport
 {
-  width: device-width;
-  zoom: 1;
+    width: device-width;
+    zoom: 1;
 }
 
 *
@@ -36,7 +36,7 @@ html, body
     background-color: #5E732E;
 }
 
-@media screen and (max-width: 400px)
+@media screen and (max-width: 800px)
 {
     .bracp-content
     {
