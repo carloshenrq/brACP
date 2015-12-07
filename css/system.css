@@ -108,12 +108,20 @@ html, body
         font-size: 12px;
         font-weight: bold;
         border-bottom: 1px dotted black;
+        min-width: 200px;
     }
 
     .bracp-menu-mobile-items-show ul ul
     {
         display: none;
     }
+
+    .bracp-menu-anterior::before
+    {
+        content: "‹";
+        padding-right: 4px;
+    }
+
 }
 
 @media screen and (min-width: 800px)

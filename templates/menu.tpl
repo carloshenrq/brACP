@@ -14,10 +14,10 @@
     <li>Rankings
         <ul data-back="Rankings">
             <li>Guerra do Emperium
-                <ul data-back="Rankings > Guerra do Emperium">
+                <ul data-back="Guerra do Emperium">
                     <li>Clãs</li>
                     <li>Castelos
-                        <ul data-back="Guerra do Emperium > Castelos">
+                        <ul data-back="Castelos">
                             <li>Geral</li>
                             <li>Econômia</li>
                             <li>Defesa</li>
@@ -26,7 +26,7 @@
                 </ul>
             </li>
             <li>Personagens
-                <ul data-back="Rankings > Personagens">
+                <ul data-back="Personagens">
                     <li>Geral</li>
                     <li>Econômia</li>
                     <li>Player vs Player (PvP)</li>

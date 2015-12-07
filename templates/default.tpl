@@ -70,7 +70,6 @@
             </div>
             <div class="bracp-body">
                 {block name="brACP_Body"}
-                    teste
                 {/block}
             </div>
             <div class="bracp-footer"></div>

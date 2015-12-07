@@ -44,10 +44,20 @@
             var subMenu = $(this).find('ul'),
                 subMenuHtml = subMenu.html();
 
-            subMenuHtml = "<li class='bracp-menu-anterior'>" + subMenu.data('back') + "</li>" + subMenuHtml; 
+            subMenuHtml = "<li class='bracp-menu-anterior' data-url='" + btoa($($(this).parent()).html()) + "'>" + subMenu.data('back') + "</li>" + subMenuHtml; 
 
-            $($(this).parent()).html(subMenuHtml);
+            $($(this).parent()).stop(true, true).fadeOut('fast', function() {
+                $(this).html(subMenuHtml).stop(true, true).fadeIn('fast');
+            });
         }
+    });
+
+    $(document).on('click', '.bracp-menu-anterior', function() {
+        var htmlMenu = atob($(this).data('url'));
+
+        $($(this).parent()).stop(true, true).fadeOut('fast', function() {
+            $(this).html(htmlMenu).stop(true, true).fadeIn('fast');
+        });
     });
 
     $(document).on('ready', function() {
