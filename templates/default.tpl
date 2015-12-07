@@ -20,6 +20,8 @@
     <head>
         <title>brACP - {block name="brACP_Title"}Welcome{/block} {if $smarty.const.BRACP_DEVELOP_MODE eq true}(DEVELOPER MODE){/if}</title>
 
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0">
+
         <link rel="shortcut icon" href="fav.ico">
         <!-- Here loads all CSS files. -->
         <link rel="stylesheet" type="text/css" href="{$smarty.const.BRACP_DIR_INSTALL_URL}css/system.css"/>
@@ -53,56 +55,21 @@
     {block name="brACP_HtmlBody"}
         <div class="bracp-content">
             <div class="bracp-header">
-                <div class="bracp-logo bracp-link" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}">
-                </div>
+                <div class="bracp-logo bracp-link" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}"></div>
                 <div class="bracp-menu">
-                    <ul>
-                        <li class="bracp-link" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}">Principal</li>
-                        {if isset($smarty.session.BRACP_ISLOGGEDIN) eq false or $smarty.session.BRACP_ISLOGGEDIN eq false}
-                            <li class="bracp-link" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/register">Criar Conta</li>
-                            <li>Minha Conta
-                                <ul>
-                                    <li class="bracp-link" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/login">Entrar</li>
-                                    <li class="bracp-link" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/recover">Recuperar</li>
-                                </ul>
-                            </li>
-                        {else}
-                            <li class="bracp-link" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/loggout">Sair ({$smarty.session.BRACP_USERID})</li>
-                        {/if}
-                        <li>Rankings
-                            <ul>
-                                <li>Guerra do Emperium
-                                    <ul>
-                                        <li>Clãs</li>
-                                        <li>Castelos
-                                            <ul>
-                                                <li>Geral</li>
-                                                <li>Econômia</li>
-                                                <li>Defesa</li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li>Personagens
-                                    <ul>
-                                        <li>Geral</li>
-                                        <li>Econômia</li>
-                                        <li>Player vs Player (PvP)</li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>Sobre
-                            <ul>
-                                <li>Equipe</li>
-                                <li>brAthena</li>
-                            </ul>
-                        </li>
-                    </ul>
+                    {include 'menu.tpl'}
+                </div>
+                <div class="bracp-menu-mobile">
+                    <div class="bracp-menu-mobile-img" data-toggle=".bracp-menu-mobile-items-show" data-menu=".bracp-menu-mobile-items"></div>
+                    <div class="bracp-menu-mobile-items-show"></div>
+                    <div class="bracp-menu-mobile-items">
+                        {include 'menu.tpl'}
+                    </div>
                 </div>
             </div>
             <div class="bracp-body">
                 {block name="brACP_Body"}
+                    teste
                 {/block}
             </div>
             <div class="bracp-footer"></div>

@@ -18,10 +18,42 @@
 
 +function($)
 {
-    // Ao clicar no div do link envia para data('url').
-    $(document).on('click', '.bracp-link', function() {
-        // Envia o usuário para o link clicado no div.
-        window.location.href = $(this).data('url');
+    // // Ao clicar no div do link envia para data('url').
+    // $(document).on('click', '.bracp-link', function() {
+    //     // Envia o usuário para o link clicado no div.
+    //     window.location.href = $(this).data('url');
+    // });
+
+    // Ao clicar sobre o imagem do menu mobile, abrir o menu dos itens.
+    $(document).on('click', '.bracp-menu-mobile-img', function() {
+        var menuHtml = $($(this).data('menu')).html(),
+            objToggle = $($(this).data('toggle'));
+
+        if(objToggle.css('display') == 'none')
+        {
+            objToggle.html(menuHtml);
+        }
+
+        objToggle.stop(true, true).slideToggle('fast');
+
+        // $($(this).data('toggle')).html(menuHtml).slideToggle('fast');
+    });
+
+    // Ao clicar em um item que possua sub-menu adiciona o menu seguinte como html atual.
+    $(document).on('click', '.bracp-menu-mobile-items-show > ul li', function() {
+        if($(this).find('ul').length > 0)
+        {
+            var subMenu = $(this).find('ul'),
+                subMenuHtml = subMenu.html();
+
+            subMenuHtml = "<li class='bracp-menu-anterior'>" + subMenu.data('back') + "</li>" + subMenuHtml; 
+
+            $($(this).parent()).html(subMenuHtml);
+        }
+    });
+
+    $(document).on('ready', function() {
+
     });
 } (window.jQuery);
 
