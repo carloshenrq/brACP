@@ -16,4 +16,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *}
 
-Testando o home e....xxxxxxxxxxxxaaaa {time()}
+<h1>Principal</h1>
+
+Seja muito bem vindo ao painel de controle.
