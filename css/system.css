@@ -264,36 +264,36 @@ html, body
     {
         background-color: #2d3716;
     }
+}
 
-    .bracp-ajax-loading
-    {
-        position: fixed;
-        top: 0px;
-        left: 0px;
+.bracp-ajax-loading
+{
+    position: fixed;
+    top: 0px;
+    left: 0px;
 
-        background-color: rgba(0, 0, 0, .5);
-        display: none;
-    }
+    background-color: rgba(0, 0, 0, .5);
+    display: none;
+}
 
-    .bracp-ajax-loading-div
-    {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        border-radius: 50%;
-        border: 3px solid white;
-        height: 18px;
-        width: 18px;
+.bracp-ajax-loading-div
+{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    border-radius: 50%;
+    border: 3px solid white;
+    height: 18px;
+    width: 18px;
 
-        -webkit-animation: pulsate 1s ease-out;
-        -webkit-animation-iteration-count: infinite; 
-        opacity: 0.0;
-    }
+    -webkit-animation: pulsate 1s ease-out;
+    -webkit-animation-iteration-count: infinite; 
+    opacity: 0.0;
+}
 
-    .ajax-url
-    {
-        cursor: pointer;
-    }
+.ajax-url
+{
+    cursor: pointer;
 }
 
 @-webkit-keyframes pulsate {
