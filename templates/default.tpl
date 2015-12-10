@@ -20,7 +20,7 @@
     <head>
         <title>brACP - {block name="brACP_Title"}Welcome{/block} {if $smarty.const.BRACP_DEVELOP_MODE eq true}(DEVELOPER MODE){/if}</title>
 
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0">
+        <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1.0">
 
         <link rel="shortcut icon" href="fav.ico">
         <!-- Here loads all CSS files. -->
@@ -56,7 +56,7 @@
     {block name="brACP_HtmlBody"}
         <div class="bracp-content">
             <div class="bracp-header">
-                <div class="bracp-logo bracp-link" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}"></div>
+                <div class="bracp-logo ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}" data-target=".bracp-body"></div>
                 <div class="bracp-menu">
                     {include 'menu.tpl'}
                 </div>
@@ -75,5 +75,8 @@
             <div class="bracp-footer"></div>
         </div>
     {/block}
+        <div class="bracp-ajax-loading">
+            <div class="bracp-ajax-loading-div"></div>
+        </div>
     </body>
 </html>

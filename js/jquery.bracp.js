@@ -18,11 +18,16 @@
 
 +function($)
 {
-    // // Ao clicar no div do link envia para data('url').
-    // $(document).on('click', '.bracp-link', function() {
-    //     // Envia o usuário para o link clicado no div.
-    //     window.location.href = $(this).data('url');
-    // });
+    $(window).on('resize', function() {
+        var objToggle = $($('.bracp-menu-mobile-img').data('toggle'));
+        objToggle.stop(true, true).slideUp('fast');
+
+        // Ajusta a tela de acordo com a largura.
+        $('.bracp-ajax-loading').css({
+            'width' : $(window).width(),
+            'height' : $(window).height(),
+        });
+    });
 
     // Ao clicar sobre o imagem do menu mobile, abrir o menu dos itens.
     $(document).on('click', '.bracp-menu-mobile-img', function() {
@@ -52,6 +57,7 @@
         }
     });
 
+    // Caso seja clicado no item anterior, volta o menu.
     $(document).on('click', '.bracp-menu-anterior', function() {
         var htmlMenu = atob($(this).data('url'));
 

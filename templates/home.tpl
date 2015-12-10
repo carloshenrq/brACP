@@ -1,5 +1,4 @@
-<?php
-/**
+{**
  *  brACP - brAthena Control Panel for Ragnarok Emulators
  *  Copyright (C) 2015  brAthena, CHLFZ
  *
@@ -15,21 +14,9 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+ *}
 
-
-class brAMiddlewareRoutes extends Slim\Middleware
-{
-    public function call()
-    {
-        // Defines the route to '/' directory
-        brACPSlim::getInstance()->get('/', function() {
-            $app = brACPSlim::getInstance();
-            sleep(2);
-            $app->view()->display('home'.(($app->request()->isAjax()) ? '.ajax':'').'.tpl');
-        });
-
-        // Calls next middleware.
-        $this->next->call();
-    }
-}
+{extends file="default.tpl"}
+{block name="brACP_Body"}
+    {include 'home.ajax.tpl'}
+{/block}

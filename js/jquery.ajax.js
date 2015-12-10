@@ -19,5 +19,45 @@
 +function($)
 {
 
+    // Caso realize o click em um elemento com ajax-url
+    $(document).on('click', '.ajax-url', function() {
+        // Define o url da página.
+        window.history.pushState("", "", $(this).data('url'));
+
+        // Realiza a requisição ajax no contexto atual.
+        $.ajax({
+            'url'       : $(this).data('url'),
+            'context'   : $($(this).data('target')) || this,
+            'method'    : $(this).data('method') || "GET",
+            'data'      : $(this).data('ajaxData') || {},
+            'cache'     : false,
+            'global'    : false,
+            'async'     : true,
+            'dataType'  : 'text',
+            'success'   : function(data, textStatus, jqXHR) {
+                // Define o retorno para a requisição como conteudo do contexto atual.
+                this.html(data);
+            },
+            'error'     : function(jqXHR, textStatus, errorThrown ) {
+                // Caso aconteça algum erro durante a requisição
+                this.html($('<div class="ajax-error"/>').html(errorThrown));
+            },
+        });
+    });
+
+
+    $.ajaxSetup({
+        'beforeSend' : function(jqXHR, settings) {
+            // Ajusta a tela de acordo com a largura.
+            $('.bracp-ajax-loading').css({
+                'width' : $(window).width(),
+                'height' : $(window).height(),
+            }).stop(true, true).fadeIn('fast');
+        },
+        'complete' : function (jqXHR, textStatus) {
+            $('.bracp-ajax-loading').stop(true, true).fadeOut('fast');
+        }
+    });
+
 } (window.jQuery);
 
