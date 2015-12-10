@@ -18,4 +18,4 @@
 
 <h1>Principal</h1>
 
-Seja muito bem vindo ao painel de controle.
+<p>Seja muito bem vindo ao painel de controle.</p>

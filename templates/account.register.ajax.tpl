@@ -17,3 +17,67 @@
  *}
 
 <h1>Criar Conta</h1>
+
+<p>Para criar sua conta, é necessário que você informe os dados abaixo corretamente para que seja possivel seu acesso ao jogo e as funções do painel de controle.<br></p>
+
+<form class="ajax-form" action="{$smarty.const.BRACP_DIR_INSTALL_URL}account/register" autocomplete="off" method="put" target=".bracp-body">
+    <div class="bracp-form" style="width: 400px">
+        <div class="bracp-form-field">
+            <label>
+                Usuário:<br>{literal}
+                <input type="text" id="userid" name="userid" placeholder="Nome de usuário" size="24" maxlength="24" pattern="[a-zA-Z0-9]{4,24}" required/>{/literal}
+            </label>
+        </div>
+        <div class="bracp-form-field">
+            <label>
+                Senha:<br>{literal}
+                <input type="password" id="user_pass" name="user_pass" placeholder="Senha de usuário" size="20" maxlength="20" pattern="[a-zA-Z0-9\s]{4,20}" required/>{/literal}
+            </label>
+        </div>
+        <div class="bracp-form-field">
+            <label>
+                Confirme:<br>{literal}
+                <input type="password" id="user_pass_conf" name="user_pass_conf" placeholder="Confirme a senha" size="20" maxlength="20" pattern="[a-zA-Z0-9\s]{4,20}" required/>{/literal}
+            </label>
+        </div>
+        <div class="bracp-form-field">
+            <label>
+                Sexo:<br>
+                <select id="sex" name="sex">
+                    <option value="M" selected>Masculino</option>
+                    <option value="F">Feminino</option>
+                </select>
+            </label>
+        </div>
+        <div class="bracp-form-field">
+            <label>
+                Email:<br>{literal}
+                <input type="text" id="email" name="email" placeholder="Endereço de e-mail" size="39" maxlength="39" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}" required/>{/literal}
+            </label>
+        </div>
+        <div class="bracp-form-field">
+            <label>
+                Confirme:<br>{literal}
+                <input type="text" id="email_conf" name="email_conf" placeholder="Confirme o email" size="39" maxlength="39" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}" required/>{/literal}
+            </label>
+        </div>
+        <div class="bracp-form-field">
+            <label>
+                Data de Nascimento:<br>{literal}
+                <input type="date" id="birthdate" name="birthdate" placeholder="Data de aniversário" required/>{/literal}
+            </label>
+        </div>
+        <div class="bracp-form-field">
+            <label>
+                <input type="checkbox" id="terms" name="terms" title="Você precisa aceitar os termos para continuar." required/>
+                Eu concordo com os termos de uso do servidor.
+            </label>
+
+            <div class="bracp-form-submit">
+                <input type="submit" value="Cadastrar"/>
+                <input type="reset" value="Resetar"/>
+            </div>
+        </div>
+    </div>
+
+</form>

@@ -19,6 +19,35 @@
 +function($)
 {
 
+    // Caso realize o submit de um form tipo ajax.
+    $(document).on('submit', 'form.ajax-form', function() {
+
+        // Define o url da página.
+        window.history.pushState("", "", $(this).attr('action'));
+
+        // Realiza a requisição ajax no contexto atual.
+        $.ajax({
+            'url'       : $(this).attr('action'),
+            'context'   : $($(this).attr('target')) || this,
+            'method'    : $(this).attr('method') || "GET",
+            'data'      : $(this).serializeObject() || {},
+            'cache'     : false,
+            'global'    : false,
+            'async'     : true,
+            'dataType'  : 'text',
+            'success'   : function(data, textStatus, jqXHR) {
+                // Define o retorno para a requisição como conteudo do contexto atual.
+                this.html(data);
+            },
+            'error'     : function(jqXHR, textStatus, errorThrown ) {
+                // Caso aconteça algum erro durante a requisição
+                this.html($('<div class="ajax-error"/>').html(errorThrown));
+            },
+        });
+
+        return false;
+    });
+
     // Caso realize o click em um elemento com ajax-url
     $(document).on('click', '.ajax-url', function() {
         // Define o url da página.
@@ -59,5 +88,21 @@
         }
     });
 
+    $.fn.serializeObject = function()
+    {
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function() {
+            if (o[this.name] !== undefined) {
+                if (!o[this.name].push) {
+                    o[this.name] = [o[this.name]];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+    };
 } (window.jQuery);
 
