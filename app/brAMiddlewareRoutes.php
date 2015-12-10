@@ -22,15 +22,25 @@ class brAMiddlewareRoutes extends Slim\Middleware
 {
     public function call()
     {
+        $app = brACPSlim::getInstance();
+
         // Defines the route to '/' directory
-        brACPSlim::getInstance()->get('/', function() {
+        $app->get('/', function() {
             $app = brACPSlim::getInstance();
             $app->view()->display('home'.(($app->request()->isAjax()) ? '.ajax':'').'.tpl');
         });
 
-        brACPSlim::getInstance()->get('/account/register', function() {
+        $app->get('/account/register', function() {
             $app = brACPSlim::getInstance();
             $app->view()->display('account.register'.(($app->request()->isAjax()) ? '.ajax':'').'.tpl');
+        });
+
+        // Rota para registrar a conta do usuário.
+        $app->put('/account/register', function() {
+
+            $app = brACPSlim::getInstance();
+            // @TODO: Registro da conta no banco de dados.
+
         });
 
         // Calls next middleware.
