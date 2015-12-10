@@ -25,7 +25,6 @@ class brAMiddlewareRoutes extends Slim\Middleware
         // Defines the route to '/' directory
         brACPSlim::getInstance()->get('/', function() {
             $app = brACPSlim::getInstance();
-            sleep(2);
             $app->view()->display('home'.(($app->request()->isAjax()) ? '.ajax':'').'.tpl');
         });
 
