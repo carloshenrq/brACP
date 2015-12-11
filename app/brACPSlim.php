@@ -198,6 +198,7 @@ class brACPSlim extends Slim\Slim
      */
     public function display($template, $data = [], $access = -1, $callable = null, $callableData = null)
     {
+        // Controle para saber se o acesso está tudo ok.
         $accessIsFine = true;
 
         // Verifica o tipo de acesso para mostrar o display do form.
@@ -211,7 +212,7 @@ class brACPSlim extends Slim\Slim
             else if($access == 1 && !$this->isLoggedIn())
             {
                 $template = 'account.error.login';
-                $accessIsFine;
+                $accessIsFine = false;
             }
         }
 
