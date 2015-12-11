@@ -86,11 +86,11 @@ class brACPSlim extends Slim\Slim
     {
         // Inicializa o objeto para criação de conta.
         $acc = new Login;
-        $acc->setUserid($this->request()->put('userid'));
-        $acc->setUser_pass($this->request()->put('user_pass'));
-        $acc->setSex($this->request()->put('sex'));
-        $acc->setEmail($this->request()->put('email'));
-        $acc->setBirthdate($this->request()->put('birthdate'));
+        $acc->setUserid($this->request()->post('userid'));
+        $acc->setUser_pass($this->request()->post('user_pass'));
+        $acc->setSex($this->request()->post('sex'));
+        $acc->setEmail($this->request()->post('email'));
+        $acc->setBirthdate($this->request()->post('birthdate'));
 
         // Se estiver configurado para realizar a aplicação do md5 na senha
         //  então aplica o hash('md5', $acc->getUser_pass())

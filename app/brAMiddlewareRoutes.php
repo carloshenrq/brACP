@@ -114,19 +114,8 @@ class brAMiddlewareRoutes extends Slim\Middleware
             }
         });
 
-        /*********************
-        **********************
-        **** DELETE - ROUTES **
-        **********************
-        **********************/
-
-        /*********************
-        **********************
-        **** PUT - ROUTES ****
-        **********************
-        **********************/
         // Rota para registrar a conta do usuário.
-        $app->put('/account/register', function() {
+        $app->post('/account/register', function() {
             $app = brACPSlim::getInstance();
 
             // Caso esteja logado, não permite realizar os testes para cadastro.
@@ -152,6 +141,18 @@ class brAMiddlewareRoutes extends Slim\Middleware
                 $app->view()->display('account.register.ajax.tpl', $displayData);
             }
         });
+
+        /*********************
+        **********************
+        **** DELETE - ROUTES **
+        **********************
+        **********************/
+
+        /*********************
+        **********************
+        **** PUT - ROUTES ****
+        **********************
+        **********************/
 
         // Calls next middleware.
         $this->next->call();
