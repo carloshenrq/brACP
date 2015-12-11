@@ -198,13 +198,21 @@ class brACPSlim extends Slim\Slim
      */
     public function display($template, $data = [], $access = -1, $callable = null, $callableData = null)
     {
+        $accessIsFine = true;
+
         // Verifica o tipo de acesso para mostrar o display do form.
         if($access != -1)
         {
             if($access == 0 && $this->isLoggedIn())
+            {
                 $template = 'account.error.logged';
+                $accessIsFine = false;
+            }
             else if($access == 1 && !$this->isLoggedIn())
+            {
                 $template = 'account.error.login';
+                $accessIsFine;
+            }
         }
 
         // Verifica se o tipo de requisição é ajax, se for, retorna o template
@@ -212,13 +220,18 @@ class brACPSlim extends Slim\Slim
         if($this->request()->isAjax())
             $template .= '.ajax';
 
-        // Invoca a função enviada por parametro antes de invocar o template.
-        if(!is_null($callableData) && is_callable($callableData))
-            $data = array_merge($data, $callableData());
+        // Caso o acesso ao form possa ser executado sem necessidade de chamar os callbacks,
+        //  quando ocorre erro.
+        if($accessIsFine)
+        {
+            // Invoca a função enviada por parametro antes de invocar o template.
+            if(!is_null($callableData) && is_callable($callableData))
+                $data = array_merge($data, $callableData());
 
-        // Invoca a função enviada por parametro antes de invocar o template.
-        if(!is_null($callable) && is_callable($callable))
-            $callable();
+            // Invoca a função enviada por parametro antes de invocar o template.
+            if(!is_null($callable) && is_callable($callable))
+                $callable();
+        }
 
         // Chama o view para mostrar o template.
         $this->view()->display($template . '.tpl', $data);
