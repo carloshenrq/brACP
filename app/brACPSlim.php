@@ -131,19 +131,26 @@ class brACPSlim extends Slim\Slim
      */
     private function checkUserAndPass($userid, $user_pass)
     {
-        // Verifica os usuários cadastrados com o usuário e senha
-        $users = $this->getEntityManager()->getRepository('Model\Login')->findBy([
-            'userid' => $userid,
-            'user_pass' => ((BRACP_MD5_PASSWORD_HASH) ? hash('md5', $user_pass):$user_pass),
-            'state' => 0
-        ]);
+        try
+        {
+            // Verifica os usuários cadastrados com o usuário e senha
+            $users = $this->getEntityManager()->getRepository('Model\Login')->findBy([
+                'userid' => $userid,
+                'user_pass' => ((BRACP_MD5_PASSWORD_HASH) ? hash('md5', $user_pass):$user_pass),
+                'state' => 0
+            ]);
 
-        // Se não existir usuários, retorna false.
-        if(!count($users))
+            // Se não existir usuários, retorna false.
+            if(!count($users))
+                return false;
+
+            // Retorna o primeiro usuário.
+            return $users[0];
+        }
+        catch(Exception $ex)
+        {
             return false;
-
-        // Retorna o primeiro usuário.
-        return $users[0];
+        }
     }
 
     /**
@@ -182,6 +189,39 @@ class brACPSlim extends Slim\Slim
     public function isLoggedIn()
     {
         return isset($_SESSION['BRACP_ISLOGGEDIN']) && $_SESSION['BRACP_ISLOGGEDIN'] == true;
+    }
+
+    /**
+     * @param string $template
+     * @param array $data
+     * @param int $access { 0: never logged. 1: ever logged. -1: always. }
+     */
+    public function display($template, $data = [], $access = -1, $callable = null, $callableData = null)
+    {
+        // Verifica o tipo de acesso para mostrar o display do form.
+        if($access != -1)
+        {
+            if($access == 0 && $this->isLoggedIn())
+                $template = 'account.error.logged';
+            else if($access == 1 && !$this->isLoggedIn())
+                $template = 'account.error.login';
+        }
+
+        // Verifica se o tipo de requisição é ajax, se for, retorna o template
+        //  para o ajax.
+        if($this->request()->isAjax())
+            $template .= '.ajax';
+
+        // Invoca a função enviada por parametro antes de invocar o template.
+        if(!is_null($callableData) && is_callable($callableData))
+            $data = array_merge($data, $callableData());
+
+        // Invoca a função enviada por parametro antes de invocar o template.
+        if(!is_null($callable) && is_callable($callable))
+            $callable();
+
+        // Chama o view para mostrar o template.
+        $this->view()->display($template . '.tpl', $data);
     }
 }
 

@@ -32,54 +32,26 @@ class brAMiddlewareRoutes extends Slim\Middleware
         **********************/
         // Defines the route to '/' directory
         $app->get('/', function() {
-            $app = brACPSlim::getInstance();
-            $app->view()->display('home'.(($app->request()->isAjax()) ? '.ajax':'').'.tpl');
+            brACPSlim::getInstance()->display('home');
         });
 
         $app->get('/account/register', function() {
-            $app = brACPSlim::getInstance();
-
-            // Redireciona logado
-            $templateName = 'account.register'.(($app->request()->isAjax()) ? '.ajax':'').'.tpl';
-            if($app->isLoggedIn())
-                $templateName = 'account.error.logged'.(($app->request()->isAjax()) ? '.ajax':'').'.tpl';
-
-            $app->view()->display($templateName);
+            brACPSlim::getInstance()->display('account.register', [], 0);
         });
 
         $app->get('/account/login', function() {
-            $app = brACPSlim::getInstance();
-
-            // Redireciona logado
-            $templateName = 'account.login'.(($app->request()->isAjax()) ? '.ajax':'').'.tpl';
-            if($app->isLoggedIn())
-                $templateName = 'account.error.logged'.(($app->request()->isAjax()) ? '.ajax':'').'.tpl';
-
-            $app->view()->display($templateName);
+            brACPSlim::getInstance()->display('account.login', [], 0);
         });
 
         $app->get('/account/recover', function() {
-            $app = brACPSlim::getInstance();
-            
-            // Redireciona logado
-            $templateName = 'account.recover'.(($app->request()->isAjax()) ? '.ajax':'').'.tpl';
-            if($app->isLoggedIn())
-                $templateName = 'account.error.logged'.(($app->request()->isAjax()) ? '.ajax':'').'.tpl';
-
-            $app->view()->display($templateName);
+            brACPSlim::getInstance()->display('account.recover', [], 0);
         });
 
         // Define o loggout do usuário.
         $app->get('/account/loggout', function() {
-            $app = brACPSlim::getInstance();
-
-            // Redireciona logado
-            $templateName = 'account.loggout'.(($app->request()->isAjax()) ? '.ajax':'').'.tpl';
-            if(!$app->isLoggedIn())
-                $templateName = 'account.error.login'.(($app->request()->isAjax()) ? '.ajax':'').'.tpl';
-
-            $app->accountLoggout();
-            $app->view()->display($templateName);
+            brACPSlim::getInstance()->display('account.loggout', [], 1, function() {
+                brACPSlim::getInstance()->accountLoggout();
+            });
         });
 
         /*********************
@@ -88,58 +60,31 @@ class brAMiddlewareRoutes extends Slim\Middleware
         **********************
         **********************/
         $app->post('/account/login', function() {
-            $app = brACPSlim::getInstance();
 
-            // Caso esteja logado, não permite realizar os testes para cadastro.
-            if($app->isLoggedIn())
-            {
-                $app->view()->display('account.error.logged'.(($app->request()->isAjax()) ? '.ajax':'').'.tpl');
-            }
-            else
-            {
-                // Objeto para retorno de erros ao view.
-                $displayData = [
-                    'message' => [
-                        'success' => 'Usuário logado com sucesso. Aguarde...',
-                        'error' => 'Combinação de usuário e senha inválidos!'
-                    ]
-                ];
+            brACPSlim::getInstance()->display('account.login', [], 0, null, function() {
 
-                // Executa o login da conta.
-                $accountLogin = $app->accountLogin();
-                unset($displayData['message'][(($accountLogin) ? 'error':'success')]);
+                // Tenta realizar o login via post.
+                if(brACPSlim::getInstance()->accountLogin())
+                    return ['message' => ['success' => 'Usuário logado com sucesso. Aguarde...']];
 
-                // Envia o display do login de usuário.
-                $app->view()->display('account.login.ajax.tpl', $displayData);
-            }
+                // Por default retorna o erro.
+                return ['message' => ['error' => 'Combinação de usuário e senha inválidos!']];
+            });
+
         });
 
         // Rota para registrar a conta do usuário.
         $app->post('/account/register', function() {
-            $app = brACPSlim::getInstance();
 
-            // Caso esteja logado, não permite realizar os testes para cadastro.
-            if($app->isLoggedIn())
-            {
-                $app->view()->display('account.error.logged'.(($app->request()->isAjax()) ? '.ajax':'').'.tpl');
-            }
-            else
-            {
-                // Objeto para retorno de erros ao view.
-                $displayData = [
-                    'message' => [
-                        'success' => 'Conta criada com sucesso. Você já pode realizar login agora.',
-                        'error' => 'Nome de usuário já cadastrado. Tente novamente.'
-                    ]
-                ];
+            brACPSlim::getInstance()->display('account.register', [], 0, null, function() {
 
-                // Executa o método de requisição para testar a criação de contas.
-                $accountRegister = $app->accountRegister();
-                unset($displayData['message'][(($accountRegister) ? 'error':'success')]);
+                // Tenta realizar o login via post.
+                if(brACPSlim::getInstance()->accountRegister())
+                    return ['message' => ['success' => 'Conta criada com sucesso. Você já pode realizar login agora.']];
 
-                // Envia o display do registro de contas.
-                $app->view()->display('account.register.ajax.tpl', $displayData);
-            }
+                // Por default retorna o erro.
+                return ['message' => ['error' => 'Nome de usuário já cadastrado. Tente novamente!']];
+            });
         });
 
         /*********************
