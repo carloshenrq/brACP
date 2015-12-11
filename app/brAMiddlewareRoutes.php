@@ -25,6 +25,11 @@ class brAMiddlewareRoutes extends Slim\Middleware
     {
         $app = brACPSlim::getInstance();
 
+        /*********************
+        **********************
+        **** GET - ROUTES ****
+        **********************
+        **********************/
         // Defines the route to '/' directory
         $app->get('/', function() {
             $app = brACPSlim::getInstance();
@@ -33,27 +38,119 @@ class brAMiddlewareRoutes extends Slim\Middleware
 
         $app->get('/account/register', function() {
             $app = brACPSlim::getInstance();
-            $app->view()->display('account.register'.(($app->request()->isAjax()) ? '.ajax':'').'.tpl');
+
+            // Redireciona logado
+            $templateName = 'account.register'.(($app->request()->isAjax()) ? '.ajax':'').'.tpl';
+            if(isset($_SESSION['BRACP_ISLOGGEDIN']) && $_SESSION['BRACP_ISLOGGEDIN'] == true)
+                $templateName = 'account.error.logged'.(($app->request()->isAjax()) ? '.ajax':'').'.tpl';
+
+            $app->view()->display($templateName);
         });
 
+        $app->get('/account/login', function() {
+            $app = brACPSlim::getInstance();
+
+            // Redireciona logado
+            $templateName = 'account.login'.(($app->request()->isAjax()) ? '.ajax':'').'.tpl';
+            if(isset($_SESSION['BRACP_ISLOGGEDIN']) && $_SESSION['BRACP_ISLOGGEDIN'] == true)
+                $templateName = 'account.error.logged'.(($app->request()->isAjax()) ? '.ajax':'').'.tpl';
+
+            $app->view()->display($templateName);
+        });
+
+        $app->get('/account/recover', function() {
+            $app = brACPSlim::getInstance();
+            
+            // Redireciona logado
+            $templateName = 'account.recover'.(($app->request()->isAjax()) ? '.ajax':'').'.tpl';
+            if(isset($_SESSION['BRACP_ISLOGGEDIN']) && $_SESSION['BRACP_ISLOGGEDIN'] == true)
+                $templateName = 'account.error.logged'.(($app->request()->isAjax()) ? '.ajax':'').'.tpl';
+
+            $app->view()->display($templateName);
+        });
+
+        // Define o loggout do usuário.
+        $app->get('/account/loggout', function() {
+            $app = brACPSlim::getInstance();
+
+            // Redireciona logado
+            $templateName = 'account.loggout'.(($app->request()->isAjax()) ? '.ajax':'').'.tpl';
+            if(!(isset($_SESSION['BRACP_ISLOGGEDIN']) && $_SESSION['BRACP_ISLOGGEDIN'] == true))
+                $templateName = 'account.error.login'.(($app->request()->isAjax()) ? '.ajax':'').'.tpl';
+
+            $app->accountLoggout();
+            $app->view()->display($templateName);
+        });
+
+        /*********************
+        **********************
+        **** POST - ROUTES ***
+        **********************
+        **********************/
+        $app->post('/account/login', function() {
+            $app = brACPSlim::getInstance();
+
+            // Caso esteja logado, não permite realizar os testes para cadastro.
+            if(isset($_SESSION['BRACP_ISLOGGEDIN']) && $_SESSION['BRACP_ISLOGGEDIN'] == true)
+            {
+                $app->view()->display('account.error.logged'.(($app->request()->isAjax()) ? '.ajax':'').'.tpl');
+            }
+            else
+            {
+                // Objeto para retorno de erros ao view.
+                $displayData = [
+                    'message' => [
+                        'success' => 'Usuário logado com sucesso. Aguarde...',
+                        'error' => 'Combinação de usuário e senha inválidos!'
+                    ]
+                ];
+
+                // Executa o login da conta.
+                $accountLogin = $app->accountLogin();
+                unset($displayData['message'][(($accountLogin) ? 'error':'success')]);
+
+                // Envia o display do login de usuário.
+                $app->view()->display('account.login.ajax.tpl', $displayData);
+            }
+        });
+
+        /*********************
+        **********************
+        **** DELETE - ROUTES **
+        **********************
+        **********************/
+
+        /*********************
+        **********************
+        **** PUT - ROUTES ****
+        **********************
+        **********************/
         // Rota para registrar a conta do usuário.
         $app->put('/account/register', function() {
             $app = brACPSlim::getInstance();
 
-            // Objeto para retorno de erros ao view.
-            $displayData = [
-                'message' => [
-                    'success' => 'Conta criada com sucesso. Você já pode realizar login agora.',
-                    'error' => 'Nome de usuário já cadastrado. Tente novamente.'
-                ]
-            ];
+            // Caso esteja logado, não permite realizar os testes para cadastro.
+            if(isset($_SESSION['BRACP_ISLOGGEDIN']) && $_SESSION['BRACP_ISLOGGEDIN'] == true)
+            {
+                $app->view()->display('account.error.logged'.(($app->request()->isAjax()) ? '.ajax':'').'.tpl');
+            }
+            else
+            {
+                // Objeto para retorno de erros ao view.
+                $displayData = [
+                    'message' => [
+                        'success' => 'Conta criada com sucesso. Você já pode realizar login agora.',
+                        'error' => 'Nome de usuário já cadastrado. Tente novamente.'
+                    ]
+                ];
 
-            // Executa o método de requisição para testar a criação de contas.
-            $accountRegister = $app->accountRegister();
-            unset($displayData['message'][(($accountRegister) ? 'error':'success')]);
+                // Executa o método de requisição para testar a criação de contas.
+                $accountRegister = $app->accountRegister();
+                unset($displayData['message'][(($accountRegister) ? 'error':'success')]);
 
-            // Envia o display do registro de contas.
-            $app->view()->display('account.register.ajax.tpl', $displayData);
+                // Envia o display do registro de contas.
+                $app->view()->display('account.register.ajax.tpl', $displayData);
+            }
         });
 
         // Calls next middleware.

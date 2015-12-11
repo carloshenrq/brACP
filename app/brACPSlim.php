@@ -49,7 +49,38 @@ class brACPSlim extends Slim\Slim
     }
 
     /**
+     * Remove os dados de sessão do navegador.
+     */
+    public function accountLoggout()
+    {
+        unset($_SESSION['BRACP_ISLOGGEDIN'], $_SESSION['BRACP_USERID'], $_SESSION['BRACP_ACC_OBJECT']);
+    }
+
+    /**
+     * Verifica os dados para realizar login.
+     */
+    public function accountLogin()
+    {
+        // Verifica se a conta é existente.
+        $acc = $this->checkUserAndPass($this->request()->post('userid'), $this->request()->post('user_pass'));
+
+        // Se a combinação não existir retorna false.
+        if($acc === false)
+            return false;
+
+        // Define como usuário logado e o objeto da conta em memória.
+        $_SESSION['BRACP_ISLOGGEDIN'] = 1;
+        $_SESSION['BRACP_USERID'] = $acc->getUserid();
+        $_SESSION['BRACP_ACC_OBJECT'] = json_encode($acc);
+
+        // Retorna verdadeiro para o login.
+        return true;
+    }
+
+    /**
      * Chama o método para gerenciar o registro de contas.
+     *
+     * @return boolean
      */
     public function accountRegister()
     {
@@ -88,6 +119,31 @@ class brACPSlim extends Slim\Slim
         // @TODO: Disparar eventos para envio de email.
 
         return true;
+    }
+
+    /**
+     * Verifica a existência do usuário no banco de dados para realizar login.
+     *
+     * @param string $userid
+     * @param string $user_pass
+     *
+     * @return mixed
+     */
+    private function checkUserAndPass($userid, $user_pass)
+    {
+        // Verifica os usuários cadastrados com o usuário e senha
+        $users = $this->getEntityManager()->getRepository('Model\Login')->findBy([
+            'userid' => $userid,
+            'user_pass' => ((BRACP_MD5_PASSWORD_HASH) ? hash('md5', $user_pass):$user_pass),
+            'state' => 0
+        ]);
+
+        // Se não existir usuários, retorna false.
+        if(!count($users))
+            return false;
+
+        // Retorna o primeiro usuário.
+        return $users[0];
     }
 
     /**

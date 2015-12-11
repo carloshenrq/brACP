@@ -85,6 +85,10 @@
                 <input type="submit" value="Cadastrar"/>
                 <input type="reset" value="Resetar"/>
             </div>
+            <div class="bracp-form-submit">
+                Perdeu sua conta? <span class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/recover" data-target=".bracp-body">clique aqui</span>.<br>
+                Já possui uma conta? <span class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/login" data-target=".bracp-body">Faça login</span>.
+            </div>
         </div>
     </div>
 
