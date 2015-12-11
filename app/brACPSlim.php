@@ -110,15 +110,22 @@ class brACPSlim extends Slim\Slim
      */
     private function createAccount(Login $acc)
     {
-        if($this->checkUserId($acc->getUserid()))
+        try
+        {
+            if($this->checkUserId($acc->getUserid()))
+                return false;
+
+            $this->getEntityManager()->persist($acc);
+            $this->getEntityManager()->flush();
+
+            // @TODO: Disparar eventos para envio de email.
+
+            return true;
+        }
+        catch(Exception $ex)
+        {
             return false;
-
-        $this->getEntityManager()->persist($acc);
-        $this->getEntityManager()->flush();
-
-        // @TODO: Disparar eventos para envio de email.
-
-        return true;
+        }
     }
 
     /**
@@ -162,9 +169,16 @@ class brACPSlim extends Slim\Slim
      */
     private function checkUserId($userid)
     {
-        return count($this->getEntityManager()->getRepository('Model\Login')->findBy([
-            'userid' => $userid
-        ])) > 0;
+        try
+        {
+            return count($this->getEntityManager()->getRepository('Model\Login')->findBy([
+                'userid' => $userid
+            ])) > 0;
+        }
+        catch(Exception $ex)
+        {
+            return true;
+        }
     }
 
     /**

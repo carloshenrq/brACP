@@ -32,5 +32,3 @@ DEFINE('BRACP_SQL_PASS', 'ragnarok', false);
 DEFINE('BRACP_SQL_DBNAME', 'ragnarok', false);
 
 DEFINE('BRACP_MD5_PASSWORD_HASH', true, false);
-
-date_default_timezone_set (BRACP_DEFAULT_TIMEZONE);
