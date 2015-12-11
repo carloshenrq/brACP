@@ -38,33 +38,22 @@ class brAMiddlewareRoutes extends Slim\Middleware
 
         // Rota para registrar a conta do usuário.
         $app->put('/account/register', function() {
-            // Obtém o app para realizar os testes de instancia da classe.
             $app = brACPSlim::getInstance();
-            $request = $app->request();
 
-            // Instancia o objeto da conta e envia para validação.
-            $acc = new Login;
-            $acc->setUserid($request->put('userid'));
-            $acc->setUser_pass($request->put('user_pass'));
-            $acc->setSex($request->put('sex'));
-            $acc->setEmail($request->put('email'));
-            $acc->setBirthdate($request->put('birthdate'));
+            // Objeto para retorno de erros ao view.
+            $displayData = [
+                'message' => [
+                    'success' => 'Conta criada com sucesso. Você já pode realizar login agora.',
+                    'error' => 'Nome de usuário já cadastrado. Tente novamente.'
+                ]
+            ];
 
-            // Se estiver configurado para realizar a aplicação do md5 na senha
-            //  então aplica o hash('md5', $acc->getUser_pass())
-            if(BRACP_MD5_PASSWORD_HASH)
-                $acc->setUser_pass(hash('md5', $acc->getUser_pass()));
+            // Executa o método de requisição para testar a criação de contas.
+            $accountRegister = $app->accountRegister();
+            unset($displayData['message'][(($accountRegister) ? 'error':'success')]);
 
-            $viewDisplayData = [ 'message' => [] ];
-
-            // Define a mensagem de 
-            if($app->createAccount($acc))
-                $viewDisplayData['message']['success'] = 'Conta criada com sucesso! Você já pode realizar login agora.';
-            else
-                $viewDisplayData['message']['error'] = 'Nome de usuário já existe. Tente novamente.';
-
-            // Exibe o layout 
-            $app->view()->display('account.register.ajax.tpl', $viewDisplayData);
+            // Envia o display do registro de contas.
+            $app->view()->display('account.register.ajax.tpl', $displayData);
         });
 
         // Calls next middleware.

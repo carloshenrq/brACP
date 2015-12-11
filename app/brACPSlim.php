@@ -48,33 +48,60 @@ class brACPSlim extends Slim\Slim
         $this->add(new \brAMiddlewareRoutes());
     }
 
+    /**
+     * Chama o método para gerenciar o registro de contas.
+     */
+    public function accountRegister()
+    {
+        // Inicializa o objeto para criação de conta.
+        $acc = new Login;
+        $acc->setUserid($this->request()->put('userid'));
+        $acc->setUser_pass($this->request()->put('user_pass'));
+        $acc->setSex($this->request()->put('sex'));
+        $acc->setEmail($this->request()->put('email'));
+        $acc->setBirthdate($this->request()->put('birthdate'));
+
+        // Se estiver configurado para realizar a aplicação do md5 na senha
+        //  então aplica o hash('md5', $acc->getUser_pass())
+        if(BRACP_MD5_PASSWORD_HASH)
+            $acc->setUser_pass(hash('md5', $acc->getUser_pass()));
+
+        // Tenta criar a conta e retorna o resultado.
+        return $this->createAccount($acc);
+    }
 
     /**
-     * Cria a conta indicada para o usuário.
+     * Cria a conta no banco de dados.
      *
-     * @param Login $acc Objeto de acc para criação da conta.
+     * @param Login $acc
      *
      * @return boolean
      */
-    public function createAccount(Login $acc)
+    private function createAccount(Login $acc)
     {
-        // Verifica quantos usuários possuem 
-        $users = count($this->getEntityManager()->getRepository('Model\Login')->findBy([
-            'userid' => $acc->getUserid()
-        ]));
-
-        // Nome de usuário já em uso!
-        if($users > 0)
+        if($this->checkUserId($acc->getUserid()))
             return false;
 
-        // Grava a conta no banco de dados.
         $this->getEntityManager()->persist($acc);
         $this->getEntityManager()->flush();
 
-        // @TODO: Disparar eventos de e-mail e validação de código.
+        // @TODO: Disparar eventos para envio de email.
 
-        // Retorna verdadeiro que a conta foi criada.
         return true;
+    }
+
+    /**
+     * Verifica se o nome de usuário informado existe no banco de dados.
+     *
+     * @param string $userid
+     *
+     * @return bool
+     */
+    private function checkUserId($userid)
+    {
+        return count($this->getEntityManager()->getRepository('Model\Login')->findBy([
+            'userid' => $userid
+        ])) > 0;
     }
 
     /**
