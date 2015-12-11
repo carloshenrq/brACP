@@ -175,5 +175,13 @@ class brACPSlim extends Slim\Slim
     {
         return $this->em;
     }
+
+    /**
+     * @return boolean
+     */
+    public function isLoggedIn()
+    {
+        return isset($_SESSION['BRACP_ISLOGGEDIN']) && $_SESSION['BRACP_ISLOGGEDIN'] == true;
+    }
 }
 

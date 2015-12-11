@@ -41,7 +41,7 @@ class brAMiddlewareRoutes extends Slim\Middleware
 
             // Redireciona logado
             $templateName = 'account.register'.(($app->request()->isAjax()) ? '.ajax':'').'.tpl';
-            if(isset($_SESSION['BRACP_ISLOGGEDIN']) && $_SESSION['BRACP_ISLOGGEDIN'] == true)
+            if($app->isLoggedIn())
                 $templateName = 'account.error.logged'.(($app->request()->isAjax()) ? '.ajax':'').'.tpl';
 
             $app->view()->display($templateName);
@@ -52,7 +52,7 @@ class brAMiddlewareRoutes extends Slim\Middleware
 
             // Redireciona logado
             $templateName = 'account.login'.(($app->request()->isAjax()) ? '.ajax':'').'.tpl';
-            if(isset($_SESSION['BRACP_ISLOGGEDIN']) && $_SESSION['BRACP_ISLOGGEDIN'] == true)
+            if($app->isLoggedIn())
                 $templateName = 'account.error.logged'.(($app->request()->isAjax()) ? '.ajax':'').'.tpl';
 
             $app->view()->display($templateName);
@@ -63,7 +63,7 @@ class brAMiddlewareRoutes extends Slim\Middleware
             
             // Redireciona logado
             $templateName = 'account.recover'.(($app->request()->isAjax()) ? '.ajax':'').'.tpl';
-            if(isset($_SESSION['BRACP_ISLOGGEDIN']) && $_SESSION['BRACP_ISLOGGEDIN'] == true)
+            if($app->isLoggedIn())
                 $templateName = 'account.error.logged'.(($app->request()->isAjax()) ? '.ajax':'').'.tpl';
 
             $app->view()->display($templateName);
@@ -75,7 +75,7 @@ class brAMiddlewareRoutes extends Slim\Middleware
 
             // Redireciona logado
             $templateName = 'account.loggout'.(($app->request()->isAjax()) ? '.ajax':'').'.tpl';
-            if(!(isset($_SESSION['BRACP_ISLOGGEDIN']) && $_SESSION['BRACP_ISLOGGEDIN'] == true))
+            if(!$app->isLoggedIn())
                 $templateName = 'account.error.login'.(($app->request()->isAjax()) ? '.ajax':'').'.tpl';
 
             $app->accountLoggout();
@@ -91,7 +91,7 @@ class brAMiddlewareRoutes extends Slim\Middleware
             $app = brACPSlim::getInstance();
 
             // Caso esteja logado, não permite realizar os testes para cadastro.
-            if(isset($_SESSION['BRACP_ISLOGGEDIN']) && $_SESSION['BRACP_ISLOGGEDIN'] == true)
+            if($app->isLoggedIn())
             {
                 $app->view()->display('account.error.logged'.(($app->request()->isAjax()) ? '.ajax':'').'.tpl');
             }
@@ -119,7 +119,7 @@ class brAMiddlewareRoutes extends Slim\Middleware
             $app = brACPSlim::getInstance();
 
             // Caso esteja logado, não permite realizar os testes para cadastro.
-            if(isset($_SESSION['BRACP_ISLOGGEDIN']) && $_SESSION['BRACP_ISLOGGEDIN'] == true)
+            if($app->isLoggedIn())
             {
                 $app->view()->display('account.error.logged'.(($app->request()->isAjax()) ? '.ajax':'').'.tpl');
             }
