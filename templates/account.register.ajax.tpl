@@ -18,7 +18,15 @@
 
 <h1>Criar Conta</h1>
 
-<p>Para criar sua conta, é necessário que você informe os dados abaixo corretamente para que seja possivel seu acesso ao jogo e as funções do painel de controle.<br></p>
+{if isset($message.success) eq true}
+    <p class="bracp-message-success">{$message.success}</p>
+{else}
+
+<p>Para criar sua conta, é necessário que você informe os dados abaixo corretamente para que seja possivel seu acesso ao jogo e as funções do painel de controle.</p>
+
+    {if isset($message.error) eq true}
+        <p class="bracp-message-error">{$message.error}</p>
+    {/if}
 
 <form class="ajax-form" action="{$smarty.const.BRACP_DIR_INSTALL_URL}account/register" autocomplete="off" method="put" target=".bracp-body">
     <div class="bracp-form" style="width: 400px">
@@ -81,3 +89,4 @@
     </div>
 
 </form>
+{/if}

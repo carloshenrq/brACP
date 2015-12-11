@@ -18,6 +18,7 @@
  */
 
 use Doctrine\ORM\EntityManager;
+use Model\Login;
 
 /**
  *
@@ -45,6 +46,35 @@ class brACPSlim extends Slim\Slim
         $this->add(new \Slim\Middleware\ContentTypes());
         $this->add(new \brAMiddlewareDoctrine());
         $this->add(new \brAMiddlewareRoutes());
+    }
+
+
+    /**
+     * Cria a conta indicada para o usuário.
+     *
+     * @param Login $acc Objeto de acc para criação da conta.
+     *
+     * @return boolean
+     */
+    public function createAccount(Login $acc)
+    {
+        // Verifica quantos usuários possuem 
+        $users = count($this->getEntityManager()->getRepository('Model\Login')->findBy([
+            'userid' => $acc->getUserid()
+        ]));
+
+        // Nome de usuário já em uso!
+        if($users > 0)
+            return false;
+
+        // Grava a conta no banco de dados.
+        $this->getEntityManager()->persist($acc);
+        $this->getEntityManager()->flush();
+
+        // @TODO: Disparar eventos de e-mail e validação de código.
+
+        // Retorna verdadeiro que a conta foi criada.
+        return true;
     }
 
     /**

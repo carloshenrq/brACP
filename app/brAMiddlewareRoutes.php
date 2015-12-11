@@ -17,6 +17,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+use Model\Login;
 
 class brAMiddlewareRoutes extends Slim\Middleware
 {
@@ -37,10 +38,28 @@ class brAMiddlewareRoutes extends Slim\Middleware
 
         // Rota para registrar a conta do usuário.
         $app->put('/account/register', function() {
-
+            // Obtém o app para realizar os testes de instancia da classe.
             $app = brACPSlim::getInstance();
-            // @TODO: Registro da conta no banco de dados.
+            $request = $app->request();
 
+            // Instancia o objeto da conta e envia para validação.
+            $acc = new Login;
+            $acc->setUserid($request->put('userid'));
+            $acc->setUser_pass($request->put('user_pass'));
+            $acc->setSex($request->put('sex'));
+            $acc->setEmail($request->put('email'));
+            $acc->setBirthdate($request->put('birthdate'));
+
+            $viewDisplayData = [ 'message' => [] ];
+
+            // Define a mensagem de 
+            if($app->createAccount($acc))
+                $viewDisplayData['message']['success'] = 'Conta criada com sucesso! Você já pode realizar login agora.';
+            else
+                $viewDisplayData['message']['error'] = 'Nome de usuário já existe. Tente novamente.';
+
+            // Exibe o layout 
+            $app->view()->display('account.register.ajax.tpl', $viewDisplayData);
         });
 
         // Calls next middleware.
