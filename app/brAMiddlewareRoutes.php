@@ -50,6 +50,11 @@ class brAMiddlewareRoutes extends Slim\Middleware
             $acc->setEmail($request->put('email'));
             $acc->setBirthdate($request->put('birthdate'));
 
+            // Se estiver configurado para realizar a aplicação do md5 na senha
+            //  então aplica o hash('md5', $acc->getUser_pass())
+            if(BRACP_MD5_PASSWORD_HASH)
+                $acc->setUser_pass(hash('md5', $acc->getUser_pass()));
+
             $viewDisplayData = [ 'message' => [] ];
 
             // Define a mensagem de 

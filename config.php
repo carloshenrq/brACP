@@ -25,11 +25,12 @@ DEFINE('BRACP_DEFAULT_TIMEZONE', 'America/Sao_Paulo', false);
 DEFINE('BRACP_DIR_TEMPLATE', '', false);
 DEFINE('BRACP_DIR_INSTALL_URL', '/brACP/', false);
 
-
 DEFINE('BRACP_SQL_DRIVER', 'pdo_mysql', false);
 DEFINE('BRACP_SQL_HOST', '127.0.0.1', false);
 DEFINE('BRACP_SQL_USER', 'ragnarok', false);
 DEFINE('BRACP_SQL_PASS', 'ragnarok', false);
 DEFINE('BRACP_SQL_DBNAME', 'ragnarok', false);
+
+DEFINE('BRACP_MD5_PASSWORD_HASH', true, false);
 
 date_default_timezone_set (BRACP_DEFAULT_TIMEZONE);
