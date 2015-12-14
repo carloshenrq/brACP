@@ -22,7 +22,7 @@
 
         <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1.0">
 
-        <link rel="shortcut icon" href="fav.ico">
+        <link rel="shortcut icon" href="{$smarty.const.BRACP_DIR_INSTALL_URL}fav.ico">
         <!-- Here loads all CSS files. -->
         <link rel="stylesheet" type="text/css" href="{$smarty.const.BRACP_DIR_INSTALL_URL}css/system.css"/>
         <style>

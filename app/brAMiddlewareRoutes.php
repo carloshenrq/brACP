@@ -102,6 +102,15 @@ class brAMiddlewareRoutes extends Slim\Middleware
         **********************
         **********************/
 
+        /*********************
+        **********************
+        *** ERROR - ROUTES ***
+        **********************
+        **********************/
+        $app->notFound(function() {
+            brACPSlim::getInstance()->display('error.not.allowed');
+        });
+
         // Calls next middleware.
         $this->next->call();
     }

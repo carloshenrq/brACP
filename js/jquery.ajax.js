@@ -69,7 +69,7 @@
             },
             'error'     : function(jqXHR, textStatus, errorThrown ) {
                 // Caso aconteça algum erro durante a requisição
-                this.html($('<div class="ajax-error"/>').html(errorThrown));
+                this.html(jqXHR.responseText);
             },
         });
     });

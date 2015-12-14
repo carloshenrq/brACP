@@ -22,8 +22,7 @@
     {if $smarty.const.BRACP_MAINTENCE eq true}
         Em manutenção.
     {else}
-        Você não possui direito de acesso a este local!<br>
-        Verifique seu usuário de acesso e tente novamente.
+        Você não possui direito de acesso a este local!
     {/if}
 </p>
 
