@@ -55,7 +55,7 @@ class brACPSlim extends Slim\Slim
      */
     public function accountLoggout()
     {
-        unset($_SESSION['BRACP_ISLOGGEDIN'], $_SESSION['BRACP_USERID'], $_SESSION['BRACP_ACC_OBJECT']);
+        unset($_SESSION['BRACP_ISLOGGEDIN'], $_SESSION['BRACP_ACCOUNTID'], $_SESSION['BRACP_USERID']);
     }
 
     /**
@@ -77,8 +77,8 @@ class brACPSlim extends Slim\Slim
 
         // Define como usuário logado e o objeto da conta em memória.
         $_SESSION['BRACP_ISLOGGEDIN'] = 1;
+        $_SESSION['BRACP_ACCOUNTID'] = $acc->getAccount_id();
         $_SESSION['BRACP_USERID'] = $acc->getUserid();
-        $_SESSION['BRACP_ACC_OBJECT'] = json_encode($acc);
 
         // Retorna verdadeiro para o login.
         return 1;
@@ -235,9 +235,9 @@ class brACPSlim extends Slim\Slim
     /**
      * @param Model\Login
      */
-    public function reloadLogin($userid)
+    public function reloadLogin($account_id)
     {
-        return $this->getEntityManager()->getRepository('Model\Login')->findOneBy(['userid' => $userid]);
+        return $this->getEntityManager()->getRepository('Model\Login')->findOneBy(['account_id' => $account_id]);
     }
 
     /**

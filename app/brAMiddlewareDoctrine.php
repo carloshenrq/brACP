@@ -37,7 +37,7 @@ class brAMiddlewareDoctrine extends Slim\Middleware
         // Se o usuário estiver logado, realiza a aatualização dos dados de sessão
         //  e da classe.
         if(brACPSlim::getInstance()->isLoggedIn())
-            brACPSlim::getInstance()->acc = brACPSlim::getInstance()->reloadLogin($_SESSION['BRACP_USERID']);
+            brACPSlim::getInstance()->acc = brACPSlim::getInstance()->reloadLogin($_SESSION['BRACP_ACCOUNTID']);
 
         // Calls next middleware.
         $this->next->call();
