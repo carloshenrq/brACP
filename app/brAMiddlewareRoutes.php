@@ -111,6 +111,13 @@ class brAMiddlewareRoutes extends Slim\Middleware
             brACPSlim::getInstance()->display('error.not.allowed');
         });
 
+        // Atribuido rota para caso de error interno.
+        $app->error(function(Exception $ex) {
+            brACPSlim::getInstance()->display('error.not.allowed', [
+                'exception' => $ex
+            ]);
+        });
+
         // Calls next middleware.
         $this->next->call();
     }

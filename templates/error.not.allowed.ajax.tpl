@@ -23,6 +23,10 @@
         Em manutenção.
     {else}
         Você não possui direito de acesso a este local!
+        {if $smarty.const.BRACP_DEVELOP_MODE eq true and isset($exception) eq true}
+            <br><br>
+            <strong>{$exception->getMessage()}</strong>
+        {/if}
     {/if}
 </p>
 
