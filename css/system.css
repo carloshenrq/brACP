@@ -71,11 +71,6 @@ html, body
     cursor: pointer;
 }
 
-.bracp-menu-mobile
-{
-    display: none;
-}
-
 .bracp-menu
 {
     background-color: #2d3716;

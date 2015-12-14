@@ -60,13 +60,6 @@
                 <div class="bracp-menu">
                     {include 'menu.tpl'}
                 </div>
-                <div class="bracp-menu-mobile">
-                    <div class="bracp-menu-mobile-img" data-toggle=".bracp-menu-mobile-items-show" data-menu=".bracp-menu-mobile-items"></div>
-                    <div class="bracp-menu-mobile-items-show"></div>
-                    <div class="bracp-menu-mobile-items">
-                        {include 'menu.tpl'}
-                    </div>
-                </div>
             </div>
             <div class="bracp-body">
                 {block name="brACP_Body"}
