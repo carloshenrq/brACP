@@ -1,7 +1,4 @@
 {
-    "config": {
-        "vendor-dir": "_dependences"
-    },
     "require": {
         "php" : ">=5.5",
         "slim/slim": "2.6.2",

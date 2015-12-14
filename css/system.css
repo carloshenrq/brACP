@@ -36,274 +36,183 @@ html, body
     background-color: #5E732E;
 }
 
-@media screen and (max-width: 800px)
+.bracp-content
 {
-    .bracp-content
-    {
-        width: 100%;
-    }
-
-    .bracp-header .bracp-logo
-    {
-        display: none;
-    }
-
-    .bracp-menu
-    {
-        display: none;
-    }
-
-    .bracp-menu-mobile
-    {
-        padding: 4px;
-        background: -webkit-linear-gradient(#e6e6e6, #d9d9d9); /* For Safari 5.1 to 6.0 */
-        background: -o-linear-gradient(#e6e6e6, #d9d9d9); /* For Opera 11.1 to 12.0 */
-        background: -moz-linear-gradient(#e6e6e6, #d9d9d9); /* For Firefox 3.6 to 15 */
-        background: linear-gradient(#e6e6e6, #d9d9d9); /* Standard syntax */
-    }
-
-    .bracp-menu-mobile .bracp-menu-mobile-img
-    {
-        height: 31px; width: 34px;
-        background-image: url(../img/mobile_menu_icon.gif);
-        background-repeat: no-repeat;
-    }
-
-    .bracp-menu-mobile .bracp-menu-mobile-items
-    {
-        display: none;
-    }
-
-    .bracp-menu-mobile-items-show
-    {
-        display: none;
-        position: absolute;
-        padding: 12px;
-        background: -webkit-linear-gradient(#e6e6e6, #d9d9d9); /* For Safari 5.1 to 6.0 */
-        background: -o-linear-gradient(#e6e6e6, #d9d9d9); /* For Opera 11.1 to 12.0 */
-        background: -moz-linear-gradient(#e6e6e6, #d9d9d9); /* For Firefox 3.6 to 15 */
-        background: linear-gradient(#e6e6e6, #d9d9d9); /* Standard syntax */
-        box-shadow: 0px 0px 1px black inset;
-    }
-
-    li.bracp-menu-anterior
-    {
-        border-bottom: 0px !important;
-        padding: 4px;
-        color: gray !important;
-        font-style: italic;
-        font-size: 10px;
-    }
-
-    .bracp-menu-mobile-items-show ul
-    {
-        position: relative;
-        margin: 0; padding: 0;
-        list-style: none;
-    }
-
-    .bracp-menu-mobile-items-show ul li
-    {
-        padding: 8px;
-        font-size: 12px;
-        font-weight: bold;
-        border-bottom: 1px dotted black;
-        min-width: 200px;
-    }
-
-    .bracp-menu-mobile-items-show ul ul
-    {
-        display: none;
-    }
-
-    .bracp-menu-anterior::before
-    {
-        content: "‹";
-        padding-right: 4px;
-    }
-
+    width: 60%;
+    margin: auto;
+    box-shadow: 0px 0px 30px 4px white;
 }
 
-@media screen and (min-width: 800px)
+.bracp-body, .bracp-footer
 {
-    .bracp-content
-    {
-        width: 60%;
-        margin: auto;
-        box-shadow: 0px 0px 30px 4px white;
-    }
+    padding: 10px;
+}
 
-    .bracp-body, .bracp-footer
-    {
-        padding: 10px;
-    }
+.bracp-header
+{
+    background-image: url(../img/background-header.png);
+    background-repeat: none;
+    background-position: 0px -100px;
+    height: 150px;
+}
 
-    .bracp-header
-    {
-        background-image: url(../img/background-header.png);
-        background-repeat: none;
-        background-position: 0px -100px;
-        height: 150px;
-    }
+.bracp-header .bracp-logo
+{
+    background-image: url(../img/logo.png);
+    background-repeat: none;
+    background-position: 0px -30px;
 
-    .bracp-header .bracp-logo
-    {
-        background-image: url(../img/logo.png);
-        background-repeat: none;
-        background-position: 0px -30px;
+    height: 150px;
+    width: 420px;
+}
 
-        height: 150px;
-        width: 420px;
-    }
+.bracp-link
+{
+    cursor: pointer;
+}
 
-    .bracp-link
-    {
-        cursor: pointer;
-    }
+.bracp-menu-mobile
+{
+    display: none;
+}
 
-    .bracp-menu-mobile
-    {
-        display: none;
-    }
-
-    .bracp-menu
-    {
-        background-color: #2d3716;
-        height: 35px;
-    }
+.bracp-menu
+{
+    background-color: #2d3716;
+    height: 35px;
+}
 
 
-    .bracp-menu ul
-    {
-        list-style: none;
-        position: relative;
-        margin: 0;
-        padding: 0;
-    }
+.bracp-menu ul
+{
+    list-style: none;
+    position: relative;
+    margin: 0;
+    padding: 0;
+}
 
 
-    .bracp-menu ul li
-    {
-        position: relative;
-        float: left;
-        margin: 0;
-        padding: 10px;
-        font-weight: bold;
-        cursor: pointer;
-        color: white;
+.bracp-menu ul li
+{
+    position: relative;
+    float: left;
+    margin: 0;
+    padding: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    color: white;
 
-        -webkit-transition: color .25s ease-in-out, background-color .25s ease-in-out;
-        -moz-transition: color .25s ease-in-out, background-color .25s ease-in-out;
-        -o-transition: color .25s ease-in-out, background-color .25s ease-in-out;
-        transition: color .25s ease-in-out, background-color .25s ease-in-out;
-    }
+    -webkit-transition: color .25s ease-in-out, background-color .25s ease-in-out;
+    -moz-transition: color .25s ease-in-out, background-color .25s ease-in-out;
+    -o-transition: color .25s ease-in-out, background-color .25s ease-in-out;
+    transition: color .25s ease-in-out, background-color .25s ease-in-out;
+}
 
-    .bracp-menu ul li > ul li
-    {
-        color: #2d3716;
-        background-color: #e6e6e6;
-    }
+.bracp-menu ul li > ul li
+{
+    color: #2d3716;
+    background-color: #e6e6e6;
+}
 
-    .bracp-menu ul li > ul li:hover
-    {
-        color: white;
-        background-color: #2d3716;
-    }
+.bracp-menu ul li > ul li:hover
+{
+    color: white;
+    background-color: #2d3716;
+}
 
-    .bracp-menu ul li:hover
-    {
-        color: #2d3716;
-        background-color: #e6e6e6;
-    }
+.bracp-menu ul li:hover
+{
+    color: #2d3716;
+    background-color: #e6e6e6;
+}
 
-    .bracp-menu ul ul
-    {
-        visibility: hidden;
-        opacity: 0;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        background-color: white;
-        box-shadow: 0px 0px 2px 1px black;
-        padding: 0;
+.bracp-menu ul ul
+{
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: white;
+    box-shadow: 0px 0px 2px 1px black;
+    padding: 0;
 
-        -webkit-transition: opacity .25s ease-in-out, visibility .25s ease-in-out;
-        -moz-transition: opacity .25s ease-in-out, visibility .25s ease-in-out;
-        -o-transition: opacity .25s ease-in-out, visibility .25s ease-in-out;
-        transition: opacity .25s ease-in-out, visibility .25s ease-in-out;
-    }
+    -webkit-transition: opacity .25s ease-in-out, visibility .25s ease-in-out;
+    -moz-transition: opacity .25s ease-in-out, visibility .25s ease-in-out;
+    -o-transition: opacity .25s ease-in-out, visibility .25s ease-in-out;
+    transition: opacity .25s ease-in-out, visibility .25s ease-in-out;
+}
 
-    .bracp-menu ul ul li
-    {
-        float: none;
-        width: 200px;
-    }
+.bracp-menu ul ul li
+{
+    float: none;
+    width: 200px;
+}
 
-    .bracp-menu ul ul ul
-    {
-        top:0;
-        left:100%;
-    }
+.bracp-menu ul ul ul
+{
+    top:0;
+    left:100%;
+}
 
-    .bracp-menu ul li:hover > ul
-    {
-        visibility: visible;
-        opacity: 1;
-    }
+.bracp-menu ul li:hover > ul
+{
+    visibility: visible;
+    opacity: 1;
+}
 
 
-    .bracp-body
-    {
-        clear: both;
-        background-color: white;
-        min-height: 250px;
-    }
+.bracp-body
+{
+    clear: both;
+    background-color: white;
+    min-height: 250px;
+}
 
-    .bracp-footer
-    {
-        background-color: #2d3716;
-    }
+.bracp-footer
+{
+    background-color: #2d3716;
+}
 
-    .bracp-form
-    {
-        margin: auto;
-        padding: 8px;
-        border-radius: 2px;
-        background-color: rgba(229, 255, 229, .45);
-        box-shadow: 0px 0px 3px rgba(0, 153, 51, .35);
-    }
+.bracp-form
+{
+    margin: auto;
+    padding: 8px;
+    border-radius: 2px;
+    background-color: rgba(229, 255, 229, .45);
+    box-shadow: 0px 0px 3px rgba(0, 153, 51, .35);
+}
 
-    .bracp-form-field
-    {
-        margin: 4px;
-        padding: 4px;
-    }
+.bracp-form-field
+{
+    margin: 4px;
+    padding: 4px;
+}
 
-    .bracp-form-field label,
-    .bracp-form-field input
-    {
-        vertical-align: middle;
-    }
+.bracp-form-field label,
+.bracp-form-field input
+{
+    vertical-align: middle;
+}
 
-    .bracp-form-field input,
-    .bracp-form-field select,
-    .bracp-form-field textarea
-    {
-        padding: 4px;
-    }
+.bracp-form-field input,
+.bracp-form-field select,
+.bracp-form-field textarea
+{
+    padding: 4px;
+}
 
-    .bracp-form-left-align,
-    .bracp-form-right-align
-    {
-        margin: 2px;
-        display: inline-block;
-    }
+.bracp-form-left-align,
+.bracp-form-right-align
+{
+    margin: 2px;
+    display: inline-block;
+}
 
-    .bracp-form-submit
-    {
-        text-align: right;
-        padding: 4px;
-    }
+.bracp-form-submit
+{
+    text-align: right;
+    padding: 4px;
 }
 
 .bracp-ajax-loading

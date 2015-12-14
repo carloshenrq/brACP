@@ -18,7 +18,7 @@
  */
 
 // Verify if the dependencies from composer are installed.
-if(!is_dir(__DIR__ . DIRECTORY_SEPARATOR . '_dependences'))
+if(!is_dir(__DIR__ . DIRECTORY_SEPARATOR . 'vendor'))
 {
     echo 'Dependencies not found. (Run \'composer install\')';
     exit;
@@ -27,7 +27,7 @@ if(!is_dir(__DIR__ . DIRECTORY_SEPARATOR . '_dependences'))
 // Mostly important file from the server. This loads all libs needed to run this panel.
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'config.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'config.parser.php';
-require_once __DIR__ . DIRECTORY_SEPARATOR . '_dependences' . DIRECTORY_SEPARATOR . 'autoload.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'autoload.php';
 
 // Calls the slim

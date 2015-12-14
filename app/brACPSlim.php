@@ -308,14 +308,14 @@ class brACPSlim extends Slim\Slim
             if(!is_null($callableData) && is_callable($callableData))
                 $data = array_merge($data, $callableData());
 
-            // Atribui o nivel de gm e acesso.
-            if($this->isLoggedIn() && !is_null($this->acc))
-                $data = array_merge($data, ['acc_gmlevel' => $this->acc->getGroup_id()]);
-
             // Invoca a função enviada por parametro antes de invocar o template.
             if(!is_null($callable) && is_callable($callable))
                 $callable();
         }
+
+        // Atribui o nivel de gm e acesso.
+        if($this->isLoggedIn() && !is_null($this->acc))
+            $data = array_merge($data, ['acc_gmlevel' => $this->acc->getGroup_id()]);
 
         // Chama o view para mostrar o template.
         $this->view()->display($template . '.tpl', $data);
