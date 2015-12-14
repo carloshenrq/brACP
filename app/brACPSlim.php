@@ -69,8 +69,11 @@ class brACPSlim extends Slim\Slim
         // Se a combinação não existir retorna false.
         // Adicionado para caso a conta seja inferior ao nivel permitido para login, não
         //  permite que seja logado.
-        if($acc === false || $acc->getGroup_id() < BRACP_ALLOW_LOGIN_GMLEVEL)
-            return false;
+        if($acc === false)
+            return 0;
+
+        if($acc->getGroup_id() < BRACP_ALLOW_LOGIN_GMLEVEL)
+            return -1;
 
         // Define como usuário logado e o objeto da conta em memória.
         $_SESSION['BRACP_ISLOGGEDIN'] = 1;
@@ -78,7 +81,7 @@ class brACPSlim extends Slim\Slim
         $_SESSION['BRACP_ACC_OBJECT'] = json_encode($acc);
 
         // Retorna verdadeiro para o login.
-        return true;
+        return 1;
     }
 
     /**
@@ -88,6 +91,19 @@ class brACPSlim extends Slim\Slim
      */
     public function accountRegister()
     {
+        // Obtém o hash das senhas para comparar.
+        $user_pass = hash('md5', $this->request()->post('user_pass'));
+        $user_pass_conf = hash('md5', $this->request()->post('user_pass_conf'));
+        // Obtém o hash dos emails para comparar.
+        $email = hash('md5', $this->request()->post('email'));
+        $email_conf = hash('md5', $this->request()->post('email_conf'));
+
+        // Verificações para nem permitir o resto da execução do programa.
+        if($user_pass !== $user_pass_conf)
+            return -1;
+        else if($email !== $email_conf)
+            return -2;
+
         // Inicializa o objeto para criação de conta.
         $acc = new Login;
         $acc->setUserid($this->request()->post('userid'));
@@ -116,21 +132,29 @@ class brACPSlim extends Slim\Slim
     {
         try
         {
-            if($this->checkUserId($acc->getUserid()))
-                return false;
-            else if(BRACP_MAIL_REGISTER_ONCE && $this->checkEmail($acc->getEmail()))
-                return false;
+            // Verifica se o nome de usuario está disponivel para uso.
+            //  - Caso e-mail esteja configurado para apenas um uso, faz o mesmo.
+            if($this->checkUserId($acc->getUserid()) || BRACP_MAIL_REGISTER_ONCE && $this->checkEmail($acc->getEmail()))
+                return 0;
 
+            // Grava o objeto no banco de dados.
             $this->getEntityManager()->persist($acc);
             $this->getEntityManager()->flush();
 
-            // @TODO: Disparar eventos para envio de email.
+            // Se permitir o envio de e-mail, envia o e-mail para o usuário com as configurações
+            //  necessárias para uma possivel ativação da conta.
+            if(BRACP_ALLOW_MAIL_SEND)
+            {
+                // @TODO: Disparar eventos para envio de email.
+            }
 
-            return true;
+            // Retorna que foi possivel criar a conta.
+            return 1;
         }
         catch(Exception $ex)
         {
-            return false;
+            // Em caso de erro, envia erro default.
+            return 0;
         }
     }
 

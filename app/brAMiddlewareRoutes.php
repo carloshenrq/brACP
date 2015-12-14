@@ -61,24 +61,32 @@ class brAMiddlewareRoutes extends Slim\Middleware
         **********************/
         $app->post('/account/login', function() {
             brACPSlim::getInstance()->display('account.login', [], 0, null, function() {
-                // Tenta realizar o login via post.
-                if(brACPSlim::getInstance()->accountLogin())
-                    return ['message' => ['success' => 'Usuário logado com sucesso. Aguarde...']];
-
-                // Por default retorna o erro.
-                return ['message' => ['error' => 'Combinação de usuário e senha inválidos!']];
+                switch(brACPSlim::getInstance()->accountLogin())
+                {
+                    case  1: return ['message' => ['success' => 'Usuário logado com sucesso. Aguarde...']];
+                    case -1: return ['message' => ['error' => 'Acesso negado! Você não possui permissões para realizar login.']];
+                    default:
+                    case  0: return ['message' => ['error' => 'Combinação de usuário e senha inválidos!']];
+                }
             });
         });
 
         // Rota para registrar a conta do usuário.
         $app->post('/account/register', function() {
             brACPSlim::getInstance()->display('account.register', [], 0, null, function() {
-                // Tenta realizar o login via post.
-                if(brACPSlim::getInstance()->accountRegister())
-                    return ['message' => ['success' => 'Conta criada com sucesso. Você já pode realizar login agora.']];
-
-                // Por default retorna o erro.
-                return ['message' => ['error' => 'Nome de usuário ou e-mail já cadastrado. Tente novamente!']];
+                // Tenta realizar o registro via post.
+                switch(brACPSlim::getInstance()->accountRegister())
+                {
+                    // Cadastro realizado com sucesso.
+                    case  1: return ['message' => ['success' => 'Conta criada com sucesso. Você já pode realizar login agora.']];
+                    // Senhas digitadas não conferem.
+                    case -1: return ['message' => ['error' => 'As senhas digitadas não conferem!']];
+                    // Emails digitados não conferem.
+                    case -2: return ['message' => ['error' => 'Os e-mails digitados não conferem!']];
+                    // Erro padrão.
+                    default:
+                    case  0: return ['message' => ['error' => 'Nome de usuário ou e-mail já cadastrado. Tente novamente!']];
+                }
             }, !BRACP_ALLOW_CREATE_ACCOUNT);
         });
 

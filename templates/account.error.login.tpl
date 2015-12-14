@@ -18,5 +18,5 @@
 
 {extends file="default.tpl"}
 {block name="brACP_Body"}
-    {include 'account.error.logged.ajax.tpl'}
+    {include 'account.error.login.ajax.tpl'}
 {/block}
