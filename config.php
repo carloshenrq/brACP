@@ -32,6 +32,12 @@ DEFINE('BRACP_SQL_USER', 'ragnarok', false);
 DEFINE('BRACP_SQL_PASS', 'ragnarok', false);
 DEFINE('BRACP_SQL_DBNAME', 'ragnarok', false);
 
+DEFINE('BRACP_MAIL_HOST', '127.0.0.1', false);
+DEFINE('BRACP_MAIL_PORT',  25, false);
+DEFINE('BRACP_MAIL_USER', 'ragnarok', false);
+DEFINE('BRACP_MAIL_PASS', 'ragnarok', false);
+DEFINE('BRACP_MAIL_FROM', 'noreply@127.0.0.1', false);
+
 DEFINE('BRACP_MD5_PASSWORD_HASH', true, false);
 DEFINE('BRACP_MAIL_REGISTER_ONCE', true, false);
 
@@ -44,5 +50,5 @@ DEFINE('BRACP_ALLOW_RESET_EQUIP', true, false);
 DEFINE('BRACP_ALLOW_LOGIN_GMLEVEL', 0, false);
 DEFINE('BRACP_ALLOW_ADMIN', true, false);
 DEFINE('BRACP_ALLOW_ADMIN_CHANGE_PASSWORD', true, false);
-DEFINE('BRACP_ALLOW_ADMIN_GMLEVEL',99, false);
+DEFINE('BRACP_ALLOW_ADMIN_GMLEVEL', 99, false);
 
