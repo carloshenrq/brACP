@@ -33,7 +33,11 @@ class brAMiddlewareDoctrine extends Slim\Middleware
             'dbname' => BRACP_SQL_DBNAME,
         ], Setup::createAnnotationMetadataConfiguration([ BRACP_ENTITY_DIR ], BRACP_DEVELOP_MODE)));
 
-        // var_dump(brACPSlim::getInstance()->getEntityManager());
+
+        // Se o usuário estiver logado, realiza a aatualização dos dados de sessão
+        //  e da classe.
+        if(brACPSlim::getInstance()->isLoggedIn())
+            brACPSlim::getInstance()->acc = brACPSlim::getInstance()->reloadLogin($_SESSION['BRACP_USERID']);
 
         // Calls next middleware.
         $this->next->call();

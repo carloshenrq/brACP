@@ -30,6 +30,8 @@ class brACPSlim extends Slim\Slim
      */
     protected $em;
 
+    public $acc;
+
     public function __construct($userSettings = [])
     {
         // Initialize session for this app.
@@ -65,7 +67,9 @@ class brACPSlim extends Slim\Slim
         $acc = $this->checkUserAndPass($this->request()->post('userid'), $this->request()->post('user_pass'));
 
         // Se a combinação não existir retorna false.
-        if($acc === false)
+        // Adicionado para caso a conta seja inferior ao nivel permitido para login, não
+        //  permite que seja logado.
+        if($acc === false || $acc->getGroup_id() < BRACP_ALLOW_LOGIN_GMLEVEL)
             return false;
 
         // Define como usuário logado e o objeto da conta em memória.
@@ -114,6 +118,8 @@ class brACPSlim extends Slim\Slim
         {
             if($this->checkUserId($acc->getUserid()))
                 return false;
+            else if(BRACP_MAIL_REGISTER_ONCE && $this->checkEmail($acc->getEmail()))
+                return false;
 
             $this->getEntityManager()->persist($acc);
             $this->getEntityManager()->flush();
@@ -161,6 +167,27 @@ class brACPSlim extends Slim\Slim
     }
 
     /**
+     * Verifica se o endereço de e-mail já está cadastrado no banco de dados.
+     *
+     * @param string $email
+     *
+     * @return bool
+     */
+    private function checkEmail($email)
+    {
+        try
+        {
+            return count($this->getEntityManager()->getRepository('Model\Login')->findBy([
+                'email' => $email
+            ])) > 0;
+        }
+        catch(Exception $ex)
+        {
+            return false;
+        }
+    }
+
+    /**
      * Verifica se o nome de usuário informado existe no banco de dados.
      *
      * @param string $userid
@@ -182,7 +209,15 @@ class brACPSlim extends Slim\Slim
     }
 
     /**
-     * @param $em Doctrine\ORM\EntityManager
+     * @param Model\Login
+     */
+    public function reloadLogin($userid)
+    {
+        return $this->getEntityManager()->getRepository('Model\Login')->findOneBy(['userid' => $userid]);
+    }
+
+    /**
+     * @param Doctrine\ORM\EntityManager $em 
      */
     public function setEntityManager(EntityManager $em)
     {
@@ -210,15 +245,21 @@ class brACPSlim extends Slim\Slim
      * @param array $data
      * @param int $access { 0: never logged. 1: ever logged. -1: always. }
      */
-    public function display($template, $data = [], $access = -1, $callable = null, $callableData = null)
+    public function display($template, $data = [], $access = -1, $callable = null, $callableData = null, $blocked = false, $gmlevel = -1)
     {
         // Controle para saber se o acesso está tudo ok.
         $accessIsFine = true;
 
         // Verifica o tipo de acesso para mostrar o display do form.
-        if($access != -1)
+        if($access != -1 || $blocked || BRACP_MAINTENCE)
         {
-            if($access == 0 && $this->isLoggedIn())
+            if($blocked || BRACP_MAINTENCE || ($access == 1 && $this->isLoggedIn()
+                                                 && ($this->acc->getState() != 0 || $this->acc->getGroup_id() < $gmlevel)))
+            {
+                $template = 'error.not.allowed';
+                $accessIsFine = false;
+            }
+            else if($access == 0 && $this->isLoggedIn())
             {
                 $template = 'account.error.logged';
                 $accessIsFine = false;
@@ -242,6 +283,10 @@ class brACPSlim extends Slim\Slim
             // Invoca a função enviada por parametro antes de invocar o template.
             if(!is_null($callableData) && is_callable($callableData))
                 $data = array_merge($data, $callableData());
+
+            // Atribui o nivel de gm e acesso.
+            if($this->isLoggedIn() && !is_null($this->acc))
+                $data = array_merge($data, ['acc_gmlevel' => $this->acc->getGroup_id()]);
 
             // Invoca a função enviada por parametro antes de invocar o template.
             if(!is_null($callable) && is_callable($callable))

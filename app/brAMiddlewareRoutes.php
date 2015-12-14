@@ -36,7 +36,7 @@ class brAMiddlewareRoutes extends Slim\Middleware
         });
 
         $app->get('/account/register', function() {
-            brACPSlim::getInstance()->display('account.register', [], 0);
+            brACPSlim::getInstance()->display('account.register', [], 0, null, null, !BRACP_ALLOW_CREATE_ACCOUNT);
         });
 
         $app->get('/account/login', function() {
@@ -44,7 +44,7 @@ class brAMiddlewareRoutes extends Slim\Middleware
         });
 
         $app->get('/account/recover', function() {
-            brACPSlim::getInstance()->display('account.recover', [], 0);
+            brACPSlim::getInstance()->display('account.recover', [], 0, null, null, !BRACP_ALLOW_RECOVER);
         });
 
         // Define o loggout do usuário.
@@ -60,9 +60,7 @@ class brAMiddlewareRoutes extends Slim\Middleware
         **********************
         **********************/
         $app->post('/account/login', function() {
-
             brACPSlim::getInstance()->display('account.login', [], 0, null, function() {
-
                 // Tenta realizar o login via post.
                 if(brACPSlim::getInstance()->accountLogin())
                     return ['message' => ['success' => 'Usuário logado com sucesso. Aguarde...']];
@@ -70,26 +68,23 @@ class brAMiddlewareRoutes extends Slim\Middleware
                 // Por default retorna o erro.
                 return ['message' => ['error' => 'Combinação de usuário e senha inválidos!']];
             });
-
         });
 
         // Rota para registrar a conta do usuário.
         $app->post('/account/register', function() {
-
             brACPSlim::getInstance()->display('account.register', [], 0, null, function() {
-
                 // Tenta realizar o login via post.
                 if(brACPSlim::getInstance()->accountRegister())
                     return ['message' => ['success' => 'Conta criada com sucesso. Você já pode realizar login agora.']];
 
                 // Por default retorna o erro.
-                return ['message' => ['error' => 'Nome de usuário já cadastrado. Tente novamente!']];
-            });
+                return ['message' => ['error' => 'Nome de usuário ou e-mail já cadastrado. Tente novamente!']];
+            }, !BRACP_ALLOW_CREATE_ACCOUNT);
         });
 
         /*********************
         **********************
-        **** DELETE - ROUTES **
+        *** DELETE - ROUTES **
         **********************
         **********************/
 
