@@ -29,7 +29,7 @@
                 {if $smarty.const.PAG_INSTALL eq true}
                     <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/donations" data-target=".bracp-body">Doações</li>
                 {/if}
-                <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/loggout" data-target=".bracp-body">Sair ({$smarty.session.BRACP_USERID})</li>
+                <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/logout" data-target=".bracp-body">Sair ({$smarty.session.BRACP_USERID})</li>
             </ul>
         </li>
     {/if}

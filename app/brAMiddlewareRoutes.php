@@ -47,9 +47,9 @@ class brAMiddlewareRoutes extends Slim\Middleware
             brACPSlim::getInstance()->display('account.recover', [], 0, null, null, !BRACP_ALLOW_RECOVER);
         });
 
-        // Define o loggout do usuário.
-        $app->get('/account/loggout', function() {
-            brACPSlim::getInstance()->display('account.loggout', [], 1, function() {
+        // Define o logout do usuário.
+        $app->get('/account/logout', function() {
+            brACPSlim::getInstance()->display('account.logout', [], 1, function() {
                 brACPSlim::getInstance()->accountLoggout();
             });
         });
