@@ -27,7 +27,7 @@ DEFINE('BRACP_DEFAULT_TIMEZONE', 'America/Sao_Paulo', false);
 DEFINE('BRACP_DIR_INSTALL_URL', '/brACP/', false);
 
 DEFINE('BRACP_SQL_DRIVER', 'pdo_mysql', false);
-DEFINE('BRACP_SQL_HOST', '127.0.0.1', false);
+DEFINE('BRACP_SQL_HOST', 'ragnarok.mysql.uhserver.com', false);
 DEFINE('BRACP_SQL_USER', 'ragnarok', false);
 DEFINE('BRACP_SQL_PASS', 'ragnarok', false);
 DEFINE('BRACP_SQL_DBNAME', 'ragnarok', false);
@@ -52,3 +52,20 @@ DEFINE('BRACP_ALLOW_ADMIN', true, false);
 DEFINE('BRACP_ALLOW_ADMIN_CHANGE_PASSWORD', true, false);
 DEFINE('BRACP_ALLOW_ADMIN_GMLEVEL', 99, false);
 DEFINE('BRACP_ALLOW_MAIL_SEND', true, false);
+
+// PAGSEGURO- CONFIGURAÇÕES DO PAGSEGURO
+if(BRACP_DEVELOP_MODE)
+{
+    DEFINE('PAG_URL', 'https://sandbox.pagseguro.uol.com.br', false);
+    DEFINE('PAG_WS_URL', 'https://ws.sandbox.pagseguro.uol.com.br', false);
+    DEFINE('PAG_STC_URL', 'https://stc.sandbox.pagseguro.uol.com.br', false);
+}
+else
+{
+    DEFINE('PAG_URL', 'https://pagseguro.uol.com.br', false);
+    DEFINE('PAG_WS_URL', 'https://ws.pagseguro.uol.com.br', false);
+    DEFINE('PAG_STC_URL', 'https://stc.pagseguro.uol.com.br', false);
+}
+
+DEFINE('PAG_EMAIL', '', false);
+DEFINE('PAG_TOKEN', '', false);
