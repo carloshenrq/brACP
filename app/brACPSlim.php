@@ -59,6 +59,14 @@ class brACPSlim extends Slim\Slim
     }
 
     /**
+     * Recebe os dados de notificação do pagseguro para atribuir ao banco de dados.
+     */
+    public function pagSeguroRequest()
+    {
+        // @Todo: Recepção dos dados do pagseguro.
+    }
+
+    /**
      * Verifica os dados para realizar login.
      */
     public function accountLogin()

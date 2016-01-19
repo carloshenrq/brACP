@@ -54,6 +54,11 @@ class brAMiddlewareRoutes extends Slim\Middleware
             });
         });
 
+        // Rota para as doações de usuários.
+        $app->get('/account/donations', function() {
+            brACPSlim::getInstance()->display('account.donations', [], 1, null, null, !PAG_INSTALL);
+        });
+
         /*********************
         **********************
         **** POST - ROUTES ***
@@ -89,6 +94,18 @@ class brAMiddlewareRoutes extends Slim\Middleware
                 }
             }, !BRACP_ALLOW_CREATE_ACCOUNT);
         });
+
+        // Caso o pagseguro esteja instalado, permite que receba
+        //  as rotas de notificação do sistema.
+        if(PAG_INSTALL)
+        {
+            /**
+             * Caminho para receber o post do pagseguro.
+             */
+            $app->post('/pagseguro/notifications', function() {
+                brACPSlim::getInstance()->pagSeguroRequest();
+            });
+        }
 
         /*********************
         **********************
