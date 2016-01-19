@@ -26,6 +26,9 @@
                 <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/change/password" data-target=".bracp-body">Alterar Senha</li>
                 <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/change/mail" data-target=".bracp-body">Alterar Email</li>
                 <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/chars" data-target=".bracp-body">Personagens</li>
+                {if $smarty.const.PAG_INSTALL eq true}
+                    <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/donations" data-target=".bracp-body">Doações</li>
+                {/if}
                 <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/loggout" data-target=".bracp-body">Sair ({$smarty.session.BRACP_USERID})</li>
             </ul>
         </li>

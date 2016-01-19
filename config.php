@@ -54,6 +54,7 @@ DEFINE('BRACP_ALLOW_ADMIN_GMLEVEL', 99, false);
 DEFINE('BRACP_ALLOW_MAIL_SEND', true, false);
 
 // PAGSEGURO- CONFIGURAÇÕES DO PAGSEGURO
+DEFINE('PAG_INSTALL', true, false);
 if(BRACP_DEVELOP_MODE)
 {
     DEFINE('PAG_URL', 'https://sandbox.pagseguro.uol.com.br', false);

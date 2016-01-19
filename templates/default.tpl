@@ -40,6 +40,10 @@
         <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/jquery.ajax.js"></script>
         <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/jquery.bracp.js"></script>
 
+        {if $smarty.const.PAG_INSTALL eq true}
+            <script src="{$smarty.const.PAG_STC_URL}/pagseguro/api/v2/checkout/pagseguro.lightbox.js"></script>
+        {/if}
+
         <script>
         {if $smarty.const.BRACP_DEVELOP_MODE eq true}
             console.info("---------------------------------------\n" +
