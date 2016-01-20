@@ -110,12 +110,16 @@ class brAMiddlewareRoutes extends Slim\Middleware
                             ->getRepository('Model\Donation')
                             ->findOneBy(['id' => $app->request()->post('donationId')]);
 
-            // Define o código de transação para a doação.
-            $donation->setTransactionCode($app->request()->post('transactionCode'));
+            // Caso a doação não seja encontrada no banco de dados.
+            if(!is_null($donation))
+            {
+                // Define o código de transação para a doação.
+                $donation->setTransactionCode($app->request()->post('transactionCode'));
 
-            // Atualiza a doação com os dados de transação.
-            $app->getEntityManager()->merge($donation);
-            $app->getEntityManager()->flush();
+                // Atualiza a doação com os dados de transação.
+                $app->getEntityManager()->merge($donation);
+                $app->getEntityManager()->flush();
+            }
         });
 
         // Caso o pagseguro esteja instalado, permite que receba
