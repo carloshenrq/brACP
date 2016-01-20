@@ -18,56 +18,52 @@
 
 +function($)
 {
-    $(window).on('resize', function() {
-        var objToggle = $($('.bracp-menu-mobile-img').data('toggle'));
-        objToggle.stop(true, true).slideUp('fast');
 
-        // Ajusta a tela de acordo com a largura.
-        $('.bracp-ajax-loading').css({
-            'width' : $(window).width(),
-            'height' : $(window).height(),
-        });
-    });
+    $(document).on('change', '.bracp-donation-calc', function() {
 
-    // Ao clicar sobre o imagem do menu mobile, abrir o menu dos itens.
-    $(document).on('click', '.bracp-menu-mobile-img', function() {
-        var menuHtml = $($(this).data('menu')).html(),
-            objToggle = $($(this).data('toggle'));
+        var thisValue = parseFloat($(this).val());
 
-        if(objToggle.css('display') == 'none')
+        if(!isNaN(thisValue))
         {
-            objToggle.html(menuHtml);
+            $($(this).data('target')).val(thisValue * parseFloat($(this).data('multiply'))).blur();
+
+            // Verifica se está sendo taxado.
+            if($(this).data('rates'))
+                $('#cobrado').val((thisValue+ .4) / (1 - .0399)).blur();
         }
+        else
+            $(this).val(0).blur().change();
 
-        objToggle.stop(true, true).slideToggle('fast');
     });
 
-    // Ao clicar em um item que possua sub-menu adiciona o menu seguinte como html atual.
-    $(document).on('click', '.bracp-menu-mobile-items-show > ul li', function() {
-        if($(this).find('ul').length > 0)
-        {
-            var subMenu = $(this).find('ul'),
-                subMenuHtml = subMenu.html();
+    $(document).on('change', '.bracp-bonus-calc', function() {
 
-            subMenuHtml = "<li class='bracp-menu-anterior' data-url='" + btoa($($(this).parent()).html()) + "'>" + subMenu.data('back') + "</li>" + subMenuHtml; 
+        var thisValue = parseFloat($(this).val());
 
-            $($(this).parent()).stop(true, true).fadeOut('fast', function() {
-                $(this).html(subMenuHtml).stop(true, true).fadeIn('fast');
-            });
-        }
+        if(!isNaN(thisValue))
+            $($(this).data('target')).val(thisValue / parseFloat($(this).data('multiply'))).blur().change();
+        else
+            $(this).val(0).blur().change();
     });
 
-    // Caso seja clicado no item anterior, volta o menu.
-    $(document).on('click', '.bracp-menu-anterior', function() {
-        var htmlMenu = atob($(this).data('url'));
+    $(document).on('keypress', 'input.number', function(e) {
+        var keyCode = e.keyCode || e.which;
 
-        $($(this).parent()).stop(true, true).fadeOut('fast', function() {
-            $(this).html(htmlMenu).stop(true, true).fadeIn('fast');
-        });
+        return /^(46|8|9|27|13|190)$/.test(keyCode) || /^([0-9.-])$/.test(String.fromCharCode(keyCode));
     });
 
-    $(document).on('ready', function() {
+    // Ao sair de um campo decimal, define as casas decimais.
+    $(document).on('blur', 'input[type="number"], input.number', function() {
+        var decimalPlaces = $(this).data('places') == undefined ? 2:$(this).data('places'),
+            decimalMultiply = Math.pow(10, decimalPlaces);
 
+        var tmpValue = $(this).val();
+
+        while(tmpValue.indexOf(',') >= 0)
+            tmpValue = tmpValue.replace(',', '.')
+
+        value = Math.floor(decimalMultiply * parseFloat(tmpValue));
+        $(this).val((value/decimalMultiply).toFixed(decimalPlaces).toString());
     });
 
 } (window.jQuery);

@@ -70,3 +70,7 @@ else
 
 DEFINE('PAG_EMAIL', '', false);
 DEFINE('PAG_TOKEN', '', false);
+
+DEFINE('DONATION_AMOUNT_MULTIPLY', 100, false);
+DEFINE('DONATION_AMOUNT_USE_RATE', true, false);
+DEFINE('DONATION_AMOUT_SHOW_RATE_CALC', true, false);

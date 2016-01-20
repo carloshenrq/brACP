@@ -276,6 +276,7 @@ span.ajax-url:hover
     padding: 5px;
     border-radius: 2px;
     border: 1px solid;
+    text-align: center;
 }
 
 .bracp-message-success
@@ -294,4 +295,9 @@ span.ajax-url:hover
 {
     background-color: rgba(255, 255, 0, .25);
     border-color: 1px solid rgba(255, 255, 0, .8);
+}
+
+input[type="number"], input.number
+{
+    text-align: right;
 }
