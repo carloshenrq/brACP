@@ -234,7 +234,7 @@ class Checkout
         $checkoutString = $xml->saveXML();
 
         // Query para envio dos dados.
-        $checkoutQuery = 'v3/checkout?email=' . PAG_EMAIL . '&token=' . PAG_TOKEN;
+        $checkoutQuery = 'v2/checkout?email=' . PAG_EMAIL . '&token=' . PAG_TOKEN;
 
         // Retorna os dados para o checkout criado.
         $checkoutResponse = simplexml_load_string(Request::create(PAG_WS_URL, [

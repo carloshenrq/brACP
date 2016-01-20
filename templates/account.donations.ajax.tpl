@@ -16,7 +16,30 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *}
 
+{if $donationStart eq true}
+<script>
+    PagSeguroLightbox({
+        'code' : '{$checkoutCode}'
+    }, {
+        'success' : function(transactionCode) {
+            $.ajax({
+                'url'       : '{$smarty.const.BRACP_DIR_INSTALL_URL}/account/donations/transactions',
+                'method'    : 'post',
+                'data'      : { 'donationId' : '{$donation->getId()}', 'transactionCode' : transactionCode },
+                'async'     : false
+            });
+        }
+    });
+</script>
+{/if}
+
 <h1>Minha Conta &raquo; Doações</h1>
+
+{if $donationStart eq true}
+    <p class="bracp-message-success">
+        Obrigado por iniciar o processo de doação! Ficamos muito felizes em receber sua ajuda!
+    </p>
+{/if}
 
 <p>Você sabia que suas doações ajudam a manter o servidor no ar? Todos custos que temos de hospedagem,
      desenvolvimento e equipe são vocês que nos ajudam a pagar através de suas doações.
@@ -32,20 +55,31 @@
 </p>
 
 <p class="bracp-message-warning">
-	Lembre-se: Para cada <strong>R$ 1,00</strong> que você doar, você é prêmiado com <strong>{$smarty.const.DONATION_AMOUNT_MULTIPLY}</strong> em Bônus Eletrônico.
+    Lembre-se: Para cada <strong>R$ 1,00</strong> que você doar, você é prêmiado com <strong>{$amountBonus} {if $amountPromo > 0}(+{$amountPromo}){/if}</strong> em Bônus Eletrônico.
 </p>
+
+
+{if is_null($promotion) eq false}
+<p class="bracp-message-success">
+    <strong>Promoção:</strong> <i>{$promotion->getDescription()}</i>.<br>
+    <strong>Periodo:</strong> <i>{$promotion->getStartDate()}</i> até <i>{$promotion->getEndDate()}</i><br>
+    <strong>Bônus extra a cada R$ 1,00:</strong> <i>{$amountPromo}</i>.<br>
+    <br>
+    <i>*Promoção válida para todas as doações <u>INICIADAS</u> dentro do periodo indicado.</i>
+</p>
+{/if}
 
 <form class="ajax-form" action="{$smarty.const.BRACP_DIR_INSTALL_URL}account/donations" autocomplete="off" method="post" target=".bracp-body">
     <div class="bracp-form" style="width: 400px">
         <div class="bracp-form-field">
             <label>
                 Valor da Doação R$:<br>
-                <input type="text" id="donation" name="donation" class="number bracp-donation-calc" data-rates="{$smarty.const.DONATION_AMOUNT_USE_RATE}" data-multiply="{$smarty.const.DONATION_AMOUNT_MULTIPLY}" data-target="#bonus" placeholder="Valor da doação" min="0" step="1.00" size="20" value="0.00"/>
+                <input type="text" id="donation" name="donation" class="number bracp-donation-calc" data-rates="{$smarty.const.DONATION_AMOUNT_USE_RATE}" data-multiply="{$amountBonus+$amountPromo}" data-target="#bonus" placeholder="Valor da doação" min="0" step="1.00" size="20" value="0.00"/>
             </label>
             <br>
             <label>
                 Valor em Bônus Eletrônico:<br>
-                <input type="text" id="bonus" name="bonus" class="number bracp-bonus-calc" data-rates="{$smarty.const.DONATION_AMOUNT_USE_RATE}" data-multiply="{$smarty.const.DONATION_AMOUNT_MULTIPLY}" data-target="#donation" placeholder="Valor em bônus" min="0" step="{$smarty.const.DONATION_AMOUNT_MULTIPLY}" size="20" value="0" data-places="0"/>
+                <input type="text" id="bonus" name="bonus" class="number bracp-bonus-calc" data-rates="{$smarty.const.DONATION_AMOUNT_USE_RATE}" data-multiply="{$amountBonus+$amountPromo}" data-target="#donation" placeholder="Valor em bônus" min="0" size="20" value="0" data-places="0"/>
             </label>
         </div>
         {if $smarty.const.DONATION_AMOUNT_USE_RATE eq true}
@@ -63,7 +97,7 @@
         {/if}
         <div class="bracp-form-field">
             <label>
-                <input type="checkbox" id="nobonus" name="nobonus"/>
+                <input type="checkbox" id="nobonus" name="nobonus" value="1"/>
                 Eu não desejo receber os bônus eletrônicos desta doação.
             </label>
             <label>
@@ -77,4 +111,7 @@
             </div>
         </div>
     </div>
+    {if is_null($promotion) eq false}
+        <input type="hidden" name="PromotionID" value="{$promotion->getId()}"/>
+    {/if}
 </form>

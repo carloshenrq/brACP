@@ -56,7 +56,7 @@ class brAMiddlewareRoutes extends Slim\Middleware
 
         // Rota para as doações de usuários.
         $app->get('/account/donations', function() {
-            brACPSlim::getInstance()->display('account.donations', [], 1, null, null, !PAG_INSTALL);
+            brACPSlim::getInstance()->donationDisplay();
         });
 
         /*********************
@@ -93,6 +93,29 @@ class brAMiddlewareRoutes extends Slim\Middleware
                     case  0: return ['message' => ['error' => 'Nome de usuário ou e-mail já cadastrado. Tente novamente!']];
                 }
             }, !BRACP_ALLOW_CREATE_ACCOUNT);
+        });
+
+        // recebe o post de dados.
+        $app->post('/account/donations', function() {
+            brACPSlim::getInstance()->pagSeguroRequest();
+        });
+
+        // Somente atualiza os dados de doação na tabela.
+        $app->post('/account/donations/transactions', function() {
+            // Obtém o aplication.
+            $app = brACPSlim::getInstance();
+
+            // Encontra o objeto de doação para poder atualizar os dados no banco.
+            $donation = $app->getEntityManager()
+                            ->getRepository('Model\Donation')
+                            ->findOneBy(['id' => $app->request()->post('donationId')]);
+
+            // Define o código de transação para a doação.
+            $donation->setTransactionCode($app->request()->post('transactionCode'));
+
+            // Atualiza a doação com os dados de transação.
+            $app->getEntityManager()->merge($donation);
+            $app->getEntityManager()->flush();
         });
 
         // Caso o pagseguro esteja instalado, permite que receba

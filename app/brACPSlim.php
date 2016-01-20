@@ -19,6 +19,7 @@
 
 use Doctrine\ORM\EntityManager;
 use Model\Login;
+use Model\Donation;
 
 /**
  *
@@ -50,12 +51,30 @@ class brACPSlim extends Slim\Slim
         $this->add(new \brAMiddlewareRoutes());
     }
 
-    /**
-     * Remove os dados de sessão do navegador.
-     */
-    public function accountLoggout()
+    public function donationDisplay($donationStart = false, $donation = null, $checkoutCode = null)
     {
-        unset($_SESSION['BRACP_ISLOGGEDIN'], $_SESSION['BRACP_ACCOUNTID'], $_SESSION['BRACP_USERID']);
+        // Cria a query para seleção da promoção no banco de dados.
+        $query = $this->getEntityManager()
+                        ->createQuery('SELECT p FROM Model\Promotion p WHERE :CURDATE BETWEEN p.startDate AND p.endDate');
+
+        $query->setParameter('CURDATE', date('Y-m-d'));
+        $result = $query->getResult();
+
+        // Obtém o objeto da promoção e envia para o formulário.
+        $promotion = ((count($result) > 0) ? $result[0]:null);
+
+        // Exibe a tela com as informações de promoção e os demais dados
+        //  caso necessário.
+        $this->display('account.donations',
+            [
+                'promotion' => $promotion,
+                'amountBonus' => DONATION_AMOUNT_MULTIPLY,
+                'amountPromo' => ((is_null($promotion)) ? 0 : $promotion->getBonusMultiply()),
+                'donationStart' => $donationStart,
+                'checkoutCode' => $checkoutCode,
+                'donation' => $donation
+            ],
+            1, null, null, !PAG_INSTALL);
     }
 
     /**
@@ -63,7 +82,74 @@ class brACPSlim extends Slim\Slim
      */
     public function pagSeguroRequest()
     {
-        // @Todo: Recepção dos dados do pagseguro.
+        // Inicializa o objeto de doação.
+        $donation = new Donation();
+
+        // Multiplicador atual de bonus.
+        $bonusMutiply = DONATION_AMOUNT_MULTIPLY;
+
+        // Caso possua código de promoção
+        if(!is_null($this->request()->post('PromotionID')))
+        {
+            // Realiza a query para obter os dados de promoção e caso existam
+            //  se existir, define o objeto de promoção para a doação.
+            $query = $this->getEntityManager()
+                            ->createQuery('SELECT p FROM Model\Promotion p WHERE p.id = :id AND :CURDATE BETWEEN p.startDate AND p.endDate');
+            $query->setParameter('id', $this->request()->post('PromotionID'))
+                    ->setParameter('CURDATE', date('Y-m-d'));
+            $result = $query->getResult();
+
+            // Se houver dados de promoção para esta doação,
+            //  define a promoção ativa.
+            if(count($result) > 0)
+            {
+                $donation->setPromotion($result[0]);
+                $bonusMutiply += $donation->getPromotion()->getBonusMultiply();
+            }
+        }
+
+        // Define o código de referência interno para a transação.
+        $donation->setReference(strtoupper(hash('md5', microtime(true))));
+        $donation->setDrive('PAGSEGURO');
+        $donation->setAccount_id($_SESSION['BRACP_ACCOUNTID']);
+        $donation->setValue($this->request()->post('donation'));
+        $donation->setBonus(floatval($donation->getValue()) * $bonusMutiply);
+        $donation->setTotalValue(floatval($donation->getValue() + 0.4) / ((100 - 3.99)/100));
+        $donation->setCheckoutCode(null);
+        $donation->setTransactionCode(null);
+        $donation->setReceiveBonus(!is_null($this->request()->post('nobonus')));
+
+        // Grava o registro de doação do banco de dados.
+        $this->getEntityManager()->persist($donation);
+        $this->getEntityManager()->flush();
+
+        // Faz a chamada da api do pagseguro para criar a transação de envio.
+        $checkout = new PagSeguro\Checkout();
+        $checkoutResponse = $checkout->setCurrency('BRL')
+                                    ->addItem(new PagSeguro\CheckoutItem( 'BONUS_ELETRONICO',
+                                             "Doação - Bônus Eletrônico ({$donation->getBonus()})",
+                                             sprintf('%.2f', $donation->getTotalValue()),
+                                             '1'))
+                                    ->setReference($donation->getReference())
+                                    ->addMetaKey('PLAYER_ID', $donation->getAccount_id())
+                                    ->sendRequest();
+
+        // Define o código de checkout para a doação.
+        $donation->setCheckoutCode($checkoutResponse->code);
+
+        $this->getEntityManager()->merge($donation);
+        $this->getEntityManager()->flush();
+
+        // Define os dados de checkout para a doação.
+        $this->donationDisplay(true, $donation, $donation->getCheckoutCode());
+    }
+
+    /**
+     * Remove os dados de sessão do navegador.
+     */
+    public function accountLoggout()
+    {
+        unset($_SESSION['BRACP_ISLOGGEDIN'], $_SESSION['BRACP_ACCOUNTID'], $_SESSION['BRACP_USERID']);
     }
 
     /**
