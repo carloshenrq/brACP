@@ -18,6 +18,8 @@
  */
 namespace PagSeguro;
 
+use \Request;
+
 /**
  * Classe para verificação de transações e suas notificações.
  *

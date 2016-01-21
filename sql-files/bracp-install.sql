@@ -19,6 +19,7 @@ DROP TABLE IF EXISTS `bracp_donations`;
 CREATE TABLE IF NOT EXISTS `bracp_donations` (
     `DonationID` INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `PromotionID` INTEGER NULL DEFAULT NULL,
+    `DonationDate` DATE NOT NULL DEFAULT '0000-00-00',
     `DonationRefer` CHAR(32) NOT NULL,
     `DonationDrive` ENUM('PAGSEGURO') NOT NULL DEFAULT 'PAGSEGURO',
     `AccountID` INTEGER NOT NULL,
@@ -32,15 +33,12 @@ CREATE TABLE IF NOT EXISTS `bracp_donations` (
     `DonationStatus` ENUM('INICIADA', 'PAGO', 'CANCELADO', 'ESTORNADO') NOT NULL DEFAULT 'INICIADA',
     `DonationPaymentDate` DATETIME NULL DEFAULT NULL,
 
-    FOREIGN KEY (`PromotionID`) REFERENCES `bracp_donations_promo` (`PromotionID`),
-    INDEX (`AccountID`, `DonationCompensate`),
-    UNIQUE INDEX (`DonationRefer`),
-    UNIQUE INDEX (`DonationDrive`, `TransactionCode`)
+    FOREIGN KEY (`PromotionID`) REFERENCES `bracp_donations_promo` (`PromotionID`)
 ) ENGINE=InnoDB COLLATE='utf8_swedish_ci';
 
 DROP TABLE IF EXISTS `bracp_compensations`;
 CREATE TABLE IF NOT EXISTS `bracp_compensations` (
-    `CompensateID` INTEGER NOT NULL PRIMARY KEY,
+    `CompensateID` INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `DonationID` INTEGER NOT NULL,
     `CompensatePending` BOOLEAN NOT NULL DEFAULT TRUE,
     `CompensateDate` DATETIME NULL DEFAULT NULL,

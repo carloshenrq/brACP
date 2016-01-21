@@ -58,7 +58,7 @@
             'url'       : $(this).data('url'),
             'context'   : $($(this).data('target')) || this,
             'method'    : $(this).data('method') || "GET",
-            'data'      : $(this).data('ajaxData') || {},
+            'data'      : $(this).data('data') || {},
             'cache'     : false,
             'global'    : false,
             'async'     : true,

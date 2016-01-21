@@ -20,6 +20,7 @@
 use Doctrine\ORM\EntityManager;
 use Model\Login;
 use Model\Donation;
+use Model\Compensate;
 
 /**
  *
@@ -53,6 +54,11 @@ class brACPSlim extends Slim\Slim
 
     public function donationDisplay($donationStart = false, $donation = null, $checkoutCode = null)
     {
+        // Verifica se foi enviado algum código de transação para ser atualizado pelo endereço
+        //  do pagseguro.
+        if(!is_null($this->request()->get('transactionCode')))
+            $this->updateTransaction($this->request()->get('transactionCode'));
+
         // Cria a query para seleção da promoção no banco de dados.
         $query = $this->getEntityManager()
                         ->createQuery('SELECT p FROM Model\Promotion p WHERE :CURDATE BETWEEN p.startDate AND p.endDate');
@@ -63,6 +69,24 @@ class brACPSlim extends Slim\Slim
         // Obtém o objeto da promoção e envia para o formulário.
         $promotion = ((count($result) > 0) ? $result[0]:null);
 
+        // Obtém as 30 ultimas doações nos ultimos 60 dias para o usuário logado.
+        $donations = $this->getEntityManager()
+                        ->createQuery('SELECT d FROM Model\Donation d WHERE d.date > :PAST_DATE ORDER BY d.id DESC')
+                        ->setParameter('PAST_DATE', date('Y-m-d',time() - (60*60*24*60)))
+                        ->setMaxResults(30)
+                        ->getResult();
+
+        $promos = [];
+
+        // Obtém todas as promoções que irão iniciar nos próximos dias.
+        if(DONATION_SHOW_NEXT_PROMO && DONATION_INTERVAL_DAYS > 0)
+            $promos = $this->getEntityManager()
+                            ->createQuery('SELECT p FROM Model\Promotion p WHERE p.startDate > :TODAY_DATE AND p.startDate <= :NEXT_DATE ORDER BY p.startDate ASC')
+                            ->setParameter('TODAY_DATE', date('Y-m-d', time()))
+                            ->setParameter('NEXT_DATE', date('Y-m-d', time() + (60*60*24*DONATION_INTERVAL_DAYS)))
+                            ->setMaxResults(10)
+                            ->getResult();
+
         // Exibe a tela com as informações de promoção e os demais dados
         //  caso necessário.
         $this->display('account.donations',
@@ -72,9 +96,83 @@ class brACPSlim extends Slim\Slim
                 'amountPromo' => ((is_null($promotion)) ? 0 : $promotion->getBonusMultiply()),
                 'donationStart' => $donationStart,
                 'checkoutCode' => $checkoutCode,
-                'donation' => $donation
+                'donation' => $donation,
+                'donations' => $donations,
+                'promos' => $promos
             ],
             1, null, null, !PAG_INSTALL);
+    }
+
+    /**
+     * Atualiza os dados da transação e faz todas as operações no banco de dados.
+     *
+     * @param string $transactionCode
+     */
+    public function updateTransaction($transactionCode)
+    {
+        // Retorna os dados de transação para o pagseguro para
+        //  verificação e possivel compensação da doação.
+        $transaction = PagSeguro\Transaction::checkTransaction($transactionCode);
+
+        // Obtém a doação com o código de referência para a transação.
+        $donation = $this->getEntityManager()
+                            ->createQuery('SELECT d, p FROM Model\Donation d LEFT JOIN d.promotion p WHERE d.reference = :reference')
+                            ->setParameter('reference', $transaction->reference)
+                            ->getOneOrNullResult();
+
+        // Estado antigo da transação. (O que ainda está salvo no banco de dados)
+        $oldStatus = $donation->getStatus();
+        $newStatus = (($transaction->status == 3 || $transaction->status == 4) ? 'PAGO' :
+                        (($transaction->status == 1 || $transaction->status == 2) ? 'INICIADA' :
+                        (($transaction->status == 7) ? 'CANCELADO' : 'ESTORNADO')));
+
+        // Obtém a data do ultimo evento executado.
+        $dateTime = date_create_from_format('Y-m-d\TH:i:s.uP', $transaction->lastEventDate)->format('Y-m-d H:i:s');
+
+        // Define o novo status da doação.
+        $donation->setStatus($newStatus);
+
+        // Se houve pilantragem.
+        if($oldStatus == 'PAGO' && $newStatus != 'PAGO')
+        {
+            // Estornou ou cancelou a doação, bloqueia a conta, pois a doação já foi
+            //  creditada.
+            $account = $this->getEntityManager()->getRepository('Model\Login')->findOneBy([
+                'account_id' => $donation->getAccount_id()
+            ]);
+
+            // Bloqueia a conta do jogaodr pois foi retornado o pagamento.
+            $account->setState(5);
+
+            // Atualiza os dados do jogador bloqueando a conta.
+            $this->getEntityManager()->merge($account);
+            $this->getEntityManager()->flush();
+        }
+        else if($oldStatus == 'INICIADA' && $newStatus == 'PAGO')
+        {
+            // Se for para doação receber o bônus doado, então
+            // Cria um registro na tabela de compensação.
+            if($donation->getReceiveBonus())
+            {
+                // Foi pago o valor e pode creditar ao jogador.
+                $compensate = new Compensate();
+                $compensate->setDonation($donation);
+                $compensate->setDate(date('Y-m-d'));
+                $compensate->setPending(true);
+                $compensate->setDate(null);
+
+                // Grava no banco de dados que foi iniciado a compensação dos dados.
+                $this->getEntityManager()->persist($compensate);
+            }
+
+            // Define como compensado.
+            $donation->setCompensate(true);
+            $donation->setPaymentDate($dateTime);
+        }
+
+        // Atualiza os dados da doação.
+        $this->getEntityManager()->merge($donation);
+        $this->getEntityManager()->flush();
     }
 
     /**
@@ -109,6 +207,7 @@ class brACPSlim extends Slim\Slim
         }
 
         // Define o código de referência interno para a transação.
+        $donation->setDate(date('Y-m-d'));
         $donation->setReference(strtoupper(hash('md5', microtime(true))));
         $donation->setDrive('PAGSEGURO');
         $donation->setAccount_id($_SESSION['BRACP_ACCOUNTID']);
@@ -117,7 +216,7 @@ class brACPSlim extends Slim\Slim
         $donation->setTotalValue(floatval($donation->getValue() + 0.4) / ((100 - 3.99)/100));
         $donation->setCheckoutCode(null);
         $donation->setTransactionCode(null);
-        $donation->setReceiveBonus(!is_null($this->request()->post('nobonus')));
+        $donation->setReceiveBonus(is_null($this->request()->post('nobonus')));
 
         // Grava o registro de doação do banco de dados.
         $this->getEntityManager()->persist($donation);

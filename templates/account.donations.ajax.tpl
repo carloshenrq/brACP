@@ -26,7 +26,11 @@
                 'url'       : '{$smarty.const.BRACP_DIR_INSTALL_URL}/account/donations/transactions',
                 'method'    : 'post',
                 'data'      : { 'donationId' : '{$donation->getId()}', 'transactionCode' : transactionCode },
-                'async'     : false
+                'async'     : false,
+                'success'   : function() {
+                    // Recarrega a página atual.
+                    window.location.reload();
+                }
             });
         }
     });
@@ -65,7 +69,7 @@
     <strong>Periodo:</strong> <i>{$promotion->getStartDate()}</i> até <i>{$promotion->getEndDate()}</i><br>
     <strong>Bônus extra a cada R$ 1,00:</strong> <i>{$amountPromo}</i>.<br>
     <br>
-    <i>*Promoção válida para todas as doações <u>INICIADAS</u> dentro do periodo indicado.</i>
+    <i>*Promoção válida <strong><u>SOMENTE</u></strong> para todas as doações <u>INICIADAS</u> dentro do periodo indicado.</i>
 </p>
 {/if}
 
@@ -115,3 +119,99 @@
         <input type="hidden" name="PromotionID" value="{$promotion->getId()}"/>
     {/if}
 </form>
+
+{if count($donations) eq 0}
+    <p class="bracp-message-warning">
+        Você não realizou nenhuma doação dentro dos ultimos 60 dias.
+    </p>
+{else}
+    <br>
+    <table border="1" align="center" class="bracp-table">
+        <caption class="bracp-message-warning">Você possui <strong>{min(30, count($donations))}</strong> doações nos últimos 60 dias</caption>
+        <thead>
+            <tr>
+                <th rowspan="2" align="right">Cód.</th>
+                <th rowspan="2" align="center">Data</th>
+                <th rowspan="2" align="center">Estado</th>
+                <th rowspan="2" align="right">Valor (R$)</th>
+                <th rowspan="2" align="right">Bônus</th>
+                <th rowspan="2" align="right">Cobrado (R$)</th>
+                <th colspan="3" align="center">Promoção</th>
+                <th rowspan="2" align="center">Compensado</th>
+                <th rowspan="2" align="center">Ação</th>
+            </tr>
+            <tr>
+                <th>Descrição</th>
+                <th align="center">Inicio</th>
+                <th align="center">Fim</th>
+            </tr>
+        </thead>
+        <tbody>
+        {foreach from=$donations item=row}
+            <tr>
+                <td align="right">{$row->getId()}</td>
+                <td align="center">{$row->getDate()}</td>
+                <td align="center">{$row->getStatus()}</td>
+                <td align="right">{sprintf('%.2f', $row->getValue())}</td>
+                <td align="right">{$row->getBonus()}</td>
+                <td align="right">{sprintf('%.2f', $row->getTotalValue())}</td>
+                {if is_null($row->getPromotion())}
+                    <td align="center" colspan="3">---</td>
+                {else}
+                    <td align="left">
+                        {if strlen($row->getPromotion()->getDescription()) > 20}
+                            <span title="{$row->getPromotion()->getDescription()}">
+                                {substr($row->getPromotion()->getDescription(), 0, 20)}...
+                            </span>
+                        {else}
+                            {$row->getPromotion()->getDescription()}
+                        {/if}
+                    </td>
+                    <td align="center">{$row->getPromotion()->getStartDate()}</td>
+                    <td align="center">{$row->getPromotion()->getEndDate()}</td>
+                {/if}
+                <td align="center">{if $row->getCompensate() eq true}Sim{else}Não{/if}</td>
+                <td align="center">
+                    {if empty($row->getTransactionCode()) eq false and !($row->getStatus() eq 'CANCELADO' or $row->getStatus() eq 'PAGO')}
+                        <button class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/donations" data-data="transactionCode={$row->getTransactionCode()}" data-method="GET" data-target=".bracp-body">Atualizar</button>
+                    {/if}
+                </td>
+            </tr>
+        {/foreach}
+        </tbody>
+    </table>
+{/if}
+
+{if $smarty.const.DONATION_SHOW_NEXT_PROMO eq true and $smarty.const.DONATION_INTERVAL_DAYS > 0}
+    {if count($promos) eq 0}
+        <p class="bracp-message-warning">Nenhuma promoção prevista para os próximos <strong>{$smarty.const.DONATION_INTERVAL_DAYS}</strong> dias.</p>
+    {else}
+        <br>
+        <table border="1" align="center" class="bracp-table">
+            <caption class="bracp-message-warning">Existem <strong>{count($promos)}</strong> promoções previstas para os próximos <strong>{$smarty.const.DONATION_INTERVAL_DAYS}</strong> dias.</caption>
+            <thead>
+                <tr>
+                    <th rowspan="2" align="right">Cód.</th>
+                    <th rowspan="2" align="left">Descrição</th>
+                    <th rowspan="2" align="right">Multiplicador</th>
+                    <th colspan="2" align="center">Periodo</th>
+                </tr>
+                <tr>
+                    <th align="center">Inicio</th>
+                    <th align="center">Fim</th>
+                </tr>
+            </thead>
+            <tbody>
+            {foreach from=$promos item=promo}
+                <tr>
+                    <td align="right">{$promo->getId()}</td>
+                    <td align="left">{$promo->getDescription()}</td>
+                    <td align="right">{$promo->getBonusMultiply()}</td>
+                    <td align="center">{$promo->getStartDate()}</td>
+                    <td align="center">{$promo->getEndDate()}</td>
+                </tr>
+            {/foreach}
+            </tbody>
+        </table>
+    {/if}
+{/if}

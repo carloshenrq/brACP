@@ -41,6 +41,11 @@ class Donation
     protected $promotion;
 
     /**
+     * @Column(name="DonationDate", type="string", length=10)
+     */
+    protected $date;
+
+    /**
      * @Column(name="DonationRefer", type="string", length=32)
      */
     protected $reference;
@@ -118,6 +123,16 @@ class Donation
     public function setPromotion($promotion)
     {
         return $this->promotion = $promotion;
+    }
+
+    public function getDate()
+    {
+        return $this->date;
+    }
+    
+    public function setDate($date)
+    {
+        return $this->date = $date;
     }
 
     public function getReference()

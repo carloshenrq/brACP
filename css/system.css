@@ -276,6 +276,7 @@ span.ajax-url:hover
     padding: 5px;
     border-radius: 2px;
     border: 1px solid;
+    text-align: left;
 }
 
 .bracp-message-success
@@ -299,4 +300,26 @@ span.ajax-url:hover
 input[type="number"], input.number
 {
     text-align: right;
+}
+
+.bracp-table
+{
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.bracp-table thead tr
+{
+    background-color: #2d3716;
+    border-color: white; color: white;
+}
+
+.bracp-table tr td, .bracp-table tr th
+{
+    padding: 3px;
+}
+
+.bracp-table tbody tr:nth-child(even)
+{
+    background-color: rgba(0, 255, 0, .1);
 }

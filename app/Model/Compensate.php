@@ -46,7 +46,7 @@ class Compensate
     protected $pending;
 
     /**
-     * @Column(name="CompensateDate", type="string", length=10)
+     * @Column(name="CompensateDate", type="string", length=10, nullable=true)
      */
     protected $date;
 
