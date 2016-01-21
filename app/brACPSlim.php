@@ -252,6 +252,50 @@ class brACPSlim extends Slim\Slim
     }
 
     /**
+     * Realiza a alteração de senha do usuário.
+     */
+    public function accountChangePassword()
+    {
+        // Não permite fazer a requisição caso esteja bloqueado para administradores
+        //  alterarem a senha.
+        if(!BRACP_ALLOW_ADMIN_CHANGE_PASSWORD && $this->acc->getGroup_id() >= BRACP_ALLOW_ADMIN_GMLEVEL)
+            return -2;
+
+        // Obtém a senha digitada.
+        $pass = hash('md5', $this->request()->post('user_pass'));
+        $actual = $this->acc->getUser_pass();
+
+        // Se não estiver ligado o hash, aplica apenas para comparar a senha.
+        if(!BRACP_MD5_PASSWORD_HASH)
+            $actual = hash('md5', $actual);
+
+        // Obtém as senhas digitadas e realiza a verificação de senha.
+        $new_pass = hash('md5', $this->request()->post('user_pass_new'));
+        $con_pass = hash('md5', $this->request()->post('user_pass_conf'));
+
+        // Senha atual não confere com o digitado.
+        if($pass !== $actual)
+            return -1;
+
+        // Senhas novas não conferem como digitado.
+        if($new_pass !== $con_pass)
+            return 0;
+
+        // Define a nova senha para a conta.
+        $user_pass = ((BRACP_MD5_PASSWORD_HASH) ? $new_pass : $this->request()->post('user_pass_new'));
+
+        // Define a senha do usuário.
+        $this->acc->setUser_pass($user_pass);
+
+        // Atualiza os dados no banco.
+        $this->getEntityManager()->merge($this->acc);
+        $this->getEntityManager()->flush();
+
+        // Retorna sucesso para a execução.
+        return 1;
+    }
+
+    /**
      * Verifica os dados para realizar login.
      */
     public function accountLogin()

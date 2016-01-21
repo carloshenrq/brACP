@@ -47,6 +47,10 @@ class brAMiddlewareRoutes extends Slim\Middleware
             brACPSlim::getInstance()->display('account.recover', [], 0, null, null, !BRACP_ALLOW_RECOVER);
         });
 
+        $app->get('/account/change/password', function() {
+            brACPSlim::getInstance()->display('account.change.password', [], 1, null, null);
+        });
+
         // Define o logout do usuário.
         $app->get('/account/logout', function() {
             brACPSlim::getInstance()->display('account.logout', [], 1, function() {
@@ -72,6 +76,18 @@ class brAMiddlewareRoutes extends Slim\Middleware
                     case -1: return ['message' => ['error' => 'Acesso negado! Você não possui permissões para realizar login.']];
                     default:
                     case  0: return ['message' => ['error' => 'Combinação de usuário e senha inválidos!']];
+                }
+            });
+        });
+
+        $app->post('/account/change/password', function(){
+            brACPSlim::getInstance()->display('account.change.password', [], 1, null, function() {
+                switch(brACPSlim::getInstance()->accountChangePassword())
+                {
+                    case  1: return ['message' => ['success' => 'Senha alterada com sucesso!']];
+                    case -1: return ['message' => ['error' => 'Senha atual digitada não confere.']];
+                    default:
+                    case  0: return ['message' => ['error' => 'As novas senhas digitadas não conferem!']];
                 }
             });
         });

@@ -16,15 +16,17 @@
         {if $smarty.const.BRACP_ALLOW_ADMIN eq true and $acc_gmlevel gte $smarty.const.BRACP_ALLOW_ADMIN_GMLEVEL}
             <li>
                 Administração
-                <ul data-back="Minha Conta">
-                    <li>Carregando.</li>
+                <ul data-back="Administração">
+                    <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}admin/manage/account" data-target=".bracp-body">Gerênciar Contas</li>
                 </ul>
             </li>
         {/if}
         <li>Minha Conta
             <ul data-back="Minha Conta">
                 <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/change/password" data-target=".bracp-body">Alterar Senha</li>
-                <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/change/mail" data-target=".bracp-body">Alterar Email</li>
+                {if $smarty.const.BRACP_ALLOW_CHANGE_MAIL eq true}
+                    <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/change/mail" data-target=".bracp-body">Alterar Email</li>
+                {/if}
                 <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/chars" data-target=".bracp-body">Personagens</li>
                 {if $smarty.const.PAG_INSTALL eq true}
                     <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/donations" data-target=".bracp-body">Doações</li>
