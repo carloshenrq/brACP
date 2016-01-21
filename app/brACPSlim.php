@@ -254,6 +254,51 @@ class brACPSlim extends Slim\Slim
     /**
      * Realiza a alteração de senha do usuário.
      */
+    public function accountChangeMail()
+    {
+        // Não permite fazer a requisição caso esteja bloqueado para administradores
+        //  alterarem o email.
+        if(!BRACP_ALLOW_CHANGE_MAIL || $this->acc->getGroup_id() >= BRACP_ALLOW_ADMIN_GMLEVEL)
+            return -2;
+
+        // Obtém o email digitado.
+        $email = hash('md5', $this->request()->post('email'));
+        $actual = hash('md5', $this->acc->getEmail());
+
+        // Obtém os novos emails digitados digitadas e realiza a verificação de senha.
+        $new_email = hash('md5', $this->request()->post('email_new'));
+        $con_email = hash('md5', $this->request()->post('email_conf'));
+
+        // Email atual não confere com o digitado.
+        if($email !== $actual)
+            return -1;
+
+        // Senhas novas não conferem como digitado.
+        if($new_email !== $con_email)
+            return 0;
+
+        // Obtém o email novo para continuar a alteração.
+        $email_new = $this->request()->post('email_new');
+
+        // Verifica se o e-mail já não está cadastrado no banco de dados.
+        if(BRACP_MAIL_REGISTER_ONCE && $this->checkEmail($email_new))
+            return -2;
+
+        // Define a senha do usuário.
+        $this->acc->setEmail($email_new);
+
+        // Atualiza os dados no banco.
+        $this->getEntityManager()->merge($this->acc);
+        $this->getEntityManager()->flush();
+
+        // Retorna sucesso para a execução.
+        return 1;
+    }
+
+
+    /**
+     * Realiza a alteração de senha do usuário.
+     */
     public function accountChangePassword()
     {
         // Não permite fazer a requisição caso esteja bloqueado para administradores

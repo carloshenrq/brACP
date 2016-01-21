@@ -18,5 +18,5 @@
 
 {extends file="default.tpl"}
 {block name="brACP_Body"}
-    {include 'account.logout.ajax.tpl'}
+    {include 'account.change.mail.ajax.tpl'}
 {/block}

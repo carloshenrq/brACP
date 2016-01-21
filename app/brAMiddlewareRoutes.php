@@ -51,6 +51,10 @@ class brAMiddlewareRoutes extends Slim\Middleware
             brACPSlim::getInstance()->display('account.change.password', [], 1, null, null);
         });
 
+        $app->get('/account/change/mail', function() {
+            brACPSlim::getInstance()->display('account.change.mail', [], 1, null, null, !BRACP_ALLOW_CHANGE_MAIL);
+        });
+
         // Define o logout do usuário.
         $app->get('/account/logout', function() {
             brACPSlim::getInstance()->display('account.logout', [], 1, function() {
@@ -90,6 +94,19 @@ class brAMiddlewareRoutes extends Slim\Middleware
                     case  0: return ['message' => ['error' => 'As novas senhas digitadas não conferem!']];
                 }
             });
+        });
+
+        $app->post('/account/change/mail', function(){
+            brACPSlim::getInstance()->display('account.change.mail', [], 1, null, function() {
+                switch(brACPSlim::getInstance()->accountChangeMail())
+                {
+                    case  1: return ['message' => ['success' => 'Email alterado com sucesso!']];
+                    case -1: return ['message' => ['error' => 'Email atual não confere com o digitado.']];
+                    case -2: return ['message' => ['error' => 'Endereço de e-mail já cadastrado.']];
+                    default:
+                    case  0: return ['message' => ['error' => 'Novo endereço de email digitado não confere!']];
+                }
+            }, !BRACP_ALLOW_CHANGE_MAIL);
         });
 
         // Rota para registrar a conta do usuário.
