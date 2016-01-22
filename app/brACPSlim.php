@@ -341,7 +341,14 @@ class brACPSlim extends Slim\Slim
         $donation->setAccount_id($_SESSION['BRACP_ACCOUNTID']);
         $donation->setValue($this->request()->post('donation'));
         $donation->setBonus(floatval($donation->getValue()) * $bonusMutiply);
-        $donation->setTotalValue(floatval($donation->getValue() + 0.4) / ((100 - 3.99)/100));
+
+        // Se o doador for pagar a taxa, então realiza o calculo do valor final para
+        //  gravar no banco de dados.
+        if(DONATION_AMOUNT_USE_RATE)
+            $donation->setTotalValue(floatval($donation->getValue() + 0.4) / ((100 - 3.99)/100));
+        else
+            $donation->setTotalValue($donation->getValue());
+
         $donation->setCheckoutCode(null);
         $donation->setTransactionCode(null);
         $donation->setReceiveBonus(is_null($this->request()->post('nobonus')));
