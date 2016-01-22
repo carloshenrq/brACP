@@ -38,33 +38,13 @@
     {if $smarty.const.BRACP_ALLOW_RANKING eq true}
     <li>Rankings
         <ul data-back="Rankings">
-            <li>Guerra do Emperium
-                <ul data-back="Guerra do Emperium">
-                    <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}rankings/woe/guilds" data-target=".bracp-body">Clãs</li>
-                    <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}rankings/woe/gvg" data-target=".bracp-body">Gladiadores</li>
-                    <li>Castelos
-                        <ul data-back="Castelos">
-                            <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}rankings/woe/castle" data-target=".bracp-body">Geral</li>
-                            <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}rankings/woe/castle/economy" data-target=".bracp-body">Econômia</li>
-                            <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}rankings/woe/castle/defense" data-target=".bracp-body">Defesa</li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
             <li>Personagens
                 <ul data-back="Personagens">
                     <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}rankings/chars" data-target=".bracp-body">Geral</li>
                     <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}rankings/chars/economy" data-target=".bracp-body">Econômia</li>
-                    <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}rankings/chars/pvp" data-target=".bracp-body">Player vs Player (PvP)</li>
                 </ul>
             </li>
         </ul>
     </li>
     {/if}
-    <li>Sobre
-        <ul data-back="Sobre">
-            <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}about/staff" data-target=".bracp-body">Equipe</li>
-            <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}about/brAthena" data-target=".bracp-body">brAthena</li>
-        </ul>
-    </li>
 </ul>

@@ -67,6 +67,10 @@ class brAMiddlewareRoutes extends Slim\Middleware
             brACPSlim::getInstance()->donationDisplay();
         });
 
+        $app->get('/account/chars', function() {
+            brACPSlim::getInstance()->charsReset();
+        });
+
         /*********************
         **********************
         **** POST - ROUTES ***
@@ -153,6 +157,11 @@ class brAMiddlewareRoutes extends Slim\Middleware
                 $app->getEntityManager()->merge($donation);
                 $app->getEntityManager()->flush();
             }
+        });
+
+
+        $app->post('/account/chars', function() {
+            brACPSlim::getInstance()->charsReset();
         });
 
         // Caso o pagseguro esteja instalado, permite que receba

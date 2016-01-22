@@ -129,7 +129,7 @@
     <table border="1" align="center" class="bracp-table">
         <caption class="bracp-message-warning">Você possui <strong>{min(30, count($donations))}</strong> doações nos últimos 60 dias</caption>
         <thead>
-            <tr>
+            <tr class="tiny">
                 <th rowspan="2" align="right">Cód.</th>
                 <th rowspan="2" align="center">Data</th>
                 <th rowspan="2" align="center">Estado</th>
@@ -140,7 +140,7 @@
                 <th rowspan="2" align="center">Compensado</th>
                 <th rowspan="2" align="center">Ação</th>
             </tr>
-            <tr>
+            <tr class="tiny">
                 <th>Descrição</th>
                 <th align="center">Inicio</th>
                 <th align="center">Fim</th>
@@ -190,13 +190,13 @@
         <table border="1" align="center" class="bracp-table">
             <caption class="bracp-message-warning">Existem <strong>{count($promos)}</strong> promoções previstas para os próximos <strong>{$smarty.const.DONATION_INTERVAL_DAYS}</strong> dias.</caption>
             <thead>
-                <tr>
+                <tr class="tiny">
                     <th rowspan="2" align="right">Cód.</th>
                     <th rowspan="2" align="left">Descrição</th>
                     <th rowspan="2" align="right">Multiplicador</th>
                     <th colspan="2" align="center">Periodo</th>
                 </tr>
-                <tr>
+                <tr class="tiny">
                     <th align="center">Inicio</th>
                     <th align="center">Fim</th>
                 </tr>

@@ -52,6 +52,93 @@ class brACPSlim extends Slim\Slim
         $this->add(new \brAMiddlewareRoutes());
     }
 
+    /**
+     * Método para gerenciamento dos personagens.
+     */
+    public function charsReset()
+    {
+        $this->display('account.chars', [], 1, null, function() {
+
+            // Obtém a instância da aplicação.
+            $app = brACPSlim::getInstance();
+
+            // Inicializa as variaveis para marcar os personagens que foram resetados.
+            $appear = $posit = $equip = [];
+
+            // Se o reset de aparências estiver habilitado, então verifica os personagens
+            //  para realizar o reset de aparência
+            if(BRACP_ALLOW_RESET_APPEAR && !empty($app->request()->post('char_id_appear')))
+            {
+                // Cria a query de atualização para os personagens selecionados
+                //  para resetar os dados.
+                $query = $app->getEntityManager()
+                                ->createQuery('
+                                    UPDATE
+                                        Model\Char c
+                                    SET
+                                        c.hair = 0, c.hair_color = 0,
+                                        c.clothes_color = 0,
+                                        c.head_top = 0, c.head_mid = 0,
+                                        c.head_bottom = 0, c.robe = 0
+                                    WHERE
+                                        c.char_id = :char_id AND c.online = 0
+                                ');
+
+                // Varre todos os chars ids para resetar os dados.
+                foreach($app->request()->post('char_id_appear') as $char_id)
+                {
+                    // Se conseguir resetar a aparência (se já não estiver resetado)
+                    if($query->setParameter('char_id', $char_id)->execute() > 0)
+                        $appear[] = $char_id;
+                }
+            }
+
+            // Verifica se pode resetar posição de personagem.
+            if(BRACP_ALLOW_RESET_POSIT && !empty($app->request()->post('char_id_posit')))
+            {
+                // Cria a query de atualização para os personagens selecionados
+                //  para resetar os dados.
+                $query = $app->getEntityManager()
+                                ->createQuery('
+                                    UPDATE
+                                        Model\Char c
+                                    SET
+                                        c.last_map = c.save_map,
+                                        c.last_x = c.save_x,
+                                        c.last_y = c.last_y
+                                    WHERE
+                                        c.char_id = :char_id AND c.online = 0
+                                ');
+
+                // Varre todos os chars ids para resetar os dados.
+                foreach($app->request()->post('char_id_posit') as $char_id)
+                {
+                    // Se conseguir resetar a aparência (se já não estiver resetado)
+                    if($query->setParameter('char_id', $char_id)->execute() > 0)
+                        $posit[] = $char_id;
+                }
+            }
+
+            // Verifica se pode resetar posição de personagem.
+            if(BRACP_ALLOW_RESET_EQUIP && !empty($app->request()->post('char_id_equip')))
+            {
+                // @Todo: Resetar equipamentos (Criar model para inventário)
+            }
+
+            $chars = $app->getEntityManager()
+                            ->getRepository('Model\Char')
+                            ->findBy([
+                                'account_id' => $app->acc->getAccount_id()
+                            ]);
+
+            return ['chars' => $chars,
+                    'appear' => $appear,
+                    'posit' => $posit,
+                    'equip' => $equip,
+                    'resetCount' => (BRACP_ALLOW_RESET_APPEAR + BRACP_ALLOW_RESET_POSIT + BRACP_ALLOW_RESET_EQUIP)];
+        });
+    }
+
     public function donationDisplay($donationStart = false, $donation = null, $checkoutCode = null)
     {
         // Verifica se foi enviado algum código de transação para ser atualizado pelo endereço

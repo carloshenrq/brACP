@@ -277,6 +277,7 @@ span.ajax-url:hover
     border-radius: 2px;
     border: 1px solid;
     text-align: left;
+    clear: both;
 }
 
 .bracp-message-success
@@ -317,6 +318,11 @@ input[type="number"], input.number
 .bracp-table tr td, .bracp-table tr th
 {
     padding: 3px;
+}
+
+.tiny, tr.tiny td, tr.tiny th
+{
+    font-size: 11px;
 }
 
 .bracp-table tbody tr:nth-child(even)
