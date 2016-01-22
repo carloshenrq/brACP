@@ -31,7 +31,9 @@
                 <th rowspan="2">Nome</th>
                 <th rowspan="2">Classe</th>
                 <th align="center" colspan="2">Nível</th>
-                <th rowspan="2" align="right">Zeny</th>
+                {if $smarty.const.BRACP_ALLOW_RANKING_ZENY_SHOW_ZENY eq true}
+                    <th rowspan="2" align="right">Zeny</th>
+                {/if}
                 <th rowspan="2" align="center">Status</th>
             </tr>
             <tr class="tiny">
@@ -47,7 +49,9 @@
                     <td align="left">{$char->getClass()}</td>
                     <td align="right">{$char->getBase_level()}</td>
                     <td align="right">{$char->getJob_level()}</td>
-                    <td align="right">{$char->getZeny()}</td>
+                    {if $smarty.const.BRACP_ALLOW_RANKING_ZENY_SHOW_ZENY eq true}
+                        <td align="right">{$char->getZeny()}</td>
+                    {/if}
                     <td align="center">{if $char->getOnline() eq true}<span style="color: green">Online</span>{else}<span style="color: red">Offline</span>{/if}</td>
                 </tr>
             {/foreach}

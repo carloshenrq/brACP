@@ -108,7 +108,7 @@ class brACPSlim extends Slim\Slim
                                     SET
                                         c.last_map = c.save_map,
                                         c.last_x = c.save_x,
-                                        c.last_y = c.last_y
+                                        c.last_y = c.save_y
                                     WHERE
                                         c.account_id = :account_id AND
                                         c.char_id = :char_id AND

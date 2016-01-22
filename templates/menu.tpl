@@ -41,7 +41,9 @@
             <li>Personagens
                 <ul data-back="Personagens">
                     <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}rankings/chars" data-target=".bracp-body">Geral</li>
-                    <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}rankings/chars/economy" data-target=".bracp-body">Econômia</li>
+                    {if $smarty.const.BRACP_ALLOW_RANKING_ZENY eq true}
+                        <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}rankings/chars/economy" data-target=".bracp-body">Econômia</li>
+                    {/if}
                 </ul>
             </li>
         </ul>

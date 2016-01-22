@@ -94,7 +94,7 @@ class brAMiddlewareRoutes extends Slim\Middleware
                                 ->setMaxResults(100)
                                 ->getResult()
                 ];
-            });
+            }, !BRACP_ALLOW_RANKING_ZENY);
         });
 
         /*********************
