@@ -84,6 +84,19 @@ class brAMiddlewareRoutes extends Slim\Middleware
             });
         });
 
+        $app->get('/rankings/chars/economy', function() {
+            brACPSlim::getInstance()->display('rankings.chars.economy', [], -1, null, function() {
+                // Obtém todos os personagens do ranking.
+                return [
+                    'chars' => brACPSlim::getInstance()
+                                ->getEntityManager()
+                                ->createQuery('SELECT c FROM Model\Char c WHERE c.zeny > 0 ORDER BY c.zeny DESC')
+                                ->setMaxResults(100)
+                                ->getResult()
+                ];
+            });
+        });
+
         /*********************
         **********************
         **** POST - ROUTES ***

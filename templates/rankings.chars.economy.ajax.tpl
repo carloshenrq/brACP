@@ -16,7 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *}
 
-<h1>Rankings &raquo; Personagens &raquo; Geral</h1>
+<h1>Rankings &raquo; Personagens &raquo; Econômia</h1>
 
 {if count($chars) eq 0}
     <p class="bracp-message-warning">
@@ -24,13 +24,14 @@
     </p>
 {else}
     <table border="1" align="center" class="bracp-table">
-        <caption><strong>Top 100 jogadores do servidor</strong></caption>
+        <caption><strong>Top 100 jogadores mais ricos</strong></caption>
         <thead>
             <tr class="tiny">
                 <th align="right" rowspan="2">Pos.</th>
                 <th rowspan="2">Nome</th>
                 <th rowspan="2">Classe</th>
                 <th align="center" colspan="2">Nível</th>
+                <th rowspan="2" align="right">Zeny</th>
                 <th rowspan="2" align="center">Status</th>
             </tr>
             <tr class="tiny">
@@ -46,6 +47,7 @@
                     <td align="left">{$char->getClass()}</td>
                     <td align="right">{$char->getBase_level()}</td>
                     <td align="right">{$char->getJob_level()}</td>
+                    <td align="right">{$char->getZeny()}</td>
                     <td align="center">{if $char->getOnline() eq true}<span style="color: green">Online</span>{else}<span style="color: red">Offline</span>{/if}</td>
                 </tr>
             {/foreach}
