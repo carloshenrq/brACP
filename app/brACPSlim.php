@@ -81,6 +81,7 @@ class brACPSlim extends Slim\Slim
                                         c.head_top = 0, c.head_mid = 0,
                                         c.head_bottom = 0, c.robe = 0
                                     WHERE
+                                        c.account_id = :account_id AND
                                         c.char_id = :char_id AND c.online = 0
                                 ');
 
@@ -88,7 +89,9 @@ class brACPSlim extends Slim\Slim
                 foreach($app->request()->post('char_id_appear') as $char_id)
                 {
                     // Se conseguir resetar a aparência (se já não estiver resetado)
-                    if($query->setParameter('char_id', $char_id)->execute() > 0)
+                    if($query->setParameter('char_id', $char_id)
+                                ->setParameter('account_id', $app->acc->getAccount_id())
+                                ->execute() > 0)
                         $appear[] = $char_id;
                 }
             }
@@ -107,14 +110,18 @@ class brACPSlim extends Slim\Slim
                                         c.last_x = c.save_x,
                                         c.last_y = c.last_y
                                     WHERE
-                                        c.char_id = :char_id AND c.online = 0
+                                        c.account_id = :account_id AND
+                                        c.char_id = :char_id AND
+                                        c.online = 0
                                 ');
 
                 // Varre todos os chars ids para resetar os dados.
                 foreach($app->request()->post('char_id_posit') as $char_id)
                 {
                     // Se conseguir resetar a aparência (se já não estiver resetado)
-                    if($query->setParameter('char_id', $char_id)->execute() > 0)
+                    if($query->setParameter('char_id', $char_id)
+                                ->setParameter('account_id', $app->acc->getAccount_id())
+                                ->execute() > 0)
                         $posit[] = $char_id;
                 }
             }
@@ -122,7 +129,41 @@ class brACPSlim extends Slim\Slim
             // Verifica se pode resetar posição de personagem.
             if(BRACP_ALLOW_RESET_EQUIP && !empty($app->request()->post('char_id_equip')))
             {
-                // @Todo: Resetar equipamentos (Criar model para inventário)
+                // Varre os personagens selecionados
+                //  para realizar o update.
+                foreach($app->request()->post('char_id_equip') as $char_id)
+                {
+                    // Obtém o personagem.
+                    $items = $app->getEntityManager()
+                                     ->createQuery('
+                                        SELECT
+                                            i, c
+                                        FROM
+                                            Model\Inventory i
+                                        LEFT JOIN
+                                            i.character c
+                                        WHERE
+                                            c.account_id = :account_id and
+                                            c.char_id = :char_id and
+                                            i.equip = 1')
+                                     ->setParameter('account_id', $app->acc->getAccount_id())
+                                     ->setParameter('char_id', $char_id)
+                                     ->getResult();
+
+                    // Desaquipa todos os itens do jogador.
+                    if(count($items) > 0)
+                    {
+                        // Varre os itens do inventário do jogador.
+                        foreach($items as $item)
+                        {
+                            $item->setEquip(false);
+                            $app->getEntityManager()->merge($item);
+                        }
+
+                        $app->getEntityManager()->flush();
+                        $equip[] = $char_id;
+                    }
+                }
             }
 
             $chars = $app->getEntityManager()

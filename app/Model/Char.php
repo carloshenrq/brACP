@@ -319,6 +319,10 @@ class Char
      */
     protected $hotkey_rowshift;
 
+    /**
+     * @OneToMany(targetEntity="Inventory", mappedBy="char")
+     */
+    protected $inventory;
 
     public function getChar_id()
     {
@@ -908,6 +912,16 @@ class Char
     public function setHotkey_rowshift($hotkey_rowshift)
     {
         return $this->hotkey_rowshift = $hotkey_rowshift;
+    }
+
+    public function getInventory()
+    {
+        return $this->inventory;
+    }
+    
+    public function setInventory($inventory)
+    {
+        return $this->inventory = $inventory;
     }
 }
 

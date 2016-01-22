@@ -71,6 +71,19 @@ class brAMiddlewareRoutes extends Slim\Middleware
             brACPSlim::getInstance()->charsReset();
         });
 
+        $app->get('/rankings/chars', function() {
+            brACPSlim::getInstance()->display('rankings.chars', [], -1, null, function() {
+                // Obtém todos os personagens do ranking.
+                return [
+                    'chars' => brACPSlim::getInstance()
+                                ->getEntityManager()
+                                ->createQuery('SELECT c FROM Model\Char c ORDER BY c.base_level DESC, c.job_level DESC, c.base_exp DESC, c.job_exp DESC')
+                                ->setMaxResults(100)
+                                ->getResult()
+                ];
+            });
+        });
+
         /*********************
         **********************
         **** POST - ROUTES ***
