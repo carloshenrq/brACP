@@ -21,9 +21,6 @@ use Doctrine\ORM\EntityManager;
 use Model\Login;
 use Model\Donation;
 use Model\Compensate;
-use \Swift_SmtpTransport;
-use \Swift_Mailer;
-use \Swift_Message;
 
 /**
  *
@@ -477,17 +474,17 @@ class brACPSlim extends Slim\Slim
     public function sendMail($subject, $to, $template, $data = [])
     {
         // Transporte para o email.
-        $transport = Swift_SmtpTransport::newInstance(BRACP_MAIL_HOST, BRACP_MAIL_PORT)
+        $transport = \Swift_SmtpTransport::newInstance(BRACP_MAIL_HOST, BRACP_MAIL_PORT)
                                             ->setUsername(BRACP_MAIL_USER)
                                             ->setPassword(BRACP_MAIL_PASS);
         // Mailer para envio dos dados.
-        $mailer = Swift_Mailer::newInstance($transport);
+        $mailer = \Swift_Mailer::newInstance($transport);
 
         // Mensagem para enviar.
-        $message = Swift_Message::newInstance($subject)
+        $message = \Swift_Message::newInstance($subject)
                                     ->setFrom([BRACP_MAIL_FROM => BRACP_MAIL_FROM_NAME])
                                     ->setTo($to)
-                                    ->setBody($this->renderMail($template, $data));
+                                    ->setBody($this->renderMail($template, $data), 'text/html');
 
         // Envia a mensagem.
         return $mailer->send($message) > 0;
@@ -515,12 +512,6 @@ class brACPSlim extends Slim\Slim
                                 ->setParameter('state', $state)
                                 ->execute() > 0;
 
-        // @Todo: Notificação de usuário.
-        if(BRACP_ALLOW_MAIL_SEND && BRACP_NOTIFY_CHANGE_STATE)
-        {
-
-        }
-
         return $stateChange;
     }
 
@@ -536,7 +527,6 @@ class brACPSlim extends Slim\Slim
         if(BRACP_MD5_PASSWORD_HASH)
             $password = hash('md5', $password);
 
-
         // Atualiza a senha do jogador.
         $passwordChange = $this->getEntityManager()
                                 ->createQuery('
@@ -551,10 +541,22 @@ class brACPSlim extends Slim\Slim
                                 ->setParameter('user_pass', $password)
                                 ->execute() > 0;
 
-        // @Todo: Notificação de usuário.
+        // Senha alterada informa para o usuário que foi modificada.
         if(BRACP_ALLOW_MAIL_SEND && BRACP_NOTIFY_CHANGE_PASSWORD)
         {
+            // Obtém a conta que será notificada.
+            $acc = $this->getEntityManager()
+                        ->getRepository('Model\Login')
+                        ->findOneBy(['account_id' => $account_id]);
 
+            // Envia o e-mail para o usuário informando que a senha foi modificada.
+            $this->sendMail('Notificação: Alteração de Senha',
+                    [$acc->getEmail()],
+                    'mail.change.password',
+                    [
+                        'userid' => $acc->getUserid(),
+                        'ipAddress' => $this->request()->getIp()
+                    ]);
         }
 
         return $passwordChange;
@@ -573,6 +575,14 @@ class brACPSlim extends Slim\Slim
         if(BRACP_MAIL_REGISTER_ONCE && $this->checkEmail($email))
             return false;
 
+        // Obtém a conta que será enviado o email.
+        $acc = $this->getEntityManager()
+                    ->getRepository('Model\Login')
+                    ->findOneBy(['account_id' => $account_id]);
+
+        // Obtém o email antigo.
+        $oldMail = $acc->getEmail();
+
         // Realiza a alteração de e-mail na conta indicada.
         $mailChange =  $this->getEntityManager()
                             ->createQuery('
@@ -587,10 +597,31 @@ class brACPSlim extends Slim\Slim
                             ->setParameter('email', $email)
                             ->execute() > 0;
 
-        // @Todo: Notificação de usuário.
+
+        // Notifica o usuário da alteração de email.
         if(BRACP_ALLOW_MAIL_SEND && BRACP_NOTIFY_CHANGE_MAIL)
         {
+            // Envia um email para o endereço antigo informando a alteração.
+            $this->sendMail('Notificação: Alteração de E-mail',
+                    [$oldMail],
+                    'mail.change.mail',
+                    [
+                        'userid' => $acc->getUserid(),
+                        'mailOld' => $oldMail,
+                        'mailNew' => $email,
+                        'ipAddress' => $this->request()->getIp()
+                    ]);
 
+            // Envia o e-mail para o novo endereço.
+            $this->sendMail('Notificação: Alteração de E-mail',
+                    [$email],
+                    'mail.change.mail',
+                    [
+                        'userid' => $acc->getUserid(),
+                        'mailOld' => $oldMail,
+                        'mailNew' => $email,
+                        'ipAddress' => $this->request()->getIp()
+                    ]);
         }
 
         return $mailChange;
