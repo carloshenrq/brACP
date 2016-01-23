@@ -37,7 +37,7 @@ DEFINE('BRACP_MAIL_PORT',  25, false);
 DEFINE('BRACP_MAIL_USER', 'ragnarok', false);
 DEFINE('BRACP_MAIL_PASS', 'ragnarok', false);
 DEFINE('BRACP_MAIL_FROM', 'noreply@127.0.0.1', false);
-DEFINE('BRACP_MAIL_FROM_NAME', 'noreply', false)
+DEFINE('BRACP_MAIL_FROM_NAME', 'noreply', false);
 
 DEFINE('BRACP_MD5_PASSWORD_HASH', true, false);
 DEFINE('BRACP_MAIL_REGISTER_ONCE', true, false);
