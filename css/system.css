@@ -329,3 +329,9 @@ input[type="number"], input.number
 {
     background-color: rgba(0, 255, 0, .1);
 }
+
+.bracp-table tbody tr.char-myaccount td
+{
+    font-weight: bold;
+    font-size: 15px;
+}

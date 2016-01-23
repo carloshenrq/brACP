@@ -916,7 +916,8 @@ class brACPSlim extends Slim\Slim
 
         // Atribui o nivel de gm e acesso.
         if($this->isLoggedIn() && !is_null($this->acc))
-            $data = array_merge($data, ['acc_gmlevel' => $this->acc->getGroup_id()]);
+            $data = array_merge($data, ['account_id' => $this->acc->getAccount_id(),
+                                        'acc_gmlevel' => $this->acc->getGroup_id()]);
 
         // Chama o view para mostrar o template.
         return $this->view()->render($template . '.tpl', $data);
