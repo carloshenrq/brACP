@@ -52,31 +52,23 @@
 <form class="ajax-form" action="{$smarty.const.BRACP_DIR_INSTALL_URL}account/chars" autocomplete="off" method="post" target=".bracp-body">
     <table border="1" align="center" class="bracp-table">
         <caption style="padding: 2px; text-align: right">
-            <input type="submit" value="Salvar"/>
-            <input type="reset" value="Resetar"/>
+            <input type="submit" value="Enviar"/>
+            <input type="reset" value="Limpar"/>
         </caption>
         <thead>
             <tr class="tiny">
                 <th rowspan="2" align="right">Cód.</th>
                 <th rowspan="2" align="left">Nome</th>
                 <th rowspan="2" align="left">Classe</th>
-                <th colspan="2" align="center">Nível</th>
-                <th colspan="3" align="center">Localização</th>
-                <th colspan="3" align="center">Ponto de Retorno</th>
+                <th rowspan="2" align="right">Nível</th>
+                <th rowspan="2" align="center">Localização</th>
+                <th rowspan="2" align="center">Ponto de Retorno</th>
                 <th rowspan="2" align="center">Online</th>
                 {if $resetCount > 0}
                     <th colspan="{$resetCount}" align="center">Resetar</th>
                 {/if}
             </tr>
             <tr class="tiny">
-                <th align="right">Base</th>
-                <th align="right">Classe</th>
-                <th align="left">Mapa</th>
-                <th align="right">X</th>
-                <th align="right">Y</th>
-                <th align="left">Mapa</th>
-                <th align="right">X</th>
-                <th align="right">Y</th>
                 {if $resetCount > 0}
                     {if $smarty.const.BRACP_ALLOW_RESET_APPEAR eq true}
                         <th align="center">Aparência</th>
@@ -96,14 +88,9 @@
                     <td align="right">{$char->getChar_id()}</td>
                     <td align="left">{$char->getName()}</td>
                     <td align="left">{$char->getClass()}</td>
-                    <td align="right">{$char->getBase_level()}</td>
-                    <td align="right">{$char->getJob_level()}</td>
-                    <td align="left">{$char->getLast_map()}</td>
-                    <td align="right">{$char->getLast_x()}</td>
-                    <td align="right">{$char->getLast_y()}</td>
-                    <td align="left">{$char->getSave_map()}</td>
-                    <td align="right">{$char->getSave_x()}</td>
-                    <td align="right">{$char->getSave_y()}</td>
+                    <td align="right">{$char->getBase_level()}/{$char->getJob_level()}</td>
+                    <td align="left">{$char->getLast_map()} ({$char->getLast_x()}, {$char->getLast_y()})</td>
+                    <td align="left">{$char->getSave_map()} ({$char->getSave_x()}, {$char->getSave_y()})</td>
                     <td align="center">{if $char->getOnline() eq true}Sim{else}Não{/if}</td>
                     {if $resetCount > 0}
                         {if $smarty.const.BRACP_ALLOW_RESET_APPEAR eq true}

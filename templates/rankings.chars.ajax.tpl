@@ -26,16 +26,12 @@
     <table border="1" align="center" class="bracp-table">
         <caption><strong>Top 100 jogadores do servidor</strong></caption>
         <thead>
-            <tr class="tiny">
-                <th align="right" rowspan="2">Pos.</th>
-                <th rowspan="2">Nome</th>
-                <th rowspan="2">Classe</th>
-                <th align="center" colspan="2">Nível</th>
-                <th rowspan="2" align="center">Status</th>
-            </tr>
-            <tr class="tiny">
-                <th align="right">Base</th>
-                <th align="right">Classe</th>
+            <tr>
+                <th align="right">Pos.</th>
+                <th>Nome</th>
+                <th>Classe</th>
+                <th align="right">Nível</th>
+                <th align="center">Status</th>
             </tr>
         </thead>
         <tbody>
@@ -44,8 +40,7 @@
                     <td align="right">{($i+1)}.º</td>
                     <td align="left">{$char->getName()}</td>
                     <td align="left">{$char->getClass()}</td>
-                    <td align="right">{$char->getBase_level()}</td>
-                    <td align="right">{$char->getJob_level()}</td>
+                    <td align="right">{$char->getBase_level()}/{$char->getJob_level()}</td>
                     <td align="center">{if $char->getOnline() eq true}<span style="color: green">Online</span>{else}<span style="color: red">Offline</span>{/if}</td>
                 </tr>
             {/foreach}

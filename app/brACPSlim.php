@@ -21,6 +21,9 @@ use Doctrine\ORM\EntityManager;
 use Model\Login;
 use Model\Donation;
 use Model\Compensate;
+use \Swift_SmtpTransport;
+use \Swift_Mailer;
+use \Swift_Message;
 
 /**
  *
@@ -69,29 +72,10 @@ class brACPSlim extends Slim\Slim
             //  para realizar o reset de aparência
             if(BRACP_ALLOW_RESET_APPEAR && !empty($app->request()->post('char_id_appear')))
             {
-                // Cria a query de atualização para os personagens selecionados
-                //  para resetar os dados.
-                $query = $app->getEntityManager()
-                                ->createQuery('
-                                    UPDATE
-                                        Model\Char c
-                                    SET
-                                        c.hair = 0, c.hair_color = 0,
-                                        c.clothes_color = 0,
-                                        c.head_top = 0, c.head_mid = 0,
-                                        c.head_bottom = 0, c.robe = 0
-                                    WHERE
-                                        c.account_id = :account_id AND
-                                        c.char_id = :char_id AND c.online = 0
-                                ');
-
                 // Varre todos os chars ids para resetar os dados.
                 foreach($app->request()->post('char_id_appear') as $char_id)
                 {
-                    // Se conseguir resetar a aparência (se já não estiver resetado)
-                    if($query->setParameter('char_id', $char_id)
-                                ->setParameter('account_id', $app->acc->getAccount_id())
-                                ->execute() > 0)
+                    if($app->resetAppear($app->acc->getAccount_id(), $char_id))
                         $appear[] = $char_id;
                 }
             }
@@ -99,29 +83,11 @@ class brACPSlim extends Slim\Slim
             // Verifica se pode resetar posição de personagem.
             if(BRACP_ALLOW_RESET_POSIT && !empty($app->request()->post('char_id_posit')))
             {
-                // Cria a query de atualização para os personagens selecionados
-                //  para resetar os dados.
-                $query = $app->getEntityManager()
-                                ->createQuery('
-                                    UPDATE
-                                        Model\Char c
-                                    SET
-                                        c.last_map = c.save_map,
-                                        c.last_x = c.save_x,
-                                        c.last_y = c.save_y
-                                    WHERE
-                                        c.account_id = :account_id AND
-                                        c.char_id = :char_id AND
-                                        c.online = 0
-                                ');
-
                 // Varre todos os chars ids para resetar os dados.
                 foreach($app->request()->post('char_id_posit') as $char_id)
                 {
                     // Se conseguir resetar a aparência (se já não estiver resetado)
-                    if($query->setParameter('char_id', $char_id)
-                                ->setParameter('account_id', $app->acc->getAccount_id())
-                                ->execute() > 0)
+                    if($app->resetPosition($app->acc->getAccount_id(), $char_id))
                         $posit[] = $char_id;
                 }
             }
@@ -133,46 +99,12 @@ class brACPSlim extends Slim\Slim
                 //  para realizar o update.
                 foreach($app->request()->post('char_id_equip') as $char_id)
                 {
-                    // Obtém o personagem.
-                    $items = $app->getEntityManager()
-                                     ->createQuery('
-                                        SELECT
-                                            i, c
-                                        FROM
-                                            Model\Inventory i
-                                        LEFT JOIN
-                                            i.character c
-                                        WHERE
-                                            c.account_id = :account_id and
-                                            c.char_id = :char_id and
-                                            i.equip = 1')
-                                     ->setParameter('account_id', $app->acc->getAccount_id())
-                                     ->setParameter('char_id', $char_id)
-                                     ->getResult();
-
-                    // Desaquipa todos os itens do jogador.
-                    if(count($items) > 0)
-                    {
-                        // Varre os itens do inventário do jogador.
-                        foreach($items as $item)
-                        {
-                            $item->setEquip(false);
-                            $app->getEntityManager()->merge($item);
-                        }
-
-                        $app->getEntityManager()->flush();
+                    if($app->resetEquip($app->acc->getAccount_id(), $char_id))
                         $equip[] = $char_id;
-                    }
                 }
             }
 
-            $chars = $app->getEntityManager()
-                            ->getRepository('Model\Char')
-                            ->findBy([
-                                'account_id' => $app->acc->getAccount_id()
-                            ]);
-
-            return ['chars' => $chars,
+            return ['chars' => $app->findChars($app->acc->getAccount_id()),
                     'appear' => $appear,
                     'posit' => $posit,
                     'equip' => $equip,
@@ -180,6 +112,9 @@ class brACPSlim extends Slim\Slim
         });
     }
 
+    /**
+     * Exibe informações de doação.
+     */
     public function donationDisplay($donationStart = false, $donation = null, $checkoutCode = null)
     {
         // Verifica se foi enviado algum código de transação para ser atualizado pelo endereço
@@ -415,16 +350,12 @@ class brACPSlim extends Slim\Slim
         // Obtém o email novo para continuar a alteração.
         $email_new = $this->request()->post('email_new');
 
-        // Verifica se o e-mail já não está cadastrado no banco de dados.
-        if(BRACP_MAIL_REGISTER_ONCE && $this->checkEmail($email_new))
+        // Verifica se não foi possivel alterar o e-mail
+        if(!$this->changeMail($this->acc->getAccount_id(), $email_new))
             return -2;
 
-        // Define a senha do usuário.
-        $this->acc->setEmail($email_new);
-
-        // Atualiza os dados no banco.
-        $this->getEntityManager()->merge($this->acc);
-        $this->getEntityManager()->flush();
+        // Atualiza a entidade.
+        $this->getEntityManager()->refresh($this->acc);
 
         // Retorna sucesso para a execução.
         return 1;
@@ -461,15 +392,12 @@ class brACPSlim extends Slim\Slim
         if($new_pass !== $con_pass)
             return 0;
 
-        // Define a nova senha para a conta.
-        $user_pass = ((BRACP_MD5_PASSWORD_HASH) ? $new_pass : $this->request()->post('user_pass_new'));
+        // Atualiza a senha do usuário.
+        if(!$this->changePassword($this->acc->getAccount_id(), $this->request()->post('user_pass_new')))
+            return -2;
 
-        // Define a senha do usuário.
-        $this->acc->setUser_pass($user_pass);
-
-        // Atualiza os dados no banco.
-        $this->getEntityManager()->merge($this->acc);
-        $this->getEntityManager()->flush();
+        // Atualiza o objeto da conta.
+        $this->getEntityManager()->refresh($this->acc);
 
         // Retorna sucesso para a execução.
         return 1;
@@ -539,40 +467,281 @@ class brACPSlim extends Slim\Slim
     }
 
     /**
+     * Envia um e-mail para os destinários.
+     *
+     * @param string $subject
+     * @param array $to
+     * @param string $template
+     * @param array $data
+     */
+    public function sendMail($subject, $to, $template, $data = [])
+    {
+        // Transporte para o email.
+        $transport = Swift_SmtpTransport::newInstance(BRACP_MAIL_HOST, BRACP_MAIL_PORT)
+                                            ->setUsername(BRACP_MAIL_USER)
+                                            ->setPassword(BRACP_MAIL_PASS);
+        // Mailer para envio dos dados.
+        $mailer = Swift_Mailer::newInstance($transport);
+
+        // Mensagem para enviar.
+        $message = Swift_Message::newInstance($subject)
+                                    ->setFrom([BRACP_MAIL_FROM => BRACP_MAIL_FROM_NAME])
+                                    ->setTo($to)
+                                    ->setBody($this->renderMail($template, $data));
+
+        // Envia a mensagem.
+        return $mailer->send($message) > 0;
+    }
+
+    /**
+     * Altera o estado da conta.
+     *
+     * @param int $account_id
+     * @param int $state
+     */
+    public function changeState($account_id, $state)
+    {
+        // Atualiza a senha do jogador.
+        $stateChange = $this->getEntityManager()
+                                ->createQuery('
+                                    UPDATE
+                                        Model\Login l
+                                    SET
+                                        l.state = :state
+                                    WHERE
+                                        l.account_id = :account_id
+                                ')
+                                ->setParameter('account_id', $account_id)
+                                ->setParameter('state', $state)
+                                ->execute() > 0;
+
+        // @Todo: Notificação de usuário.
+        if(BRACP_ALLOW_MAIL_SEND && BRACP_NOTIFY_CHANGE_STATE)
+        {
+
+        }
+
+        return $stateChange;
+    }
+
+    /**
+     * Altera a senha de usuário para a senha indicada.
+     *
+     * @param int $account_id
+     * @param string $password
+     */
+    public function changePassword($account_id, $password)
+    {
+        // Se estiver configurado para usar md5.
+        if(BRACP_MD5_PASSWORD_HASH)
+            $password = hash('md5', $password);
+
+
+        // Atualiza a senha do jogador.
+        $passwordChange = $this->getEntityManager()
+                                ->createQuery('
+                                    UPDATE
+                                        Model\Login l
+                                    SET
+                                        l.user_pass = :user_pass
+                                    WHERE
+                                        l.account_id = :account_id
+                                ')
+                                ->setParameter('account_id', $account_id)
+                                ->setParameter('user_pass', $password)
+                                ->execute() > 0;
+
+        // @Todo: Notificação de usuário.
+        if(BRACP_ALLOW_MAIL_SEND && BRACP_NOTIFY_CHANGE_PASSWORD)
+        {
+
+        }
+
+        return $passwordChange;
+    }
+
+    /**
+     * Altera o endereço de e-mail da conta indicada.
+     *
+     * @param int $account_id
+     * @param string $email
+     */
+    public function changeMail($account_id, $email)
+    {
+        // Verifica se é apenas os endereços de emails não podem se repetir.
+        //  Se não puder, retorna falso.
+        if(BRACP_MAIL_REGISTER_ONCE && $this->checkEmail($email))
+            return false;
+
+        // Realiza a alteração de e-mail na conta indicada.
+        $mailChange =  $this->getEntityManager()
+                            ->createQuery('
+                                UPDATE
+                                    Model\Login l
+                                SET
+                                    l.email = :email
+                                WHERE
+                                    l.account_id = :account_id
+                            ')
+                            ->setParameter('account_id', $account_id)
+                            ->setParameter('email', $email)
+                            ->execute() > 0;
+
+        // @Todo: Notificação de usuário.
+        if(BRACP_ALLOW_MAIL_SEND && BRACP_NOTIFY_CHANGE_MAIL)
+        {
+
+        }
+
+        return $mailChange;
+    }
+
+    /**
+     * Encontra todos os personagens da conta indicada.
+     *
+     * @param int $account_id
+     */
+    public function findChars($account_id)
+    {
+        return $this->getEntityManager()
+                    ->getRepository('Model\Char')
+                    ->findBy(['account_id' => $account_id]);
+    }
+
+    /**
+     * Reseta a aparência do personagem.
+     *
+     * @param int $account_id
+     * @param int $char_id
+     */
+    public function resetAppear($account_id, $char_id)
+    {
+        // Se a configuração não permitir este reset retorna sem executar o resto do código.
+        if(!BRACP_ALLOW_RESET_POSIT)
+            return false;
+
+        // Executa a query no banco de dados e retorna true se foi resetado.
+        return $this->getEntityManager()
+                    ->createQuery('
+                        UPDATE
+                            Model\Char c
+                        SET
+                            c.last_map = c.save_map,
+                            c.last_x = c.save_x,
+                            c.last_y = c.save_y
+                        WHERE
+                            c.account_id = :account_id AND
+                            c.char_id = :char_id AND
+                            c.online = 0
+                    ')
+                    ->setParameter('account_id', $account_id)
+                    ->setParameter('char_id', $char_id)
+                    ->execute() > 0;
+    }
+
+    /**
+     * Reseta a posição do personagem.
+     * 
+     * @param int $account_id
+     * @param int $char_id
+     */
+    public function resetPosition($account_id, $char_id)
+    {
+        // Se a configuração não permitir este reset retorna sem executar o resto do código.
+        if(!BRACP_ALLOW_RESET_APPEAR)
+            return false;
+
+        // Executa a query no banco de dados e retorna true se foi resetado.
+        return $this->getEntityManager()
+                        ->createQuery('
+                            UPDATE
+                                Model\Char c
+                            SET
+                                c.hair = 0, c.hair_color = 0,
+                                c.clothes_color = 0,
+                                c.head_top = 0, c.head_mid = 0,
+                                c.head_bottom = 0, c.robe = 0
+                            WHERE
+                                c.account_id = :account_id AND
+                                c.char_id = :char_id AND
+                                c.online = 0
+                        ')
+                        ->setParameter('account_id', $account_id)
+                        ->setParameter('char_id', $char_id)
+                        ->execute() > 0;
+    }
+
+    /**
+     * Reseta os equipamentos do personagem.
+     *
+     * @param int $account_id
+     * @param int $char_id
+     */
+    public function resetEquip($account_id, $char_id)
+    {
+        // Se a configuração não permitir este reset retorna sem executar o resto do código.
+        if(!BRACP_ALLOW_RESET_EQUIP)
+            return false;
+
+        // Obtém todos os itens no inventário do jogador.
+        $items = $this->getEntityManager()
+                        ->createQuery('
+                                        SELECT
+                                            i, c
+                                        FROM
+                                            Model\Inventory i
+                                        LEFT JOIN
+                                            i.character c
+                                        WHERE
+                                            c.account_id = :account_id and
+                                            c.char_id = :char_id and
+                                            i.equip = 1')
+                        ->setParameter('account_id', $account_id)
+                        ->setParameter('char_id', $char_id)
+                        ->getResult();
+
+        // Se o jogador não possuir itens equipados, retorna sem atualizar nada.
+        if(count($items) == 0)
+            return false;
+
+        foreach($items as $item)
+        {
+            $item->setEquip(false);
+            $this->getEntityManager()->merge($item);
+        }
+
+        $this->getEntityManager()->flush();
+        return true;
+    }
+
+    /**
      * Cria a conta no banco de dados.
      *
      * @param Login $acc
      *
      * @return boolean
      */
-    private function createAccount(Login $acc)
+    public function createAccount(Login $acc)
     {
-        try
-        {
-            // Verifica se o nome de usuario está disponivel para uso.
-            //  - Caso e-mail esteja configurado para apenas um uso, faz o mesmo.
-            if($this->checkUserId($acc->getUserid()) || BRACP_MAIL_REGISTER_ONCE && $this->checkEmail($acc->getEmail()))
-                return 0;
-
-            // Grava o objeto no banco de dados.
-            $this->getEntityManager()->persist($acc);
-            $this->getEntityManager()->flush();
-
-            // Se permitir o envio de e-mail, envia o e-mail para o usuário com as configurações
-            //  necessárias para uma possivel ativação da conta.
-            if(BRACP_ALLOW_MAIL_SEND)
-            {
-                // @TODO: Disparar eventos para envio de email.
-            }
-
-            // Retorna que foi possivel criar a conta.
-            return 1;
-        }
-        catch(Exception $ex)
-        {
-            // Em caso de erro, envia erro default.
+        // Verifica se o nome de usuario está disponivel para uso.
+        //  - Caso e-mail esteja configurado para apenas um uso, faz o mesmo.
+        if($this->checkUserId($acc->getUserid()) 
+            || BRACP_MAIL_REGISTER_ONCE && $this->checkEmail($acc->getEmail()))
             return 0;
+
+        // Grava o objeto no banco de dados.
+        $this->getEntityManager()->persist($acc);
+        $this->getEntityManager()->flush();
+
+        // Se permitir o envio de e-mail, envia o e-mail para o usuário com as configurações
+        //  necessárias para uma possivel ativação da conta.
+        if(BRACP_ALLOW_MAIL_SEND)
+        {
+            // @TODO: Disparar eventos para envio de email.
         }
+
+        // Retorna que foi possivel criar a conta.
+        return 1;
     }
 
     /**
@@ -583,28 +752,16 @@ class brACPSlim extends Slim\Slim
      *
      * @return mixed
      */
-    private function checkUserAndPass($userid, $user_pass)
+    public function checkUserAndPass($userid, $user_pass)
     {
-        try
-        {
-            // Verifica os usuários cadastrados com o usuário e senha
-            $users = $this->getEntityManager()->getRepository('Model\Login')->findBy([
-                'userid' => $userid,
-                'user_pass' => ((BRACP_MD5_PASSWORD_HASH) ? hash('md5', $user_pass):$user_pass),
-                'state' => 0
-            ]);
+        // Verifica os usuários cadastrados com o usuário e senha
+        $user = $this->getEntityManager()->getRepository('Model\Login')->findOneBy([
+            'userid' => $userid,
+            'user_pass' => ((BRACP_MD5_PASSWORD_HASH) ? hash('md5', $user_pass):$user_pass),
+            'state' => 0
+        ]);
 
-            // Se não existir usuários, retorna false.
-            if(!count($users))
-                return false;
-
-            // Retorna o primeiro usuário.
-            return $users[0];
-        }
-        catch(Exception $ex)
-        {
-            return false;
-        }
+        return ((is_null($user)) ? false : $user);
     }
 
     /**
@@ -614,18 +771,12 @@ class brACPSlim extends Slim\Slim
      *
      * @return bool
      */
-    private function checkEmail($email)
+    public function checkEmail($email)
     {
-        try
-        {
-            return count($this->getEntityManager()->getRepository('Model\Login')->findBy([
-                'email' => $email
-            ])) > 0;
-        }
-        catch(Exception $ex)
-        {
-            return false;
-        }
+        // Se houver retorno na verificação, então existe email cadastrado.
+        return !is_null($this->getEntityManager()
+                                ->getRepository('Model\Login')
+                                ->findOneBy(['email' => $email]));
     }
 
     /**
@@ -635,18 +786,11 @@ class brACPSlim extends Slim\Slim
      *
      * @return bool
      */
-    private function checkUserId($userid)
+    public function checkUserId($userid)
     {
-        try
-        {
-            return count($this->getEntityManager()->getRepository('Model\Login')->findBy([
-                'userid' => $userid
-            ])) > 0;
-        }
-        catch(Exception $ex)
-        {
-            return true;
-        }
+        return !is_null($this->getEntityManager()
+                                ->getRepository('Model\Login')
+                                ->findOneBy(['userid' => $userid]));
     }
 
     /**
@@ -682,11 +826,20 @@ class brACPSlim extends Slim\Slim
     }
 
     /**
+     * Renderiza o template para o e-mail.
+     * 
      * @param string $template
      * @param array $data
-     * @param int $access { 0: never logged. 1: ever logged. -1: always. }
      */
-    public function display($template, $data = [], $access = -1, $callable = null, $callableData = null, $blocked = false, $gmlevel = -1)
+    public function renderMail($template, $data)
+    {
+        return $this->renderTemplate($template, $data, -1, null, null, false, -1, false);
+    }
+
+    /**
+     * Renderiza o template a ser exibido.
+     */
+    public function renderTemplate($template, $data = [], $access = -1, $callable = null, $callableData = null, $blocked = false, $gmlevel = -1, $ajaxFile = true)
     {
         // Controle para saber se o acesso está tudo ok.
         $accessIsFine = true;
@@ -714,7 +867,7 @@ class brACPSlim extends Slim\Slim
 
         // Verifica se o tipo de requisição é ajax, se for, retorna o template
         //  para o ajax.
-        if($this->request()->isAjax())
+        if($ajaxFile && $this->request()->isAjax())
             $template .= '.ajax';
 
         // Caso o acesso ao form possa ser executado sem necessidade de chamar os callbacks,
@@ -735,7 +888,20 @@ class brACPSlim extends Slim\Slim
             $data = array_merge($data, ['acc_gmlevel' => $this->acc->getGroup_id()]);
 
         // Chama o view para mostrar o template.
-        $this->view()->display($template . '.tpl', $data);
+        return $this->view()->render($template . '.tpl', $data);
+    }
+
+    /**
+     * Nome do template para exibir.
+     *
+     * @param string $template
+     * @param array $data
+     * @param int $access { 0: never logged. 1: ever logged. -1: always. }
+     */
+    public function display($template, $data = [], $access = -1, $callable = null, $callableData = null, $blocked = false, $gmlevel = -1)
+    {
+        echo $this->renderTemplate($template, $data, $access,
+                                    $callable, $callableData, $blocked, $gmlevel);
     }
 }
 

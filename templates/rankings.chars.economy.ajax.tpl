@@ -26,19 +26,15 @@
     <table border="1" align="center" class="bracp-table">
         <caption><strong>Top 100 jogadores mais ricos</strong></caption>
         <thead>
-            <tr class="tiny">
+            <tr>
                 <th align="right" rowspan="2">Pos.</th>
-                <th rowspan="2">Nome</th>
-                <th rowspan="2">Classe</th>
-                <th align="center" colspan="2">Nível</th>
+                <th>Nome</th>
+                <th>Classe</th>
+                <th align="right">Nível</th>
                 {if $smarty.const.BRACP_ALLOW_RANKING_ZENY_SHOW_ZENY eq true}
-                    <th rowspan="2" align="right">Zeny</th>
+                    <th align="right">Zeny</th>
                 {/if}
-                <th rowspan="2" align="center">Status</th>
-            </tr>
-            <tr class="tiny">
-                <th align="right">Base</th>
-                <th align="right">Classe</th>
+                <th align="center">Status</th>
             </tr>
         </thead>
         <tbody>
@@ -47,8 +43,7 @@
                     <td align="right">{($i+1)}.º</td>
                     <td align="left">{$char->getName()}</td>
                     <td align="left">{$char->getClass()}</td>
-                    <td align="right">{$char->getBase_level()}</td>
-                    <td align="right">{$char->getJob_level()}</td>
+                    <td align="right">{$char->getBase_level()}/{$char->getJob_level()}</td>
                     {if $smarty.const.BRACP_ALLOW_RANKING_ZENY_SHOW_ZENY eq true}
                         <td align="right">{$char->getZeny()}</td>
                     {/if}
