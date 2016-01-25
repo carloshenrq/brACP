@@ -24,8 +24,10 @@ class brAMiddlewareDoctrine extends Slim\Middleware
 {
     public function call()
     {
+        $app = brACPSlim::getInstance();
+
         // Creates the EntityManager for the panel.
-        brACPSlim::getInstance()->setEntityManager(EntityManager::create([
+        $app->setEntityManager(EntityManager::create([
             'driver' => BRACP_SQL_DRIVER,
             'host' => BRACP_SQL_HOST,
             'user' => BRACP_SQL_USER,
@@ -36,13 +38,14 @@ class brAMiddlewareDoctrine extends Slim\Middleware
 
         // Se o usuário estiver logado, realiza a aatualização dos dados de sessão
         //  e da classe.
-        if(brACPSlim::getInstance()->isLoggedIn())
+        if($app->isLoggedIn())
         {
             // Obtém a conta do banco de dados.
-            brACPSlim::getInstance()->acc = brACPSlim::getInstance()->reloadLogin($_SESSION['BRACP_ACCOUNTID']);
+            $app->acc = $app->reloadLogin($_SESSION['BRACP_ACCOUNTID']);
 
             // Se a conta não for encontrada, então, deleta a sessão de usuário.
-            if(is_null(brACPSlim::getInstance()->acc))
+            // -> Adicionado, se a conta estiver bloqueada, desloga o usuário.
+            if(is_null($app->acc) || $app->acc->getState() != 0)
                 brACPSlim::getInstance()->accountLoggout();
         }
 
