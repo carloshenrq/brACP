@@ -298,7 +298,20 @@ class brACPSlim extends Slim\Slim
 
         // Obtém as 30 ultimas doações nos ultimos 60 dias para o usuário logado.
         $donations = $this->getEntityManager()
-                        ->createQuery('SELECT d FROM Model\Donation d WHERE d.date > :PAST_DATE ORDER BY d.id DESC')
+                        ->createQuery('
+                            SELECT
+                                d, l
+                            FROM
+                                Model\Donation d
+                            INNER JOIN
+                                d.account l
+                            WHERE
+                                l.account_id = :account_id AND
+                                d.date > :PAST_DATE
+                            ORDER BY
+                                d.id DESC
+                        ')
+                        ->setParameter('account_id', $this->acc->getAccount_id())
                         ->setParameter('PAST_DATE', date('Y-m-d',time() - (60*60*24*60)))
                         ->setMaxResults(30)
                         ->getResult();
