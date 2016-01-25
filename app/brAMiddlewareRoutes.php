@@ -43,8 +43,8 @@ class brAMiddlewareRoutes extends Slim\Middleware
             brACPSlim::getInstance()->display('account.login', [], 0);
         });
 
-        $app->get('/account/recover', function() {
-            brACPSlim::getInstance()->display('account.recover', [], 0, null, null, !BRACP_ALLOW_RECOVER);
+        $app->get('/account/recover(/:code)', function($code = null) {
+            brACPSlim::getInstance()->recoverAccount($code);
         });
 
         $app->get('/account/change/password', function() {
@@ -112,6 +112,10 @@ class brAMiddlewareRoutes extends Slim\Middleware
                     case  0: return ['message' => ['error' => 'Combinação de usuário e senha inválidos!']];
                 }
             });
+        });
+
+        $app->post('/account/recover', function() {
+            brACPSlim::getInstance()->recoverAccount();
         });
 
         $app->post('/account/change/password', function(){

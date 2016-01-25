@@ -56,9 +56,10 @@ class Donation
     protected $drive = 'PAGSEGURO';
 
     /**
-     * @Column(name="AccountID", type="integer")
+     * @ManyToOne(targetEntity="Login")
+     * @JoinColumn(name="AccountID", referencedColumnName="account_id", nullable=true)
      */
-    protected $account_id;
+    protected $account;
 
     /**
      * @Column(name="DonationValue", type="decimal", precision=12, scale=2)
@@ -155,14 +156,14 @@ class Donation
         return $this->drive = $drive;
     }
 
-    public function getAccount_id()
+    public function getAccount()
     {
-        return $this->account_id;
+        return $this->account;
     }
     
-    public function setAccount_id($account_id)
+    public function setAccount($account)
     {
-        return $this->account_id = $account_id;
+        return $this->account = $account;
     }
 
     public function getValue()

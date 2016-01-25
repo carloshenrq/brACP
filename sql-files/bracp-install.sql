@@ -46,4 +46,16 @@ CREATE TABLE IF NOT EXISTS `bracp_compensations` (
     FOREIGN KEY (`DonationID`) REFERENCES `bracp_donations` (`DonationID`)
 ) ENGINE=InnoDB COLLATE='utf8_swedish_ci';
 
+DROP TABLE IF EXISTS `bracp_recover`;
+CREATE TABLE IF NOT EXISTS `bracp_recover` (
+    `RecoverID` INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `AccountID` INTEGER NOT NULL,
+    `RecoverCode` VARCHAR(32) NOT NULL,
+    `RecoverDate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `RecoverExpire` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `RecoverUsed` BOOLEAN NOT NULL DEFAULT FALSE,
+    UNIQUE INDEX (`RecoverCode`),
+    INDEX (`AccountID`)
+) ENGINE=InnoDB COLLATE='utf8_swedish_ci';
+
 SET FOREIGN_KEY_CHECKS = 1;

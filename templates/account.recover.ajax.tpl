@@ -18,6 +18,14 @@
 
 <h1>Minha Conta &raquo; Recuperar</h1>
 
+{if isset($message)}
+    {if isset($message.success)}
+        <p class="bracp-message-success">{$message.success}</p>
+    {else}
+        <p class="bracp-message-error">{$message.error}</p>
+    {/if}
+{/if}
+
 <p>Para recuperar seu nome de usuário, você deve preencher abaixo as informações corretas para que seja possível realizar esta recuperação.</p>
 
 <form class="ajax-form" action="{$smarty.const.BRACP_DIR_INSTALL_URL}account/recover" autocomplete="off" method="post" target=".bracp-body">

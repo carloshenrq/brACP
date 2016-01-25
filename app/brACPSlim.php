@@ -21,6 +21,7 @@ use Doctrine\ORM\EntityManager;
 use Model\Login;
 use Model\Donation;
 use Model\Compensate;
+use Model\Recover;
 
 /**
  *
@@ -50,6 +51,171 @@ class brACPSlim extends Slim\Slim
         $this->add(new \Slim\Middleware\ContentTypes());
         $this->add(new \brAMiddlewareDoctrine());
         $this->add(new \brAMiddlewareRoutes());
+    }
+
+    /**
+     * Gera uma senha aleatória.
+     */
+    public function randomString($length = BRACP_RECOVER_STRING_LENGTH, $string = BRACP_RECOVER_RANDOM_STRING)
+    {
+        $str = '';
+
+        while(strlen($str) < $length)
+            $str .= $string[rand(0, strlen($string))];
+
+        return $str;
+    }
+
+    /**
+     * Método utilizado para recuperar a conta dos usuários.
+     */
+    public function recoverAccount($code = null)
+    {
+        // Exibe o layout na tela.
+        $this->display('account.recover', [], 0, null, function() use ($code) {
+            // Instância da aplicação
+            $app = brACPSlim::getInstance();
+
+            // Dados a serem retornados na tela do usuário.
+            $data = [];
+
+            // Verifica se possui código enviado e se este tipo de requisição pode ser realizada.
+            if(!is_null($code) && (BRACP_MD5_PASSWORD_HASH || BRACP_RECOVER_BY_CODE))
+            {
+                // Obtém os códigos de recuperação de acordo com as datas de recuperação
+                //  e expirar.
+                $_recover = $app->getEntityManager()
+                                ->createQuery('
+                                    SELECT
+                                        r, l
+                                    FROM
+                                        Model\Recover r
+                                    INNER JOIN
+                                        r.account l
+                                    WHERE
+                                        r.code = :code AND
+                                        r.used = false AND
+                                        :CURDATETIME BETWEEN r.date and r.expire
+                                ')
+                                ->setParameter('code', $code)
+                                ->setParameter('CURDATETIME', date('Y-m-d H:i:s'))
+                                ->getResult();
+                // Obtém o objeot de recuperação da conta.
+                $recover = ((count($_recover) > 0) ? $_recover[0] : null);
+
+                // Se o código de recuperação de contas foi encontrado.
+                // Realiza as alterações de senha da conta.
+                if(!is_null($recover))
+                {
+                    // Atualiza o código de recuperação para utilizado.
+                    $recover->setUsed(true);
+
+                    $app->getEntityManager()->merge($recover);
+                    $app->getEntityManager()->flush();
+
+                    // Obtém a nova senha a ser utilizada.
+                    $password = $app->randomString();
+
+                    // Atualiza a nova senha de usuário.
+                    $app->changePassword($recover->getAccount()->getAccount_id(), $password);
+
+                    // Envia o e-mail para o usuario com sua nova senha.
+                    $app->sendMail('Notificação: Senha Recuperada',
+                            [$recover->getAccount()->getEmail()],
+                            'mail.recover',
+                            [
+                                'userid' => $recover->getAccount()->getUserid(),
+                                'password' => $password,
+                                'ipAddress' => $app->request()->getIp(),
+                            ]);
+
+                    // Mensagem informativa para a senha alterada.
+                    $data = ['message' => ['success' => 'Sua senha foi alterada com sucesso! Verifique seu endereço de e-mail contendo sua nova senha.']];
+                }
+                else
+                {
+                    // Define a mensagem de erro informando que o código de recuperação não foi encontrado.
+                    $data = ['message' => ['error' => 'O Código de recuperação não foi encontrado ou já foi utilizado.']];
+                }
+            }
+            // Caso o nome de usuário e endereço de e-mail estejam preenchidos, esta foi uma requisição
+            //  para recuperar os dados da conta.
+            else if(!empty($app->request()->post('userid')) && !empty($app->request()->post('email')))
+            {
+                // Tenta obter a conta para realizar a requisição
+                //  de recuperação de conta.
+                $account =  $app->getEntityManager()
+                                ->getRepository('Model\Login')
+                                ->findOneBy([
+                                    'userid' => $app->request()->post('userid'),
+                                    'email' => $app->request()->post('email')
+                                ]);
+
+                // Se encontrou a conta para retornar o email com os dados, então:
+                if(!is_null($account))
+                {
+                    // Se o painel está usando hash md5 ou está configurado
+                    //  para retornar recuperação por código, então irá criar
+                    //  registro de recuperação e quando o usuário clicar no e-mail
+                    //  será enviado para o lugar de senha resetada.
+                    if(BRACP_MD5_PASSWORD_HASH || BRACP_RECOVER_BY_CODE)
+                    {
+                        // Cria o objeto de recuperação.
+                        $recover = new Recover();
+                        $recover->setAccount($account);
+                        $recover->setCode(hash('md5', microtime(true)));
+                        $recover->setDate(date('Y-m-d H:i:s'));
+                        $recover->setExpire(date('Y-m-d H:i:s', time() + (60*BRACP_RECOVER_CODE_EXPIRE)));
+                        $recover->setUsed(false);
+
+                        // Grava o código no banco de dados e envia o email.
+                        $this->getEntityManager()->persist($recover);
+                        $this->getEntityManager()->flush();
+
+                        // Envia o e-mail para o usuário informando que a senha foi modificada.
+                        $app->sendMail('Recuperação de Usuário',
+                                [$account->getEmail()],
+                                'mail.recover.code',
+                                [
+                                    'userid' => $account->getUserid(),
+                                    'code' => $recover->getCode(),
+                                    'date' => $recover->getDate(),
+                                    'expire' => $recover->getExpire(),
+                                    'ipAddress' => $app->request()->getIp(),
+                                    'href' => BRACP_URL . BRACP_DIR_INSTALL_URL . 'account/recover'
+                                ]);
+
+                        // Define o status de mensagem que o email contendo dados
+                        //  de recuperação da conta foi enviado com sucesso.
+                        $data = ['message' => ['success' => 'Um e-mail contendo os dados de recuperação foi enviado ao seu e-mail.']];
+                    }
+                    else
+                    {
+                        // Envia o e-mail para o usuario com sua nova senha.
+                        $app->sendMail('Notificação: Senha Recuperada',
+                                [$account->getEmail()],
+                                'mail.recover',
+                                [
+                                    'userid' => $account->getUserid(),
+                                    'password' => $account->getUser_pass(),
+                                    'ipAddress' => $app->request()->getIp(),
+                                ]);
+
+                        // Define o status de mensagem que o email contendo dados
+                        //  de recuperação da conta foi enviado com sucesso.
+                        $data = ['message' => ['success' => 'Verifique seu endereço de e-mail contendo sua senha.']];
+                    }
+                }
+                else
+                {
+                    // Define o status de mensagem que o email contendo dados
+                    //  de recuperação da conta foi enviado com sucesso.
+                    $data = ['message' => ['error' => 'Combinação de usuário e e-mail não encontrados.']];
+                }
+            }
+
+            return $data;
+        }, !BRACP_ALLOW_RECOVER);
     }
 
     /**
@@ -270,7 +436,7 @@ class brACPSlim extends Slim\Slim
         $donation->setDate(date('Y-m-d'));
         $donation->setReference(strtoupper(hash('md5', microtime(true))));
         $donation->setDrive('PAGSEGURO');
-        $donation->setAccount_id($_SESSION['BRACP_ACCOUNTID']);
+        $donation->setAccount($this->acc);
         $donation->setValue($this->request()->post('donation'));
         $donation->setBonus(floatval($donation->getValue()) * $bonusMutiply);
 
@@ -297,7 +463,7 @@ class brACPSlim extends Slim\Slim
                                              sprintf('%.2f', $donation->getTotalValue()),
                                              '1'))
                                     ->setReference($donation->getReference())
-                                    ->addMetaKey('PLAYER_ID', $donation->getAccount_id())
+                                    ->addMetaKey('PLAYER_ID', $donation->getAccount()->getAccount_id())
                                     ->sendRequest();
 
         // Define o código de checkout para a doação.
