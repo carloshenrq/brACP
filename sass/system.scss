@@ -173,12 +173,16 @@ html, body
             }
         }
     }
-
 }
 
 .ajax-url
 {
     cursor: pointer;
+}
+
+span.ajax-url
+{
+    font-weight: bold;
 }
 
 .bracp-ajax-loading
