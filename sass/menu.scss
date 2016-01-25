@@ -44,6 +44,11 @@
 						background-color: rgba(0, 51, 0, 1);
 						color: white;
 					}
+
+					&+ li
+					{
+						border-top: 1px dotted rgba(0, 51, 0, 1);
+					}
 				}
 
 				ul

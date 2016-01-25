@@ -159,7 +159,7 @@ html, body
             {
                 tr
                 {
-                    &:nth-child(even) td
+                    &:nth-child(even)
                     {
                         background-color: rgba(0, 255, 0, .1);
                     }

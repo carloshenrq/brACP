@@ -28,6 +28,8 @@
           .bracp-menu ul li > ul li:hover {
             background-color: #003300;
             color: white; }
+          .bracp-menu ul li > ul li + li {
+            border-top: 1px dotted #003300; }
         .bracp-menu ul li > ul ul {
           top: 0%;
           left: 100%; }

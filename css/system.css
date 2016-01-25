@@ -82,7 +82,7 @@ html, body {
         padding: 3px; }
       .bracp-content .bracp-body .bracp-table tr.tiny td, .bracp-content .bracp-body .bracp-table tr.tiny th {
         font-size: 11px; }
-      .bracp-content .bracp-body .bracp-table tbody tr:nth-child(even) td {
+      .bracp-content .bracp-body .bracp-table tbody tr:nth-child(even) {
         background-color: rgba(0, 255, 0, 0.1); }
       .bracp-content .bracp-body .bracp-table tbody tr.char-myaccount td {
         font-weight: bold;
