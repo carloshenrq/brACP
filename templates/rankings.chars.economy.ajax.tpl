@@ -42,12 +42,12 @@
                 <tr class="{if isset($account_id) eq true and $char->getAccount_id() eq $account_id}char-myaccount{/if}">
                     <td align="right">{($i+1)}.º</td>
                     <td align="left">{$char->getName()}</td>
-                    <td align="left">{$char->getClass()}</td>
+                    <td align="left">{Format::job($char->getClass())}</td>
                     <td align="right">{$char->getBase_level()}/{$char->getJob_level()}</td>
                     {if $smarty.const.BRACP_ALLOW_RANKING_ZENY_SHOW_ZENY eq true}
                         <td align="right">{Format::zeny($char->getZeny())}</td>
                     {/if}
-                    <td align="center">{if $char->getOnline() eq true}<span style="color: green">Online</span>{else}<span style="color: red">Offline</span>{/if}</td>
+                    <td align="center">{Format::status($char->getOnline())}</td>
                 </tr>
             {/foreach}
         </tbody>

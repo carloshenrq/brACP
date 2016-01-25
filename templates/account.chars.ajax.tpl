@@ -63,7 +63,7 @@
                 <th rowspan="2" align="right">Nível</th>
                 <th rowspan="2" align="center">Localização</th>
                 <th rowspan="2" align="center">Ponto de Retorno</th>
-                <th rowspan="2" align="center">Online</th>
+                <th rowspan="2" align="center">Status</th>
                 {if $resetCount > 0}
                     <th colspan="{$resetCount}" align="center">Resetar</th>
                 {/if}
@@ -87,11 +87,11 @@
                 <tr>
                     <td align="right">{$char->getChar_id()}</td>
                     <td align="left">{$char->getName()}</td>
-                    <td align="left">{$char->getClass()}</td>
+                    <td align="left">{Format::job($char->getClass())}</td>
                     <td align="right">{$char->getBase_level()}/{$char->getJob_level()}</td>
                     <td align="left">{$char->getLast_map()} ({$char->getLast_x()}, {$char->getLast_y()})</td>
                     <td align="left">{$char->getSave_map()} ({$char->getSave_x()}, {$char->getSave_y()})</td>
-                    <td align="center">{if $char->getOnline() eq true}Sim{else}Não{/if}</td>
+                    <td align="center">{Format::status($char->getOnline())}</td>
                     {if $resetCount > 0}
                         {if $smarty.const.BRACP_ALLOW_RESET_APPEAR eq true}
                             <td align="center"><input type="checkbox" name="char_id_appear[]" value="{$char->getChar_id()}" {if $char->getOnline() eq true}disabled{/if} /></td>

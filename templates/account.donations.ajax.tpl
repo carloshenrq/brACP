@@ -152,9 +152,9 @@
                 <td align="right">{$row->getId()}</td>
                 <td align="center">{$row->getDate()}</td>
                 <td align="center">{$row->getStatus()}</td>
-                <td align="right">{sprintf('%.2f', $row->getValue())}</td>
+                <td align="right">{Format::money($row->getValue())}</td>
                 <td align="right">{$row->getBonus()}</td>
-                <td align="right">{sprintf('%.2f', $row->getTotalValue())}</td>
+                <td align="right">{Format::money($row->getTotalValue())}</td>
                 {if is_null($row->getPromotion())}
                     <td align="center" colspan="3">---</td>
                 {else}
