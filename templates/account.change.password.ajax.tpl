@@ -71,8 +71,8 @@
                 </label>
 
                 <div class="bracp-form-submit">
-                    <input type="submit" value="Alterar"/>
-                    <input type="reset" value="Resetar"/>
+                    <input class="btn" type="submit" value="Alterar"/>
+                    <input class="btn" type="reset" value="Resetar"/>
                 </div>
             </div>
         </div>

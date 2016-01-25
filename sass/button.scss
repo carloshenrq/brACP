@@ -1,0 +1,82 @@
+@import '_options';
+@import '_functions';
+@import '_mixin';
+
+.btn
+{
+    border: 0;
+    margin: 0px;
+    padding: 6px 10px 6px 10px;
+    cursor: pointer;
+    outline: 0px;
+    display: inline-block;
+    font-family: Verdana, Tahoma, Arial;
+    font-size: 12px;
+    color: black;
+    @include border-radius(2px);
+    @include box-shadow(0px 0px 0px 1px rgba(0, 0, 0, .3));
+    @include background-gradient($COLOR_GradientDefaultStart, $COLOR_GradientDefaultEnd);
+    @include transition(box-shadow .2s ease-out);
+
+    &:active
+    {
+        @include background-gradient($COLOR_GradientDefaultEnd, $COLOR_GradientDefaultEnd);
+    }
+
+    &.btn-success, &.btn-warning, &.btn-error, &.btn-info, &.btn-inverse
+    {
+        color: white;
+    }
+
+    &.btn-success
+    {
+        @include background-gradient($Color_GradientSuccessStart, $Color_GradientSuccessEnd);
+
+        &:active
+        {
+            @include background-gradient($Color_GradientSuccessEnd, $Color_GradientSuccessEnd);
+        }
+    }
+
+    &.btn-warning
+    {
+        @include background-gradient($Color_GradientWarningStart, $Color_GradientWarningEnd);
+
+        &:active
+        {
+            @include background-gradient($Color_GradientWarningEnd, $Color_GradientWarningEnd);
+        }
+    }
+
+    &.btn-error
+    {
+        @include background-gradient($Color_GradientErrorStart, $Color_GradientErrorEnd);
+
+        &:active
+        {
+            @include background-gradient($Color_GradientErrorEnd, $Color_GradientErrorEnd);
+        }
+    }
+
+    &.btn-info
+    {
+        @include background-gradient($Color_GradientInfoStart, $Color_GradientInfoEnd);
+
+        &:active
+        {
+            @include background-gradient($Color_GradientInfoEnd, $Color_GradientInfoEnd);
+        }
+    }
+
+    &.btn-inverse
+    {
+        @include background-gradient($Color_GradientInverseStart, $Color_GradientInverseEnd);
+        @include box-shadow(0px 0px 0px 1px rgba(255, 255, 255, .3) inset);
+
+        &:active
+        {
+            @include box-shadow(0px 0px 0px 1px rgba(255, 255, 255, .8) inset);
+            @include background-gradient($Color_GradientInverseEnd, $Color_GradientInverseEnd);
+        }
+    }
+}

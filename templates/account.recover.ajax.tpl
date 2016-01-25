@@ -44,8 +44,8 @@
         </div>
         <div class="bracp-form-field">
             <div class="bracp-form-submit">
-                <input type="submit" value="Recuperar"/>
-                <input type="reset" value="Resetar"/>
+                <input class="btn" type="submit" value="Recuperar"/>
+                <input class="btn" type="reset" value="Resetar"/>
             </div>
         </div>
         <div class="bracp-form-submit">

@@ -55,8 +55,8 @@
             </label>
 
             <div class="bracp-form-submit">
-                <input type="submit" value="Entrar"/>
-                <input type="reset" value="Resetar"/>
+                <input class="btn" type="submit" value="Entrar"/>
+                <input class="btn" type="reset" value="Resetar"/>
             </div>
         </div>
         <div class="bracp-form-submit">

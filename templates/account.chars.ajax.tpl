@@ -52,8 +52,8 @@
 <form class="ajax-form" action="{$smarty.const.BRACP_DIR_INSTALL_URL}account/chars" autocomplete="off" method="post" target=".bracp-body">
     <table border="1" align="center" class="bracp-table">
         <caption style="padding: 2px; text-align: right">
-            <input type="submit" value="Enviar"/>
-            <input type="reset" value="Limpar"/>
+            <input class="btn" type="submit" value="Enviar"/>
+            <input class="btn" type="reset" value="Limpar"/>
         </caption>
         <thead>
             <tr class="tiny">

@@ -44,7 +44,7 @@
     </p>
 
     <form class="ajax-form" action="{$smarty.const.BRACP_DIR_INSTALL_URL}account/change/mail" autocomplete="off" method="post" target=".bracp-body">
-        <div class="bracp-form" style="width: 320px">
+        <div class="bracp-form" style="width: 380px">
             <div class="bracp-form-field">
                 <label>
                     Email atual:<br>{literal}
@@ -64,8 +64,8 @@
                 </label>
 
                 <div class="bracp-form-submit">
-                    <input type="submit" value="Alterar"/>
-                    <input type="reset" value="Resetar"/>
+                    <input class="btn" type="submit" value="Alterar"/>
+                    <input class="btn" type="reset" value="Resetar"/>
                 </div>
             </div>
         </div>

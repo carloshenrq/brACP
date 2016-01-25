@@ -1,0 +1,95 @@
+
+@mixin size($width, $height)
+{
+    width: $width; height: $height;
+}
+
+@mixin min-size($width, $height)
+{
+    min-width: $width; min-height: $height;
+}
+
+@mixin max-size($width, $height, $overflow : auto)
+{
+    max-width: $width; max-height: $height;
+    overflow: $overflow;
+}
+
+@mixin position-center($position)
+{
+    @include position-fixed($position, 50%, 50%);
+}
+
+@mixin position-fixed($position, $top, $left)
+{
+    @include position-left($position, $top, $left);
+    @include transform('translate(#{(-100% + $top)}, #{(-100% + $left)})');
+}
+
+@mixin position-left($position, $top, $left)
+{
+    position: $position;
+    top: $top;
+    left: $left;
+}
+
+@mixin position-right($position, $top, $right)
+{
+    position: $position;
+    top: $top;
+    right: $right;
+}
+
+@mixin box-shadow($shadow)
+{
+    box-shadow: #{$shadow};
+    -moz-box-shadow: #{$shadow};
+    -webkit-box-shadow: #{$shadow};
+}
+
+@mixin border-radius($radius)
+{
+    border-radius: $radius;
+    -moz-border-radius: $radius;
+    -webkit-border-radius: $radius;
+}
+
+@mixin animation($animation)
+{
+    animation: #{$animation};
+    -moz-animation: #{$animation};
+    -webkit-animation: #{$animation};
+}
+
+@mixin transform($transform)
+{
+    transform: #{$transform};
+    -ms-transform: #{$transform};
+    -webkit-transform: #{$transform};
+}
+
+@mixin background-size($background)
+{
+    background-size: $background;
+    -o-background-size: $background;
+    -moz-background-size: $background;
+    -webkit-background-size: $background;
+}
+
+@mixin background-gradient($colorStart, $colorEnd)
+{
+    background: $colorStart;
+    background: -moz-linear-gradient(top, $colorStart 0%, $colorEnd 100%);
+    background: -webkit-linear-gradient(top, $colorStart 0%, $colorEnd 100%);
+    background: linear-gradient(to bottom, $colorStart 0%, $colorEnd 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#{$colorStart}', endColorstr='#{$colorEnd}',GradientType=0 );
+    background-repeat: repeat-x;
+}
+
+@mixin transition($transition)
+{
+    transition: #{$transition};
+    -o-transition: #{$transition};
+    -moz-transition: #{$transition};
+    -webkit-transition: #{$transition};
+}

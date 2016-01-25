@@ -1,337 +1,121 @@
-/**
- *  brACP - brAthena Control Panel for Ragnarok Emulators
- *  Copyright (C) 2015  brAthena, CHLFZ
- *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+@viewport {
+  width: device-width;
+  zoom: 1; }
+* {
+  font-family: Verdana, Tahoma, Arial;
+  font-size: 12px; }
 
+html, body {
+  margin: 0px;
+  padding: 0px;
+  background-color: #003300; }
 
-@viewport
-{
-    width: device-width;
-    zoom: 1;
-}
-
-*
-{
-    font-family: Verdana, Tahoma, Arial;
-    font-size: 12px;
-}
-
-html, body
-{
-    margin: 0px;
-    padding: 0px;
-    background-color: #5E732E;
-}
-
-.bracp-content
-{
-    width: 60%;
-    margin: auto;
-    box-shadow: 0px 0px 30px 4px white;
-}
-
-.bracp-body, .bracp-footer
-{
-    padding: 10px;
-}
-
-.bracp-header
-{
+.bracp-content {
+  width: 80%;
+  margin: auto;
+  box-shadow: 0px 0px 3px white; }
+  .bracp-content .bracp-header {
     background-image: url(../img/background-header.png);
     background-repeat: none;
-    background-position: 0px -100px;
-    height: 150px;
-}
-
-.bracp-header .bracp-logo
-{
-    background-image: url(../img/logo.png);
-    background-repeat: none;
-    background-position: 0px -30px;
-
-    height: 150px;
-    width: 420px;
-}
-
-.bracp-link
-{
-    cursor: pointer;
-}
-
-.bracp-menu
-{
-    background-color: #2d3716;
-    height: 35px;
-}
-
-
-.bracp-menu ul
-{
-    list-style: none;
-    position: relative;
-    margin: 0;
-    padding: 0;
-}
-
-
-.bracp-menu ul li
-{
-    position: relative;
-    float: left;
-    margin: 0;
-    padding: 10px;
-    font-weight: bold;
-    cursor: pointer;
-    color: white;
-
-    -webkit-transition: color .25s ease-in-out, background-color .25s ease-in-out;
-    -moz-transition: color .25s ease-in-out, background-color .25s ease-in-out;
-    -o-transition: color .25s ease-in-out, background-color .25s ease-in-out;
-    transition: color .25s ease-in-out, background-color .25s ease-in-out;
-}
-
-.bracp-menu ul li > ul li
-{
-    color: #2d3716;
-    background-color: #e6e6e6;
-}
-
-.bracp-menu ul li > ul li:hover
-{
-    color: white;
-    background-color: #2d3716;
-}
-
-.bracp-menu ul li:hover
-{
-    color: #2d3716;
-    background-color: #e6e6e6;
-}
-
-.bracp-menu ul ul
-{
-    visibility: hidden;
-    opacity: 0;
-    position: absolute;
-    top: 100%;
-    left: 0;
+    background-position: 0px -100px; }
+    .bracp-content .bracp-header .bracp-logo {
+      background-image: url(../img/logo.png);
+      background-repeat: none;
+      background-position: 0px -30px;
+      height: 150px;
+      width: 420px; }
+  .bracp-content .bracp-body {
     background-color: white;
-    box-shadow: 0px 0px 2px 1px black;
-    padding: 0;
-
-    -webkit-transition: opacity .25s ease-in-out, visibility .25s ease-in-out;
-    -moz-transition: opacity .25s ease-in-out, visibility .25s ease-in-out;
-    -o-transition: opacity .25s ease-in-out, visibility .25s ease-in-out;
-    transition: opacity .25s ease-in-out, visibility .25s ease-in-out;
-}
-
-.bracp-menu ul ul li
-{
-    float: none;
-    width: 200px;
-}
-
-.bracp-menu ul ul ul
-{
-    top:0;
-    left:100%;
-}
-
-.bracp-menu ul li:hover > ul
-{
-    visibility: visible;
-    opacity: 1;
-}
-
-
-.bracp-body
-{
-    clear: both;
-    background-color: white;
-    min-height: 250px;
-}
-
-.bracp-footer
-{
-    background-color: #2d3716;
-}
-
-.bracp-form
-{
-    margin: auto;
     padding: 8px;
-    border-radius: 2px;
-    background-color: rgba(229, 255, 229, .45);
-    box-shadow: 0px 0px 3px rgba(0, 153, 51, .35);
-}
+    min-height: 300px; }
+    .bracp-content .bracp-body h1 {
+      padding: 2px;
+      margin: 5px;
+      border-bottom: 1px dotted #5E732E;
+      font-size: 13px; }
+    .bracp-content .bracp-body .bracp-message-error, .bracp-content .bracp-body .bracp-message-warning, .bracp-content .bracp-body .bracp-message-success {
+      padding: 5px;
+      border-radius: 2px;
+      border: 1px solid;
+      text-align: left;
+      clear: both; }
+    .bracp-content .bracp-body .bracp-message-warning {
+      background-color: rgba(255, 255, 0, 0.25);
+      border-color: rgba(255, 255, 0, 0.8); }
+    .bracp-content .bracp-body .bracp-message-error {
+      background-color: rgba(255, 0, 0, 0.25);
+      border-color: rgba(255, 0, 0, 0.8);
+      color: red; }
+    .bracp-content .bracp-body .bracp-message-success {
+      background-color: rgba(0, 255, 0, 0.25);
+      border-color: rgba(0, 255, 0, 0.8); }
+    .bracp-content .bracp-body input[type="number"], .bracp-content .bracp-body input.number {
+      text-align: right; }
+    .bracp-content .bracp-body .bracp-form {
+      margin: auto;
+      padding: 8px;
+      border-radius: 2px;
+      background-color: rgba(229, 255, 229, 0.45);
+      box-shadow: 0px 0px 3px rgba(0, 153, 51, 0.35); }
+    .bracp-content .bracp-body .bracp-form-field {
+      margin: 4px;
+      padding: 4px; }
+      .bracp-content .bracp-body .bracp-form-field label, .bracp-content .bracp-body .bracp-form-field input[type="text"] {
+        vertical-align: middle; }
+      .bracp-content .bracp-body .bracp-form-field input[type="text"], .bracp-content .bracp-body .bracp-form-field input[type="password"], .bracp-content .bracp-body .bracp-form-field select, .bracp-content .bracp-body .bracp-form-field textarea {
+        padding: 4px; }
+    .bracp-content .bracp-body .bracp-form-left-align,
+    .bracp-content .bracp-body .bracp-form-right-align {
+      margin: 2px;
+      display: inline-block; }
+    .bracp-content .bracp-body .bracp-form-submit {
+      text-align: right;
+      padding: 4px; }
+    .bracp-content .bracp-body .bracp-table {
+      border-collapse: collapse;
+      width: 100%; }
+      .bracp-content .bracp-body .bracp-table thead tr {
+        background-color: #2d3716;
+        border-color: white;
+        color: white; }
+      .bracp-content .bracp-body .bracp-table tr td, .bracp-content .bracp-body .bracp-table tr th {
+        padding: 3px; }
+      .bracp-content .bracp-body .bracp-table tr.tiny td, .bracp-content .bracp-body .bracp-table tr.tiny th {
+        font-size: 11px; }
+      .bracp-content .bracp-body .bracp-table tbody tr:nth-child(even) td {
+        background-color: rgba(0, 255, 0, 0.1); }
+      .bracp-content .bracp-body .bracp-table tbody tr.char-myaccount td {
+        font-weight: bold;
+        font-size: 15px; }
 
-.bracp-form-field
-{
-    margin: 4px;
-    padding: 4px;
-}
+.ajax-url {
+  cursor: pointer; }
 
-.bracp-form-field label,
-.bracp-form-field input
-{
-    vertical-align: middle;
-}
+.bracp-ajax-loading {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none; }
 
-.bracp-form-field input,
-.bracp-form-field select,
-.bracp-form-field textarea
-{
-    padding: 4px;
-}
-
-.bracp-form-left-align,
-.bracp-form-right-align
-{
-    margin: 2px;
-    display: inline-block;
-}
-
-.bracp-form-submit
-{
-    text-align: right;
-    padding: 4px;
-}
-
-.bracp-ajax-loading
-{
-    position: fixed;
-    top: 0px;
-    left: 0px;
-
-    background-color: rgba(0, 0, 0, .5);
-    display: none;
-}
-
-.bracp-ajax-loading-div
-{
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    border-radius: 50%;
-    border: 3px solid white;
-    height: 18px;
-    width: 18px;
-
-    -webkit-animation: pulsate 1s ease-out;
-    -webkit-animation-iteration-count: infinite; 
-    opacity: 0.0;
-}
-
-.ajax-url
-{
-    cursor: pointer;
-}
-
-span.ajax-url
-{
-    font-weight: bold;
-    transition: all .35s ease-out;
-}
-
-span.ajax-url:hover
-{
-    text-shadow: -1px 1px rgba(0, 0, 0, .3);
-}
-
-.bracp-body
-{
-    text-align: justify;
-}
-
-.bracp-body h1
-{
-    margin: 5px;
-    padding: 2px;
-    border-bottom: 1px dotted #5E732E;
-}
+.bracp-ajax-loading-div {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  border: 3px solid white;
+  height: 18px;
+  width: 18px;
+  -webkit-animation: pulsate 1s ease-out;
+  -webkit-animation-iteration-count: infinite;
+  opacity: 0.0; }
 
 @-webkit-keyframes pulsate {
-    0% {-webkit-transform: scale(0.1, 0.1); opacity: 0.0;}
-    50% {opacity: 1.0;}
-    100% {-webkit-transform: scale(1.2, 1.2); opacity: 0.0;}
- }
-
-.bracp-message-success,
-.bracp-message-error,
-.bracp-message-warning
-{
-    padding: 5px;
-    border-radius: 2px;
-    border: 1px solid;
-    text-align: left;
-    clear: both;
-}
-
-.bracp-message-success
-{
-    background-color: rgba(0, 255, 0, .25);
-    border-color: rgba(0, 255, 0, .8);
-}
-
-.bracp-message-error
-{
-    background-color: rgba(255, 0, 0, .25);
-    border-color: 1px solid rgba(255, 0, 0, .8);
-}
-
-.bracp-message-warning
-{
-    background-color: rgba(255, 255, 0, .25);
-    border-color: 1px solid rgba(255, 255, 0, .8);
-}
-
-input[type="number"], input.number
-{
-    text-align: right;
-}
-
-.bracp-table
-{
-    border-collapse: collapse;
-    width: 100%;
-}
-
-.bracp-table thead tr
-{
-    background-color: #2d3716;
-    border-color: white; color: white;
-}
-
-.bracp-table tr td, .bracp-table tr th
-{
-    padding: 3px;
-}
-
-.tiny, tr.tiny td, tr.tiny th
-{
-    font-size: 11px;
-}
-
-.bracp-table tbody tr:nth-child(even)
-{
-    background-color: rgba(0, 255, 0, .1);
-}
-
-.bracp-table tbody tr.char-myaccount td
-{
-    font-weight: bold;
-    font-size: 15px;
-}
+  0% {
+    -webkit-transform: scale(0.1, 0.1);
+    opacity: 0.0; }
+  50% {
+    opacity: 1.0; }
+  100% {
+    -webkit-transform: scale(1.2, 1.2);
+    opacity: 0.0; } }

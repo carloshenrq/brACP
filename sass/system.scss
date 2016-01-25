@@ -1,0 +1,213 @@
+@viewport
+{
+    width: device-width;
+    zoom: 1;
+}
+
+*
+{
+    font-family: Verdana, Tahoma, Arial;
+    font-size: 12px;
+}
+
+html, body
+{
+    margin: 0px; padding: 0px;
+    background-color: rgba(0, 51, 0, 1);
+}
+
+.bracp-content
+{
+    width: 80%;
+    margin: auto;
+    box-shadow: 0px 0px 3px white;
+
+    .bracp-header
+    {
+        background-image: url(../img/background-header.png);
+        background-repeat: none;
+        background-position: 0px -100px;
+
+        .bracp-logo
+        {
+            background-image: url(../img/logo.png);
+            background-repeat: none;
+            background-position: 0px -30px;
+
+            height: 150px;
+            width: 420px;
+        }
+    }
+
+    .bracp-body
+    {
+        background-color: white;
+        padding: 8px;
+
+        min-height: 300px;
+
+        h1
+        {
+            padding: 2px; margin: 5px;
+            border-bottom: 1px dotted #5E732E;
+            font-size: 13px;
+        }
+
+        .bracp-message-error, .bracp-message-warning, .bracp-message-success
+        {
+            padding: 5px;
+            border-radius: 2px;
+            border: 1px solid;
+            text-align: left;
+            clear: both;
+        }
+
+        .bracp-message-warning
+        {
+            background-color: rgba(255, 255, 0, .25);
+            border-color: rgba(255, 255, 0, .8);
+        }
+
+        .bracp-message-error
+        {
+            background-color: rgba(255, 0, 0, .25);
+            border-color: rgba(255, 0, 0, .8);
+            color: red;
+        }
+
+        .bracp-message-success
+        {
+            background-color: rgba(0, 255, 0, .25);
+            border-color: rgba(0, 255, 0, .8);
+        }
+
+        input[type="number"], input.number
+        {
+            text-align: right;
+        }
+
+        .bracp-form
+        {
+            margin: auto;
+            padding: 8px;
+            border-radius: 2px;
+            background-color: rgba(229, 255, 229, .45);
+            box-shadow: 0px 0px 3px rgba(0, 153, 51, .35);
+        }
+
+        .bracp-form-field
+        {
+            margin: 4px;
+            padding: 4px;
+
+            label, input[type="text"]
+            {
+                vertical-align: middle;
+            }
+
+            input[type="text"], input[type="password"], select, textarea
+            {
+                padding: 4px;
+            }
+        }
+
+        .bracp-form-left-align,
+        .bracp-form-right-align
+        {
+            margin: 2px;
+            display: inline-block;
+        }
+
+        .bracp-form-submit
+        {
+            text-align: right;
+            padding: 4px;
+        }
+
+        .bracp-table
+        {
+            border-collapse: collapse;
+            width: 100%;
+
+            thead
+            {
+                tr
+                {
+                    background-color: #2d3716;
+                    border-color: white;
+                    color: white;
+                }
+            }
+
+            tr
+            {
+                td, th
+                {
+                    padding: 3px;
+                }
+
+                &.tiny
+                {
+                    td, th
+                    {
+                        font-size: 11px;
+                    }
+                }
+            }
+
+            tbody
+            {
+                tr
+                {
+                    &:nth-child(even) td
+                    {
+                        background-color: rgba(0, 255, 0, .1);
+                    }
+
+                    &.char-myaccount td
+                    {
+                        font-weight: bold;
+                        font-size: 15px;
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+.ajax-url
+{
+    cursor: pointer;
+}
+
+.bracp-ajax-loading
+{
+    position: fixed;
+    top: 0px;
+    left: 0px;
+
+    background-color: rgba(0, 0, 0, .5);
+    display: none;
+}
+
+.bracp-ajax-loading-div
+{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    border-radius: 50%;
+    border: 3px solid white;
+    height: 18px;
+    width: 18px;
+
+    -webkit-animation: pulsate 1s ease-out;
+    -webkit-animation-iteration-count: infinite; 
+    opacity: 0.0;
+}
+
+@-webkit-keyframes pulsate {
+    0% {-webkit-transform: scale(0.1, 0.1); opacity: 0.0;}
+    50% {opacity: 1.0;}
+    100% {-webkit-transform: scale(1.2, 1.2); opacity: 0.0;}
+}

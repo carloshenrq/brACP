@@ -110,8 +110,8 @@
             </label>
 
             <div class="bracp-form-submit">
-                <input type="submit" value="Doar"/>
-                <input type="reset" value="Resetar"/>
+                <input class="btn" type="submit" value="Doar"/>
+                <input class="btn" type="reset" value="Resetar"/>
             </div>
         </div>
     </div>

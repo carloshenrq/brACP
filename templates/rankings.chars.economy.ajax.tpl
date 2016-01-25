@@ -28,8 +28,8 @@
         <thead>
             <tr>
                 <th align="right" rowspan="2">Pos.</th>
-                <th>Nome</th>
-                <th>Classe</th>
+                <th align="left">Nome</th>
+                <th align="left">Classe</th>
                 <th align="right">Nível</th>
                 {if $smarty.const.BRACP_ALLOW_RANKING_ZENY_SHOW_ZENY eq true}
                     <th align="right">Zeny</th>

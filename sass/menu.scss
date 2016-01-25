@@ -1,0 +1,67 @@
+@import '_options';
+@import '_functions';
+@import '_mixin';
+
+.bracp-menu
+{
+	background-color: rgba(0, 51, 0, .4);
+	box-shadow: 0px 0px 3px white;
+
+	ul
+	{
+		padding: 0px; margin: 0px;
+		list-style: none;
+
+		li
+		{
+			display: inline-block;
+			margin: 0px;
+			padding: 8px;
+			color: white;
+			cursor: pointer;
+			font-weight: bold;
+
+			position: relative;
+
+			&> ul
+			{
+				position: absolute;
+				top: 100%; left: 0%;
+				display: none;
+
+				color: black;
+				background-color: white;
+				box-shadow: 0px 0px 1px black;
+
+				li
+				{
+					color: black;
+					display: block;
+					min-width: 160px;
+
+					&:hover
+					{
+						background-color: rgba(0, 51, 0, 1);
+						color: white;
+					}
+				}
+
+				ul
+				{
+					top: 0%; left: 100%;
+				}
+			}
+
+			&:hover
+			{
+				background-color: white;
+				color: rgba(0, 51, 0, 1);
+
+				&> ul
+				{
+					display: block;
+				}
+			}
+		}
+	}
+}
