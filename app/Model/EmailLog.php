@@ -23,13 +23,13 @@ use Doctrine\ORM\Mapping;
 
 /**
  * @Entity
- * @Table(name="bracp_recover")
+ * @Table(name="bracp_change_mail_log")
  */
-class Recover
+class EmailLog
 {
     /**
      * @Id
-     * @Column(name="RecoverID", type="integer")
+     * @Column(name="EmailLogID", type="integer")
      * @GeneratedValue(strategy="AUTO")
      */
     protected $id;
@@ -41,24 +41,19 @@ class Recover
     protected $account;
 
     /**
-     * @Column(name="RecoverCode", type="string", length=32)
+     * @Column(name="EmailFrom", type="string", length=39)
      */
-    protected $code;
+    protected $from;
 
     /**
-     * @Column(name="RecoverDate", type="string", length=19)
+     * @Column(name="EmailTo", type="string", length=39)
+     */
+    protected $to;
+
+    /**
+     * @Column(name="EmailLogDate", type="string", length=19)
      */
     protected $date;
-
-    /**
-     * @Column(name="RecoverExpire", type="string", length=19)
-     */
-    protected $expire;
-
-    /**
-     * @Column(name="RecoverUsed", type="boolean")
-     */
-    protected $used;
 
     public function getId()
     {
@@ -80,14 +75,24 @@ class Recover
         return $this->account = $account;
     }
 
-    public function getCode()
+    public function getFrom()
     {
-        return $this->code;
+        return $this->from;
     }
     
-    public function setCode($code)
+    public function setFrom($from)
     {
-        return $this->code = $code;
+        return $this->from = $from;
+    }
+
+    public function getTo()
+    {
+        return $this->to;
+    }
+    
+    public function setTo($to)
+    {
+        return $this->to = $to;
     }
 
     public function getDate()
@@ -98,26 +103,6 @@ class Recover
     public function setDate($date)
     {
         return $this->date = $date;
-    }
-
-    public function getExpire()
-    {
-        return $this->expire;
-    }
-    
-    public function setExpire($expire)
-    {
-        return $this->expire = $expire;
-    }
-
-    public function getUsed()
-    {
-        return $this->used;
-    }
-    
-    public function setUsed($used)
-    {
-        return $this->used = $used;
     }
 }
 

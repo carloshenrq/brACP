@@ -58,4 +58,14 @@ CREATE TABLE IF NOT EXISTS `bracp_recover` (
     INDEX (`AccountID`)
 ) ENGINE=InnoDB COLLATE='utf8_swedish_ci';
 
+DROP TABLE IF EXISTS `bracp_change_mail_log`;
+CREATE TABLE IF NOT EXISTS `bracp_change_mail_log` (
+    `EmailLogID` INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `AccountID` INTEGER NOT NULL,
+    `EmailFrom` VARCHAR(39) NOT NULL,
+    `EmailTo` VARCHAR(39) NOT NULL,
+    `EmailLogDate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00', 
+    INDEX (`AccountID`)
+) ENGINE=InnoDB COLLATE='utf8_swedish_ci';
+
 SET FOREIGN_KEY_CHECKS = 1;

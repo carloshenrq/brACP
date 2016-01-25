@@ -22,6 +22,7 @@ use Model\Login;
 use Model\Donation;
 use Model\Compensate;
 use Model\Recover;
+use Model\EmailLog;
 
 /**
  *
@@ -120,7 +121,7 @@ class brACPSlim extends Slim\Slim
                     $app->changePassword($recover->getAccount()->getAccount_id(), $password);
 
                     // Envia o e-mail para o usuario com sua nova senha.
-                    $app->sendMail('Notificação: Senha Recuperada',
+                    $app->sendMail('Senha Recuperada',
                             [$recover->getAccount()->getEmail()],
                             'mail.recover',
                             [
@@ -763,29 +764,38 @@ class brACPSlim extends Slim\Slim
                             ->setParameter('email', $email)
                             ->execute() > 0;
 
+        // Cria um log de alterações para o endereço de e-mail do usuário.
+        $log = new EmailLog();
+        $log->setAccount($acc);
+        $log->setFrom($oldMail);
+        $log->setTo($email);
+        $log->setDate(date('Y-m-d H:i:s'));
+
+        $this->getEntityManager()->persist($log);
+        $this->getEntityManager()->flush();
 
         // Notifica o usuário da alteração de email.
         if(BRACP_ALLOW_MAIL_SEND && BRACP_NOTIFY_CHANGE_MAIL)
         {
             // Envia um email para o endereço antigo informando a alteração.
             $this->sendMail('Notificação: Alteração de E-mail',
-                    [$oldMail],
+                    [$log->getFrom()],
                     'mail.change.mail',
                     [
                         'userid' => $acc->getUserid(),
-                        'mailOld' => $oldMail,
-                        'mailNew' => $email,
+                        'mailOld' => $log->getFrom(),
+                        'mailNew' => $log->getTo(),
                         'ipAddress' => $this->request()->getIp()
                     ]);
 
             // Envia o e-mail para o novo endereço.
             $this->sendMail('Notificação: Alteração de E-mail',
-                    [$email],
+                    [$log->getTo()],
                     'mail.change.mail',
                     [
                         'userid' => $acc->getUserid(),
-                        'mailOld' => $oldMail,
-                        'mailNew' => $email,
+                        'mailOld' => $log->getFrom(),
+                        'mailNew' => $log->getTo(),
                         'ipAddress' => $this->request()->getIp()
                     ]);
         }
