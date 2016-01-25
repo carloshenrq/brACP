@@ -343,7 +343,17 @@ class brACPSlim extends Slim\Slim
 
         // Obtém a doação com o código de referência para a transação.
         $donation = $this->getEntityManager()
-                            ->createQuery('SELECT d, p FROM Model\Donation d LEFT JOIN d.promotion p WHERE d.reference = :reference')
+                            ->createQuery('
+                                SELECT
+                                    d, p, l
+                                FROM
+                                    Model\Donation d
+                                INNER JOIN
+                                    d.account l
+                                LEFT JOIN
+                                    d.promotion p
+                                WHERE
+                                    d.reference = :reference')
                             ->setParameter('reference', $transaction->reference)
                             ->getOneOrNullResult();
 
@@ -362,18 +372,8 @@ class brACPSlim extends Slim\Slim
         // Se houve pilantragem.
         if($oldStatus == 'PAGO' && $newStatus != 'PAGO')
         {
-            // Estornou ou cancelou a doação, bloqueia a conta, pois a doação já foi
-            //  creditada.
-            $account = $this->getEntityManager()->getRepository('Model\Login')->findOneBy([
-                'account_id' => $donation->getAccount_id()
-            ]);
-
             // Bloqueia a conta do jogaodr pois foi retornado o pagamento.
-            $account->setState(5);
-
-            // Atualiza os dados do jogador bloqueando a conta.
-            $this->getEntityManager()->merge($account);
-            $this->getEntityManager()->flush();
+            $this->changeState($donation->getAccount()->getAccount_id(), 5);
         }
         else if($oldStatus == 'INICIADA' && $newStatus == 'PAGO')
         {
