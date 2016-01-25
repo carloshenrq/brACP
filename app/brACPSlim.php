@@ -944,7 +944,11 @@ class brACPSlim extends Slim\Slim
         //  necessárias para uma possivel ativação da conta.
         if(BRACP_ALLOW_MAIL_SEND)
         {
-            // @TODO: Disparar eventos para envio de email.
+            // Envia o e-mail de criação da conta.
+            $this->sendMail('Sua conta foi criada!', [$acc->getEmail()], 'mail.create', [
+                'userid' => $acc->getUserid(),
+                'ipAddress' => $this->request()->getIp()
+            ]);
         }
 
         // Retorna que foi possivel criar a conta.
