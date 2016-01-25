@@ -31,7 +31,9 @@
                 <th>Nome</th>
                 <th>Classe</th>
                 <th align="right">Nível</th>
-                <th align="center">Status</th>
+                {if $smarty.const.BRACP_ALLOW_SHOW_CHAR_STATUS eq true}
+                    <th align="center">Status</th>
+                {/if}
             </tr>
         </thead>
         <tbody>
@@ -41,7 +43,9 @@
                     <td align="left">{$char->getName()}</td>
                     <td align="left">{Format::job($char->getClass())}</td>
                     <td align="right">{$char->getBase_level()}/{$char->getJob_level()}</td>
-                    <td align="center">{Format::status($char->getOnline())}</td>
+                    {if $smarty.const.BRACP_ALLOW_SHOW_CHAR_STATUS eq true}
+                        <td align="center">{Format::status($char->getOnline())}</td>
+                    {/if}
                 </tr>
             {/foreach}
         </tbody>

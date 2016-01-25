@@ -34,7 +34,9 @@
                 {if $smarty.const.BRACP_ALLOW_RANKING_ZENY_SHOW_ZENY eq true}
                     <th align="right">Zeny</th>
                 {/if}
-                <th align="center">Status</th>
+                {if $smarty.const.BRACP_ALLOW_SHOW_CHAR_STATUS eq true}
+                    <th align="center">Status</th>
+                {/if}
             </tr>
         </thead>
         <tbody>
@@ -47,7 +49,9 @@
                     {if $smarty.const.BRACP_ALLOW_RANKING_ZENY_SHOW_ZENY eq true}
                         <td align="right">{Format::zeny($char->getZeny())}</td>
                     {/if}
-                    <td align="center">{Format::status($char->getOnline())}</td>
+                    {if $smarty.const.BRACP_ALLOW_SHOW_CHAR_STATUS eq true}
+                        <td align="center">{Format::status($char->getOnline())}</td>
+                    {/if}
                 </tr>
             {/foreach}
         </tbody>

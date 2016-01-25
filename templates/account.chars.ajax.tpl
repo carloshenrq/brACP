@@ -63,7 +63,9 @@
                 <th rowspan="2" align="right">Nível</th>
                 <th rowspan="2" align="center">Localização</th>
                 <th rowspan="2" align="center">Ponto de Retorno</th>
-                <th rowspan="2" align="center">Status</th>
+                {if $smarty.const.BRACP_ALLOW_SHOW_CHAR_STATUS eq true}
+                    <th rowspan="2" align="center">Status</th>
+                {/if}
                 {if $resetCount > 0}
                     <th colspan="{$resetCount}" align="center">Resetar</th>
                 {/if}
@@ -91,7 +93,9 @@
                     <td align="right">{$char->getBase_level()}/{$char->getJob_level()}</td>
                     <td align="left">{$char->getLast_map()} ({$char->getLast_x()}, {$char->getLast_y()})</td>
                     <td align="left">{$char->getSave_map()} ({$char->getSave_x()}, {$char->getSave_y()})</td>
-                    <td align="center">{Format::status($char->getOnline())}</td>
+                    {if $smarty.const.BRACP_ALLOW_SHOW_CHAR_STATUS eq true}
+                        <td align="center">{Format::status($char->getOnline())}</td>
+                    {/if}
                     {if $resetCount > 0}
                         {if $smarty.const.BRACP_ALLOW_RESET_APPEAR eq true}
                             <td align="center"><input type="checkbox" name="char_id_appear[]" value="{$char->getChar_id()}" {if $char->getOnline() eq true}disabled{/if} /></td>
