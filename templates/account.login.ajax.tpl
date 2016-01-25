@@ -38,8 +38,8 @@
     <div class="bracp-form" style="width: 250px">
         <div class="bracp-form-field">
             <label>
-                Usuário:<br>{literal}
-                <input type="text" id="userid" name="userid" placeholder="Nome de usuário" size="24" maxlength="24" pattern="[a-zA-Z0-9]{4,24}" required/>{/literal}
+                Usuário:<br>
+                <input type="text" value="{if !empty($userid)}{$userid}{/if}" id="userid" name="userid" placeholder="Nome de usuário" size="24" maxlength="24" {literal}pattern="[a-zA-Z0-9]{4,24}"{/literal} required/>
             </label>
         </div>
         <div class="bracp-form-field">
@@ -50,7 +50,7 @@
         </div>
         <div class="bracp-form-field">
             <label>
-                <input type="checkbox" id="remeberme" name="remeberme"/>
+                <input type="checkbox" id="remeberme" name="remeberme" value="true" {if !empty($smarty.cookies.userid_rememberme)}checked{/if} />
                 Lembrar nome de usuário
             </label>
 

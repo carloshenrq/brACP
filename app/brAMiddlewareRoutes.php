@@ -40,7 +40,9 @@ class brAMiddlewareRoutes extends Slim\Middleware
         });
 
         $app->get('/account/login', function() {
-            brACPSlim::getInstance()->display('account.login', [], 0);
+            brACPSlim::getInstance()->display('account.login', [], 0, null, function() {
+                return ['userid' => brACPSlim::getInstance()->getCookie('userid_rememberme')];
+            });
         });
 
         $app->get('/account/recover(/:code)', function($code = null) {
@@ -104,13 +106,24 @@ class brAMiddlewareRoutes extends Slim\Middleware
         **********************/
         $app->post('/account/login', function() {
             brACPSlim::getInstance()->display('account.login', [], 0, null, function() {
-                switch(brACPSlim::getInstance()->accountLogin())
+                $app = brACPSlim::getInstance();
+
+                $data = [];
+                switch($app->accountLogin())
                 {
-                    case  1: return ['message' => ['success' => 'Usuário logado com sucesso. Aguarde...']];
-                    case -1: return ['message' => ['error' => 'Acesso negado! Você não possui permissões para realizar login.']];
+                    case  1: $data =  ['message' => ['success' => 'Usuário logado com sucesso. Aguarde...']]; break;
+                    case -1: $data =  ['message' => ['error' => 'Acesso negado! Você não possui permissões para realizar login.']]; break;
                     default:
-                    case  0: return ['message' => ['error' => 'Combinação de usuário e senha inválidos!']];
+                    case  0: $data =  ['message' => ['error' => 'Combinação de usuário e senha inválidos!']]; break;
                 }
+
+                // Se estiver marcado para lembrar o nome de usuário e senha.
+                if(!empty($app->request()->post('remeberme')))
+                    $app->setCookie('userid_rememberme', $app->request()->post('userid'));
+                else
+                    $app->deleteCookie('userid_rememberme');
+
+                return array_merge($data, ['userid' => $app->request()->post('userid')]);
             });
         });
 
