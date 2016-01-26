@@ -178,7 +178,7 @@ class brACPSlim extends Slim\Slim
                                             FROM
                                                 Model\Recover r
                                             INNER JOIN
-                                                Model\Login l
+                                                r.account l
                                             WHERE
                                                 l.account_id = :account_id AND
                                                 r.used = false AND
