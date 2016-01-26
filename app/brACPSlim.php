@@ -68,6 +68,53 @@ class brACPSlim extends Slim\Slim
     }
 
     /**
+     * Salva as novas configurações do painel de controle.
+     */
+    public function adminSaveConfig($config)
+    {
+        // Caminho para o arquivo de configuração do sistema.
+        $configPath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'config.php';
+
+        // Verifica se o arquivo de configuração existe no diretório raiz do sistema.
+        if(is_file($configPath) && file_exists($configPath))
+            rename($configPath, $configPath . '.bkp');
+
+        // Abre o ponteiro de escrita para o arquivo.
+        $fp = fopen($configPath, 'w');
+
+        fwrite($fp, "<?php\n");
+        fwrite($fp, "/**\n");
+        fwrite($fp, " * Arquivo de configuração gerado às ".date('d/m/Y H:i:s').".\n");
+        fwrite($fp, " */\n");
+        fwrite($fp, "\n");
+
+        // Cria o arquivo de configuração e escreve os dados no mesmo.
+        foreach($config as $key => $value)
+        {
+            fwrite($fp, "DEFINE('{$key}', '" . addslashes($value) . "', false);\n");
+        }
+
+        fwrite($fp, "\n");
+        fwrite($fp, "if(BRACP_DEVELOP_MODE)\n");
+        fwrite($fp, "{\n");
+        fwrite($fp, "\tDEFINE('PAG_URL', 'https://sandbox.pagseguro.uol.com.br', false);\n");
+        fwrite($fp, "\tDEFINE('PAG_WS_URL', 'https://ws.sandbox.pagseguro.uol.com.br', false);\n");
+        fwrite($fp, "\tDEFINE('PAG_STC_URL', 'https://stc.sandbox.pagseguro.uol.com.br', false);\n");
+        fwrite($fp, "}\n");
+        fwrite($fp, "else\n");
+        fwrite($fp, "{\n");
+        fwrite($fp, "\tDEFINE('PAG_URL', 'https://pagseguro.uol.com.br', false);\n");
+        fwrite($fp, "\tDEFINE('PAG_WS_URL', 'https://ws.pagseguro.uol.com.br', false);\n");
+        fwrite($fp, "\tDEFINE('PAG_STC_URL', 'https://stc.pagseguro.uol.com.br', false);\n");
+        fwrite($fp, "}\n");
+
+        // Libera o ponteiro de escrita para o arquivo.
+        fclose($fp);
+
+        return ['message' => ['success' => 'Configurações salvas com sucesso.']];
+    }
+
+    /**
      * Método para obter todas as doações e realizar a somatória dos dados.
      */
     public function adminDonations()
@@ -1161,6 +1208,29 @@ class brACPSlim extends Slim\Slim
     {
         echo $this->renderTemplate($template, $data, $access,
                                     $callable, $callableData, $blocked, $gmlevel);
+    }
+
+    /**
+     * Carrega todas as variaveis de configuração do sistema.
+     */
+    public function loadConfig()
+    {
+        // Realiza a leitura de todas as variaveis de configuração do sistema.
+        $const = get_defined_constants(1);
+        $user_const = $const['user'];
+        $bracp_const = [];
+
+        // Varre todas as constantes definidas pelo usuário.
+        foreach($user_const as $k => $v)
+        {
+            // Se encaixar na configuração do painel de controle, BRACP_, PAG_ ou DONATION_
+            //  então adiciona como constante de configuração do sistema.
+            if(preg_match('/^(BRACP_|PAG_(INSTALL|EMAIL|TOKEN)|DONATION_)/i', $k))
+                $bracp_const[$k] = (($v == false) ? '0':$v);
+        }
+
+        // Retorna todas as configurações encontradas para o sistema.
+        return $bracp_const;
     }
 }
 

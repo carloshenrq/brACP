@@ -92,6 +92,12 @@ class brAMiddlewareRoutes extends Slim\Middleware
             }, !PAG_INSTALL, BRACP_ALLOW_ADMIN_GMLEVEL);
         });
 
+        $app->get('/admin/config', function() {
+            brACPSlim::getInstance()->display('admin.config', [], 1, null, function() {
+                return ['configs' => brACPSlim::getInstance()->loadConfig()];
+            }, !PAG_INSTALL, BRACP_ALLOW_ADMIN_GMLEVEL);
+        });
+
         $app->get('/rankings/chars/economy', function() {
             brACPSlim::getInstance()->display('rankings.chars.economy', [], -1, null, function() {
                 // Obtém todos os personagens do ranking.
@@ -208,6 +214,11 @@ class brAMiddlewareRoutes extends Slim\Middleware
             }
         });
 
+        $app->post('/admin/config', function() {
+            brACPSlim::getInstance()->display('admin.config', [], 1, null, function() {
+                return ['message' => brACPSlim::getInstance()->adminSaveConfig(brACPSlim::getInstance()->request()->post())];
+            }, !PAG_INSTALL, BRACP_ALLOW_ADMIN_GMLEVEL);
+        });
 
         $app->post('/account/chars', function() {
             brACPSlim::getInstance()->charsReset();

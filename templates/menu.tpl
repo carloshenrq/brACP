@@ -19,6 +19,7 @@
                 <ul data-back="Administração">
                     <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}admin/donations" data-target=".bracp-body">Doações</li>
                     <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}admin/manage/account" data-target=".bracp-body">Gerênciar Contas</li>
+                    <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}admin/config" data-target=".bracp-body">Configurações</li>
                 </ul>
             </li>
         {/if}
