@@ -93,7 +93,7 @@ class brACPSlim extends Slim\Slim
             {
                 // Obtém os códigos de recuperação de acordo com as datas de recuperação
                 //  e expirar.
-                $_recover = $app->getEntityManager()
+                $recover = $app->getEntityManager()
                                 ->createQuery('
                                     SELECT
                                         r, l
@@ -108,9 +108,7 @@ class brACPSlim extends Slim\Slim
                                 ')
                                 ->setParameter('code', $code)
                                 ->setParameter('CURDATETIME', date('Y-m-d H:i:s'))
-                                ->getResult();
-                // Obtém o objeot de recuperação da conta.
-                $recover = ((count($_recover) > 0) ? $_recover[0] : null);
+                                ->getOneOrNullResult();
 
                 // Se o código de recuperação de contas foi encontrado.
                 // Realiza as alterações de senha da conta.
@@ -318,15 +316,18 @@ class brACPSlim extends Slim\Slim
         if(!is_null($this->request()->get('transactionCode')))
             $this->updateTransaction($this->request()->get('transactionCode'));
 
-        // Cria a query para seleção da promoção no banco de dados.
-        $query = $this->getEntityManager()
-                        ->createQuery('SELECT p FROM Model\Promotion p WHERE :CURDATE BETWEEN p.startDate AND p.endDate');
-
-        $query->setParameter('CURDATE', date('Y-m-d'));
-        $result = $query->getResult();
-
         // Obtém o objeto da promoção e envia para o formulário.
-        $promotion = ((count($result) > 0) ? $result[0]:null);
+        $promotion = $this->getEntityManager()
+                            ->createQuery('
+                                SELECT
+                                    p
+                                FROM
+                                    Model\Promotion p
+                                WHERE
+                                    :CURDATE BETWEEN p.startDate AND p.endDate
+                            ')
+                            ->setParameter('CURDATE', date('Y-m-d'))
+                            ->getOneOrNullResult();
 
         // Obtém as 30 ultimas doações nos ultimos 60 dias para o usuário logado.
         $donations = $this->getEntityManager()
@@ -348,6 +349,7 @@ class brACPSlim extends Slim\Slim
                         ->setMaxResults(30)
                         ->getResult();
 
+        // Inicializa o vetor para as promoções.
         $promos = [];
 
         // Obtém todas as promoções que irão iniciar nos próximos dias.
@@ -463,17 +465,17 @@ class brACPSlim extends Slim\Slim
         {
             // Realiza a query para obter os dados de promoção e caso existam
             //  se existir, define o objeto de promoção para a doação.
-            $query = $this->getEntityManager()
-                            ->createQuery('SELECT p FROM Model\Promotion p WHERE p.id = :id AND :CURDATE BETWEEN p.startDate AND p.endDate');
-            $query->setParameter('id', $this->request()->post('PromotionID'))
-                    ->setParameter('CURDATE', date('Y-m-d'));
-            $result = $query->getResult();
+            $result = $this->getEntityManager()
+                            ->createQuery('SELECT p FROM Model\Promotion p WHERE p.id = :id AND :CURDATE BETWEEN p.startDate AND p.endDate')
+                            ->setParameter('id', $this->request()->post('PromotionID'))
+                            ->setParameter('CURDATE', date('Y-m-d'))
+                            ->getOneOrNullResult();
 
             // Se houver dados de promoção para esta doação,
             //  define a promoção ativa.
-            if(count($result) > 0)
+            if(!is_null($result))
             {
-                $donation->setPromotion($result[0]);
+                $donation->setPromotion($result);
                 $bonusMutiply += $donation->getPromotion()->getBonusMultiply();
             }
         }
