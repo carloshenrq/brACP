@@ -68,6 +68,14 @@ class brACPSlim extends Slim\Slim
     }
 
     /**
+     * Método para obter todas as doações e realizar a somatória dos dados.
+     */
+    public function adminDonations()
+    {
+        return [];
+    }
+
+    /**
      * Método utilizado para recuperar a conta dos usuários.
      */
     public function recoverAccount($code = null)
@@ -161,17 +169,41 @@ class brACPSlim extends Slim\Slim
                     //  será enviado para o lugar de senha resetada.
                     if(BRACP_MD5_PASSWORD_HASH || BRACP_RECOVER_BY_CODE)
                     {
-                        // Cria o objeto de recuperação.
-                        $recover = new Recover();
-                        $recover->setAccount($account);
-                        $recover->setCode(hash('md5', microtime(true)));
-                        $recover->setDate(date('Y-m-d H:i:s'));
-                        $recover->setExpire(date('Y-m-d H:i:s', time() + (60*BRACP_RECOVER_CODE_EXPIRE)));
-                        $recover->setUsed(false);
+                        // Verifica se existe algum código de de recuperação para
+                        //  o usuário que está fazendo a requisição.
+                        $recover = $this->getEntityManager()
+                                        ->createQuery('
+                                            SELECT
+                                                r, l
+                                            FROM
+                                                Model\Recover r
+                                            INNER JOIN
+                                                Model\Login l
+                                            WHERE
+                                                l.account_id = :account_id AND
+                                                r.used = false AND
+                                                :CURDATETIME BETWEEN r.date and r.expire
+                                        ')
+                                        ->setParameter('account_id', $account->getAccount_id())
+                                        ->setParameter('CURDATETIME', date('Y-m-d H:i:s'))
+                                        ->getOneOrNullResult();
 
-                        // Grava o código no banco de dados e envia o email.
-                        $this->getEntityManager()->persist($recover);
-                        $this->getEntityManager()->flush();
+                        // Se o registro de recuperação não for encontrado,
+                        // Então, cria um novo registro, se não, utiliza o mesmo criado anteriormente.
+                        if(is_null($recover))
+                        {
+                            // Cria o objeto de recuperação.
+                            $recover = new Recover();
+                            $recover->setAccount($account);
+                            $recover->setCode(hash('md5', microtime(true)));
+                            $recover->setDate(date('Y-m-d H:i:s'));
+                            $recover->setExpire(date('Y-m-d H:i:s', time() + (60*BRACP_RECOVER_CODE_EXPIRE)));
+                            $recover->setUsed(false);
+
+                            // Grava o código no banco de dados e envia o email.
+                            $this->getEntityManager()->persist($recover);
+                            $this->getEntityManager()->flush();
+                        }
 
                         // Envia o e-mail para o usuário informando que a senha foi modificada.
                         $app->sendMail('Recuperação de Usuário',

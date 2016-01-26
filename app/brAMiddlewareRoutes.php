@@ -86,6 +86,12 @@ class brAMiddlewareRoutes extends Slim\Middleware
             });
         });
 
+        $app->get('/admin/donations', function() {
+            brACPSlim::getInstance()->display('admin.donations', [], 1, null, function() {
+                return brACPSlim::getInstance()->adminDonations();
+            }, !PAG_INSTALL, BRACP_ALLOW_ADMIN_GMLEVEL);
+        });
+
         $app->get('/rankings/chars/economy', function() {
             brACPSlim::getInstance()->display('rankings.chars.economy', [], -1, null, function() {
                 // Obtém todos os personagens do ranking.
