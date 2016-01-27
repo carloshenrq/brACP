@@ -31,9 +31,7 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'a
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'autoload.php';
 
 // Calls the slim
-$app = new brACPSlim(array(
-    'view' => new \Slim\Views\Smarty()
-));
+$app = new brACPApp();
 $app->run();
 
 // $app->run();

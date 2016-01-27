@@ -19,20 +19,8 @@
 
 // Defines the default exception handler for this app.
 set_exception_handler(function(Exception $unhandledEx) {
-
-    try
-    {
-        $smarty = new Smarty();
-        $smarty->setTemplateDir(BRACP_TEMPLATE_DIR);
-        $smarty->assign('ex', $unhandledEx);
-        $smarty->display('error.tpl');
-    }
-    catch(Exception $ex)
-    {
-        echo print_r($ex, true);
-        exit;
-    }
-
+	echo $unhandledEx->getMessage();
+	exit;
 });
 
 // Defines the default error handler for this app.
