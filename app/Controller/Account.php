@@ -6,6 +6,7 @@ use \Psr\Http\Message\ServerRequestInterface;
 use \Psr\Http\Message\ResponseInterface;
 
 use \Model\Login;
+use \Model\Recover;
 
 /**
  * Controlador para dados de conta.
@@ -61,6 +62,20 @@ class Account
         // Exibe as informações no template de cadastro.
         self::getApp()->display('account.register',
                                     (($request->isPost()) ? self::registerAccount($request->getParsedBody()):[]));
+    }
+
+    /**
+     * Método para recuperar a conta do usuário.
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param array $args
+     */
+    public static function recover(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        // Exibe as informações no template de cadastro.
+        self::getApp()->display('account.recover',
+                                    (($request->isPost()) ? self::recoverAccount($request->getParsedBody()):[]));
     }
 
     /**
@@ -131,10 +146,162 @@ class Account
     }
 
     /**
+     * Altera a senha do usuário e envia a notificação para o e-mail da conta.
+     *
+     * @param int $account_id
+     * @param string $user_pass
+     *
+     * @return boolean
+     */
+    public static function changePass($account_id, $user_pass)
+    {
+
+    }
+
+    /**
+     * Método utilizado para recuperar a conta.
+     *
+     * @static
+     *
+     * @return array
+     */
+    public static function recoverAccount($data, $code = null)
+    {
+        // Se o código não foi enviado.
+        if(!is_null($code) && (BRACP_MD5_PASSWORD_HASH || BRACP_RECOVER_BY_CODE))
+        {
+            // Verificação do banco de dados para saber se o código de recuperação foi
+            //  enviado com sucesso.
+            $recover = self::getApp()->getEm()
+                                        ->createQuery('
+                                            SELECT
+                                                recover, login
+                                            FROM
+                                                Model\Recover recover
+                                            INNER JOIN
+                                                recover.account login
+                                            WHERE
+                                                recover.code = :code AND
+                                                recover.used = false AND
+                                                :CURDATETIME BETWEEN recover.date AND recover.expire
+                                        ')
+                                        ->setParameter('code', $code)
+                                        ->setParameter('CURDATETIME', date('Y-m-d H:i:s'))
+                                        ->getOneOrNullResult();
+
+            // Não foi encontrado código de recuperação para a conta.
+            if(is_null($recover))
+                return ['message' => ['error' => 'O Código de recuperação já foi utilizado ou é inválido.']];
+
+            // Calcula a nova senha de usuário.
+            $user_pass = self::getApp()->randomString(BRACP_RECOVER_STRING_LENGTH, BRACP_RECOVER_RANDOM_STRING);
+
+            // Realiza a alteração da senha da conta.
+            if($this->changePass($recover->getAccount()->getAccount_id(), $user_pass))
+            {
+                // Atualiza o código de recuperação marcando como utilizado e atualiza a tabela.
+                $recover->setUsed(true);
+
+                self::getApp()->getEm()->merge($recover);
+                self::getApp()->getEm()->flush();
+
+                // Envia o e-mail com os dados de recuperação do usuário.
+                self::getApp()->sendMail('Redefinição de Senha', [$recover->getAccount()->getEmail()],
+                    'mail.recover', [
+                        'userid' => $recover->getAccount()->getUserid(),
+                        'password' => $user_pass
+                    ]);
+
+                return ['message' => ['success' => 'A Nova senha foi enviada para seu endereço de e-mail.']];
+            }
+            else
+            {
+                return ['message' => ['error' => 'Não foi possível recuperar a senha de usuário.']]
+            }
+        }
+        else
+        {
+            // Obtém a conta que está sendo solicitada a requisição para 
+            //  recuperação de senha.
+            $account = self::getApp()->getEm()
+                                        ->getRepository('Model\Login')
+                                        ->findOneBy(['userid' => $data['userid'], 'email' => $data['email']]);
+
+            // Objeto da conta não encontrado.
+            if(is_null($account))
+                return ['message' => ['error' => 'Combinação de usuário e e-mail não encontrados.']];
+
+            // Se o painel de controle estiver configurado para usar md5 ou recuperação de código
+            //  via e-mail, então, inicializa os códigos.
+            if(BRACP_MD5_PASSWORD_HASH || BRACP_RECOVER_BY_CODE)
+            {
+                // Verifica se algum código de recuperação já foi criado dentro do periodo
+                //  deconfiguração.
+                $recover = self::getApp()->getEm()
+                                            ->createQuery('
+                                                SELECT
+                                                    recover, login
+                                                FROM
+                                                    Model\Recover recover
+                                                INNER JOIN
+                                                    recover.account login
+                                                WHERE
+                                                    login.account_id = :account_id AND
+                                                    recover.used = false AND
+                                                    :CURDATETIME BETWEEN recover.date AND recover.expire
+                                            ')
+                                            ->setParameter('account_id', $account->getAccount_id())
+                                            ->setParameter('CURDATETIME', date('Y-m-d H:i:s'))
+                                            ->getOneOrDefault();
+
+                // Se não foi encontrado o objeto de recuperação, será criado um novo
+                //  registro do banco de dados.
+                if(is_null($recover))
+                {
+                    // Inicializa o objeto de recuperação da conta.
+                    $recover = new Recover;
+                    $recover->setAccount($account);
+                    $recover->setCode(hash('md5', microtime(true)));
+                    $recover->setDate(date('Y-m-d H:i:s'));
+                    $recover->setExpire(date('Y-m-d H:i:s', time() + (60*BRACP_RECOVER_CODE_EXPIRE)));
+                    $recover->setUsed(false);
+
+                    // Grava o código no banco de dados e envia o email.
+                    self::getApp()->getEm()->persist($recover);
+                    self::getApp()->getEm()->flush();
+                }
+
+                // Envia o e-mail para o usuário.
+                self::getApp()->sendMail('Recuperação de Usuário', [$account->getEmail()],
+                    'mail.recover.code', [
+                        'userid' => $account->getUserid(),
+                        'code' => $recover->getCode(),
+                        'expire' => $recover->getExpire(),
+                        'href' => BRACP_URL . BRACP_DIR_INSTALL_URL . 'account/recover'
+                    ]);
+
+                // Informa que o código de recuperação foi enviado ao e-mail do usuário.
+                return ['message' => ['success' => 'Foi enviado um e-mail contendo os dados de recuperação. Verifique seu e-mail.']];
+            }
+            else
+            {
+                // Envia o e-mail com os dados de recuperação do usuário.
+                self::getApp()->sendMail('Recuperação de Senha', [$account->getEmail()],
+                    'mail.recover', [
+                        'userid' => $account->getUserid(),
+                        'password' => $account->getUser_pass()
+                    ]);
+
+                // Retorna informação que foi retornado os dados da conta.
+                return ['message' => ['success' => 'Os dados de sua conta foram enviados ao seu e-mail.']];
+            }
+        }
+    }
+
+    /**
      * Método utilizado para realizar login na conta.
      *
      * @static
-     * @access private
      *
      * @return array
      */
@@ -171,7 +338,6 @@ class Account
      *  as informações para a nova conta criada.
      *
      * @static
-     * @access private
      *
      * @return array
      */

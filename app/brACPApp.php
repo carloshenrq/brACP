@@ -107,6 +107,19 @@ class brACPApp extends Slim\App
     }
 
     /**
+     * Gera uma string aleatória.
+     *
+     * @param int $length
+     * @param string $string
+     *
+     * @return string
+     */
+    public function randomString($length, $string)
+    {
+        return substr(str_shuffle($string), 0, $length);
+    }
+
+    /**
      * Exibe o template a ser chamado.
      *
      * @param string $template Nome do arquivo a ser chamado.
