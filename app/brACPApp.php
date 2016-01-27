@@ -64,7 +64,7 @@ class brACPApp extends Slim\App
         // Cria a instância do smarty.
         $this->view = new Smarty;
         $this->view->setTemplateDir(BRACP_TEMPLATE_DIR);
-        $this->view->setCaching(BRACP_TEMPLATE_CACHE);
+        $this->view->setCaching(false);
 
         // Adiciona os middlewares na rota para serem executados.
         $this->add(new Route());
