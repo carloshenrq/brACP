@@ -71,12 +71,6 @@
         </div>
         <div class="bracp-form-field">
             <label>
-                Data de Nascimento:<br>{literal}
-                <input type="date" id="birthdate" name="birthdate" placeholder="Data de aniversário" required/>{/literal}
-            </label>
-        </div>
-        <div class="bracp-form-field">
-            <label>
                 <input type="checkbox" id="terms" name="terms" title="Você precisa aceitar os termos para continuar." required/>
                 Eu concordo com os termos de uso do servidor.
             </label>

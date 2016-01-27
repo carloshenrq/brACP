@@ -713,7 +713,6 @@ class brACPSlim extends Slim\Slim
         $acc->setUser_pass($this->request()->post('user_pass'));
         $acc->setSex($this->request()->post('sex'));
         $acc->setEmail($this->request()->post('email'));
-        $acc->setBirthdate($this->request()->post('birthdate'));
 
         // Se estiver configurado para realizar a aplicação do md5 na senha
         //  então aplica o hash('md5', $acc->getUser_pass())
@@ -734,6 +733,11 @@ class brACPSlim extends Slim\Slim
      */
     public function sendMail($subject, $to, $template, $data = [])
     {
+        // Adicionado teste para envio de e-mail. Se não for permitido em configurador
+        //  o envio dos emails então retorna false.
+        if(!BRACP_ALLOW_MAIL_SEND)
+            return false;
+
         // Transporte para o email.
         $transport = \Swift_SmtpTransport::newInstance(BRACP_MAIL_HOST, BRACP_MAIL_PORT)
                                             ->setUsername(BRACP_MAIL_USER)
