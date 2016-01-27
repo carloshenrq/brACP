@@ -2,6 +2,9 @@
 
 namespace Controller;
 
+use \Psr\Http\Message\ServerRequestInterface;
+use \Psr\Http\Message\ResponseInterface;
+
 /**
  * Controlador para dados de conta.
  *
@@ -14,11 +17,50 @@ class Account
     /**
      * Método para dados de registro da conta
      *
-     * @static
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param array $args
      */
-    public static function register()
+    public static function register(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
-        // self::getApp()->display('account.register', [], 0, null, ['\Controller\Account', 'registerPost'], !BRACP_ALLOW_CREATE_ACCOUNT);
+        // @Todo: Dados do cadastro.
+        self::getApp()->display('account.register');
+    }
+
+    /**
+     * Verifica se o usuário está logado no sistema.
+     *
+     * @return boolean
+     */
+    public static function isLoggedIn()
+    {
+        return isset($_SESSION['BRACP_ISLOGGEDIN']) and $_SESSION['BRACP_ISLOGGEDIN'] == true;
+    }
+
+    /**
+     * Define se o usuário necessita entrar para realizar a ação.
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param callback $next
+     */
+    public static function needLogin(ServerRequestInterface $request, ResponseInterface $response, $next)
+    {
+        // Chama o próximo middleware.
+        return $next($request, $response);
+    }
+
+    /**
+     * Define se o usuário necessita entrar para realizar a ação.
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param callback $next
+     */
+    public static function needLoggout(ServerRequestInterface $request, ResponseInterface $response, $next)
+    {
+        // Chama o próximo middleware.
+        return $next($request, $response);
     }
 
     /**
@@ -30,7 +72,7 @@ class Account
      *
      * @return array
      */
-    private static function registerPost()
+    private static function registerPost($post)
     {
         return [];
     }

@@ -43,6 +43,13 @@ class brACPApp extends Slim\App
     private $view;
 
     /**
+     * Entitymanager para gerênciamento do banco de dados.
+     *
+     * @var EntityManager
+     */
+    private $em;
+
+    /**
      * Construtor e inicializador para o painel de controle.
      */
     public function __construct()
@@ -61,6 +68,7 @@ class brACPApp extends Slim\App
 
         // Adiciona os middlewares na rota para serem executados.
         $this->add(new Route());
+        $this->add(new Database());
 
         // Define a instância global como sendo o proprio.
         self::$app = $this;
@@ -102,12 +110,24 @@ class brACPApp extends Slim\App
     }
 
     /**
-     * Obtém a instância do smarty para o painel de controle.
-     * @return Smarty
+     * Define o entitymanager.
+     *
+     * @param EntityManager $em
      */
-    public function getView()
+    public function setEm(EntityManager $em)
     {
-        return $this->view;
+        $this->em = $em;
+        return $this;
+    }
+
+    /**
+     * Obtém o EntityManager.
+     *
+     * @return EntityManager
+     */
+    public function getEm()
+    {
+        return $this->em;
     }
 
     /**

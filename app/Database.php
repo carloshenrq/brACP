@@ -19,8 +19,10 @@
 
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Doctrine\ORM\Tools\Setup;
+use Doctrine\ORM\EntityManager;
 
-class Route
+class Database
 {
     use TApplication;
 
@@ -35,20 +37,14 @@ class Route
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, $next)
     {
-        // Se o painel de controle não estiver em manutenção, então define as rotas corretas para
-        //  cada endereço.
-        if(!BRACP_MAINTENCE)
-        {
-            // Define a rota para a tela principal.
-            self::getApp()->get('/', ['Controller\Home', 'index']);
-
-            // Mapeia o grupo account.
-            self::getApp()->group('/account', function() {
-                // Mapeia a rota de registro para a grupo de account.
-                $this->map(['GET', 'POST'], '/register', ['Controller\Account', 'register'])
-                        ->add(['Controller\Account', 'needLoggout']);
-            });
-        }
+        // Define o entitymanager para o servidor.
+        self::getApp()->setEm(EntityManager::create([
+            'driver' => BRACP_SQL_DRIVER,
+            'host' => BRACP_SQL_HOST,
+            'user' => BRACP_SQL_USER,
+            'password' => BRACP_SQL_PASS,
+            'dbname' => BRACP_SQL_DBNAME,
+        ], Setup::createAnnotationMetadataConfiguration([ BRACP_ENTITY_DIR ], BRACP_DEVELOP_MODE)));
 
         // Chama o próximo middleware.
         return $next($request, $response);
