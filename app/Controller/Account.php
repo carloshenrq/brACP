@@ -155,7 +155,36 @@ class Account
      */
     public static function changePass($account_id, $user_pass)
     {
+        // Atualiza a senha do usuário.
+        $changed = self::getApp()->getEm()
+                    ->createQuery('
+                        UPDATE
+                            Model\Login login
+                        SET
+                            login.user_pass = :user_pass
+                        WHERE
+                            login.account_id = :account_id
+                    ')
+                    ->setParameter('account_id', $account_id)
+                    ->setParameter('user_pass', ((BRACP_MD5_PASSWORD_HASH) ? hash('md5', $user_pass):$user_pass))
+                    ->execute();
 
+        // Verifica se a senha foi alterada e se é necessário o envio
+        if($changed && BRACP_ALLOW_MAIL_SEND && BRACP_NOTIFY_CHANGE_PASSWORD)
+        {
+            // Obtém o objeto da conta para enviar a notificação por e-mail.
+            $account = self::getApp()->getEm()
+                                        ->getRepository('Model\Login')
+                                        ->findOneBy(['account_id' => $account_id]);
+
+            // Envia o e-mail com os dados de recuperação do usuário.
+            self::getApp()->sendMail('Notificação: Alteração de Senha', [$account->getEmail()],
+                'mail.change.password', [
+                    'userid' => $account->getUserid()
+                ]);
+        }
+
+        return $changed;
     }
 
     /**
