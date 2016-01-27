@@ -17,6 +17,39 @@ class Account
     use \TApplication;
 
     /**
+     * Obtém o usuário logado no sistema.
+     * @var \Model\Login
+     */
+    private static $user = null;
+
+    /**
+     * Método para realizar login
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param array $args
+     */
+    public static function login(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        // Exibe as informações no template de cadastro.
+        self::getApp()->display('account.login',
+                                    (($request->isPost()) ? self::loginAccount($request->getParsedBody()):[]));
+    }
+
+    /**
+     * Método para realizar logout
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param array $args
+     */
+    public static function logout(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        unset($_SESSION['BRACP_ISLOGGEDIN'], $_SESSION['BRACP_ACCOUNTID']);
+        self::getApp()->display('account.logout');
+    }
+
+    /**
      * Método para dados de registro da conta
      *
      * @param ServerRequestInterface $request
@@ -41,16 +74,20 @@ class Account
     }
 
     /**
-     * Define se o usuário necessita entrar para realizar a ação.
+     * Obtém o usuário logado no sistema.
      *
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     * @param callback $next
+     * @return \Model\Login
      */
-    public static function needLogin(ServerRequestInterface $request, ResponseInterface $response, $next)
+    public static function loggedUser()
     {
-        // Chama o próximo middleware.
-        return $next($request, $response);
+        // Se não possui usuário em cache, obtém o usuário do banco
+        //  e atribui ao cache.
+        if(is_null(self::$user))
+            self::$user = self::getApp()->getEm()
+                                        ->getRepository('Model\Login')
+                                        ->findOneBy(['account_id' => $_SESSION['BRACP_ACCOUNTID']]);
+        // Retorna o usuário logado.
+        return self::$user;
     }
 
     /**
@@ -60,10 +97,73 @@ class Account
      * @param ResponseInterface $response
      * @param callback $next
      */
-    public static function needLoggout(ServerRequestInterface $request, ResponseInterface $response, $next)
+    public static function needLogin(ServerRequestInterface $request, ResponseInterface $response, $next)
     {
+        // Se usuário não logado, pede ao usuário para logar ao endereço.
+        if(!self::isLoggedIn())
+        {
+            self::getApp()->display('account.error.login');
+            return $response;
+        }
+
         // Chama o próximo middleware.
         return $next($request, $response);
+    }
+
+    /**
+     * Define se o usuário necessita sair para realizar a ação.
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param callback $next
+     */
+    public static function needLoggout(ServerRequestInterface $request, ResponseInterface $response, $next)
+    {
+        // Verifica se o usuário está logado.
+        if(self::isLoggedIn())
+        {
+            self::getApp()->display('account.error.logged');
+            return $response;
+        }
+
+        // Chama o próximo middleware.
+        return $next($request, $response);
+    }
+
+    /**
+     * Método utilizado para realizar login na conta.
+     *
+     * @static
+     * @access private
+     *
+     * @return array
+     */
+    public static function loginAccount($data)
+    {
+        // Obtém a senha que será utilizada para realizar login.
+        $user_pass = ((BRACP_MD5_PASSWORD_HASH) ? hash('md5', $data['user_pass']) : $data['user_pass']);
+
+        // Tenta obter a conta que fará login no painel de controle.
+        $account = self::getApp()->getEm()
+                                    ->getRepository('Model\Login')
+                                    ->findOneBy(['userid' => $data['userid'], 'user_pass' => $user_pass]);
+
+        // Se a conta retornada for igual a null, não foi encontrada
+        //  Então, retorna mensagem de erro.
+        if(is_null($account))
+            return ['message' => ['error' => 'Combinação de usuário e senha incorretos.']];
+
+        // Se a conta do usuário é inferior ao nivel mínimo permitido
+        //  para login, então retorna mensagem de erro.
+        if($account->getGroup_id() < BRACP_ALLOW_LOGIN_GMLEVEL || $account->getState() != 0)
+            return ['message' => ['error' => 'Acesso negado. Você não pode realizar login.']];
+
+        // Define os dados de sessão para o usuário.
+        $_SESSION['BRACP_ISLOGGEDIN'] = true;
+        $_SESSION['BRACP_ACCOUNTID'] = $account->getAccount_id();
+
+        // Retorna mensagem de login realizado com sucesso.
+        return ['message' => ['success' => 'Login realizado com sucesso. Aguarde...']];
     }
 
     /**
@@ -90,7 +190,7 @@ class Account
 
         // Se a senha for hash md5, troca o valor para hash-md5.
         if(BRACP_MD5_PASSWORD_HASH)
-           $data['user_pass'] = hash('md5', $data['user_pass'])
+           $data['user_pass'] = hash('md5', $data['user_pass']);
 
         try
         {
@@ -105,8 +205,12 @@ class Account
             self::getApp()->getEm()->persist($account);
             self::getApp()->getEm()->flush();
 
-            // @Todo: Código para envio dos e-mails.
+            // Envia o e-mail para usuário caso o painel de controle esteja com as configurações
+            //  de envio ativas.
+            self::getApp()->sendMail('Conta Registrada', [$account->getEmail()],
+                                        'mail.create', ['userid' => $account->getUserid()]);
 
+            // Retorna mensagem que a conta foi criada com sucesso.
             return ['message' => ['success' => 'Sua conta foi criada com sucesso! Você já pode realizar login.']];
         }
         catch(\Exception $ex)

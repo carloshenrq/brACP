@@ -13,7 +13,7 @@
             </ul>
         </li>
     {else}
-        {if $smarty.const.BRACP_ALLOW_ADMIN eq true and $acc_gmlevel gte $smarty.const.BRACP_ALLOW_ADMIN_GMLEVEL}
+        {if $smarty.const.BRACP_ALLOW_ADMIN eq true and $account->getGroup_id() gte $smarty.const.BRACP_ALLOW_ADMIN_GMLEVEL}
             <li>
                 Administração
                 <ul data-back="Administração">
@@ -33,7 +33,7 @@
                 {if $smarty.const.PAG_INSTALL eq true}
                     <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/donations" data-target=".bracp-body">Doações</li>
                 {/if}
-                <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/logout" data-target=".bracp-body">Sair ({$smarty.session.BRACP_USERID})</li>
+                <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/logout" data-target=".bracp-body">Sair ({$account->getUserid()})</li>
             </ul>
         </li>
     {/if}

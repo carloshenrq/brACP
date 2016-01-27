@@ -44,9 +44,15 @@ class Route
 
             // Mapeia o grupo account.
             self::getApp()->group('/account', function() {
-                // Mapeia a rota de registro para a grupo de account.
+                // Rotas que não necessitam de login para entrar.
                 $this->map(['GET', 'POST'], '/register', ['Controller\Account', 'register'])
                         ->add(['Controller\Account', 'needLoggout']);
+                $this->map(['GET', 'POST'], '/login', ['Controller\Account', 'login'])
+                        ->add(['Controller\Account', 'needLoggout']);
+
+                // Rotas que necessitam de login para entrar.
+                $this->get('/logout', ['Controller\Account', 'logout'])
+                        ->add(['Controller\Account', 'needLogin']);
             });
         }
 

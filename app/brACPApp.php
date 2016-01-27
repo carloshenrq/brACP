@@ -18,11 +18,7 @@
  */
 
 use Doctrine\ORM\EntityManager;
-use Model\Login;
-use Model\Donation;
-use Model\Compensate;
-use Model\Recover;
-use Model\EmailLog;
+use Controller\Account;
 
 /**
  * Classe para gerenciar a aplicação
@@ -75,14 +71,50 @@ class brACPApp extends Slim\App
     }
 
     /**
+     * Realiza o envio de e-mails para os usuários.
+     *
+     * @param string $subject
+     * @param string $to
+     * @param string $template
+     * @param array $data
+     *
+     * @return boolean
+     */
+    public function sendMail($subject, $to, $template, $data = [])
+    {
+        // Verifica se a configuração de envio para e-mails está habilitada.
+        //  Se não estiver, retorna false.
+        if(!BRACP_ALLOW_MAIL_SEND)
+            return false;
+
+        // Mescla o array atual com os dados de envio.
+        $data = array_merge(['ipAddress' => $this->getContainer()->get('request')->getAttribute('ip_address')], $data);
+
+        // Transporte para o email.
+        $transport = \Swift_SmtpTransport::newInstance(BRACP_MAIL_HOST, BRACP_MAIL_PORT)
+                                            ->setUsername(BRACP_MAIL_USER)
+                                            ->setPassword(BRACP_MAIL_PASS);
+        // Mailer para envio dos dados.
+        $mailer = \Swift_Mailer::newInstance($transport);
+        // Mensagem para enviar.
+        $message = \Swift_Message::newInstance($subject)
+                                    ->setFrom([BRACP_MAIL_FROM => BRACP_MAIL_FROM_NAME])
+                                    ->setTo($to)
+                                    ->setBody($this->render($template, $data, false), 'text/html');
+
+        // Retorna informando que o envio foi realizado com sucesso.
+        return $mailer->send($message) > 0;
+    }
+
+    /**
      * Exibe o template a ser chamado.
      *
      * @param string $template Nome do arquivo a ser chamado.
      * @param array $data Dados a serem enviados ao template.
      */
-    public function display($template, $data = [], $isAjax = false)
+    public function display($template, $data = [], $ajax = true)
     {
-        echo $this->render($template, $data);
+        echo $this->render($template, $data, $ajax);
     }
 
     /**
@@ -95,6 +127,10 @@ class brACPApp extends Slim\App
      */
     public function render($template, $data = [], $ajax = true)
     {
+        // Verifica se o usuário está logado no sistema.
+        if(Account::isLoggedIn())
+            $data = array_merge(['account' => Account::loggedUser()]);
+
         // Atribui os dados ao view.
         foreach($data as $key => $value)
         {
