@@ -51,6 +51,8 @@ class Route
                         ->add(['Controller\Account', 'needLoggout']);
                 $this->map(['GET', 'POST'], '/recover', ['Controller\Account', 'recover'])
                         ->add(['Controller\Account', 'needLoggout']);
+                $this->map(['GET', 'POST'], '/recover/{code}', ['Controller\Account', 'recover'])
+                        ->add(['Controller\Account', 'needLoggout']);
 
                 // Rotas que necessitam de login para entrar.
                 $this->map(['GET', 'POST'], '/change/password', ['Controller\Account', 'password'])

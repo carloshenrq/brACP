@@ -73,9 +73,12 @@ class Account
      */
     public static function recover(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
+        // Obtém o código de recuperação.
+        $code = ((isset($args['code'])) ? $args['code'] : null);
+
         // Exibe as informações no template de cadastro.
         self::getApp()->display('account.recover',
-                                    (($request->isPost()) ? self::recoverAccount($request->getParsedBody()):[]));
+                                    (($request->isPost() || !is_null($code)) ? self::recoverAccount($request->getParsedBody(), $code):[]));
     }
 
     /**
@@ -354,7 +357,7 @@ class Account
             $user_pass = self::getApp()->randomString(BRACP_RECOVER_STRING_LENGTH, BRACP_RECOVER_RANDOM_STRING);
 
             // Realiza a alteração da senha da conta.
-            if($this->changePass($recover->getAccount()->getAccount_id(), $user_pass))
+            if(self::changePass($recover->getAccount()->getAccount_id(), $user_pass))
             {
                 // Atualiza o código de recuperação marcando como utilizado e atualiza a tabela.
                 $recover->setUsed(true);
@@ -409,7 +412,7 @@ class Account
                                             ')
                                             ->setParameter('account_id', $account->getAccount_id())
                                             ->setParameter('CURDATETIME', date('Y-m-d H:i:s'))
-                                            ->getOneOrDefault();
+                                            ->getOneOrNullResult();
 
                 // Se não foi encontrado o objeto de recuperação, será criado um novo
                 //  registro do banco de dados.
