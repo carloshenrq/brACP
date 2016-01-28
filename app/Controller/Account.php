@@ -7,6 +7,7 @@ use \Psr\Http\Message\ResponseInterface;
 
 use \Model\Login;
 use \Model\Recover;
+use \Model\EmailLog;
 
 /**
  * Controlador para dados de conta.
@@ -32,7 +33,6 @@ class Account
      */
     public static function login(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
-        // Exibe as informações no template de cadastro.
         self::getApp()->display('account.login',
                                     (($request->isPost()) ? self::loginAccount($request->getParsedBody()):[]));
     }
@@ -146,6 +146,81 @@ class Account
     }
 
     /**
+     * Altera o endereço de e-mail da conta do jogador.
+     *
+     * @param int $account_id
+     * @param string $email
+     *
+     * @return boolean
+     */
+    public static function changeMail($account_id, $email)
+    {
+        // Se por configuração está habilitado a trocar de endereço de e-mail.
+        // Se não estiver, retorna falso.
+        if(!BRACP_ALLOW_CHANGE_MAIL)
+            return false;
+
+        // Obtém a conta que fará a alteração de endereço de e-mail.
+        $account = self::getApp()->getEm()->getRepository('Model\Login')->findOneBy(['account_id' => $account_id]);
+
+        // Verifica se a conta enviada existe.
+        if(is_null($account))
+            return false;
+
+        // Verifica se a conta é do tipo administrador. Se for, não permite que
+        //  o e-mail seja alterado.
+        if($account->getGroup_id() >= BRACP_ALLOW_ADMIN_GMLEVEL)
+            return false;
+
+        // Obtém o e-mail antigo da conta para enviar a notificação.
+        $oldEmail = $account->getEmail();
+
+        // Atualiza o endereço de e-mail.
+        $account->setEmail($email);
+
+        // Salva a alteração no banco de dados.
+        self::getApp()->getEm()->merge($account);
+        self::getApp()->getEm()->flush();
+
+        // Cria o log de alterações para mudanças de endereço de e-mail.
+        $log = new EmailLog;
+        $log->setAccount($account);
+        $log->setFrom($oldEmail);
+        $log->setTo($email);
+        $log->setDate(date('Y-m-d H:i:s'));
+
+        self::getApp()->getEm()->persist($log);
+        self::getApp()->getEm()->flush();
+
+        // Verifica se as notificações para envio de e-mail estão ativas.
+        if(BRACP_NOTIFY_CHANGE_MAIL)
+        {
+            // Envia um email para o endereço antigo informando a alteração.
+            self::getApp()->sendMail('Notificação: Alteração de E-mail',
+                                        [$log->getFrom()],
+                                        'mail.change.mail',
+                                        [
+                                            'userid' => $account->getUserid(),
+                                            'mailOld' => $log->getFrom(),
+                                            'mailNew' => $log->getTo(),
+                                        ]);
+
+            // Envia o e-mail para o novo endereço.
+            self::getApp()->sendMail('Notificação: Alteração de E-mail',
+                                        [$log->getTo()],
+                                        'mail.change.mail',
+                                        [
+                                            'userid' => $account->getUserid(),
+                                            'mailOld' => $log->getFrom(),
+                                            'mailNew' => $log->getTo(),
+                                        ]);
+        }
+
+        // Retorna verdadeiro para a alteração de endereço de e-mail.
+        return true;
+    }
+
+    /**
      * Altera a senha do usuário e envia a notificação para o e-mail da conta.
      *
      * @param int $account_id
@@ -167,7 +242,7 @@ class Account
                     ')
                     ->setParameter('account_id', $account_id)
                     ->setParameter('user_pass', ((BRACP_MD5_PASSWORD_HASH) ? hash('md5', $user_pass):$user_pass))
-                    ->execute();
+                    ->execute() > 0;
 
         // Verifica se a senha foi alterada e se é necessário o envio
         if($changed && BRACP_ALLOW_MAIL_SEND && BRACP_NOTIFY_CHANGE_PASSWORD)
@@ -245,7 +320,7 @@ class Account
             }
             else
             {
-                return ['message' => ['error' => 'Não foi possível recuperar a senha de usuário.']]
+                return ['message' => ['error' => 'Não foi possível recuperar a senha de usuário.']];
             }
         }
         else

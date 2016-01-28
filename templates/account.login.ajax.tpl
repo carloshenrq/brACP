@@ -18,8 +18,8 @@
 
 <h1>Minha Conta &raquo; Entrar</h1>
 
-{if isset($message.success) eq true}
-    <p class="bracp-message-success">{$message.success}</p>
+{if isset($smarty.session.BRACP_ISLOGGEDIN) eq true}
+    <p class="bracp-message-success">Login realizado com sucesso. Aguarde...</p>
 
     <script>
         setTimeout(function() {
