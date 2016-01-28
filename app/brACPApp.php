@@ -142,13 +142,10 @@ class brACPApp extends Slim\App
     {
         // Verifica se o usuário está logado no sistema.
         if(Account::isLoggedIn())
-            $data = array_merge(['account' => Account::loggedUser()]);
+            $data = array_merge(['account' => Account::loggedUser()], $data);
 
-        // Atribui os dados ao view.
-        foreach($data as $key => $value)
-        {
-            $this->view->assign($key, $value);
-        }
+        // Atribui os dados ao smarty.
+        $this->view->assign($data);
 
         // Se for uma requisição do tipo ajax, adiciona o sulfixo ajax ao nome do template.
         if($ajax && $this->getContainer()->get('request')->isXhr())

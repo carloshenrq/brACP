@@ -91,7 +91,7 @@ class Account
     public static function password(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
         // Exibe as informações no template de cadastro.
-        self::getApp()->display('account.change.password', []);
+        self::getApp()->display('account.change.password', (($request->isPost()) ? self::passwordAccount($request->getParsedBody()):[])  );
     }
 
     /**
@@ -104,7 +104,8 @@ class Account
     public static function email(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
         // Exibe as informações no template de cadastro.
-        self::getApp()->display('account.change.mail', []);
+        self::getApp()->display('account.change.mail',
+                                            (($request->isPost()) ? self::emailAccount($request->getParsedBody()):[]));
     }
 
     /**
@@ -316,6 +317,44 @@ class Account
         }
 
         return $changed;
+    }
+
+    /**
+     * Método utilizado para alterar a senha da conta.
+     *
+     * @static
+     *
+     * @return array
+     */
+    public static function passwordAccount($data)
+    {
+        // Se administradores não podem atualizar senha, verifica nivel do usuário logado e
+        //  retorna erro caso nivel administrador.
+        if(!BRACP_ALLOW_ADMIN_CHANGE_PASSWORD && self::loggedUser()->getGroup_id() >= BRACP_ALLOW_ADMIN_GMLEVEL)
+            return ['message' => ['error' => 'Usuários do tipo administrador não podem realizar alteração de senha.']];
+
+        // Obtém a senha atual do jogador para aplicação do md5 na comparação da senha.
+        $user_pass = self::loggedUser()->getUser_pass();
+        if(!BRACP_MD5_PASSWORD_HASH)
+            $user_pass = hash('md5', $user_pass);
+
+        // Verifica senha atual digitada.
+        if(hash('md5', $data['user_pass']) !== $user_pass)
+            return ['message' => ['error' => 'Senha atual digitada não confere.']];
+
+        // Verifica novas senhas digitadas.
+        if(hash('md5', $data['user_pass_new']) !== hash('md5', $data['user_pass_conf']))
+            return ['message' => ['error' => 'Novas senhas digitadas não conferem.']];
+
+        // Verifica se a senha nova é igual a anterior.
+        if(hash('md5', $data['user_pass_new']) === $user_pass)
+            return ['message' => ['error' => 'Sua nova senha não pode ser igual a senha anterior.']];
+
+        // Senha alterada com sucesso.
+        if(self::changePass(self::loggedUser()->getAccount_id(), $data['user_pass_new']))
+            return ['message' => ['success' => 'Sua senha foi alterada com sucesso!']];
+        else
+            return ['message' => ['error' => 'Ocorreu um erro durante a alteração de sua senha.']];
     }
 
     /**
