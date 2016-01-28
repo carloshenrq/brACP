@@ -103,9 +103,36 @@ class Account
      */
     public static function email(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
+        // Dados a serem enviados a tela.
+        $data = $mailChanges = [];
+        if($request->isPost())
+            $data = self::emailAccount($request->getParsedBody());
+
+        // Se estiver configurado para realizar leitura
+        if(BRACP_MAIL_SHOW_LOG)
+        {
+            // Obtém todas as ultimas alterações de e-mail.
+            $mailChanges = self::getApp()->getEm()
+                            ->createQuery('
+                                SELECT
+                                    log, login
+                                FROM
+                                    Model\EmailLog log
+                                INNER JOIN
+                                    log.account login
+                                WHERE
+                                    login.account_id = :account_id
+                                ORDER BY
+                                    log.id DESC
+                            ')
+                            ->setParameter('account_id', self::loggedUser()->getAccount_id())
+                            ->setMaxResults(10)
+                            ->getResult();
+        }
+
         // Exibe as informações no template de cadastro.
-        self::getApp()->display('account.change.mail',
-                                            (($request->isPost()) ? self::emailAccount($request->getParsedBody()):[]));
+        self::getApp()->display('account.change.mail', array_merge($data,
+                                                        ['mailChange' => $mailChanges]));
     }
 
     /**
@@ -209,7 +236,7 @@ class Account
      *
      * @return boolean
      */
-    public static function changeMail($account_id, $email)
+    public static function changeMail($account_id, $email, $checkDelay = true)
     {
         // Se por configuração está habilitado a trocar de endereço de e-mail.
         // Se não estiver, retorna falso.
@@ -228,6 +255,34 @@ class Account
         //  o e-mail seja alterado.
         if($account->getGroup_id() >= BRACP_ALLOW_ADMIN_GMLEVEL)
             return false;
+
+        // Verifica se existe delay para alteração de endereço de e-mail e se houver
+        //  verifica a data da ultima alteração de e-mail para não permitir que
+        //  seja alterado o endereço dentro do delay informado.
+        if($checkDelay && BRACP_CHANGE_MAIL_DELAY > 0)
+        {
+            // Conta os registros de log para não permitir alterações
+            //  de e-mail dentro do delay informado.
+            $count = self::getApp()->getEm()
+                                    ->createQuery('
+                                        SELECT
+                                            count(log)
+                                        FROM
+                                            Model\EmailLog log
+                                        INNER JOIN
+                                            log.account login
+                                        WHERE
+                                            login.account_id = :account_id AND
+                                            log.date >= :DELAYDATE
+                                    ')
+                                    ->setParameter('account_id', $account->getAccount_id())
+                                    ->setParameter('DELAYDATE', date('Y-m-d H:i:s', time() - (BRACP_CHANGE_MAIL_DELAY*60)))
+                                    ->getSingleScalarResult();
+
+            // Caso existam resultados para obter os dados de delay.
+            if($count > 0)
+                return false;
+        }
 
         // Obtém o e-mail antigo da conta para enviar a notificação.
         $oldEmail = $account->getEmail();
@@ -317,6 +372,39 @@ class Account
         }
 
         return $changed;
+    }
+
+    /**
+     * Método utilizado para alterar o e-mail da conta.
+     *
+     * @static
+     *
+     * @return array
+     */
+    public static function emailAccount($data)
+    {
+        // Verifica se a conta é do tipo administrador e não deixa realizar a alteração de e-mail
+        if(self::loggedUser()->getGroup_id() >= BRACP_ALLOW_ADMIN_GMLEVEL)
+            return ['message' => ['error' => 'Usuários administradores não podem realizar alteração de e-mail.']];
+
+        // Verifica se o email atual digitado é igual ao email atual.
+        if(hash('md5', self::loggedUser()->getEmail()) !== hash('md5', $data['email']))
+            return ['message' => ['error' => 'E-mail atual não confere com o digitado.']];
+
+        // Verifica se o email novo digitado é igual ao email de confirmação.
+        if(hash('md5', $data['email_new']) !== hash('md5', $data['email_conf']))
+            return ['message' => ['error' => 'Os e-mails digitados não conferem.']];
+
+        // Verifica se o email atual é igual ao email novo digitado.
+        if(hash('md5', self::loggedUser()->getEmail()) === hash('md5', $data['email_new']))
+            return ['message' => ['error' => 'O Novo endereço de e-mail não pode ser igual ao atual.']];
+
+        // Verifica se foi possivel alterar o endereço de e-mail do usuário.
+        if(self::changeMail(self::loggedUser()->getAccount_id(), $data['email_new']))
+            return ['message' => ['success' => 'Seu endereço de e-mail foi alterado com sucesso.']];
+        else
+            // Ocorre quando o endereço de e-mail já está em uso.
+            return ['message' => ['error' => 'Ocorreu um erro durante a alteração do seu endereço.']];
     }
 
     /**

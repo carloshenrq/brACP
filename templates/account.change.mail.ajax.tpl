@@ -71,4 +71,32 @@
         </div>
     </form>
 
+    {if $smarty.const.BRACP_MAIL_SHOW_LOG eq true}
+        {if count($mailChange) gt 0}
+            <br>
+            <table border="1" align="center" class="bracp-table">
+                <caption class="bracp-message-warning">{min(10, count($mailChange))} última(s) alteração(ões) de e-mail.</caption>
+                <thead>
+                    <tr>
+                        <th>Cód.</th>
+                        <th>Antigo</th>
+                        <th>Novo</th>
+                        <th>Data</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {foreach from=$mailChange item=change}
+                        <tr>
+                            <td>{$change->getId()}</td>
+                            <td>{Format::protectMail($change->getFrom())}</td>
+                            <td>{Format::protectMail($change->getTo())}</td>
+                            <td>{Format::date($change->getDate())}</td>
+                        </tr>
+                    {/foreach}
+                </tbody>
+            </table>
+        {else}
+            <p class="bracp-message-warning">Você ainda não realizou nenhuma mudança de e-mail.</p>
+        {/if}
+    {/if}
 {/if}

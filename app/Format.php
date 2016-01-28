@@ -25,6 +25,37 @@
 class Format
 {
     /**
+     * Formata informações de data do formato indicado até o destino.
+     *
+     * @param string $date
+     * @param string $destFormat
+     * @param string $fromFormat
+     *
+     * @return string
+     */
+    public static function date($date, $destFormat = 'd/m/Y H:i:s')
+    {
+        return date($destFormat, strtotime($date));
+    }
+
+    /**
+     * Protege o endereço de e-mail exibindo apenas o primeiro e ultimo caractere antes do @
+     *
+     * @param string $email
+     *
+     * @return string
+     */
+    public static function protectMail($email)
+    {
+        preg_match('/^([a-z0-9._%+-])([^\@]+)([a-z0-9._%+-])(.*)/i', $email, $match);
+
+        array_shift($match);
+        $match[1] = preg_replace('([a-z0-9._%+-])', '*', $match[1]);
+
+        return implode('', $match);
+    }
+
+    /**
      * Formata o falor enviado como dinheiro.
      */
     public static function money($money, $decimalPlaces = 2, $centsDelimiter = ',', $milharDelimiter = '.')
