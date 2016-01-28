@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS `bracp_donations_promo` (
     `BonusMultiply` INTEGER NOT NULL DEFAULT 0,
     `PromotionStartDate` DATE NOT NULL DEFAULT '0000-00-00',
     `PromotionEndDate` DATE NOT NULL DEFAULT '0000-00-00',
+    `PromotionCanceled` BOOLEAN NOT NULL DEFAULT FALSE,
     INDEX (`PromotionStartDate`, `PromotionEndDate`)
 ) ENGINE=InnoDB COLLATE='utf8_swedish_ci';
 
@@ -32,6 +33,7 @@ CREATE TABLE IF NOT EXISTS `bracp_donations` (
     `DonationCompensate` BOOLEAN NOT NULL DEFAULT FALSE,
     `DonationStatus` ENUM('INICIADA', 'PAGO', 'CANCELADO', 'ESTORNADO') NOT NULL DEFAULT 'INICIADA',
     `DonationPaymentDate` DATETIME NULL DEFAULT NULL,
+    `DonationCancelDate` DATETIME NULL DEFAULT NULL,
 
     FOREIGN KEY (`PromotionID`) REFERENCES `bracp_donations_promo` (`PromotionID`)
 ) ENGINE=InnoDB COLLATE='utf8_swedish_ci';

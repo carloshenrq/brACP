@@ -54,6 +54,11 @@ class Promotion
      */
     protected $endDate;
 
+    /**
+     * @Column(name="PromotionCanceled", type="boolean")
+     */
+    protected $canceled = false;
+
     public function getId()
     {
         return $this->id;
@@ -102,6 +107,16 @@ class Promotion
     public function setEndDate($endDate)
     {
         return $this->endDate = $endDate;
+    }
+
+    public function getCanceled()
+    {
+        return $this->canceled;
+    }
+    
+    public function setCanceled($canceled)
+    {
+        return $this->canceled = $canceled;
     }
 }
 

@@ -106,6 +106,11 @@ class Donation
      */
     protected $paymentDate = null;
 
+    /**
+     * @Column(name="DonationCancelDate", type="string", length=19, nullable=true)
+     */
+    protected $cancelDate = null;
+
     public function getId()
     {
         return $this->id;
@@ -254,6 +259,16 @@ class Donation
     public function setPaymentDate($paymentDate)
     {
         return $this->paymentDate = $paymentDate;
+    }
+
+    public function getCancelDate()
+    {
+        return $this->cancelDate;
+    }
+    
+    public function setCancelDate($cancelDate)
+    {
+        return $this->cancelDate = $cancelDate;
     }
 }
 
