@@ -157,7 +157,8 @@ class Account
     {
         // Se por configuração está habilitado a trocar de endereço de e-mail.
         // Se não estiver, retorna falso.
-        if(!BRACP_ALLOW_CHANGE_MAIL)
+        // -> Verifica se o endereço de e-mail já está cadastrado.
+        if(!BRACP_ALLOW_CHANGE_MAIL || BRACP_MAIL_REGISTER_ONCE && self::checkMail($email))
             return false;
 
         // Obtém a conta que fará a alteração de endereço de e-mail.
