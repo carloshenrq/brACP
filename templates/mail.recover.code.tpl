@@ -24,7 +24,7 @@
     Para confirmar essa tentativa de recuperação, por favor, clique no link abaixo ou copie e cole o endereço em seu navegador.<br>
     <br>
     <a href="{$href}/{$code}" target="_blank">{$href}/{$code}</a><br>
-    <i>Link válido até <strong>{$expire}</strong>.</i><br>
+    <i>Link válido até <strong>{Format::date($expire)}</strong>.</i><br>
     <br>
     Após acessar o link, você receberá um segundo e-mail com a nova senha gerada aleatóriamente pelo sistema.
 {/block}
