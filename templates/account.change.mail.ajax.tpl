@@ -18,7 +18,7 @@
 
 <h1>Minha Conta &raquo; Alterar Email</h1>
 
-{if $acc_gmlevel >= $smarty.const.BRACP_ALLOW_ADMIN_GMLEVEL}
+{if $account->getGroup_id() >= $smarty.const.BRACP_ALLOW_ADMIN_GMLEVEL}
     <p class="bracp-message-error">
         Nenhum administrador está permitido a alterar seu endereço de email.
         {if $smarty.const.BRACP_ALLOW_ADMIN eq true}

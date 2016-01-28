@@ -18,7 +18,7 @@
 
 <h1>Minha Conta &raquo; Alterar Senha</h1>
 
-{if $smarty.const.BRACP_ALLOW_ADMIN_CHANGE_PASSWORD eq false and $acc_gmlevel >= $smarty.const.BRACP_ALLOW_ADMIN_GMLEVEL}
+{if $smarty.const.BRACP_ALLOW_ADMIN_CHANGE_PASSWORD eq false and $account->getGroup_id() >= $smarty.const.BRACP_ALLOW_ADMIN_GMLEVEL}
     <p class="bracp-message-error">
         Nenhum administrador está permitido a alterar sua senha aqui.
         {if $smarty.const.BRACP_ALLOW_ADMIN eq true}
@@ -28,7 +28,7 @@
         {/if}
     </p>
 {else}
-    {if $acc_gmlevel >= $smarty.const.BRACP_ALLOW_ADMIN_GMLEVEL}
+    {if $account->getGroup_id() >= $smarty.const.BRACP_ALLOW_ADMIN_GMLEVEL}
         <p class="bracp-message-warning">
             <strong>Nota.:</strong> Por motivos de segurança é recomendado que a alteração de senha para adminsitradores seja desabilitada!<br>
             <br>

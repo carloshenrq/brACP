@@ -79,6 +79,32 @@ class Account
     }
 
     /**
+     * Método para alteração de senha do usuário.
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param array $args
+     */
+    public static function password(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        // Exibe as informações no template de cadastro.
+        self::getApp()->display('account.change.password', []);
+    }
+
+    /**
+     * Método para alteração de email do usuário.
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param array $args
+     */
+    public static function email(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        // Exibe as informações no template de cadastro.
+        self::getApp()->display('account.change.mail', []);
+    }
+
+    /**
      * Verifica se o usuário está logado no sistema.
      *
      * @return boolean
@@ -141,6 +167,32 @@ class Account
             return $response;
         }
 
+        // Chama o próximo middleware.
+        return $next($request, $response);
+    }
+
+    /**
+     * Define que o usuário precisa ser nivel administrador para usar.
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param callback $next
+     */
+    public static function needAdmin(ServerRequestInterface $request, ResponseInterface $response, $next)
+    {
+        // Chama o próximo middleware.
+        return $next($request, $response);
+    }
+
+    /**
+     * Define que o usuário não pode ser nivel administrador para usar.
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param callback $next
+     */
+    public static function notNeedAdmin(ServerRequestInterface $request, ResponseInterface $response, $next)
+    {
         // Chama o próximo middleware.
         return $next($request, $response);
     }
