@@ -211,6 +211,13 @@ class Account
      */
     public static function needAdmin(ServerRequestInterface $request, ResponseInterface $response, $next)
     {
+        // Verifica se o usuário está logado e se é adminsitrador.
+        if(!self::isLoggedIn() || self::loggedUser()->getGroup_id() < BRACP_ALLOW_ADMIN_GMLEVEL)
+        {
+            self::getApp()->display('error.not.allowed');
+            return $response;
+        }
+
         // Chama o próximo middleware.
         return $next($request, $response);
     }
@@ -224,6 +231,13 @@ class Account
      */
     public static function notNeedAdmin(ServerRequestInterface $request, ResponseInterface $response, $next)
     {
+        // Verifica se o usuário está logado e é nivel adminsitrador.
+        if(!self::isLoggedIn() || self::loggedUser()->getGroup_id() >= BRACP_ALLOW_ADMIN_GMLEVEL)
+        {
+            self::getApp()->display('error.not.allowed');
+            return $response;
+        }
+
         // Chama o próximo middleware.
         return $next($request, $response);
     }
@@ -645,35 +659,24 @@ class Account
         if(BRACP_MD5_PASSWORD_HASH)
            $data['user_pass'] = hash('md5', $data['user_pass']);
 
-        try
-        {
-            // Cria o objeto da conta para ser salvo no banco de dados.
-            $account = new Login;
-            $account->setUserid($data['userid']);
-            $account->setUser_pass($data['user_pass']);
-            $account->setSex($data['sex']);
-            $account->setEmail($data['email']);
+        // Cria o objeto da conta para ser salvo no banco de dados.
+        $account = new Login;
+        $account->setUserid($data['userid']);
+        $account->setUser_pass($data['user_pass']);
+        $account->setSex($data['sex']);
+        $account->setEmail($data['email']);
 
-            // Salva os dados na tabela de usuário.
-            self::getApp()->getEm()->persist($account);
-            self::getApp()->getEm()->flush();
+        // Salva os dados na tabela de usuário.
+        self::getApp()->getEm()->persist($account);
+        self::getApp()->getEm()->flush();
 
-            // Envia o e-mail para usuário caso o painel de controle esteja com as configurações
-            //  de envio ativas.
-            self::getApp()->sendMail('Conta Registrada', [$account->getEmail()],
-                                        'mail.create', ['userid' => $account->getUserid()]);
+        // Envia o e-mail para usuário caso o painel de controle esteja com as configurações
+        //  de envio ativas.
+        self::getApp()->sendMail('Conta Registrada', [$account->getEmail()],
+                                    'mail.create', ['userid' => $account->getUserid()]);
 
-            // Retorna mensagem que a conta foi criada com sucesso.
-            return ['message' => ['success' => 'Sua conta foi criada com sucesso! Você já pode realizar login.']];
-        }
-        catch(\Exception $ex)
-        {
-            return ['message' =>
-                        ['error' =>
-                            'Não foi possivel criar sua conta de usuário.' . ((BRACP_DEVELOP_MODE) ? '<br><br>' . $ex->getMessage():'')
-                        ]
-                   ];
-        }
+        // Retorna mensagem que a conta foi criada com sucesso.
+        return ['message' => ['success' => 'Sua conta foi criada com sucesso! Você já pode realizar login.']];
     }
 
     /**
