@@ -24,15 +24,15 @@ if(!is_dir(__DIR__ . DIRECTORY_SEPARATOR . 'vendor'))
     exit;
 }
 
-// Mostly important file from the server. This loads all libs needed to run this panel.
+// Carrega o arquivo de configurações para o painel de controle.
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'config.php';
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'config.parser.php';
+
+date_default_timezone_set(BRACP_DEFAULT_TIMEZONE);
+
+// Carrega informações de autoload do composer e do app.
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'autoload.php';
 
 // Calls the slim
 $app = new brACPApp();
 $app->run();
-
-// $app->run();
-
