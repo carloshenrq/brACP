@@ -66,5 +66,18 @@
         $(this).val((value/decimalMultiply).toFixed(decimalPlaces).toString());
     });
 
+    $.ajaxSetup({
+        'beforeSend' : function(jqXHR, settings) {
+            // Ajusta a tela de acordo com a largura.
+            $('.bracp-ajax-loading').css({
+                'width' : $(window).width(),
+                'height' : $(window).height(),
+            }).stop(true, true).fadeIn('fast');
+        },
+        'complete' : function (jqXHR, textStatus) {
+            $('.bracp-ajax-loading').stop(true, true).fadeOut('fast');
+        }
+    });
+
 } (window.jQuery);
 
