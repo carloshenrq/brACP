@@ -625,6 +625,11 @@ class Account
      */
     public static function loginAccount($data)
     {
+        // Verificação recaptcha para saber se a requisição realizada
+        //  é verdadeira e pode continuar.
+        if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['g-recaptcha-response']))
+            return ['message' => ['error' => 'Código de verificação inválido. Verifique por favor.']];
+
         // Obtém a senha que será utilizada para realizar login.
         $user_pass = ((BRACP_MD5_PASSWORD_HASH) ? hash('md5', $data['user_pass']) : $data['user_pass']);
 

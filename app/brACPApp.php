@@ -71,6 +71,35 @@ class brACPApp extends Slim\App
     }
 
     /**
+     * Código re-captcha para a verificação no link de envio.
+     *
+     * @param string $response Código re-captcha para verificação.
+     *
+     * @return boolean Se verdadeiro a requisição foi verificada com sucesso.
+     */
+    public function checkReCaptcha($response)
+    {
+        // Se a configuração estiver desabilitada para o captcha,
+        //  não enviar requisição, apenas retornar false.
+        if(!BRACP_RECAPTCHA_ENABLED)
+            return false;
+
+        // Realiza a requisição da key no servido reCaptcha do google
+        //  para testar se a requisição é verdadeira ou não.
+        $captchaResponse = json_decode(Request::create('')
+            ->post(BRACP_RECAPTCHA_PRIVATE_URL, [
+                'form_params' => [
+                    'secret' => BRACP_RECAPTCHA_PRIVATE_KEY,
+                    'response' => $response
+                ]
+            ])->getBody()->getContents());
+
+        // Se a validação for realizada com sucesso, então, retorna verdadeiro,
+        //  se não, falso.
+        return $captchaResponse->success == 1;
+    }
+
+    /**
      * Realiza o envio de e-mails para os usuários.
      *
      * @param string $subject
