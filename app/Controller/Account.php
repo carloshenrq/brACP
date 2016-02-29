@@ -477,23 +477,45 @@ class Account
         // Se não estiver, envia mensagem de erro no retorno.
         if(BRACP_ALLOW_RESET_APPEAR || BRACP_ALLOW_RESET_POSIT || BRACP_ALLOW_RESET_EQUIP)
         {
-            $data = ['message' => []];
-
             // Verifica se a configuração de alteração de aparência pode
             //  ser realizada.
-            if(BRACP_ALLOW_RESET_APPEAR && count($data['appear']) > 0)
+            if(BRACP_ALLOW_RESET_APPEAR && isset($data['appear']) && count($data['appear']) > 0)
             {
-                // @Todo: Reset de aparência
+                // Adicionado reset de aparências do personagem.
+                $appear = self::getApp()->getEm()
+                                ->createQuery('
+                                    UPDATE
+                                        Model\Char chars
+                                    SET
+                                        chars.hair = 0,
+                                        chars.hair_color = 0,
+                                        chars.clothes_color = 0,
+                                        chars.head_top = 0,
+                                        chars.head_mid = 0,
+                                        chars.head_bottom = 0,
+                                        chars.robe = 0
+                                    WHERE
+                                        chars.account_id = :account_id AND
+                                        chars.char_id = :char_id AND
+                                        chars.online = 0
+                                ');
+
+                foreach($data['appear'] as $char_id)
+                {
+                    $appear->setParameter('account_id', self::loggedUser()->getAccount_id())
+                            ->setParameter('char_id', $char_id)
+                            ->execute();
+                }
             }
 
             // Verifica se a posição pode ser alterada e se dados para
             //  resetar foram realizados com sucesso.
-            if(BRACP_ALLOW_RESET_POSIT && count($data['posit']) > 0)
+            if(BRACP_ALLOW_RESET_POSIT && isset($data['posit']) && count($data['posit']) > 0)
             {
                 // @Todo: Reset de posição.
             }
 
-            if(BRACP_ALLOW_RESET_EQUIP && count($data['equip']) > 0)
+            if(BRACP_ALLOW_RESET_EQUIP && isset($data['equip']) && count($data['equip']) > 0)
             {
                 // @Todo: Reset de equipamentos.
             }
