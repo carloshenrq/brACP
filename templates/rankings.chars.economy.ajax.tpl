@@ -41,7 +41,7 @@
         </thead>
         <tbody>
             {foreach from=$chars key=i item=char}
-                <tr class="{if isset($account_id) eq true and $char->getAccount_id() eq $account_id}char-myaccount{/if}">
+                <tr class="{if isset($account) eq true and $char->getAccount_id() eq $account->getAccount_id()}char-myaccount{/if}">
                     <td align="right">{($i+1)}.º</td>
                     <td align="left">{$char->getName()}</td>
                     <td align="left">{Format::job($char->getClass())}</td>

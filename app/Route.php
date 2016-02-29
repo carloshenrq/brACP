@@ -64,6 +64,12 @@ class Route
                 $this->get('/logout', ['Controller\Account', 'logout'])
                         ->add(['Controller\Account', 'needLogin']);
             });
+
+            self::getApp()->group('/rankings', function() {
+                $this->get('/chars', ['Controller\Ranking', 'chars']);
+                $this->get('/chars/economy', ['Controller\Ranking', 'economy']);
+            });
+
         }
 
         // Chama o próximo middleware.
