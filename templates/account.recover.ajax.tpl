@@ -43,6 +43,11 @@
             </label>
         </div>
         <div class="bracp-form-field">
+
+            {if $smarty.const.BRACP_RECAPTCHA_ENABLED eq true}
+                <div class="g-recaptcha" data-sitekey="{$smarty.const.BRACP_RECAPTCHA_PUBLIC_KEY}"></div>
+            {/if}
+
             <div class="bracp-form-submit">
                 <input class="btn" type="submit" value="Recuperar"/>
                 <input class="btn" type="reset" value="Resetar"/>

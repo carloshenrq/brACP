@@ -485,6 +485,11 @@ class Account
      */
     public static function recoverAccount($data, $code = null)
     {
+        // Verificação recaptcha para saber se a requisição realizada
+        //  é verdadeira e pode continuar.
+        if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['g-recaptcha-response']))
+            return ['message' => ['error' => 'Código de verificação inválido. Verifique por favor.']];
+
         // Se o código não foi enviado.
         if(!is_null($code) && (BRACP_MD5_PASSWORD_HASH || BRACP_RECOVER_BY_CODE))
         {
@@ -666,6 +671,11 @@ class Account
      */
     public static function registerAccount($data)
     {
+        // Verificação recaptcha para saber se a requisição realizada
+        //  é verdadeira e pode continuar.
+        if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['g-recaptcha-response']))
+            return ['message' => ['error' => 'Código de verificação inválido. Verifique por favor.']];
+
         if(hash('md5', $data['user_pass']) !== hash('md5', $data['user_pass_conf']))
             return ['message' => ['error' => 'As senhas digitadas não conferem!']];
 
