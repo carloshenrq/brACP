@@ -54,6 +54,10 @@
                 Lembrar nome de usuário
             </label>
 
+            {if $smarty.const.BRACP_RECAPTCHA_ENABLED eq true}
+                <div class="g-recaptcha" data-sitekey="{$smarty.const.BRACP_RECAPTCHA_PUBLIC_KEY}"></div>
+            {/if}
+
             <div class="bracp-form-submit">
                 <input class="btn" type="submit" value="Entrar"/>
                 <input class="btn" type="reset" value="Resetar"/>

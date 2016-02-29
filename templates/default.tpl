@@ -47,6 +47,10 @@
             <script src="{$smarty.const.PAG_STC_URL}/pagseguro/api/v2/checkout/pagseguro.lightbox.js"></script>
         {/if}
 
+        {if $smarty.const.BRACP_RECAPTCHA_ENABLED eq true}
+            <script src="https://www.google.com/recaptcha/api.js"></script>
+        {/if}
+
         <script>
         {if $smarty.const.BRACP_DEVELOP_MODE eq true}
             console.info("---------------------------------------\n" +

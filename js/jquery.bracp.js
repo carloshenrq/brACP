@@ -76,6 +76,20 @@
         },
         'complete' : function (jqXHR, textStatus) {
             $('.bracp-ajax-loading').stop(true, true).fadeOut('fast');
+
+            // Adicionado renderização para o código re-captcha na página atual.
+            // Verificações serão adicionadas via servidor.
+            if($('.g-recaptcha').length > 0)
+            {
+                $('.g-recaptcha').each(function(){
+                    if($(this).html().length == 0)
+                    {
+                        grecaptcha.render(this, {
+                            'sitekey' : $(this).data('sitekey')
+                        });
+                    }
+                });
+            }
         }
     });
 
