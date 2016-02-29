@@ -70,6 +70,10 @@
                     <input type="password" id="user_pass_conf" name="user_pass_conf" placeholder="Confirme sua nova senha" size="24" maxlength="24" pattern="[a-zA-Z0-9\s]{4,20}" required/>{/literal}
                 </label>
 
+                {if $smarty.const.BRACP_RECAPTCHA_ENABLED eq true}
+                    <div class="g-recaptcha" data-sitekey="{$smarty.const.BRACP_RECAPTCHA_PUBLIC_KEY}"></div>
+                {/if}
+
                 <div class="bracp-form-submit">
                     <input class="btn" type="submit" value="Alterar"/>
                     <input class="btn" type="reset" value="Resetar"/>

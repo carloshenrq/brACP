@@ -418,6 +418,11 @@ class Account
         if(self::loggedUser()->getGroup_id() >= BRACP_ALLOW_ADMIN_GMLEVEL)
             return ['message' => ['error' => 'Usuários administradores não podem realizar alteração de e-mail.']];
 
+        // Verificação recaptcha para saber se a requisição realizada
+        //  é verdadeira e pode continuar.
+        if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['g-recaptcha-response']))
+            return ['message' => ['error' => 'Código de verificação inválido. Verifique por favor.']];
+
         // Verifica se o email atual digitado é igual ao email atual.
         if(hash('md5', self::loggedUser()->getEmail()) !== hash('md5', $data['email']))
             return ['message' => ['error' => 'E-mail atual não confere com o digitado.']];
@@ -451,6 +456,11 @@ class Account
         //  retorna erro caso nivel administrador.
         if(!BRACP_ALLOW_ADMIN_CHANGE_PASSWORD && self::loggedUser()->getGroup_id() >= BRACP_ALLOW_ADMIN_GMLEVEL)
             return ['message' => ['error' => 'Usuários do tipo administrador não podem realizar alteração de senha.']];
+
+        // Verificação recaptcha para saber se a requisição realizada
+        //  é verdadeira e pode continuar.
+        if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['g-recaptcha-response']))
+            return ['message' => ['error' => 'Código de verificação inválido. Verifique por favor.']];
 
         // Obtém a senha atual do jogador para aplicação do md5 na comparação da senha.
         $user_pass = self::loggedUser()->getUser_pass();

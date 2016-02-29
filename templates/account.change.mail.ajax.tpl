@@ -63,6 +63,10 @@
                     <input type="text" id="email_conf" name="email_conf" placeholder="Confirme seu novo email" size="39" maxlength="39" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}" required/>{/literal}
                 </label>
 
+                {if $smarty.const.BRACP_RECAPTCHA_ENABLED eq true}
+                    <div class="g-recaptcha" data-sitekey="{$smarty.const.BRACP_RECAPTCHA_PUBLIC_KEY}"></div>
+                {/if}
+
                 <div class="bracp-form-submit">
                     <input class="btn" type="submit" value="Alterar"/>
                     <input class="btn" type="reset" value="Resetar"/>
