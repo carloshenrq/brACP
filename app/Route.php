@@ -61,6 +61,12 @@ class Route
                 $this->map(['GET', 'POST'], '/change/mail', ['Controller\Account', 'email'])
                         ->add(['Controller\Account', 'needLogin']);
 
+                $this->map(['GET', 'POST'], '/chars', ['Controller\Account', 'chars'])
+                        ->add(['Controller\Account', 'needLogin']);
+
+                $this->map(['GET', 'POST'], '/donations', ['Controller\Account', 'donations'])
+                        ->add(['Controller\Account', 'needLogin']);
+
                 $this->get('/logout', ['Controller\Account', 'logout'])
                         ->add(['Controller\Account', 'needLogin']);
             });

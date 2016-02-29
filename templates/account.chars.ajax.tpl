@@ -18,99 +18,69 @@
 
 <h1>Minha Conta &raquo; Personagens</h1>
 
+<p>Segue abaixo a lista dos personagens gerenciaveis para sua conta.</p>
+
 {if count($chars) eq 0}
     <p class="bracp-message-warning">
-        Você não possui nenhum personagem criado. Realize login no jogo e crie seu personagem.
+        Você não possui personagens criados para gerênciar.
     </p>
 {else}
 
-{if count($appear) > 0}
-    <p class="bracp-message-success">
-        A aparência do(s) personagem(ns) <strong>{implode(', ', $appear)}</strong> foi(ram) resetada(s) com sucesso!
-    </p>
-{/if}
-{if count($posit) > 0}
-    <p class="bracp-message-success">
-        A posição do(s) personagem(ns) <strong>{implode(', ', $posit)}</strong> foi(ram) resetada(s) com sucesso!
-    </p>
-{/if}
-{if count($equip) > 0}
-    <p class="bracp-message-success">
-        Os equipamentos do(s) personagem(ns) <strong>{implode(', ', $equip)}</strong> foi(ram) resetada(s) com sucesso!
-    </p>
-{/if}
-
-<p>
-    Segue abaixo a lista dos seus personagens.
-</p>
-
-<p class="bracp-message-warning">
-    <strong>OBS.:</strong>
-    <i>Personagens que estiverem online, não serão resetados. Por favor, faça logout do jogo para resetar o personagem.</i>
-</p>
-
 <form class="ajax-form" action="{$smarty.const.BRACP_DIR_INSTALL_URL}account/chars" autocomplete="off" method="post" target=".bracp-body">
+
     <table border="1" align="center" class="bracp-table">
-        <caption style="padding: 2px; text-align: right">
-            <input class="btn" type="submit" value="Enviar"/>
-            <input class="btn" type="reset" value="Limpar"/>
+        <caption style="text-align: right">
+            <input type="submit" class="btn" value="Enviar"/>
+            <input type="reset" class="btn" value="Limpar"/>
         </caption>
         <thead>
-            <tr class="tiny">
-                <th rowspan="2" align="right">Cód.</th>
-                <th rowspan="2" align="left">Nome</th>
-                <th rowspan="2" align="left">Classe</th>
-                <th rowspan="2" align="right">Nível</th>
-                <th rowspan="2" align="center">Localização</th>
-                <th rowspan="2" align="center">Ponto de Retorno</th>
-                {if $smarty.const.BRACP_ALLOW_SHOW_CHAR_STATUS eq true}
-                    <th rowspan="2" align="center">Status</th>
-                {/if}
-                {if $resetCount > 0}
-                    <th colspan="{$resetCount}" align="center">Resetar</th>
+            <tr>
+                <th align="right" rowspan="2">Cód.</th>
+                <th align="left" rowspan="2">Nome</th>
+                <th align="left" rowspan="2">Classe</th>
+                <th align="right" rowspan="2">Nível</th>
+                <th align="right" rowspan="2">Zeny</th>
+                <th align="left" rowspan="2">Mapa</th>
+                <th align="left" rowspan="2">Retorno</th>
+                {if $actions neq 0}
+                    <th colspan="3">Resetar</th>
                 {/if}
             </tr>
-            <tr class="tiny">
-                {if $resetCount > 0}
-                    {if $smarty.const.BRACP_ALLOW_RESET_APPEAR eq true}
-                        <th align="center">Aparência</th>
-                    {/if}
-                    {if $smarty.const.BRACP_ALLOW_RESET_POSIT eq true}
-                        <th align="center">Posição</th>
-                    {/if}
-                    {if $smarty.const.BRACP_ALLOW_RESET_EQUIP eq true}
-                        <th align="center">Equip</th>
-                    {/if}
+            <tr>
+                {if $actions&1 eq 1}
+                    <th>Visual</th>
+                {/if}
+                {if $actions&2 eq 2}
+                    <th>Local</th>
+                {/if}
+                {if $actions&4 eq 4}
+                    <th>Equip</th>
                 {/if}
             </tr>
         </thead>
         <tbody>
-            {foreach from=$chars item=char}
+            {foreach from=$chars item=row}
                 <tr>
-                    <td align="right">{$char->getChar_id()}</td>
-                    <td align="left">{$char->getName()}</td>
-                    <td align="left">{Format::job($char->getClass())}</td>
-                    <td align="right">{$char->getBase_level()}/{$char->getJob_level()}</td>
-                    <td align="left">{$char->getLast_map()} ({$char->getLast_x()}, {$char->getLast_y()})</td>
-                    <td align="left">{$char->getSave_map()} ({$char->getSave_x()}, {$char->getSave_y()})</td>
-                    {if $smarty.const.BRACP_ALLOW_SHOW_CHAR_STATUS eq true}
-                        <td align="center">{Format::status($char->getOnline())}</td>
+                    <td align="right">{$row->getChar_id()}</td>
+                    <td align="left">{$row->getName()}</td>
+                    <td align="left">{Format::job($row->getClass())}</td>
+                    <td align="right">{$row->getBase_level()}/{$row->getJob_level()}</td>
+                    <td align="right">{Format::zeny($row->getZeny())}</td>
+                    <td align="left">{$row->getLast_map()} ({$row->getLast_x()}, {$row->getLast_y()})</td>
+                    <td align="left">{$row->getSave_map()} ({$row->getSave_x()}, {$row->getSave_y()})</td>
+
+                    {if $actions&1 eq 1}
+                        <td align="center"><input type="checkbox" name="appear[]" value="{$row->getChar_id()}"/></td>
                     {/if}
-                    {if $resetCount > 0}
-                        {if $smarty.const.BRACP_ALLOW_RESET_APPEAR eq true}
-                            <td align="center"><input type="checkbox" name="char_id_appear[]" value="{$char->getChar_id()}" {if $char->getOnline() eq true}disabled{/if} /></td>
-                        {/if}
-                        {if $smarty.const.BRACP_ALLOW_RESET_POSIT eq true}
-                            <td align="center"><input type="checkbox" name="char_id_posit[]" value="{$char->getChar_id()}" {if $char->getOnline() eq true}disabled{/if} /></td>
-                        {/if}
-                        {if $smarty.const.BRACP_ALLOW_RESET_EQUIP eq true}
-                            <td align="center"><input type="checkbox" name="char_id_equip[]" value="{$char->getChar_id()}" {if $char->getOnline() eq true}disabled{/if} /></td>
-                        {/if}
+                    {if $actions&2 eq 2}
+                        <td align="center"><input type="checkbox" name="posit[]" value="{$row->getChar_id()}"/></td>
+                    {/if}
+                    {if $actions&4 eq 4}
+                        <td align="center"><input type="checkbox" name="equip[]" value="{$row->getChar_id()}"/></td>
                     {/if}
                 </tr>
             {/foreach}
         </tbody>
     </table>
 </form>
-
 {/if}

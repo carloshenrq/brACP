@@ -153,6 +153,64 @@ class Account
     }
 
     /**
+     * Método para exibição dos personagens e alterações.
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param array $args
+     */
+    public static function chars(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+
+        $data = [];
+
+        // Se é uma requisição tipo post, então
+        //  tenta realizar a alteração dos personagens realizando o envio dos dados
+        //  para o método.
+        if($request->isPost())
+            $data = array_merge($data, self::charsAccount($request->getParsedBody()));
+
+        // Realiza a query para obter os personagens da conta logada.
+        $chars = self::getApp()->getEm()
+                        ->createQuery('
+                            SELECT
+                                chars
+                            FROM
+                                Model\Char chars
+                            WHERE
+                                chars.account_id = :account_id
+                            ORDER BY
+                                chars.char_num ASC
+                        ')
+                        ->setParameter('account_id', self::loggedUser()->getAccount_id())
+                        ->getResult();
+
+        $actions = 0;
+
+        if(BRACP_ALLOW_RESET_APPEAR) $actions |= 1;
+        if(BRACP_ALLOW_RESET_POSIT) $actions |= 2;
+        if(BRACP_ALLOW_RESET_EQUIP) $actions |= 4;
+
+        // Envia para tela os dados da conta logada.
+        self::getApp()->display('account.chars', array_merge([
+            'chars' => $chars,
+            'actions' => $actions
+        ], $data));
+    }
+
+    /**
+     * Método para doações.
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param array $args
+     */
+    public static function donations(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        self::getApp()->display('account.donations');
+    }
+
+    /**
      * Verifica se o usuário está logado no sistema.
      *
      * @return boolean
@@ -403,6 +461,51 @@ class Account
         }
 
         return $changed;
+    }
+
+    /**
+     * Método utilizado para resetar informações dos personagens.
+     *
+     * @param array $data
+     *
+     * @return array Mensagem de retorno.
+     */
+    public static function charsAccount($data)
+    {
+
+        // Verifica se alguma opção do painel de controle está habilitada.
+        // Se não estiver, envia mensagem de erro no retorno.
+        if(BRACP_ALLOW_RESET_APPEAR || BRACP_ALLOW_RESET_POSIT || BRACP_ALLOW_RESET_EQUIP)
+        {
+            $data = ['message' => []];
+
+            // Verifica se a configuração de alteração de aparência pode
+            //  ser realizada.
+            if(BRACP_ALLOW_RESET_APPEAR && count($data['appear']) > 0)
+            {
+                // @Todo: Reset de aparência
+            }
+
+            // Verifica se a posição pode ser alterada e se dados para
+            //  resetar foram realizados com sucesso.
+            if(BRACP_ALLOW_RESET_POSIT && count($data['posit']) > 0)
+            {
+                // @Todo: Reset de posição.
+            }
+
+            if(BRACP_ALLOW_RESET_EQUIP && count($data['equip']) > 0)
+            {
+                // @Todo: Reset de equipamentos.
+            }
+
+            // Retorna mensagem de sucesso para as alterações.
+            return ['message' => ['success' => 'Alterações realizadas com sucesso.']];
+        }
+        else
+        {
+            // Caso nenhuma configuração esteja habilitada.
+            return ['message' => ['error' => 'Impossível realizar ação solicitada.']];
+        }
     }
 
     /**
