@@ -464,6 +464,114 @@ class Account
     }
 
     /**
+     * Realiza o reset de aparência do personagem.
+     *
+     * @param integer $account_id
+     * @param integer $char_id
+     *
+     * @return boolean
+     */
+    public static function charResetAppear($account_id, $char_id)
+    {
+        return self::getApp()->getEm()
+                            ->createQuery('
+                                UPDATE
+                                    Model\Char chars
+                                SET
+                                    chars.hair = 0,
+                                    chars.hair_color = 0,
+                                    chars.clothes_color = 0,
+                                    chars.head_top = 0,
+                                    chars.head_mid = 0,
+                                    chars.head_bottom = 0,
+                                    chars.robe = 0
+                                WHERE
+                                    chars.account_id = :account_id AND
+                                    chars.char_id = :char_id AND
+                                    chars.online = 0
+                            ')
+                            ->setParameter('account_id', $account_id)
+                            ->setParameter('char_id', $char_id)
+                            ->execute() > 0;
+    }
+
+    /**
+     * Realiza o reset de posição do personagem.
+     *
+     * @param integer $account_id
+     * @param integer $char_id
+     *
+     * @return boolean
+     */
+    public static function charResetPosit($account_id, $char_id)
+    {
+        return self::getApp()->getEm()
+                            ->createQuery('
+                                UPDATE
+                                    Model\Char chars
+                                SET
+                                    chars.last_map = chars.save_map,
+                                    chars.last_x = chars.save_x,
+                                    chars.last_y = chars.save_y
+                                WHERE
+                                    chars.account_id = :account_id AND
+                                    chars.char_id = :char_id AND
+                                    chars.online = 0
+                            ')
+                            ->setParameter('account_id', $account_id)
+                            ->setParameter('char_id', $char_id)
+                            ->execute() > 0;
+    }
+
+    /**
+     * Reseta os equipamentos do personagem.
+     *
+     * @param integer $account_id
+     * @param integer $char_id
+     *
+     * @return boolean
+     */
+    public static function charResetEquip($account_id, $char_id)
+    {
+        // Obtém todos os itens do inventório que estão equipados para o personagem do jogador.
+        $inventory = self::getApp()->getEm()
+                                    ->createQuery('
+                                        SELECT
+                                            inventory,
+                                            chars
+                                        FROM
+                                            Model\Inventory inventory
+                                        INNER JOIN
+                                            inventory.character chars
+                                        WHERE
+                                            chars.account_id = :account_id AND
+                                            chars.char_id = :char_id AND
+                                            chars.online = 0 AND
+                                            inventory.equip = 1
+                                    ')
+                                    ->setParameter('account_id', $account_id)
+                                    ->setParameter('char_id', $char_id)
+                                    ->getResult();
+
+        // Verifica se existem itens no inventário a serem resetados.
+        // Se houver itens, então, desequipa e salva as alterações no banco de dados.
+        if(($updated = count($inventory) > 0))
+        {
+            // Remove o item do inventário do jogador um a um.
+            foreach($inventory as $entry)
+            {
+                $entry->setEquip(0);
+
+                self::getApp()->getEm()->merge($entry);
+                self::getApp()->getEm()->flush();
+            }
+        }
+
+        // Retorna dependendo da condição se houve itens a atualizar ou não.
+        return $updated;
+    }
+
+    /**
      * Método utilizado para resetar informações dos personagens.
      *
      * @param array $data
@@ -477,34 +585,22 @@ class Account
         // Se não estiver, envia mensagem de erro no retorno.
         if(BRACP_ALLOW_RESET_APPEAR || BRACP_ALLOW_RESET_POSIT || BRACP_ALLOW_RESET_EQUIP)
         {
+            // Obtém a conta logada para realizar as alterações no personagem.
+            $account_id = self::loggedUser()->getAccount_id();
+
+            // Variavel temporaria para armazenar as informações dos personagens resetados.
+            $appear = $posit = $equip = [];
+
             // Verifica se a configuração de alteração de aparência pode
             //  ser realizada.
             if(BRACP_ALLOW_RESET_APPEAR && isset($data['appear']) && count($data['appear']) > 0)
             {
-                // Adicionado reset de aparências do personagem.
-                $appear = self::getApp()->getEm()
-                                ->createQuery('
-                                    UPDATE
-                                        Model\Char chars
-                                    SET
-                                        chars.hair = 0,
-                                        chars.hair_color = 0,
-                                        chars.clothes_color = 0,
-                                        chars.head_top = 0,
-                                        chars.head_mid = 0,
-                                        chars.head_bottom = 0,
-                                        chars.robe = 0
-                                    WHERE
-                                        chars.account_id = :account_id AND
-                                        chars.char_id = :char_id AND
-                                        chars.online = 0
-                                ');
-
                 foreach($data['appear'] as $char_id)
                 {
-                    $appear->setParameter('account_id', self::loggedUser()->getAccount_id())
-                            ->setParameter('char_id', $char_id)
-                            ->execute();
+                    if(self::charResetAppear($account_id, $char_id))
+                    {
+                        $appear[] = $char_id;
+                    }
                 }
             }
 
@@ -512,16 +608,44 @@ class Account
             //  resetar foram realizados com sucesso.
             if(BRACP_ALLOW_RESET_POSIT && isset($data['posit']) && count($data['posit']) > 0)
             {
-                // @Todo: Reset de posição.
+                foreach($data['posit'] as $char_id)
+                {
+                    if(self::charResetPosit($account_id, $char_id))
+                    {
+                        $posit[] = $char_id;
+                    }
+                }
             }
 
+            // Verifica as configuração para poder restar os dados de equipamentos
+            //  e se foi realizado com sucesso.
             if(BRACP_ALLOW_RESET_EQUIP && isset($data['equip']) && count($data['equip']) > 0)
             {
-                // @Todo: Reset de equipamentos.
+                foreach($data['equip'] as $char_id)
+                {
+                    if(self::charResetEquip($account_id, $char_id))
+                    {
+                        $equip[] = $char_id;
+                    }
+                }
             }
 
+            // Mensagens de retorno.
+            $message = [];
+
+            // Verifica se algum das informações foi resetado com sucesso para dar de informação
+            //  na tela a mensagem.
+            if(count($appear) > 0)
+                $message[] = 'Visual resetado com sucesso para o(s) personagem(ns): <strong>'. implode(', ', $appear) .'</strong>.';
+            if(count($posit) > 0)
+                $message[] = 'Local resetado com sucesso para o(s) personagem(ns): <strong>'. implode(', ', $posit) .'</strong>.';
+            if(count($equip) > 0)
+                $message[] = 'Equipamento resetado com sucesso para o(s) personagem(ns): <strong>'. implode(', ', $equip) .'</strong>.';
+
             // Retorna mensagem de sucesso para as alterações.
-            return ['message' => ['success' => 'Alterações realizadas com sucesso.']];
+            return ['message' => ['success' => ((count($message) > 0) ?
+                                                            implode('<br>', $message) :
+                                                            'Comandos executados com sucesso.')]];
         }
         else
         {

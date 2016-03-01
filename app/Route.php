@@ -45,14 +45,25 @@ class Route
             // Mapeia o grupo account.
             self::getApp()->group('/account', function() {
                 // Rotas que não necessitam de login para entrar.
-                $this->map(['GET', 'POST'], '/register', ['Controller\Account', 'register'])
-                        ->add(['Controller\Account', 'needLoggout']);
+
+                // Verifica configuração se permite criação de nova conta.
+                if(BRACP_ALLOW_CREATE_ACCOUNT)
+                {
+                    $this->map(['GET', 'POST'], '/register', ['Controller\Account', 'register'])
+                            ->add(['Controller\Account', 'needLoggout']);
+                }
+
                 $this->map(['GET', 'POST'], '/login', ['Controller\Account', 'login'])
                         ->add(['Controller\Account', 'needLoggout']);
-                $this->map(['GET', 'POST'], '/recover', ['Controller\Account', 'recover'])
-                        ->add(['Controller\Account', 'needLoggout']);
-                $this->map(['GET', 'POST'], '/recover/{code}', ['Controller\Account', 'recover'])
-                        ->add(['Controller\Account', 'needLoggout']);
+
+                // Verifica configuração se permite recuperar uma conta.
+                if(BRACP_ALLOW_RECOVER)
+                {
+                    $this->map(['GET', 'POST'], '/recover', ['Controller\Account', 'recover'])
+                            ->add(['Controller\Account', 'needLoggout']);
+                    $this->map(['GET', 'POST'], '/recover/{code}', ['Controller\Account', 'recover'])
+                            ->add(['Controller\Account', 'needLoggout']);
+                }
 
                 // Rotas que necessitam de login para entrar.
                 $this->map(['GET', 'POST'], '/change/password', ['Controller\Account', 'password'])
@@ -71,10 +82,21 @@ class Route
                         ->add(['Controller\Account', 'needLogin']);
             });
 
-            self::getApp()->group('/rankings', function() {
-                $this->get('/chars', ['Controller\Ranking', 'chars']);
-                $this->get('/chars/economy', ['Controller\Ranking', 'economy']);
-            });
+            // Verifica se os rankings estão habilitados para serem exibidos.
+            if(BRACP_ALLOW_RANKING)
+            {
+                // Abre o grupo de rotas para os rankings a serem exibidos.
+                self::getApp()->group('/rankings', function() {
+                    // Rankings para personagens.
+                    $this->get('/chars', ['Controller\Ranking', 'chars']);
+
+                    // Verifica se o ranking de zeny está habilitado a ser exibido.
+                    if(BRACP_ALLOW_RANKING_ZENY)
+                    {
+                        $this->get('/chars/economy', ['Controller\Ranking', 'economy']);
+                    }
+                });
+            }
 
         }
 

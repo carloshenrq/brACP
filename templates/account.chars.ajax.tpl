@@ -26,6 +26,16 @@
     </p>
 {else}
 
+{if isset($message['success']) eq true}
+    <p class="bracp-message-success">
+        {$message['success']}
+    </p>
+{else if isset($message['error']) eq true}
+    <p class="bracp-message-error">
+        {$message['error']}
+    </p>
+{/if}
+
 <form class="ajax-form" action="{$smarty.const.BRACP_DIR_INSTALL_URL}account/chars" autocomplete="off" method="post" target=".bracp-body">
 
     <table border="1" align="center" class="bracp-table">
@@ -42,6 +52,9 @@
                 <th align="right" rowspan="2">Zeny</th>
                 <th align="left" rowspan="2">Mapa</th>
                 <th align="left" rowspan="2">Retorno</th>
+                {if $smarty.const.BRACP_ALLOW_SHOW_CHAR_STATUS eq true}
+                    <th align="center" rowspan="2">Status</th>
+                {/if}
                 {if $actions neq 0}
                     <th colspan="3">Resetar</th>
                 {/if}
@@ -68,6 +81,9 @@
                     <td align="right">{Format::zeny($row->getZeny())}</td>
                     <td align="left">{$row->getLast_map()} ({$row->getLast_x()}, {$row->getLast_y()})</td>
                     <td align="left">{$row->getSave_map()} ({$row->getSave_x()}, {$row->getSave_y()})</td>
+                    {if $smarty.const.BRACP_ALLOW_SHOW_CHAR_STATUS eq true}
+                        <td align="center">{Format::status($row->getOnline())}</td>
+                    {/if}
 
                     {if $actions&1 eq 1}
                         <td align="center"><input type="checkbox" name="appear[]" value="{$row->getChar_id()}"/></td>
