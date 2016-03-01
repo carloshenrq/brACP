@@ -51,7 +51,7 @@
     </p>
 
     <form class="ajax-form" action="{$smarty.const.BRACP_DIR_INSTALL_URL}account/change/password" autocomplete="off" method="post" target=".bracp-body">
-        <div class="bracp-form" style="width: 250px">
+        <div class="bracp-form">
             <div class="bracp-form-field">
                 <label>
                     Senha atual:<br>{literal}

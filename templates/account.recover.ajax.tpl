@@ -29,7 +29,7 @@
 <p>Para recuperar seu nome de usuário, você deve preencher abaixo as informações corretas para que seja possível realizar esta recuperação.</p>
 
 <form class="ajax-form" action="{$smarty.const.BRACP_DIR_INSTALL_URL}account/recover" autocomplete="off" method="post" target=".bracp-body">
-    <div class="bracp-form" style="width: 350px">
+    <div class="bracp-form">
         <div class="bracp-form-field">
             <label>
                 Usuário:<br>{literal}

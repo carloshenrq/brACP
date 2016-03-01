@@ -35,7 +35,7 @@
 {/if}
 
 <form class="ajax-form" action="{$smarty.const.BRACP_DIR_INSTALL_URL}account/login" autocomplete="off" method="post" target=".bracp-body">
-    <div class="bracp-form" style="width: 250px">
+    <div class="bracp-form">
         <div class="bracp-form-field">
             <label>
                 Usuário:<br>

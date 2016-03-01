@@ -1,40 +1,50 @@
 .bracp-menu {
   background-color: rgba(0, 51, 0, 0.4);
-  box-shadow: 0px 0px 3px white; }
-  .bracp-menu ul {
-    padding: 0px;
-    margin: 0px;
-    list-style: none; }
-    .bracp-menu ul li {
-      display: inline-block;
-      margin: 0px;
-      padding: 8px;
-      color: white;
-      cursor: pointer;
-      font-weight: bold;
-      position: relative; }
-      .bracp-menu ul li > ul {
-        position: absolute;
-        top: 100%;
-        left: 0%;
-        display: none;
-        color: black;
-        background-color: white;
-        box-shadow: 0px 0px 1px black; }
-        .bracp-menu ul li > ul li {
-          color: black;
-          display: block;
-          min-width: 160px; }
-          .bracp-menu ul li > ul li:hover {
-            background-color: #003300;
-            color: white; }
-          .bracp-menu ul li > ul li + li {
-            border-top: 1px dotted #003300; }
-        .bracp-menu ul li > ul ul {
-          top: 0%;
-          left: 100%; }
-      .bracp-menu ul li:hover {
-        background-color: white;
-        color: #003300; }
-        .bracp-menu ul li:hover > ul {
-          display: block; }
+  box-shadow: 0px 0px 3px white;
+}
+.bracp-menu ul {
+  padding: 0px;
+  margin: 0px;
+  list-style: none;
+}
+.bracp-menu ul li {
+  display: inline-block;
+  margin: 0px;
+  padding: 8px;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+  position: relative;
+}
+.bracp-menu ul li > ul {
+  position: absolute;
+  top: 100%;
+  left: 0%;
+  display: none;
+  color: black;
+  background-color: white;
+  box-shadow: 0px 0px 1px black;
+}
+.bracp-menu ul li > ul li {
+  color: black;
+  display: block;
+  min-width: 160px;
+}
+.bracp-menu ul li > ul li:hover {
+  background-color: #003300;
+  color: white;
+}
+.bracp-menu ul li > ul li + li {
+  border-top: 1px dotted #003300;
+}
+.bracp-menu ul li > ul ul {
+  top: 0%;
+  left: 100%;
+}
+.bracp-menu ul li:hover {
+  background-color: white;
+  color: #003300;
+}
+.bracp-menu ul li:hover > ul {
+  display: block;
+}
