@@ -169,9 +169,18 @@ class brACPApp extends Slim\App
      */
     public function render($template, $data = [], $ajax = true)
     {
-        // Verifica se o usuário está logado no sistema.
-        if(Account::isLoggedIn())
-            $data = array_merge(['account' => Account::loggedUser()], $data);
+        try
+        {
+            // Verifica se o usuário está logado no sistema.
+            if(Account::isLoggedIn())
+                $data = array_merge(['account' => Account::loggedUser()], $data);
+        }
+        catch(\Exception $ex)
+        {
+            // Irá acontecer quando existir um erro de conexão com o banco de dados.
+            if(!isset( $data['exception']))
+                $data['exception'] = $ex;
+        }
 
         // Atribui os dados ao smarty.
         $this->view->assign($data);
@@ -202,6 +211,11 @@ class brACPApp extends Slim\App
      */
     public function getEm()
     {
+        // Se não houver EntityManager, emite uma exceção para tratamento
+        //  do erro.
+        if(is_null($this->em))
+            throw new \Exception('EntityManager not defined.');
+
         return $this->em;
     }
 

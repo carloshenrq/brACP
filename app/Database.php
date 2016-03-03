@@ -37,14 +37,31 @@ class Database
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, $next)
     {
-        // Define o entitymanager para o servidor.
-        self::getApp()->setEm(EntityManager::create([
-            'driver' => BRACP_SQL_DRIVER,
-            'host' => BRACP_SQL_HOST,
-            'user' => BRACP_SQL_USER,
-            'password' => BRACP_SQL_PASS,
-            'dbname' => BRACP_SQL_DBNAME,
-        ], Setup::createAnnotationMetadataConfiguration([ BRACP_ENTITY_DIR ], BRACP_DEVELOP_MODE)));
+        try
+        {
+            // Define o entitymanager para o servidor.
+            $em = EntityManager::create([
+                'driver' => BRACP_SQL_DRIVER,
+                'host' => BRACP_SQL_HOST,
+                'user' => BRACP_SQL_USER,
+                'password' => BRACP_SQL_PASS,
+                'dbname' => BRACP_SQL_DBNAME,
+            ], Setup::createAnnotationMetadataConfiguration([ BRACP_ENTITY_DIR ], BRACP_DEVELOP_MODE));
+
+            // Realiza a conexão no banco de dados para ver se está tudo funcionando
+            //  de forma correta e se não existirá surpresas de erros quanto a conexão.
+            $em->getConnection()->connect();
+
+            // Caso tudo ocorra normalmente, define o EntityManager.
+            self::getApp()->setEm($em);
+        }
+        catch(\Exception $ex)
+        {
+            self::getApp()->display('error.not.allowed', [
+                'exception' => $ex
+            ]);
+            return $response;
+        }
 
         // Chama o próximo middleware.
         return $next($request, $response);

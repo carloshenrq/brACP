@@ -645,7 +645,7 @@ class Account
             // Retorna mensagem de sucesso para as alterações.
             return ['message' => ['success' => ((count($message) > 0) ?
                                                             implode('<br>', $message) :
-                                                            'Comandos executados com sucesso.')]];
+                                                            'Comando(s) executado(s) com sucesso. Nenhum personagem foi alterado.')]];
         }
         else
         {
