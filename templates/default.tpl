@@ -72,9 +72,31 @@
                     {include 'menu.tpl'}
                 </div>
             </div>
-            <div class="bracp-body">
-                {block name="brACP_Body"}
-                {/block}
+            <div class="bracp-body-container">
+                {if $smarty.const.BRACP_DEVELOP_MODE eq true}
+                    <div class="bracp-message-warning">
+                        <h3>Lembrete!</h3>
+                        O Sistema está sendo executado em modo desenvolvimento!<br>
+                        <i><u>Algumas configurações podem não responder ao esperado.</u></i>
+                    </div>
+                {/if}
+                {if isset($account) eq true && $account->getGroup_id() >= BRACP_ALLOW_ADMIN_GMLEVEL}
+                    <div class="bracp-message-error">
+                        <h3>Lembrete aos adminsitradores</h3>
+                        Por questões de segurança:
+                        <ul>
+                            <li>Você não pode realizar alterações de e-mail pelo painel de controle.</li>
+                            {if $smarty.const.BRACP_ALLOW_ADMIN_CHANGE_PASSWORD eq false}
+                                <li>Você não pode alterar sua senha pelo item do menu.<br>
+                                    Verifique o menu administrativo.</li>
+                            {/if}
+                        </ul>
+                    </div>
+                {/if}
+                <div class="bracp-body">
+                    {block name="brACP_Body"}
+                    {/block}
+                </div>
             </div>
             <div class="bracp-footer"></div>
         </div>

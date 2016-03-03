@@ -41,19 +41,9 @@ html, body
         }
     }
 
-    .bracp-body
+    .bracp-body-container
     {
         background-color: white;
-        padding: 8px;
-
-        min-height: 300px;
-
-        h1
-        {
-            padding: 2px; margin: 5px;
-            border-bottom: 1px dotted #5E732E;
-            font-size: 13px;
-        }
 
         .bracp-message-error, .bracp-message-warning, .bracp-message-success
         {
@@ -62,6 +52,18 @@ html, body
             border: 1px solid;
             text-align: left;
             clear: both;
+
+            ul
+            {
+                margin: 0px;
+            }
+
+            h3
+            {
+                margin: 0px 0px 5px 0px;
+                padding: 4px;
+                border-bottom: 1px dotted;
+            }
         }
 
         .bracp-message-warning
@@ -82,101 +84,116 @@ html, body
             border-color: rgba(0, 255, 0, .8);
         }
 
-        input[type="number"], input.number
+        .bracp-body
         {
-            text-align: right;
-        }
-
-        .bracp-form
-        {
-            display: block;
-            width: 500px;
-            margin: auto;
+            background-color: white;
             padding: 8px;
 
-            background-color: rgba(0, 255, 0, .08);
+            min-height: 300px;
 
-            @include box-shadow('0px 0px 3px rgba(0, 51, 0, .5)');
-
-            .g-recaptcha
+            h1
             {
-                margin-top: 5px;
-            }
-        }
-
-        .bracp-form-field
-        {
-            margin: 4px;
-            padding: 4px;
-
-            label, input[type="text"]
-            {
-                vertical-align: middle;
+                padding: 2px; margin: 5px;
+                border-bottom: 1px dotted #5E732E;
+                font-size: 13px;
             }
 
-            input[type="text"], input[type="password"], select, textarea
+            input[type="number"], input.number
             {
+                text-align: right;
+            }
+
+            .bracp-form
+            {
+                display: block;
+                width: 500px;
+                margin: auto;
+                padding: 8px;
+
+                background-color: rgba(0, 255, 0, .08);
+
+                @include box-shadow('0px 0px 3px rgba(0, 51, 0, .5)');
+
+                .g-recaptcha
+                {
+                    margin-top: 5px;
+                }
+            }
+
+            .bracp-form-field
+            {
+                margin: 4px;
+                padding: 4px;
+
+                label, input[type="text"]
+                {
+                    vertical-align: middle;
+                }
+
+                input[type="text"], input[type="password"], select, textarea
+                {
+                    padding: 4px;
+                }
+            }
+
+            .bracp-form-left-align,
+            .bracp-form-right-align
+            {
+                margin: 2px;
+                display: inline-block;
+            }
+
+            .bracp-form-submit
+            {
+                text-align: right;
                 padding: 4px;
             }
-        }
 
-        .bracp-form-left-align,
-        .bracp-form-right-align
-        {
-            margin: 2px;
-            display: inline-block;
-        }
-
-        .bracp-form-submit
-        {
-            text-align: right;
-            padding: 4px;
-        }
-
-        .bracp-table
-        {
-            border-collapse: collapse;
-            width: 100%;
-
-            thead
+            .bracp-table
             {
+                border-collapse: collapse;
+                width: 100%;
+
+                thead
+                {
+                    tr
+                    {
+                        background-color: #2d3716;
+                        border-color: white;
+                        color: white;
+                    }
+                }
+
                 tr
-                {
-                    background-color: #2d3716;
-                    border-color: white;
-                    color: white;
-                }
-            }
-
-            tr
-            {
-                td, th
-                {
-                    padding: 3px;
-                }
-
-                &.tiny
                 {
                     td, th
                     {
-                        font-size: 11px;
+                        padding: 3px;
+                    }
+
+                    &.tiny
+                    {
+                        td, th
+                        {
+                            font-size: 11px;
+                        }
                     }
                 }
-            }
 
-            tbody
-            {
-                tr
+                tbody
                 {
-                    &:nth-child(even)
+                    tr
                     {
-                        background-color: rgba(0, 255, 0, .1);
-                    }
+                        &:nth-child(even)
+                        {
+                            background-color: rgba(0, 255, 0, .1);
+                        }
 
-                    &.char-myaccount td
-                    {
-                        font-weight: bold;
-                        font-size: 15px;
+                        &.char-myaccount td
+                        {
+                            font-weight: bold;
+                            font-size: 15px;
+                        }
                     }
                 }
             }
