@@ -58,7 +58,14 @@
 {if $smarty.const.DONATION_AMOUNT_USE_RATE eq true}
     <p class="bracp-message-info">
         Nós utilizamos o <a href="https://pagseguro.uol.com.br/" target="_blank">PagSeguro</a> como motor de nossas doações.<br>
-        Por conta disso, será cobrado uma taxa de <strong>R$ 0,40 + 0,3999%</strong> sobre o valor doado. 
+        Por conta disso, será adicionado uma taxa de <strong>R$ 0,40 + 3,99%</strong> sobre o valor doado.
+        {if $smarty.const.DONATION_AMOUT_SHOW_RATE_CALC eq true}
+            <br>
+            <br>
+            <strong>Valor doado</strong>: R$ 100,00<br>
+            <strong>Taxa (%)</strong>: 100,00 * 3,99% = 3,99 + 0,40 = 4,39<br>
+            <strong>Valor total</strong>: R$ 100,00 + R$ 4,39 = R$ 104,39
+        {/if}
     </p>
 {/if}
 
