@@ -35,17 +35,20 @@ html, body {
 .bracp-content .bracp-body-container {
   background-color: white;
 }
-.bracp-content .bracp-body-container .bracp-message-error, .bracp-content .bracp-body-container .bracp-message-warning, .bracp-content .bracp-body-container .bracp-message-success {
+.bracp-content .bracp-body-container .bracp-message-error, .bracp-content .bracp-body-container .bracp-message-warning,
+.bracp-content .bracp-body-container .bracp-message-success, .bracp-content .bracp-body-container .bracp-message-info {
   padding: 5px;
   border-radius: 2px;
   border: 1px solid;
   text-align: left;
   clear: both;
 }
-.bracp-content .bracp-body-container .bracp-message-error ul, .bracp-content .bracp-body-container .bracp-message-warning ul, .bracp-content .bracp-body-container .bracp-message-success ul {
+.bracp-content .bracp-body-container .bracp-message-error ul, .bracp-content .bracp-body-container .bracp-message-warning ul,
+.bracp-content .bracp-body-container .bracp-message-success ul, .bracp-content .bracp-body-container .bracp-message-info ul {
   margin: 0px;
 }
-.bracp-content .bracp-body-container .bracp-message-error h3, .bracp-content .bracp-body-container .bracp-message-warning h3, .bracp-content .bracp-body-container .bracp-message-success h3 {
+.bracp-content .bracp-body-container .bracp-message-error h3, .bracp-content .bracp-body-container .bracp-message-warning h3,
+.bracp-content .bracp-body-container .bracp-message-success h3, .bracp-content .bracp-body-container .bracp-message-info h3 {
   margin: 0px 0px 5px 0px;
   padding: 4px;
   border-bottom: 1px dotted;
@@ -61,6 +64,10 @@ html, body {
 .bracp-content .bracp-body-container .bracp-message-success {
   background-color: rgba(0, 255, 0, 0.25);
   border-color: rgba(0, 255, 0, 0.8);
+}
+.bracp-content .bracp-body-container .bracp-message-info {
+  background-color: rgba(144, 195, 212, 0.25);
+  border-color: rgba(144, 195, 212, 0.8);
 }
 .bracp-content .bracp-body-container .bracp-body {
   background-color: white;

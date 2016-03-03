@@ -207,7 +207,23 @@ class Account
      */
     public static function donations(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
-        self::getApp()->display('account.donations');
+        // Obtém a promoção para as doações.
+        $promotion = self::getApp()->getEm()
+                                ->createQuery('
+                                    SELECT
+                                        promotion
+                                    FROM
+                                        Model\Promotion promotion
+                                    WHERE
+                                        promotion.canceled = false AND
+                                        :curdate BETWEEN promotion.startDate AND promotion.endDate
+                                ')
+                                ->setParameter('curdate', date('Y-m-d H:i:s'))
+                                ->getOneOrNullResult();
+
+        self::getApp()->display('account.donations', [
+            'promotion' => $promotion
+        ]);
     }
 
     /**

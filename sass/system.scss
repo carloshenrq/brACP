@@ -45,7 +45,8 @@ html, body
     {
         background-color: white;
 
-        .bracp-message-error, .bracp-message-warning, .bracp-message-success
+        .bracp-message-error, .bracp-message-warning,
+        .bracp-message-success, .bracp-message-info
         {
             padding: 5px;
             border-radius: 2px;
@@ -82,6 +83,12 @@ html, body
         {
             background-color: rgba(0, 255, 0, .25);
             border-color: rgba(0, 255, 0, .8);
+        }
+
+        .bracp-message-info
+        {
+            background-color: rgba(144, 195, 212, .25);
+            border-color: rgba(144, 195, 212, .8);
         }
 
         .bracp-body

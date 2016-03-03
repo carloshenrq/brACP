@@ -39,6 +39,42 @@ class Format
     }
 
     /**
+     * Calcula a diferença de datas e retorna em formato de string.
+     *
+     * @param string $start
+     * @param string $end
+     *
+     * @return string
+     */
+    public static function date_diff($start, $end, $format = 'Y-m-d H:i:s')
+    {
+        $str = '';
+        $interval = date_diff(date_create_from_format($format, $end),
+                        date_create_from_format($format, $start), true);
+
+        $tmp = [];
+
+        if($interval->y > 0) $tmp[] = $interval->y . ' ano'.(($interval->y > 1) ? 's':'');
+        if($interval->m > 0) $tmp[] = $interval->m . ' '.(($interval->m > 1) ? 'meses':'mês');
+        if($interval->d > 0) $tmp[] = $interval->d . ' dia' . (($interval->d > 1) ? 's':'');
+        if($interval->h > 0) $tmp[] = $interval->h . ' hora' . (($interval->h > 1) ? 's':'');
+        if($interval->i > 0) $tmp[] = $interval->i . ' minuto' . (($interval->i > 1) ? 's':'');
+        if($interval->s > 0) $tmp[] = $interval->s . ' segundo' . (($interval->s > 1) ? 's':'');
+
+        for($i = 0; $i < count($tmp); $i++)
+        {
+            $str .= $tmp[$i];
+
+            if(($i + 1) < (count($tmp) - 1))
+                $str .= ', ';
+            else if(($i + 1) == (count($tmp) - 1))
+                $str .= ' e ';
+
+        }
+        return $str;
+    }
+
+    /**
      * Protege o endereço de e-mail exibindo apenas o primeiro e ultimo caractere antes do @
      *
      * @param string $email
