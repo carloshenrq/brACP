@@ -42,7 +42,7 @@
         <u><i>{Format::date($promotion->getStartDate(), 'd/m/Y')}</i></u>
             até <u><i>{Format::date($promotion->getEndDate(), 'd/m/Y')}</i></u> 
             termina em 
-            <u><i>{Format::date_diff($promotion->getStartDate(), $promotion->getEndDate(), 'Y-m-d')}</i></u>.<br>
+            <u><i>{Format::date_diff(date('Y-m-d'), $promotion->getEndDate(), 'Y-m-d')}</i></u>.<br>
         <br>
         <strong>Descrição:</strong><br>{$promotion->getDescription()}<br>
         <br>
