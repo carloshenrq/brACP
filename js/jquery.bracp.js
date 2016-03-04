@@ -18,7 +18,6 @@
 
 +function($)
 {
-
     $(document).on('change', '.bracp-donation-calc', function() {
 
         var thisValue = parseFloat($(this).val());
@@ -63,6 +62,10 @@
             tmpValue = tmpValue.replace(',', '.')
 
         value = Math.floor(decimalMultiply * parseFloat(tmpValue));
+
+        if(isNaN(value))
+            value = 0;
+
         $(this).val((value/decimalMultiply).toFixed(decimalPlaces).toString());
     });
 
@@ -90,6 +93,10 @@
                     }
                 });
             }
+
+            $('input[type="number"], input.number').each(function() {
+                $(this).blur();
+            });
         }
     });
 

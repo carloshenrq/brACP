@@ -207,6 +207,9 @@ class Account
      */
     public static function donations(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
+        // Valor da multiplicação do bonus eletrônico.
+        $multiply = DONATION_AMOUNT_MULTIPLY;
+
         // Obtém a promoção para as doações.
         $promotion = self::getApp()->getEm()
                                 ->createQuery('
@@ -221,8 +224,34 @@ class Account
                                 ->setParameter('curdate', date('Y-m-d H:i:s'))
                                 ->getOneOrNullResult();
 
+        // Promoção aumenta o multiply rate.
+        if(!is_null($promotion))
+            $multiply += intval($promotion->getBonusMultiply());
+
+        // Todas as doações para o usuário atual.
+        $donations = self::getApp()->getEm()
+                                    ->createQuery('
+                                        SELECT
+                                            donation,
+                                            promotion,
+                                            login
+                                        FROM
+                                            Model\Donation donation
+                                        LEFT JOIN
+                                            donation.promotion promotion
+                                        INNER JOIN
+                                            donation.account login
+                                        WHERE
+                                            login.account_id = :account_id
+                                    ')
+                                    ->setParameter('account_id', self::loggedUser()->getAccount_id())
+                                    ->getResult();
+
+        // Template de doações carrega com os dados sendo informados.
         self::getApp()->display('account.donations', [
-            'promotion' => $promotion
+            'promotion' => $promotion,
+            'multiply' => $multiply,
+            'donations' => $donations
         ]);
     }
 

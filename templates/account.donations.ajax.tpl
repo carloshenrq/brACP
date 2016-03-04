@@ -69,4 +69,59 @@
     </p>
 {/if}
 
+<form class="ajax-form" action="{$smarty.const.BRACP_DIR_INSTALL_URL}account/donations" autocomplete="off" method="post" target=".bracp-body">
+    <div class="bracp-form">
+        <div style="width: 50%; margin: auto;">
+            <div class="bracp-form-field">
+                <label>
+                    Valor da Doação (R$):<br>
+                    <input class="bracp-donation-calc number" data-target="#bonusValue" data-multiply="{$multiply}" data-rates="1" type="text" id="donationValue" name="donationValue" placeholder="Valor da Doação (R$)" size="30" maxlength="30" data-places="2" value="0.00" required/>
+                </label>
+            </div>
+            <div class="bracp-form-field">
+                <label>
+                    Bônus Eletrônico:<br>
+                    <input type="text" id="bonusValue" name="bonusValue" placeholder="Valor do bônus" class="number" data-places="0" value="0" size="30" maxlength="30" readonly/>
+                </label>
+            </div>
+            <div class="bracp-form-field">
+                <label>
+                    Valor total (R$):<br>
+                    <input type="text" id="cobrado" name="cobrado" placeholder="Valor cobrado (com taxas)" class="number" data-places="2" value="0.00" size="30" maxlength="30" readonly/>
+                </label>
+            </div>
+        </div>
+        <div class="bracp-form-field">
+            <label>
+                <input type="checkbox" id="donotreceivebonus" name="donotreceivebonus"/>
+                Eu não desejo receber os bônus eletrônicos para esta doação.
+            </label>
+            <br>
+            <label>
+                <input type="checkbox" id="acceptdonation" name="acceptdonation" required/>
+                Eu entendo que isto <strong>é uma doação</strong> e <strong>não uma compra</strong>.
+            </label>
+        </div>
 
+        {if $smarty.const.BRACP_RECAPTCHA_ENABLED eq true}
+            <div class="g-recaptcha" data-sitekey="{$smarty.const.BRACP_RECAPTCHA_PUBLIC_KEY}"></div>
+        {/if}
+
+        <div class="bracp-form-submit">
+            <input class="btn" type="submit" value="Doar"/>
+            <input class="btn" type="reset" value="Limpar"/>
+        </div>
+    </div>
+</form>
+
+{if count($donations) eq 0}
+
+<p class="bracp-message-warning">
+    Você ainda não realizou doações ao servidor.
+</p>
+
+{else}
+
+<p class="bracp-message-error">@Todo: Exibir doações realizadas.</p>
+
+{/if}
