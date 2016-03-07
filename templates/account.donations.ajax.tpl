@@ -18,6 +18,44 @@
 
 <h1>Minha Conta &raquo; Doações</h1>
 
+{if isset($donationId) eq true && isset($checkoutCode) eq true}
+<script>
+    var donationId = '{$donationId}',
+        checkoutCode = '{$checkoutCode}';
+    PagSeguroLightbox({
+        'code' : checkoutCode
+    }, {
+        'success' : function(transactionCode)
+        {
+            // Atualiza a doação com o código de transação.
+            donationTransactionCode(donationId,
+                                    checkoutCode,
+                                    transactionCode,
+                                    '{$smarty.const.BRACP_DIR_INSTALL_URL}account/donations/transaction');
+        },
+        'abort' : function()
+        {
+            // Cancela a doação.
+            donationAbort(donationId,
+                            checkoutCode,
+                            '{$smarty.const.BRACP_DIR_INSTALL_URL}account/donations/transaction');
+        }
+    });
+</script>
+{/if}
+
+{if isset($message) eq true}
+    {if isset($message['success']) eq true}
+        <p class='bracp-message-success'>
+            {$message['success']}
+        </p>
+    {else}
+        <p class="bracp-message-error">
+            {$message['error']}
+        </p>
+    {/if}
+{/if}
+
 <p>
     Olá <strong>{$account->getUserid()}</strong>, você sabia que suas doações são importantes para o servidor?!<br>
     Quando você doa ao servidor você ajuda em:

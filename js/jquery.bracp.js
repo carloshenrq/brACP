@@ -102,3 +102,41 @@
 
 } (window.jQuery);
 
+
+/**
+ * Atualiza a doação com um código de transção.
+ *
+ * @param integer donationId Código da doação.
+ * @param string transactionCode Código de transação.
+ */
+function donationTransactionCode(donationId, checkoutCode, transactionCode, url)
+{
+    $.ajax({
+        'url'       : url,
+        'method'    : 'POST',
+        'data'      : { 'DonationID' : donationId, 'transactionCode' : transactionCode, 'checkoutCode' : checkoutCode },
+        'async'     : false,
+        'success'   : function() {
+            window.location.reload();
+        }
+    });
+}
+
+/**
+ * Cancela uma doação já inicializada.
+ *
+ * @param integer donationId Código da doação.
+ * @param string checkoutCode Código de checkout para a doação.
+ */
+function donationAbort(donationId, checkoutCode, url)
+{
+    $.ajax({
+        'url'       : url,
+        'method'    : 'POST',
+        'data'      : { 'DonationID' : donationId, 'checkoutCode' : checkoutCode, 'cancel' : 1 },
+        'async'     : false,
+        'success'   : function() {
+            window.location.reload();
+        }
+    });
+}

@@ -78,6 +78,9 @@ class Route
                 $this->map(['GET', 'POST'], '/donations', ['Controller\Account', 'donations'])
                         ->add(['Controller\Account', 'needLogin']);
 
+                $this->post('/donations/transaction', ['Controller\Account', 'transaction'])
+                        ->add(['Controller\Account', 'needLogin']);;
+
                 $this->get('/logout', ['Controller\Account', 'logout'])
                         ->add(['Controller\Account', 'needLogin']);
             });

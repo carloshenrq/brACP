@@ -25,6 +25,10 @@ use \Psr\Http\Message\ResponseInterface;
 use \Model\Login;
 use \Model\Recover;
 use \Model\EmailLog;
+use \Model\Donation;
+
+use \PagSeguro\Checkout;
+use \PagSeguro\CheckoutItem;
 
 /**
  * Controlador para dados de conta.
@@ -207,6 +211,15 @@ class Account
      */
     public static function donations(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
+        // Dados iniciais.
+        $data = [];
+
+        // Se houve envio de dados, então define os dados como o retorno
+        //  de tratamento para o post.
+        if($request->isPost())
+            $data = self::donationAccount($request->getParsedBody());
+
+
         // Valor da multiplicação do bonus eletrônico.
         $multiply = DONATION_AMOUNT_MULTIPLY;
 
@@ -248,11 +261,71 @@ class Account
                                     ->getResult();
 
         // Template de doações carrega com os dados sendo informados.
-        self::getApp()->display('account.donations', [
+        self::getApp()->display('account.donations', array_merge($data, [
             'promotion' => $promotion,
             'multiply' => $multiply,
             'donations' => $donations
-        ]);
+        ]));
+    }
+
+    /**
+     * Obtém as requisições para tratamento dos dados de pagseguro.
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param array $args
+     */
+    public static function transaction(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        // Recebe os dados relacionados a transação informada.
+        $data = $request->getParsedBody();
+
+        // Verifica se estão definidos os dados de retorno para o ajax.
+        if(isset($data['DonationID']) && isset($data['checkoutCode']))
+        {
+            // Obtém a doação gerada no banco de dados.
+            $donation = self::getApp()->getEm()
+                                    ->createQuery('
+                                        SELECT
+                                            donation,
+                                            promo,
+                                            login
+                                        FROM
+                                            Model\Donation donation
+                                        LEFT JOIN
+                                            donation.promotion promo
+                                        INNER JOIN
+                                            donation.account login
+                                        WHERE
+                                            donation.id = :id AND
+                                            donation.checkoutCode = :checkoutCode AND
+                                            donation.paymentDate IS NULL AND
+                                            donation.cancelDate IS NULL AND
+                                            donation.transactionCode IS NULL AND
+                                            login.account_id = :account_id
+                                    ')
+                                    ->setParameter('id', $data['DonationID'])
+                                    ->setParameter('checkoutCode', $data['checkoutCode'])
+                                    ->setParameter('account_id', self::loggedUser()->getAccount_id())
+                                    ->getOneOrNullResult();
+
+            // Verifica se a doação realmente existe no banco de dados.
+            if(!is_null($donation))
+            {
+                // Se for para realizar o cancelamento, então
+                //  cancela os dados da transação.
+                if(isset($data['cancel']) && $data['cancel'] == true)
+                    $donation->setCancelDate(date('Y-m-d H:i:s'));
+                // Se for para adicionar código de transação, então salva o código de transação.
+                else if(isset($data['transactionCode']))
+                    $donation->setCheckoutCode($data['transactionCode']);
+
+                // Atualiza os dados da transação no banco de dados.
+                self::getApp()->getEm()->merge($donation);
+                self::getApp()->getEm()->flush();
+            }
+        } /* fim - else if(isset($data['DonationID']) && isset($data['checkoutCode'])) */
+
     }
 
     /**
@@ -697,6 +770,97 @@ class Account
             // Caso nenhuma configuração esteja habilitada.
             return ['message' => ['error' => 'Impossível realizar ação solicitada.']];
         }
+    }
+
+    /**
+     * Método utilizado para tratar o recebimento dos dados de doação para registrar
+     *  e possívelmente iniciar a doação para o jogador.
+     *
+     * @static
+     *
+     * @return array
+     */
+    public static function donationAccount($data)
+    {
+        // Verificação recaptcha para saber se a requisição realizada
+        //  é verdadeira e pode continuar.
+        if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['g-recaptcha-response']))
+            return ['message' => ['error' => 'Código de verificação inválido. Verifique por favor.']];
+
+        // Verifica se a doação foi aceita pelo jogador.
+        if(!isset($data['acceptdonation']) or $data['acceptdonation'] <> 'on')
+            return ['message' => ['error' => 'Você deve aceitar os termos de doação antes de continuar.']];
+
+        // Verifica se o valor digitado está em formato incorreto.
+        if(floatval($data['donationValue']) <= 0)
+            return ['message' => ['error' => 'Valor para a doação incorreto. Verifique por favor.']];
+
+        // Valor para doações.
+        $donationValue = floatval($data['donationValue']);
+        $bonusMultiply = DONATION_AMOUNT_MULTIPLY;
+
+        // Obtém a promoção para as doações.
+        $promotion = self::getApp()->getEm()
+                                ->createQuery('
+                                    SELECT
+                                        promotion
+                                    FROM
+                                        Model\Promotion promotion
+                                    WHERE
+                                        promotion.canceled = false AND
+                                        :curdate BETWEEN promotion.startDate AND promotion.endDate
+                                ')
+                                ->setParameter('curdate', date('Y-m-d H:i:s'))
+                                ->getOneOrNullResult();
+
+        // Se houver promoção adiciona a promoção ao valor de bônus.
+        if(!is_null($promotion))
+            $bonusMultiply += $promotion->getBonusMultiply();
+
+        // Inicializa o objeto de doação.
+        $donation = new Donation;
+        $donation->setPromotion($promotion);
+        $donation->setDate(date('Y-m-d'));
+        $donation->setReference(strtoupper(hash('md5', microtime(true))));
+        $donation->setDrive('PAGSEGURO');
+        $donation->setAccount(self::loggedUser());
+        $donation->setValue($donationValue);
+        $donation->setBonus($donationValue * $bonusMultiply);
+        $donation->setTotalValue($donationValue);
+        $donation->setCheckoutCode(null);
+        $donation->setTransactionCode(null);
+        $donation->setReceiveBonus(!isset($data['donotreceivebonus']));
+
+        // Se usa valores com ajuste de taxas, então aplica o calculo para ajustar as taxas.
+        if(DONATION_AMOUNT_USE_RATE)
+            $donation->setTotalValue(($donationValue + .4) / (1 - .0399));
+
+        // Salva a nova entrada no banco de dados.
+        self::getApp()->getEm()->persist($donation);
+        self::getApp()->getEm()->flush();
+
+        // Realiza a requisição para o pagseguro criar o checkoutcode.
+        $checkout = new Checkout();
+        $checkoutResponse = $checkout->setCurrency('BRL')
+                                    ->addItem(new CheckoutItem( 'BONUS_ELETRONICO',
+                                             "Doação - Bônus Eletrônico ({$donation->getBonus()})",
+                                             sprintf('%.2f', $donation->getTotalValue()),
+                                             '1'))
+                                    ->setReference($donation->getReference())
+                                    ->addMetaKey('PLAYER_ID', $donation->getAccount()->getAccount_id())
+                                    ->sendRequest();
+
+        // Define o código de checkout para a doação.
+        $donation->setCheckoutCode($checkoutResponse->code);
+
+        // Atualiza os dados da doação no banco de dados.
+        self::getApp()->getEm()->merge($donation);
+        self::getApp()->getEm()->flush();
+
+        // Retorna os dados de checkout para o painel de controle abrir o PagSeguro.
+        return ['message' => ['success' => 'Sua doação foi registrada em nosso sistema! Muito obrigado!'],
+                'checkoutCode' => $donation->getCheckoutCode(),
+                'donationId' => $donation->getId()];
     }
 
     /**
