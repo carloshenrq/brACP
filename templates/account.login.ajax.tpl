@@ -39,13 +39,13 @@
         <div class="bracp-form-field">
             <label>
                 Usuário:<br>
-                <input type="text" id="userid" name="userid" placeholder="Nome de usuário" size="24" maxlength="24" {literal}pattern="{$smarty.const.BRACP_REGEXP_USERNAME}"{/literal} required/>
+                <input type="text" id="userid" name="userid" placeholder="Nome de usuário" size="24" maxlength="24" pattern="{$smarty.const.BRACP_REGEXP_USERNAME}" required/>
             </label>
         </div>
         <div class="bracp-form-field">
             <label>
-                Senha:<br>{literal}
-                <input type="password" id="user_pass" name="user_pass" placeholder="Senha de usuário" size="24" maxlength="24" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>{/literal}
+                Senha:<br>
+                <input type="password" id="user_pass" name="user_pass" placeholder="Senha de usuário" size="24" maxlength="24" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>
             </label>
         </div>
         <div class="bracp-form-field">

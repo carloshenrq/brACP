@@ -47,20 +47,20 @@
         <div class="bracp-form">
             <div class="bracp-form-field">
                 <label>
-                    Email atual:<br>{literal}
-                    <input type="text" id="email" name="email" placeholder="Email atual" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>{/literal}
+                    Email atual:<br>
+                    <input type="text" id="email" name="email" placeholder="Email atual" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
                 </label>
             </div>
             <div class="bracp-form-field">
                 <label>
-                    Novo email:<br>{literal}
-                    <input type="text" id="email_new" name="email_new" placeholder="Novo email" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>{/literal}
+                    Novo email:<br>
+                    <input type="text" id="email_new" name="email_new" placeholder="Novo email" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
                 </label>
             </div>
             <div class="bracp-form-field">
                 <label>
-                    Confirme:<br>{literal}
-                    <input type="text" id="email_conf" name="email_conf" placeholder="Confirme seu novo email" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>{/literal}
+                    Confirme:<br>
+                    <input type="text" id="email_conf" name="email_conf" placeholder="Confirme seu novo email" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
                 </label>
 
                 {if $smarty.const.BRACP_RECAPTCHA_ENABLED eq true}

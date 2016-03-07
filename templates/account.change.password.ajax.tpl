@@ -54,20 +54,20 @@
         <div class="bracp-form">
             <div class="bracp-form-field">
                 <label>
-                    Senha atual:<br>{literal}
-                    <input type="password" id="user_pass" name="user_pass" placeholder="Senha atual" size="24" maxlength="24" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>{/literal}
+                    Senha atual:<br>
+                    <input type="password" id="user_pass" name="user_pass" placeholder="Senha atual" size="24" maxlength="24" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>
                 </label>
             </div>
             <div class="bracp-form-field">
                 <label>
-                    Senha nova:<br>{literal}
-                    <input type="password" id="user_pass_new" name="user_pass_new" placeholder="Nova senha" size="24" maxlength="24" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>{/literal}
+                    Senha nova:<br>
+                    <input type="password" id="user_pass_new" name="user_pass_new" placeholder="Nova senha" size="24" maxlength="24" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>
                 </label>
             </div>
             <div class="bracp-form-field">
                 <label>
-                    Confirme:<br>{literal}
-                    <input type="password" id="user_pass_conf" name="user_pass_conf" placeholder="Confirme sua nova senha" size="24" maxlength="24" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>{/literal}
+                    Confirme:<br>
+                    <input type="password" id="user_pass_conf" name="user_pass_conf" placeholder="Confirme sua nova senha" size="24" maxlength="24" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>
                 </label>
 
                 {if $smarty.const.BRACP_RECAPTCHA_ENABLED eq true}
