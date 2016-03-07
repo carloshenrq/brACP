@@ -33,19 +33,19 @@
         <div class="bracp-form-field">
             <label>
                 Usuário:<br>{literal}
-                <input type="text" id="userid" name="userid" placeholder="Nome de usuário" size="24" maxlength="24" pattern="[a-zA-Z0-9]{4,24}" required/>{/literal}
+                <input type="text" id="userid" name="userid" placeholder="Nome de usuário" size="24" maxlength="24" pattern="{$smarty.const.BRACP_REGEXP_USERNAME}" required/>{/literal}
             </label>
         </div>
         <div class="bracp-form-field">
             <label>
                 Senha:<br>{literal}
-                <input type="password" id="user_pass" name="user_pass" placeholder="Senha de usuário" size="20" maxlength="20" pattern="[a-zA-Z0-9\s]{4,20}" required/>{/literal}
+                <input type="password" id="user_pass" name="user_pass" placeholder="Senha de usuário" size="20" maxlength="20" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>{/literal}
             </label>
         </div>
         <div class="bracp-form-field">
             <label>
                 Confirme:<br>{literal}
-                <input type="password" id="user_pass_conf" name="user_pass_conf" placeholder="Confirme a senha" size="20" maxlength="20" pattern="[a-zA-Z0-9\s]{4,20}" required/>{/literal}
+                <input type="password" id="user_pass_conf" name="user_pass_conf" placeholder="Confirme a senha" size="20" maxlength="20" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>{/literal}
             </label>
         </div>
         <div class="bracp-form-field">
@@ -60,13 +60,13 @@
         <div class="bracp-form-field">
             <label>
                 Email:<br>{literal}
-                <input type="text" id="email" name="email" placeholder="Endereço de e-mail" size="39" maxlength="39" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}" required/>{/literal}
+                <input type="text" id="email" name="email" placeholder="Endereço de e-mail" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>{/literal}
             </label>
         </div>
         <div class="bracp-form-field">
             <label>
                 Confirme:<br>{literal}
-                <input type="text" id="email_conf" name="email_conf" placeholder="Confirme o email" size="39" maxlength="39" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}" required/>{/literal}
+                <input type="text" id="email_conf" name="email_conf" placeholder="Confirme o email" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>{/literal}
             </label>
         </div>
         <div class="bracp-form-field">

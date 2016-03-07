@@ -33,13 +33,13 @@
         <div class="bracp-form-field">
             <label>
                 Usuário:<br>{literal}
-                <input type="text" id="userid" name="userid" placeholder="Nome de usuário" size="24" maxlength="24" pattern="[a-zA-Z0-9]{4,24}" required/>{/literal}
+                <input type="text" id="userid" name="userid" placeholder="Nome de usuário" size="24" maxlength="24" pattern="{$smarty.const.BRACP_REGEXP_USERNAME}" required/>{/literal}
             </label>
         </div>
         <div class="bracp-form-field">
             <label>
                 E-mail:<br>{literal}
-                <input type="text" id="email" name="email" placeholder="Endereço de e-mail" size="39" maxlength="39" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}" required/>{/literal}
+                <input type="text" id="email" name="email" placeholder="Endereço de e-mail" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>{/literal}
             </label>
         </div>
         <div class="bracp-form-field">

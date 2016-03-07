@@ -76,6 +76,10 @@ DEFINE('BRACP_RECAPTCHA_PUBLIC_KEY', '', false);
 DEFINE('BRACP_RECAPTCHA_PRIVATE_KEY', '', false);
 DEFINE('BRACP_RECAPTCHA_PRIVATE_URL' , 'https://www.google.com/recaptcha/api/siteverify', false);
 
+DEFINE('BRACP_REGEXP_USERNAME', '[a-zA-Z0-9]{4,24}', false);
+DEFINE('BRACP_REGEXP_PASSWORD', '[a-zA-Z0-9]{4,20}', false);
+DEFINE('BRACP_REGEXP_EMAIL', '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}', false);
+
 // PAGSEGURO- CONFIGURAÇÕES DO PAGSEGURO
 DEFINE('PAG_INSTALL', true, false);
 if(BRACP_DEVELOP_MODE)
