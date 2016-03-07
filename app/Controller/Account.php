@@ -318,7 +318,7 @@ class Account
                     $donation->setCancelDate(date('Y-m-d H:i:s'));
                 // Se for para adicionar código de transação, então salva o código de transação.
                 else if(isset($data['transactionCode']))
-                    $donation->setCheckoutCode($data['transactionCode']);
+                    $donation->setTransactionCode($data['transactionCode']);
 
                 // Atualiza os dados da transação no banco de dados.
                 self::getApp()->getEm()->merge($donation);
