@@ -182,10 +182,13 @@ class brACPApp extends Slim\App
                 $data['exception'] = $ex;
         }
 
+        // Obtém o endereço de ip do cliente.
+        $ip_address = $this->getContainer()->get('request')->getAttribute('ip_address');
+
         // Adiciona o navegador aos dados para o template.
         $data = array_merge($data, [
             'navigator' => Navigator::getBrowser($this->getContainer()->get('request')->getHeader('user-agent')[0]),
-            'ipAddress' => $this->getContainer()->get('request')->getAttribute('ip_address')
+            'ipAddress' => ((is_null($ip_address)) ? $_SERVER['REMOTE_ADDR'] : $ip_address)
         ]);
 
         // Atribui os dados ao smarty.

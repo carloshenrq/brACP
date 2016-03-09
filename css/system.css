@@ -148,8 +148,33 @@ html, body {
   color: red;
 }
 .bracp-content .bracp-footer {
-  background-color: #c8ffff;
+  background-color: #dbffdb;
   padding: 8px;
+  text-align: center;
+}
+.bracp-content .bracp-footer .bracp-navigator, .bracp-content .bracp-footer .nav-ipaddress {
+  display: inline;
+}
+.bracp-content .bracp-footer .nav-ipaddress {
+  margin-left: 32px;
+}
+.bracp-content .bracp-footer .nav-ipaddress:before {
+  background-image: url(../img/ip.png);
+}
+.bracp-content .bracp-footer .nav-ipaddress:before, .bracp-content .bracp-footer .bracp-navigator .nav-name:before {
+  content: '\00a0';
+  background-repeat: no-repeat;
+  background-position: center left;
+  padding: 8px;
+}
+.bracp-content .bracp-footer .bracp-navigator {
+  padding: 8px;
+}
+.bracp-content .bracp-footer .bracp-navigator .nav-name, .bracp-content .bracp-footer .bracp-navigator .nav-version {
+  display: inline;
+}
+.bracp-content .bracp-footer .bracp-navigator.nav-firefox .nav-name:before {
+  background-image: url(../img/firefox.png);
 }
 
 .ajax-url {

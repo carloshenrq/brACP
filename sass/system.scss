@@ -225,8 +225,53 @@ html, body
 
     .bracp-footer
     {
-        background-color: rgba(200, 255, 255, 1);
+        background-color: rgba(219, 255, 219, 1);
         padding: 8px;
+        text-align: center;
+
+        .bracp-navigator, .nav-ipaddress
+        {
+            display: inline;
+        }
+
+        .nav-ipaddress
+        {
+            margin-left: 32px;
+
+            &:before
+            {
+                background-image: url(../img/ip.png);
+            }
+        }
+
+        .nav-ipaddress:before, .bracp-navigator .nav-name:before
+        {
+            content: '\00a0';
+            background-repeat: no-repeat;
+            background-position: center left;
+            padding: 8px;
+        }
+
+        .bracp-navigator
+        {
+            padding: 8px;
+
+            .nav-name, .nav-version
+            {
+                display: inline;
+            }
+
+            &.nav-firefox
+            {
+                .nav-name
+                {
+                    &:before
+                    {
+                        background-image: url(../img/firefox.png);
+                    }
+                }
+            }
+        }
     }
 }
 
