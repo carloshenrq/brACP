@@ -882,28 +882,40 @@ class Account
         self::getApp()->getEm()->persist($donation);
         self::getApp()->getEm()->flush();
 
-        // Realiza a requisição para o pagseguro criar o checkoutcode.
-        $checkout = new Checkout();
-        $checkoutResponse = $checkout->setCurrency('BRL')
-                                    ->addItem(new CheckoutItem( 'BONUS_ELETRONICO',
-                                             "Doação - Bônus Eletrônico ({$donation->getBonus()})",
-                                             sprintf('%.2f', $donation->getTotalValue()),
-                                             '1'))
-                                    ->setReference($donation->getReference())
-                                    ->addMetaKey('PLAYER_ID', $donation->getAccount()->getAccount_id())
-                                    ->sendRequest();
+        try
+        {
+            // Realiza a requisição para o pagseguro criar o checkoutcode.
+            $checkout = new Checkout();
+            $checkoutResponse = $checkout->setCurrency('BRL')
+                                        ->addItem(new CheckoutItem( 'BONUS_ELETRONICO',
+                                                 "Doação - Bônus Eletrônico ({$donation->getBonus()})",
+                                                 sprintf('%.2f', $donation->getTotalValue()),
+                                                 '1'))
+                                        ->setReference($donation->getReference())
+                                        ->addMetaKey('PLAYER_ID', $donation->getAccount()->getAccount_id())
+                                        ->sendRequest();
 
-        // Define o código de checkout para a doação.
-        $donation->setCheckoutCode($checkoutResponse->code);
+            // Define o código de checkout para a doação.
+            $donation->setCheckoutCode($checkoutResponse->code);
 
-        // Atualiza os dados da doação no banco de dados.
-        self::getApp()->getEm()->merge($donation);
-        self::getApp()->getEm()->flush();
+            // Atualiza os dados da doação no banco de dados.
+            self::getApp()->getEm()->merge($donation);
+            self::getApp()->getEm()->flush();
 
-        // Retorna os dados de checkout para o painel de controle abrir o PagSeguro.
-        return ['message' => ['success' => 'Sua doação foi registrada em nosso sistema! Muito obrigado!'],
-                'checkoutCode' => $donation->getCheckoutCode(),
-                'donationId' => $donation->getId()];
+             // Retorna os dados de checkout para o painel de controle abrir o PagSeguro.
+            return ['message' => ['success' => 'Sua doação foi registrada em nosso sistema! Muito obrigado!'],
+                    'checkoutCode' => '', //$donation->getCheckoutCode(),
+                    'donationId' => $donation->getId()];
+        }
+        catch(\Exception $ex)
+        {
+            return ['message' =>
+                        [
+                            'error' => ((BRACP_DEVELOP_MODE) ? $ex->getMessage():'Ocorreu um erro durante o registro da sua doação.')
+                        ]
+                   ];
+        }
+
     }
 
     /**

@@ -80,6 +80,11 @@
                         <i><u>Algumas configurações podem não responder ao esperado.</u></i>
                     </div>
                 {/if}
+                {if true}
+                    <div class="bracp-message-info">
+                        Versão beta.
+                    </div>
+                {/if}
                 {if isset($account) eq true && $account->getGroup_id() >= BRACP_ALLOW_ADMIN_GMLEVEL}
                     <div class="bracp-message-error">
                         <h3>Lembrete aos adminsitradores</h3>

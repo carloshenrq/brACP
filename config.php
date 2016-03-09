@@ -17,6 +17,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+DEFINE('BRACP_VERSION', '0.1.0-.commit.-beta', false);
 DEFINE('BRACP_MAINTENCE', false, false);
 DEFINE('BRACP_DEVELOP_MODE', true, false);
 
