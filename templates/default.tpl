@@ -80,9 +80,11 @@
                         <i><u>Algumas configurações podem não responder ao esperado.</u></i>
                     </div>
                 {/if}
-                {if true}
+                {if preg_match('/beta$/i', $smarty.const.BRACP_VERSION) eq 1}
                     <div class="bracp-message-info">
-                        Versão beta.
+                        <h3>Você está executando uma versão beta! <i>({$smarty.const.BRACP_VERSION})</i></h3>
+                        A Versão do sistema que está em execução não é estavel e ainda está em fase de testes!<br>
+                        Por favor, fique atento as atualizações pois muitos erros podem ser corrigidos.
                     </div>
                 {/if}
                 {if isset($account) eq true && $account->getGroup_id() >= BRACP_ALLOW_ADMIN_GMLEVEL}
