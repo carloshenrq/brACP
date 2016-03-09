@@ -256,6 +256,8 @@ class Account
                                             donation.account login
                                         WHERE
                                             login.account_id = :account_id
+                                        ORDER BY
+                                            donation.id DESC
                                     ')
                                     ->setParameter('account_id', self::loggedUser()->getAccount_id())
                                     ->getResult();
@@ -266,6 +268,42 @@ class Account
             'multiply' => $multiply,
             'donations' => $donations
         ]));
+    }
+
+    /**
+     * Método para doações.
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param array $args
+     */
+    public static function donationsCheck(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        // Todas as doações para o usuário atual.
+        $donations = self::getApp()->getEm()
+                                    ->createQuery('
+                                        SELECT
+                                            donation,
+                                            promotion,
+                                            login
+                                        FROM
+                                            Model\Donation donation
+                                        LEFT JOIN
+                                            donation.promotion promotion
+                                        INNER JOIN
+                                            donation.account login
+                                        WHERE
+                                            login.account_id = :account_id
+                                        ORDER BY
+                                            donation.id DESC
+                                    ')
+                                    ->setParameter('account_id', self::loggedUser()->getAccount_id())
+                                    ->getResult();
+
+        // Template de doações carrega com os dados sendo informados.
+        self::getApp()->display('account.donations.table', [
+            'donations' => $donations
+        ], false);
     }
 
     /**
@@ -315,10 +353,15 @@ class Account
                 // Se for para realizar o cancelamento, então
                 //  cancela os dados da transação.
                 if(isset($data['cancel']) && $data['cancel'] == true)
+                {
+                    $donation->setStatus('CANCELADO');
                     $donation->setCancelDate(date('Y-m-d H:i:s'));
+                }
                 // Se for para adicionar código de transação, então salva o código de transação.
                 else if(isset($data['transactionCode']))
+                {
                     $donation->setTransactionCode($data['transactionCode']);
+                }
 
                 // Atualiza os dados da transação no banco de dados.
                 self::getApp()->getEm()->merge($donation);

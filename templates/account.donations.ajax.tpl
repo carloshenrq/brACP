@@ -159,7 +159,8 @@
 </p>
 
 {else}
-
-<p class="bracp-message-error">@Todo: Exibir doações realizadas.</p>
-
+<br>
+<div class="donation-table">
+    {include 'account.donations.table.tpl'}
+</div>
 {/if}

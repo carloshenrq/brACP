@@ -25,6 +25,9 @@
   -moz-transition: box-shadow 0.2s ease-out;
   -webkit-transition: box-shadow 0.2s ease-out;
 }
+.btn.btn-small {
+  padding: 2px 4px 2px 4px;
+}
 .btn:active {
   background: #e6e6e6;
   background: -moz-linear-gradient(top, #e6e6e6 0%, #e6e6e6 100%);

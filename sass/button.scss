@@ -18,6 +18,11 @@
     @include background-gradient($COLOR_GradientDefaultStart, $COLOR_GradientDefaultEnd);
     @include transition(box-shadow .2s ease-out);
 
+    &.btn-small
+    {
+        padding: 2px 4px 2px 4px;
+    }
+
     &:active
     {
         @include background-gradient($COLOR_GradientDefaultEnd, $COLOR_GradientDefaultEnd);

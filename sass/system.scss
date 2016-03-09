@@ -166,8 +166,12 @@ html, body
                     tr
                     {
                         background-color: #2d3716;
-                        border-color: white;
                         color: white;
+
+                        td, th
+                        {
+                            border-color: white;
+                        }
                     }
                 }
 
@@ -175,6 +179,7 @@ html, body
                 {
                     td, th
                     {
+                        border-color: #2d3716;
                         padding: 3px;
                     }
 
@@ -191,6 +196,8 @@ html, body
                 {
                     tr
                     {
+                        border-color: #2d3716 !important;
+
                         &:nth-child(even)
                         {
                             background-color: rgba(0, 255, 0, .1);
@@ -200,6 +207,15 @@ html, body
                         {
                             font-weight: bold;
                             font-size: 15px;
+                        }
+
+                        &.bracp-table-row-canceled
+                        {
+                            td
+                            {
+                                font-style: italic;
+                                color: red;
+                            }
                         }
                     }
                 }

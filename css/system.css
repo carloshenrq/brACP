@@ -121,14 +121,20 @@ html, body {
 }
 .bracp-content .bracp-body-container .bracp-body .bracp-table thead tr {
   background-color: #2d3716;
-  border-color: white;
   color: white;
 }
+.bracp-content .bracp-body-container .bracp-body .bracp-table thead tr td, .bracp-content .bracp-body-container .bracp-body .bracp-table thead tr th {
+  border-color: white;
+}
 .bracp-content .bracp-body-container .bracp-body .bracp-table tr td, .bracp-content .bracp-body-container .bracp-body .bracp-table tr th {
+  border-color: #2d3716;
   padding: 3px;
 }
 .bracp-content .bracp-body-container .bracp-body .bracp-table tr.tiny td, .bracp-content .bracp-body-container .bracp-body .bracp-table tr.tiny th {
   font-size: 11px;
+}
+.bracp-content .bracp-body-container .bracp-body .bracp-table tbody tr {
+  border-color: #2d3716 !important;
 }
 .bracp-content .bracp-body-container .bracp-body .bracp-table tbody tr:nth-child(even) {
   background-color: rgba(0, 255, 0, 0.1);
@@ -136,6 +142,10 @@ html, body {
 .bracp-content .bracp-body-container .bracp-body .bracp-table tbody tr.char-myaccount td {
   font-weight: bold;
   font-size: 15px;
+}
+.bracp-content .bracp-body-container .bracp-body .bracp-table tbody tr.bracp-table-row-canceled td {
+  font-style: italic;
+  color: red;
 }
 
 .ajax-url {

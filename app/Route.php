@@ -81,6 +81,9 @@ class Route
                 $this->post('/donations/transaction', ['Controller\Account', 'transaction'])
                         ->add(['Controller\Account', 'needLogin']);;
 
+                $this->post('/donations/check', ['Controller\Account', 'donationsCheck'])
+                        ->add(['Controller\Account', 'needLogin']);;
+
                 $this->get('/logout', ['Controller\Account', 'logout'])
                         ->add(['Controller\Account', 'needLogin']);
             });
