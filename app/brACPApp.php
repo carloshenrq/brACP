@@ -182,6 +182,12 @@ class brACPApp extends Slim\App
                 $data['exception'] = $ex;
         }
 
+        // Adiciona o navegador aos dados para o template.
+        $data = array_merge($data, [
+            'navigator' => Navigator::getBrowser($this->getContainer()->get('request')->getHeader('user-agent')[0]),
+            'ipAddress' => $this->getContainer()->get('request')->getAttribute('ip_address')
+        ]);
+
         // Atribui os dados ao smarty.
         $this->view->assign($data);
 

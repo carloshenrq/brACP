@@ -105,7 +105,13 @@
                     {/block}
                 </div>
             </div>
-            <div class="bracp-footer"></div>
+            <div class="bracp-footer">
+                <div class="bracp-navigator {$navigator->getClass()}">
+                    <div class="nav-name">{$navigator->getName()}</div>
+                    <div class="nav-version">{$navigator->getVersion()}</div>
+                    <div class="nav-ipaddress">{$ipAddress}</div>
+                </div>
+            </div>
         </div>
     {/block}
         <div class="bracp-ajax-loading">

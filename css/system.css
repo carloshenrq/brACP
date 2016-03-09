@@ -147,6 +147,10 @@ html, body {
   font-style: italic;
   color: red;
 }
+.bracp-content .bracp-footer {
+  background-color: #c8ffff;
+  padding: 8px;
+}
 
 .ajax-url {
   cursor: pointer;
