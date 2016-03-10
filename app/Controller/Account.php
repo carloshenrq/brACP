@@ -262,6 +262,19 @@ class Account
                                     ->setParameter('account_id', self::loggedUser()->getAccount_id())
                                     ->getResult();
 
+        // Varre todas as doações antes de escrever em tela.
+        foreach($donations as $donation)
+        {
+            // Se uma doação estiver com o código de checkout em branco
+            //  irá então, cancelar a doação.
+            if(empty($donation->getCheckoutCode()))
+            {
+                $donation->setStatus('CANCELADO');
+                self::getApp()->getEm()->merge($donation);
+                self::getApp()->getEm()->flush();
+            }
+        }
+
         // Template de doações carrega com os dados sendo informados.
         self::getApp()->display('account.donations', array_merge($data, [
             'promotion' => $promotion,
@@ -904,7 +917,7 @@ class Account
 
              // Retorna os dados de checkout para o painel de controle abrir o PagSeguro.
             return ['message' => ['success' => 'Sua doação foi registrada em nosso sistema! Muito obrigado!'],
-                    'checkoutCode' => '', //$donation->getCheckoutCode(),
+                    'checkoutCode' => $donation->getCheckoutCode(),
                     'donationId' => $donation->getId()];
         }
         catch(\Exception $ex)

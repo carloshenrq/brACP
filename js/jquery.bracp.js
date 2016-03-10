@@ -18,6 +18,12 @@
 
 +function($)
 {
+    $(document).on('click', '.donation-cancel', function(e) {
+        e.preventDefault();
+        // Cancela a doação clicada.
+        donationAbort($(this).data('id'), $(this).data('checkout'), $(this).data('url'));
+    });
+
     $(document).on('change', '.bracp-donation-calc', function() {
 
         var thisValue = parseFloat($(this).val());
@@ -102,6 +108,30 @@
 
 } (window.jQuery);
 
+
+function donation(donationId, checkoutCode, url)
+{
+    // Inicializa o lightbox do pagseguro.
+    PagSeguroLightbox({
+        'code' : checkoutCode
+    }, {
+        'success' : function(transactionCode)
+        {
+            // Atualiza a doação com o código de transação.
+            donationTransactionCode(donationId,
+                                    checkoutCode,
+                                    transactionCode,
+                                    url);
+        },
+        'abort' : function()
+        {
+            // Cancela a doação.
+            donationAbort(donationId,
+                            checkoutCode,
+                            url);
+        }
+    });
+}
 
 /**
  * Atualiza a doação com um código de transção.

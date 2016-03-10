@@ -22,25 +22,9 @@
 <script>
     var donationId = '{$donationId}',
         checkoutCode = '{$checkoutCode}';
-    PagSeguroLightbox({
-        'code' : checkoutCode
-    }, {
-        'success' : function(transactionCode)
-        {
-            // Atualiza a doação com o código de transação.
-            donationTransactionCode(donationId,
-                                    checkoutCode,
-                                    transactionCode,
-                                    '{$smarty.const.BRACP_DIR_INSTALL_URL}account/donations/transaction');
-        },
-        'abort' : function()
-        {
-            // Cancela a doação.
-            donationAbort(donationId,
-                            checkoutCode,
-                            '{$smarty.const.BRACP_DIR_INSTALL_URL}account/donations/transaction');
-        }
-    });
+
+    // Inicializa os parametros de doação.
+    donation(donationId, checkoutCode, '{$smarty.const.BRACP_DIR_INSTALL_URL}account/donations/transaction');
 </script>
 {/if}
 

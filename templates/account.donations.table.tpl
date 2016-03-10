@@ -51,8 +51,17 @@
                         {/if}
                     </td>
                     <td align="center" width="100px">
-                        {if $row->getStatus() eq 'INICIADA'}
-                            <input type="checkbox" name="DonationID[]" value="{$row->getId()}"/>
+                        {if $row->getStatus() eq 'INICIADA' && !empty($row->getCheckoutCode())}
+                            {if empty($row->getTransactionCode())}
+                                <button class="btn btn-success btn-tiny donation-checkout" data-id="{$row->getId()}" data-checkout="{$row->getCheckoutCode()}" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/donations/transaction">
+                                    Doar
+                                </button>
+                                <button class="btn btn-error btn-tiny donation-cancel" data-id="{$row->getId()}" data-checkout="{$row->getCheckoutCode()}" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/donations/transaction">
+                                    Cancelar
+                                </button>
+                            {else}
+                                <input type="checkbox" name="DonationID[]" value="{$row->getId()}"/>
+                            {/if}
                         {/if}
                     </td>
                 </tr>
