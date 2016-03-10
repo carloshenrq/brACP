@@ -56,6 +56,8 @@ class Route
                 $this->map(['GET', 'POST'], '/login', ['Controller\Account', 'login'])
                         ->add(['Controller\Account', 'needLoggout']);
 
+                $this->post('/donations/notification', ['Controller\Account', 'donationsNotify']);
+
                 // Verifica configuração se permite recuperar uma conta.
                 if(BRACP_ALLOW_RECOVER)
                 {
@@ -79,10 +81,10 @@ class Route
                         ->add(['Controller\Account', 'needLogin']);
 
                 $this->post('/donations/transaction', ['Controller\Account', 'transaction'])
-                        ->add(['Controller\Account', 'needLogin']);;
+                        ->add(['Controller\Account', 'needLogin']);
 
                 $this->post('/donations/check', ['Controller\Account', 'donationsCheck'])
-                        ->add(['Controller\Account', 'needLogin']);;
+                        ->add(['Controller\Account', 'needLogin']);
 
                 $this->get('/logout', ['Controller\Account', 'logout'])
                         ->add(['Controller\Account', 'needLogin']);

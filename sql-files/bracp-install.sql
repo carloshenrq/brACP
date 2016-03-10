@@ -35,7 +35,8 @@ CREATE TABLE IF NOT EXISTS `bracp_donations` (
     `DonationPaymentDate` DATETIME NULL DEFAULT NULL,
     `DonationCancelDate` DATETIME NULL DEFAULT NULL,
 
-    FOREIGN KEY (`PromotionID`) REFERENCES `bracp_donations_promo` (`PromotionID`)
+    FOREIGN KEY (`PromotionID`) REFERENCES `bracp_donations_promo` (`PromotionID`),
+    UNIQUE INDEX (`DonationRefer`, `TransactionCode`)
 ) ENGINE=InnoDB COLLATE='utf8_swedish_ci';
 
 DROP TABLE IF EXISTS `bracp_compensations`;

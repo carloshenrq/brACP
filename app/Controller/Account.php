@@ -294,6 +294,55 @@ class Account
      * @param ResponseInterface $response
      * @param array $args
      */
+    public static function donationsNotify(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        // Somente aceita requisições do tipo POST.
+        if(!$request->isPost())
+            return;
+
+        // Dados a serem tratados pela notificação da transação.
+        $data = $request->getParsedBody();
+
+        // Obtém os dados da notificação para poder trabalhar com a doação.
+        $notification = Transaction::checkNotification($data['notificationCode']);
+
+        // Obtém a doação salva no banco de dados para realizar as verificações
+        //  pelo código da transação no site do pagseguro.
+        $donation = self::getApp()->getEm()
+                                ->createQuery('
+                                    SELECT
+                                        donation,
+                                        promotion,
+                                        login
+                                    FROM
+                                        Model\Donation donation
+                                    LEFT JOIN
+                                        donation.promotion promotion
+                                    INNER JOIN
+                                        donation.account login
+                                    WHERE
+                                        donation.reference = :reference AND
+                                        donation.transactionCode = :transactionCode
+                                ')
+                                ->setParameter('reference', $notification->reference)
+                                ->setParameter('transactionCode', $notification->code)
+                                ->getOneOrNullResult();
+
+        // Verifica se a notificação do pagseguro realmente existe no banco de dados
+        //  Se existir, faz uma atualização da doação do jogador.
+        if(!is_null($donation))
+        {
+            self::donationCheck($donation);
+        }
+    }
+
+    /**
+     * Método para doações.
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param array $args
+     */
     public static function donationsCheck(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
         // Todas as doações para o usuário atual.
@@ -868,13 +917,13 @@ class Account
 
         // 1: Aguardando Pgto.
         // 2: Pagamento em Analise
-        if($transaction->status == 1 || $transaction->status == 2)
+        if($donation->getStatus() != 'INICIADA' && ($transaction->status == 1 || $transaction->status == 2))
         {
             $donation->setStatus('INICIADA');
         }
         // 3: Paga
         // 4: Disponivel (Sem disputa)
-        else if($transaction->status == 3 || $transaction->status == 4)
+        else if($donation->getStatus() != 'PAGO' && ($transaction->status == 3 || $transaction->status == 4))
         {
             $donation->setStatus('PAGO');
             $donation->setPaymentDate(date('Y-m-d H:i:s'));
@@ -899,7 +948,8 @@ class Account
         // 7: Cancelado
         // 8: Charback debitado
         // 9: Em contestação
-        else if($transaction->status == 7 || $transaction->status == 8 || $transaction->status == 5 || $transaction->status == 6 || $transaction->status == 9)
+        else if($donation->getStatus() != 'CANCELADO'
+            && ($transaction->status == 7 || $transaction->status == 8 || $transaction->status == 5 || $transaction->status == 6 || $transaction->status == 9))
         {
             // Se a doação antes estava paga, bloqueia a conta do jogador.
             if($donation->getStatus() == 'PAGO' && $donation->getCompensate())
