@@ -234,10 +234,13 @@ html, body
             display: inline;
         }
 
-        .nav-ipaddress
+        .bracp-navigator + .nav-ipaddress
         {
             margin-left: 32px;
+        }
 
+        .nav-ipaddress
+        {
             &:before
             {
                 background-image: url(../img/ip.png);
@@ -261,6 +264,17 @@ html, body
                 display: inline;
             }
 
+            &.nav-chrome
+            {
+                .nav-name
+                {
+                    &:before
+                    {
+                        background-image: url(../img/chrome.png);
+                    }
+                }
+            }
+
             &.nav-firefox
             {
                 .nav-name
@@ -268,6 +282,39 @@ html, body
                     &:before
                     {
                         background-image: url(../img/firefox.png);
+                    }
+                }
+            }
+
+            &.nav-ie
+            {
+                .nav-name
+                {
+                    &:before
+                    {
+                        background-image: url(../img/ie.png);
+                    }
+                }
+            }
+
+            &.nav-safari
+            {
+                .nav-name
+                {
+                    &:before
+                    {
+                        background-image: url(../img/safari.png);
+                    }
+                }
+            }
+
+            &.nav-opera
+            {
+                .nav-name
+                {
+                    &:before
+                    {
+                        background-image: url(../img/opera.png);
                     }
                 }
             }

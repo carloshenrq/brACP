@@ -155,7 +155,7 @@ html, body {
 .bracp-content .bracp-footer .bracp-navigator, .bracp-content .bracp-footer .nav-ipaddress {
   display: inline;
 }
-.bracp-content .bracp-footer .nav-ipaddress {
+.bracp-content .bracp-footer .bracp-navigator + .nav-ipaddress {
   margin-left: 32px;
 }
 .bracp-content .bracp-footer .nav-ipaddress:before {
@@ -173,8 +173,20 @@ html, body {
 .bracp-content .bracp-footer .bracp-navigator .nav-name, .bracp-content .bracp-footer .bracp-navigator .nav-version {
   display: inline;
 }
+.bracp-content .bracp-footer .bracp-navigator.nav-chrome .nav-name:before {
+  background-image: url(../img/chrome.png);
+}
 .bracp-content .bracp-footer .bracp-navigator.nav-firefox .nav-name:before {
   background-image: url(../img/firefox.png);
+}
+.bracp-content .bracp-footer .bracp-navigator.nav-ie .nav-name:before {
+  background-image: url(../img/ie.png);
+}
+.bracp-content .bracp-footer .bracp-navigator.nav-safari .nav-name:before {
+  background-image: url(../img/safari.png);
+}
+.bracp-content .bracp-footer .bracp-navigator.nav-opera .nav-name:before {
+  background-image: url(../img/opera.png);
 }
 
 .ajax-url {

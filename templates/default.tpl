@@ -106,10 +106,12 @@
                 </div>
             </div>
             <div class="bracp-footer">
-                <div class="bracp-navigator {$navigator->getClass()}">
-                    <div class="nav-name">{$navigator->getName()}</div>
-                    <div class="nav-version">{$navigator->getVersion()}</div>
-                </div>
+                {if is_null($navigator) eq false}
+                    <div class="bracp-navigator {$navigator->getClass()}">
+                        <div class="nav-name">{$navigator->getName()}</div>
+                        <div class="nav-version">{$navigator->getVersion()}</div>
+                    </div>
+                {/if}
                 <div class="nav-ipaddress">{$ipAddress}</div>
             </div>
         </div>

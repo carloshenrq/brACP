@@ -24,12 +24,50 @@
  */
 class Navigator
 {
-    const MozillaFirefox = '/^Mozilla\/5.0 \([^\)]+\) Gecko\/([0-9.]+) Firefox\/([0-9.]+)$/i';
-    const GoogleChrome = '/^Mozilla\/5.0 \([^\)]+\) AppleWebKit\/([0-9.]+) \([^\)]+\) Chrome\/([0-9.]+) Safari\/([0-9.]+)$/i';
-    const MicrosoftEdge = '/^Mozilla\/5.0 \([^\)]+\) AppleWebKit\/([0-9.]+) \([^\)]+\) Chrome\/([0-9.]+) Safari\/([0-9.]+) Edge\/([0-9.]+)$/i';
-    const MicrosoftInternetExplorer = '/(?:MSIE ([0-9]{1,}[\.0-9]{0,})|^Mozilla\/5.0 \([^\)]+\) like Gecko$)/i';
-    const Opera = '/Opera\/([0-9.]+)/i';
-    const Safari = '/^Mozilla\/5.0 \([^\)]+\) AppleWebKit\/([0-9.]+) \([^\)]+\) Version\/([0-9.]+) ((?:Mobile\/([^\s]+)\s)?)Safari\/([0-9.A-Z]+)$/i';
+
+    private static $navigators = [
+        // Teste para navegador google chrome
+        [
+            'name' => 'Google Chrome',
+            'icon' => 'nav-chrome',
+            'regex' => [
+                '/Chrome\/([^\s]+) Safari\/(?:[a-zA-Z0-9.]+)$/i',
+            ]
+        ],
+        // Teste para navegador firefox
+        [
+            'name' => 'Mozilla Firefox',
+            'icon' => 'nav-firefox',
+            'regex' => [
+                '/(?:Firefox|Firebird)\/([a-zA-Z0-9.]+)$/i',
+            ]
+        ],
+        // Teste para navegador Internet Explorer
+        [
+            'name' => 'Internet Explorer',
+            'icon' => 'nav-ie',
+            'regex' => [
+                '/MSIE ([a-zA-Z0-9.]+)$/i',
+                '/rv\:([a-zA-Z0-9.]+)\) like Gecko$/i',
+            ]
+        ],
+        // Teste para navegador Safari
+        [
+            'name' => 'Safari',
+            'icon' => 'nav-safari',
+            'regex' => [
+                '/Version\/([a-zA-Z0-9.]+) (?:(?:Mobile\/(?:[a-zA-Z0-9.]+)\s)?)Safari\/(?:[a-zA-Z0-9.]+)$/i',
+            ]
+        ],
+        // Teste para navegador Opera
+        [
+            'name' => 'Opera',
+            'icon' => 'nav-opera',
+            'regex' => [
+                '/^(?:Opera|Mozilla).*(?:Version\/|Opera\s)([a-zA-Z0-9.]+)$/i',
+            ]
+        ],
+    ];
 
     private $name;
     private $class;
@@ -81,18 +119,25 @@ class Navigator
      */
     public static function getBrowser($userAgent)
     {
-        if(preg_match(self::GoogleChrome, $userAgent, $matches))
+        // Varre todos os navegadores identificados para realizar o teste na tela.
+        foreach(self::$navigators as $navigator)
         {
-            return '@Todo';
-        }
-        else if(preg_match(self::MozillaFirefox, $userAgent, $matches))
-        {
-            return new Navigator('Mozilla Firefox', 'nav-firefox', $matches[2]);
+            // Varre todas as expressões regulares para encontrar o navegador que se
+            //  encaixa no usuário.
+            foreach($navigator['regex'] as $regex)
+            {
+                // Verifica a expressão regular no userAgent do usuário.
+                if(preg_match($regex, $userAgent, $matches))
+                {
+                    // Retorna os dados de navegador que for encontrado.
+                    return new Navigator($navigator['name'], $navigator['icon'], $matches[1]);
+                }
+            }
         }
 
-        // @Todo: Fazer os testes para os demais navegadores.
-
-        return new Navigator('Desconhecido', 'nav-unknow', '?');
+        // Caso não encontre o navegador, então retorna NULL.
+        // Não será exibido em tela.
+        return null;
     }
 
 }

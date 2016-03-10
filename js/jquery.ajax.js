@@ -22,8 +22,9 @@
     // Caso realize o submit de um form tipo ajax.
     $(document).on('submit', 'form.ajax-form', function() {
 
-        // Se estiver definido para bloquear o url, então não atualiza o url no navegador.
-        if($(this).data('block') == undefined)
+        // Se não houver restrições para definir o URL no envio do form, então
+        //  não permite que o URL do navegador seja alterado.
+        if($(this).data('block') === undefined)
         {
             // Define o url da página.
             window.history.pushState("", "", $(this).attr('action'));
@@ -55,12 +56,8 @@
     // Caso realize o click em um elemento com ajax-url
     $(document).on('click', '.ajax-url', function() {
 
-        // Se estiver definido para bloquear o url, então não atualiza o url no navegador.
-        if($(this).data('block') == undefined)
-        {
-            // Define o url da página.
-            window.history.pushState("", "", $(this).attr('action'));
-        }
+        // Define o url da página.
+        window.history.pushState(null, null, $(this).data('url'));
 
         // Realiza a requisição ajax no contexto atual.
         $.ajax({
