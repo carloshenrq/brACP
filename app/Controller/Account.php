@@ -26,9 +26,13 @@ use \Model\Login;
 use \Model\Recover;
 use \Model\EmailLog;
 use \Model\Donation;
+use \Model\Compensate;
 
 use \PagSeguro\Checkout;
 use \PagSeguro\CheckoutItem;
+use \PagSeguro\Transaction;
+
+use \Format;
 
 /**
  * Controlador para dados de conta.
@@ -312,6 +316,28 @@ class Account
                                     ')
                                     ->setParameter('account_id', self::loggedUser()->getAccount_id())
                                     ->getResult();
+
+
+        // Obtém os dados enviados pela requisição.
+        $data = $request->getParsedBody();
+
+        // Caso existam dados a serem processados.
+        if(isset($data) && count($data) > 0)
+        {
+            // Obtém todas as doações enviadas via POST.
+            $DonationID = $data['DonationID'];
+
+            // Varre as doações procurando as doações a serem verificadas.
+            foreach($donations as $donation)
+            {
+                // Se a doação estiver no array de verificação, então
+                //  realiza uma requisição ao PagSeguro para 
+                if(in_array($donation->getId(), $DonationID) && !empty($donation->getTransactionCode()))
+                {
+                    self::donationCheck($donation);
+                }
+            }
+        }
 
         // Template de doações carrega com os dados sendo informados.
         self::getApp()->display('account.donations.table', [
@@ -829,6 +855,96 @@ class Account
     }
 
     /**
+     * Verifica a doação e atualiza seu status no banco de dados.
+     *
+     * @param integer $donationId
+     *
+     * @return boolean
+     */
+    public static function donationCheck(Donation $donation)
+    {
+        // Obtém os dados de transação para o código informado.
+        $transaction = Transaction::checkTransaction($donation->getTransactionCode());
+
+        // 1: Aguardando Pgto.
+        // 2: Pagamento em Analise
+        if($transaction->status == 1 || $transaction->status == 2)
+        {
+            $donation->setStatus('INICIADA');
+        }
+        // 3: Paga
+        // 4: Disponivel (Sem disputa)
+        else if($transaction->status == 3 || $transaction->status == 4)
+        {
+            $donation->setStatus('PAGO');
+            $donation->setPaymentDate(date('Y-m-d H:i:s'));
+
+            // Se o jogador não marcou a opção para não receber os bônus
+            //  a sua conta, então gerar a compensação para o jogador.
+            if($donation->getReceiveBonus())
+            {
+                // Cria o objeto de compensação no banco de dados
+                //  para identificar que é nessário dar ao jogador in-game as informações.
+                $compensate = new Compensate();
+                $compensate->setDonation($donation);
+                $compensate->setPending(true);
+                $compensate->setDate(null);
+
+                // Grava os dados de compensação no banco de dados.
+                self::getApp()->getEm()->persist($compensate);
+            }
+        }
+        // 5: Em disputa
+        // 6: Devolvida
+        // 7: Cancelado
+        // 8: Charback debitado
+        // 9: Em contestação
+        else if($transaction->status == 7 || $transaction->status == 8 || $transaction->status == 5 || $transaction->status == 6 || $transaction->status == 9)
+        {
+            // Se a doação antes estava paga, bloqueia a conta do jogador.
+            if($donation->getStatus() == 'PAGO' && $donation->getCompensate())
+            {
+                // Se a doação já foi compensada, então, bloqueará a conta do jogador.
+                if($donation->getCompensate())
+                {
+                    $donation->getAccount()->setState(5);
+                    self::getApp()->getEm()->merge($donation->getAccount());
+                }
+                else
+                {
+                    // Obtém o objeto da compensação da doação.
+                    $compensate = self::getApp()->getEm()
+                                                ->createQuery('
+                                                    SELECT
+                                                        compensate,
+                                                        donation
+                                                    FROM
+                                                        Model\Compensate compensate
+                                                    INNER JOIN
+                                                        compensate.donation donation
+                                                    WHERE
+                                                        compensate.pending = true AND
+                                                        donation.id = :id
+                                                ')
+                                                ->setParameter('id', $donation->getId())
+                                                ->getOneOrNullResult();
+
+                    // Remove a compensação do banco de dados.
+                    self::getApp()->getEm()->remove($compensate);
+                }
+            }
+
+            // Marca a doação como cancelada e atualiza as informações de cancelamento.
+            $donation->setStatus('CANCELADO');
+            $donation->setCancelDate(date('Y-m-d H:i:s'));
+        }
+
+        // Atualiza a doação no banco de dados.
+        self::getApp()->getEm()->merge($donation);
+        self::getApp()->getEm()->flush();
+    }
+
+    /**
      * Método utilizado para tratar o recebimento dos dados de doação para registrar
      *  e possívelmente iniciar a doação para o jogador.
      *
@@ -889,7 +1005,7 @@ class Account
 
         // Se usa valores com ajuste de taxas, então aplica o calculo para ajustar as taxas.
         if(DONATION_AMOUNT_USE_RATE)
-            $donation->setTotalValue(($donationValue + .4) / (1 - .0399));
+            $donation->setTotalValue(($donationValue/(1 - .0399)) + .4);
 
         // Salva a nova entrada no banco de dados.
         self::getApp()->getEm()->persist($donation);

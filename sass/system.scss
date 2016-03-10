@@ -217,6 +217,15 @@ html, body
                                 color: red;
                             }
                         }
+
+                        &.bracp-table-row-paid
+                        {
+                            td
+                            {
+                                font-weight: bold;
+                                color: green;
+                            }
+                        }
                     }
                 }
             }

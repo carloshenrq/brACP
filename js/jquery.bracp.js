@@ -18,10 +18,18 @@
 
 +function($)
 {
+    // Ao clicar no botão para doar novamente.
+    $(document).on('click', '.donation-checkout', function(e) {
+        e.preventDefault();
+        // Abre o pagseguro para realizar o checkout novamente.
+        donation($(this).data('id'), $(this).data('checkout'), $(this).data('url'));
+    });
+
+    // Ao clicar no botão para cancelar a doação.
     $(document).on('click', '.donation-cancel', function(e) {
         e.preventDefault();
         // Cancela a doação clicada.
-        donationAbort($(this).data('id'), $(this).data('checkout'), $(this).data('url'));
+        donationAbort($(this).data('id'), $(this).data('checkout'), $(this).data('url'), true);
     });
 
     $(document).on('change', '.bracp-donation-calc', function() {
@@ -34,7 +42,7 @@
 
             // Verifica se está sendo taxado.
             if($(this).data('rates'))
-                $('#cobrado').val((thisValue+ .4) / (1 - .0399)).blur();
+                $('#cobrado').val((thisValue/(1 - .0399)) + .4).blur();
         }
         else
             $(this).val(0).blur().change();
@@ -158,13 +166,16 @@ function donationTransactionCode(donationId, checkoutCode, transactionCode, url)
  * @param integer donationId Código da doação.
  * @param string checkoutCode Código de checkout para a doação.
  */
-function donationAbort(donationId, checkoutCode, url)
+function donationAbort(donationId, checkoutCode, url, async)
 {
+    if(async == undefined)
+        async = false;
+
     $.ajax({
         'url'       : url,
         'method'    : 'POST',
         'data'      : { 'DonationID' : donationId, 'checkoutCode' : checkoutCode, 'cancel' : 1 },
-        'async'     : false,
+        'async'     : async,
         'success'   : function() {
             window.location.reload();
         }

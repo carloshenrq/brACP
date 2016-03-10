@@ -147,6 +147,10 @@ html, body {
   font-style: italic;
   color: red;
 }
+.bracp-content .bracp-body-container .bracp-body .bracp-table tbody tr.bracp-table-row-paid td {
+  font-weight: bold;
+  color: green;
+}
 .bracp-content .bracp-footer {
   background-color: #dbffdb;
   padding: 8px;

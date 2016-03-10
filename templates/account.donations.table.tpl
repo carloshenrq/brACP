@@ -31,12 +31,13 @@
                 <th align="right" width="80px">Bônus</th>
                 <th align="right" width="100px">Pago R$</th>
                 <th align="left">Promoção</th>
+                <th align="center">Bônus</th>
                 <th align="center">Ação</th>
             </tr>
         </thead>
         <tbody>
             {foreach from=$donations item=row}
-                <tr class="bracp-table-row{if $row->getStatus() eq 'CANCELADO'}-canceled{/if}">
+                <tr class="bracp-table-row{if $row->getStatus() eq 'CANCELADO'}-canceled{else if $row->getStatus() eq 'PAGO'}-paid{/if}">
                     <td align="right">{$row->getId()}</td>
                     <td align="center">{Format::date($row->getDate(), 'd/m/Y')}</td>
                     <td align="center">{$row->getStatus()}</td>
@@ -48,6 +49,13 @@
                             <span title="{$row->getPromotion()->getDescription()}">
                                 {substr($row->getPromotion()->getDescription(), 0, 30)}...
                             </span>
+                        {/if}
+                    </td>
+                    <td align="center">
+                        {if $row->getReceiveBonus() eq true}
+                            Sim
+                        {else}
+                            <strong>Não</strong>
                         {/if}
                     </td>
                     <td align="center" width="100px">
