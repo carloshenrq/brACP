@@ -992,6 +992,13 @@ class Account
         // Atualiza a doação no banco de dados.
         self::getApp()->getEm()->merge($donation);
         self::getApp()->getEm()->flush();
+
+        // Verifica se permite o envio de e-mails para notificar o cliente.
+        // Envia o e-mail para o usuário informando o que aconteceu com a doação dele.
+        if(BRACP_ALLOW_MAIL_SEND)
+        {
+            self::donationNotifyMail($donation);
+        }
     }
 
     /**
@@ -1061,6 +1068,15 @@ class Account
         self::getApp()->getEm()->persist($donation);
         self::getApp()->getEm()->flush();
 
+        // Verifica se pode enviar e-mails de acordo com a configuração do painel de controle
+        //  para informar ao usuário que sua doação foi criada pelo endereço de e-mail.
+        if(BRACP_ALLOW_MAIL_SEND)
+        {
+            // Envia o e-mail ao usuário informando que a doação foi criada no sistema
+            // E está aguardando pagamento.
+            self::donationNotifyMail($donation);
+        }
+
         try
         {
             // Realiza a requisição para o pagseguro criar o checkoutcode.
@@ -1095,6 +1111,26 @@ class Account
                    ];
         }
 
+    }
+
+    /**
+     * Envia um e-mail ao usuário informando que a doação foi atualizada.
+     *
+     * @param Donation $donation
+     *
+     * @return void
+     */
+    public static function donationNotifyMail(Donation $donation)
+    {
+        // Envia o e-mail ao usuário informando que a doação foi criada no sistema
+        // E está aguardando pagamento.
+        self::getApp()->sendMail(
+            'Doação Atualizada',
+            [$donation->getAccount()->getEmail()],
+            'mail.donation.notify',
+            [
+                'donation' => $donation,
+            ]);
     }
 
     /**

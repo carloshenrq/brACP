@@ -116,9 +116,6 @@ class brACPApp extends Slim\App
         if(!BRACP_ALLOW_MAIL_SEND)
             return false;
 
-        // Mescla o array atual com os dados de envio.
-        $data = array_merge(['ipAddress' => $this->getContainer()->get('request')->getAttribute('ip_address')], $data);
-
         // Transporte para o email.
         $transport = \Swift_SmtpTransport::newInstance(BRACP_MAIL_HOST, BRACP_MAIL_PORT)
                                             ->setUsername(BRACP_MAIL_USER)
@@ -173,7 +170,8 @@ class brACPApp extends Slim\App
         {
             // Verifica se o usuário está logado no sistema.
             if(Account::isLoggedIn())
-                $data = array_merge(['account' => Account::loggedUser()], $data);
+                $data = array_merge(['userid' => Account::loggedUser()->getUserId(),
+                                     'account' => Account::loggedUser()], $data);
         }
         catch(\Exception $ex)
         {
