@@ -17,22 +17,32 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Verify if the dependencies from composer are installed.
-if(!is_dir(__DIR__ . DIRECTORY_SEPARATOR . 'vendor'))
+// Verifica se o painel de controle possui o arquivo de configurações.
+// @issue 5
+if(!file_exists(__DIR__ . DIRECTORY_SEPARATOR . 'config.php'))
 {
-    echo 'Dependencies not found. (Run \'composer install\')';
-    exit;
+    // Inclui o arquivo de instalação para tratar os dados do painel de controle.
+    require_once __DIR__ . DIRECTORY_SEPARATOR . 'install.php';
 }
+else
+{
+    // Verify if the dependencies from composer are installed.
+    if(!is_dir(__DIR__ . DIRECTORY_SEPARATOR . 'vendor'))
+    {
+        echo 'Dependencies not found. (Run \'composer install\')';
+        exit;
+    }
 
-// Carrega o arquivo de configurações para o painel de controle.
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'config.php';
+    // Carrega o arquivo de configurações para o painel de controle.
+    require_once __DIR__ . DIRECTORY_SEPARATOR . 'config.php';
 
-date_default_timezone_set(BRACP_DEFAULT_TIMEZONE);
+    date_default_timezone_set(BRACP_DEFAULT_TIMEZONE);
 
-// Carrega informações de autoload do composer e do app.
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'autoload.php';
+    // Carrega informações de autoload do composer e do app.
+    require_once __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+    require_once __DIR__ . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'autoload.php';
 
-// Calls the slim
-$app = new brACPApp();
-$app->run();
+    // Calls the slim
+    $app = new brACPApp();
+    $app->run();
+}
