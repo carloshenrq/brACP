@@ -28,6 +28,7 @@ $writeable = is_writable(__DIR__);
 
 // Configurações padrão.
 $config = [
+    // Configurações Gerais
     'BRACP_DEFAULT_TIMEZONE'                => @date_default_timezone_get(),
     'BRACP_URL'                             => 'http://'.$_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'],
     'BRACP_DIR_INSTALL_URL'                 => $_SERVER['REQUEST_URI'],
@@ -39,7 +40,6 @@ $config = [
     'BRACP_CHANGE_MAIL_DELAY'               => 60,
     'BRACP_ALLOW_CHANGE_MAIL'               => 1,
     'BRACP_ALLOW_CREATE_ACCOUNT'            => 1,
-    'BRACP_ALLOW_RECOVER'                   => 1,
     'BRACP_ALLOW_ADMIN'                     => 1,
     'BRACP_ALLOW_ADMIN_GMLEVEL'             => 99,
     'BRACP_ALLOW_LOGIN_GMLEVEL'             => 0,
@@ -49,6 +49,22 @@ $config = [
     'BRACP_ALLOW_RANKING_ZENY'              => 1,
     'BRACP_ALLOW_RANKING_ZENY_SHOW_ZENY'    => 1,
     'BRACP_DEVELOP_MODE'                    => 0,
+
+    // MySQL
+    'BRACP_SQL_DRIVER'                      => 'pdo_mysql',
+    'BRACP_SQL_HOST'                        => '127.0.0.1:3306',
+    'BRACP_SQL_USER'                        => 'ragnarok',
+    'BRACP_SQL_PASS'                        => 'ragnarok',
+    'BRACP_SQL_DBNAME'                      => 'ragnarok',
+
+    // Servidor de E-mail
+    'BRACP_ALLOW_RECOVER'                   => 1,
+
+    // reCAPTCHA
+
+    // PagSeguro
+
+    // Outros
 ];
 
 ?>
@@ -270,6 +286,47 @@ $config = [
                     <input name="conf-tab" id="conf-mysql" class="bracp-install-tab-radio" type="radio"/>
                     <div class="bracp-install-tab-div">
                         <h1>MySQL</h1>
+                        <div class="bracp-install-warning">
+                            Essas configurações são de grande importância para a execução correta do painel de controle.<br>
+                            Tome cuidado para não configurar de forma incorreta.
+                        </div>
+                        <br>
+                        <div class="bracp-install-label-data">
+                            <label>
+                                Drive de Conexão:<br>
+                                <select id="BRACP_SQL_DRIVER" name="BRACP_SQL_DRIVER">
+                                    <option value="ibm_db2">DB2</option>
+                                    <option value="pdo_sqlsrv">SQL-Server</option>
+                                    <option value="pdo_mysql">MySQL</option>
+                                    <option value="pdo_pgsql">PostgreSQL</option>
+                                    <option value="pdo_sqlite">SQLite</option>
+                                </select>
+                            </label>
+                        </div>
+                        <div class="bracp-install-label-data">
+                            <label>
+                                Servidor:<br>
+                                <input id="BRACP_SQL_HOST" name="BRACP_SQL_HOST" type="text" value="" size="40"/>
+                            </label>
+                        </div>
+                        <div class="bracp-install-label-data">
+                            <label>
+                                Usuário:<br>
+                                <input id="BRACP_SQL_USER" name="BRACP_SQL_USER" type="text" value="" size="20"/>
+                            </label>
+                        </div>
+                        <div class="bracp-install-label-data">
+                            <label>
+                                Senha:<br>
+                                <input id="BRACP_SQL_PASS" name="BRACP_SQL_PASS" type="text" value="" size="20"/>
+                            </label>
+                        </div>
+                        <div class="bracp-install-label-data">
+                            <label>
+                                Banco:<br>
+                                <input id="BRACP_SQL_DBNAME" name="BRACP_SQL_DBNAME" type="text" value="" size="20"/>
+                            </label>
+                        </div>
                     </div>
 
                     <input name="conf-tab" id="conf-mail" class="bracp-install-tab-radio" type="radio"/>

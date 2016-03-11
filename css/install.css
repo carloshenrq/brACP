@@ -30,6 +30,11 @@ html, body {
   background-color: rgba(0, 183, 255, 0.1);
   color: #138EBF;
 }
+.bracp-install-body .bracp-install-warning {
+  border-color: rgba(255, 153, 0, 0.7);
+  background-color: rgba(255, 153, 0, 0.1);
+  color: #ff9900;
+}
 .bracp-install-body .bracp-install-tab-radio {
   display: none;
 }
