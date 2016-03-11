@@ -1,0 +1,95 @@
+@import '_mixin';
+
+html, body
+{
+    margin: 0px; padding: 0px;
+    font-family: Verdana, Tahoma, Arial;
+    font-size: 12px;
+}
+
+.bracp-install-body
+{
+    width: 60%;
+    margin: auto;
+
+    h1
+    {
+        margin: 4px; padding: 0px;
+        border-bottom: 1px dotted black;
+        text-align: center;
+    }
+
+    .bracp-install-error, .bracp-install-info, .bracp-install-warning
+    {
+        padding: 16px;
+        border: 1px solid;
+        border-radius: 4px;
+    }
+
+    .bracp-install-error
+    {
+        border-color: rgba(255, 0, 0, .7);
+        background-color: rgba(255, 0, 0, .1);
+        color: #BD0029;
+    }
+
+    .bracp-install-info
+    {
+        border-color: rgba(0, 183, 255, .7);
+        background-color: rgba(0, 183, 255, .1);
+        color: #138EBF;
+    }
+
+    .bracp-install-tab-radio
+    {
+        display: none;
+
+        &:not(:checked) + .bracp-install-tab-div
+        {
+            display: none;
+        }
+    }
+
+    .bracp-install-tab-div
+    {
+        margin: 13px; padding: 12px;
+        border-radius: 4px;
+        border: 1px solid rgba(0, 0, 0, .25);
+        height: 400px;
+        overflow: auto;
+
+        h1
+        {
+            border-bottom: 1px dotted rgba(0, 0, 0, .6);
+            font-size: 15px;
+            text-align: left;
+        }
+    }
+
+    .bracp-install-tabs
+    {
+        padding: 8px; margin: 0px;
+        list-style: none;
+        text-align: center;
+
+        li
+        {
+            display: inline-block;
+
+            &+ li
+            {
+                margin-left: 5px;
+            }
+        }
+    }
+
+    .bracp-install-submit
+    {
+        text-align: center;
+
+        input + input
+        {
+            margin-left: 24px;
+        }
+    }
+}
