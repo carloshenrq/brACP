@@ -1122,15 +1122,22 @@ class Account
      */
     public static function donationNotifyMail(Donation $donation)
     {
+        // Dados a serem enviados ao e-mail.
+        $data = [
+            'donation' => $donation,
+        ];
+
+        // Se o usuário não estiver logado, provavelmente é uma requisição do pag-seguro, então
+        //  adiciona o nome de usuário da doação a requisição.
+        if(!self::isLoggedIn())
+            $data = array_merge(['userid' => $donation->getAccount()->getUserid()], $data);
+
         // Envia o e-mail ao usuário informando que a doação foi criada no sistema
         // E está aguardando pagamento.
         self::getApp()->sendMail(
             'Doação Atualizada',
             [$donation->getAccount()->getEmail()],
-            'mail.donation.notify',
-            [
-                'donation' => $donation,
-            ]);
+            'mail.donation.notify', $data);
     }
 
     /**
