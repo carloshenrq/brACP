@@ -44,10 +44,19 @@ html, body {
   height: 400px;
   overflow: auto;
 }
+.bracp-install-body .bracp-install-tab-div .bracp-install-label-data + .bracp-install-label-data {
+  margin-top: 10px;
+}
 .bracp-install-body .bracp-install-tab-div h1 {
   border-bottom: 1px dotted rgba(0, 0, 0, 0.6);
   font-size: 15px;
   text-align: left;
+}
+.bracp-install-body .bracp-install-tab-div label {
+  display: inline-block;
+}
+.bracp-install-body .bracp-install-tab-div label + label {
+  margin-left: 15px;
 }
 .bracp-install-body .bracp-install-tabs {
   padding: 8px;

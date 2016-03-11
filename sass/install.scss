@@ -58,11 +58,29 @@ html, body
         height: 400px;
         overflow: auto;
 
+        .bracp-install-label-data
+        {
+            &+ .bracp-install-label-data
+            {
+                margin-top: 10px;
+            }
+        }
+
         h1
         {
             border-bottom: 1px dotted rgba(0, 0, 0, .6);
             font-size: 15px;
             text-align: left;
+        }
+
+        label
+        {
+            display: inline-block;
+            
+            &+ label
+            {
+                margin-left: 15px;
+            }
         }
     }
 
