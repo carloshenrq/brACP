@@ -9,7 +9,7 @@ html, body
 
 .bracp-install-body
 {
-    width: 60%;
+    width: 800px;
     margin: auto;
 
     h1
@@ -19,8 +19,9 @@ html, body
         text-align: center;
     }
 
-    .bracp-install-error, .bracp-install-info, .bracp-install-warning
+    .bracp-install-error, .bracp-install-info, .bracp-install-warning, .bracp-install-success
     {
+        margin: 3px;
         padding: 16px;
         border: 1px solid;
         border-radius: 4px;
@@ -47,6 +48,13 @@ html, body
         color: #ff9900;
     }
 
+    .bracp-install-success
+    {
+        border-color: rgba(120, 209, 90, .7);
+        background-color: rgba(120, 209, 90, .1);
+        color: #53913F;
+    }
+
     .bracp-install-tab-radio
     {
         display: none;
@@ -59,7 +67,7 @@ html, body
 
     .bracp-install-tab-div
     {
-        margin: 13px; padding: 12px;
+        padding: 12px;
         border-radius: 4px;
         border: 1px solid rgba(0, 0, 0, .25);
         height: 400px;
@@ -110,6 +118,7 @@ html, body
 
     .bracp-install-submit
     {
+        margin-top: 16px;
         text-align: center;
 
         input + input

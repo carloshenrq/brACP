@@ -49,6 +49,8 @@ $config = [
     'BRACP_ALLOW_RANKING_ZENY'              => 1,
     'BRACP_ALLOW_RANKING_ZENY_SHOW_ZENY'    => 1,
     'BRACP_DEVELOP_MODE'                    => 0,
+    'BRACP_MAINTENCE'                       => 0,
+    'BRACP_VERSION'                         =>'0.1.1-beta',
 
     // MySQL
     'BRACP_SQL_DRIVER'                      => 'pdo_mysql',
@@ -58,14 +60,106 @@ $config = [
     'BRACP_SQL_DBNAME'                      => 'ragnarok',
 
     // Servidor de E-mail
+    'BRACP_ALLOW_MAIL_SEND'                 => 1,
+    'BRACP_MAIL_HOST'                       => '127.0.0.1',
+    'BRACP_MAIL_PORT'                       => 25,
+    'BRACP_MAIL_USER'                       => 'ragnarok',
+    'BRACP_MAIL_PASS'                       => 'ragnarok',
+    'BRACP_MAIL_FROM'                       => 'noreply@127.0.0.1',
+    'BRACP_MAIL_FROM_NAME'                  => 'noreply',
+    'BRACP_NOTIFY_CHANGE_PASSWORD'          => 1,
+    'BRACP_NOTIFY_CHANGE_MAIL'              => 1,
     'BRACP_ALLOW_RECOVER'                   => 1,
+    'BRACP_RECOVER_BY_CODE'                 => 1,
+    'BRACP_RECOVER_CODE_EXPIRE'             => 120,
+    'BRACP_RECOVER_STRING_LENGTH'           => 8,
+    'BRACP_RECOVER_RANDOM_STRING'           => 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
 
     // reCAPTCHA
+    'BRACP_RECAPTCHA_ENABLED'               => 1,
+    'BRACP_RECAPTCHA_PUBLIC_KEY'            => '',
+    'BRACP_RECAPTCHA_PRIVATE_KEY'           => '',
+    'BRACP_RECAPTCHA_PRIVATE_URL'           => 'https://www.google.com/recaptcha/api/siteverify',
 
     // PagSeguro
+    'PAG_INSTALL'                           => 1,
+    'PAG_EMAIL'                             => '',
+    'PAG_TOKEN'                             => '',
+    'DONATION_AMOUNT_MULTIPLY'              => 100,
+    'DONATION_AMOUNT_USE_RATE'              => 1,
+    'DONATION_AMOUT_SHOW_RATE_CALC'         => 1,
+    'DONATION_SHOW_NEXT_PROMO'              => 1,
+    'DONATION_INTERVAL_DAYS'                => 3,
 
     // Outros
+    'BRACP_ALLOW_RESET_APPEAR'              => 1,
+    'BRACP_ALLOW_RESET_POSIT'               => 1,
+    'BRACP_ALLOW_RESET_EQUIP'               => 1,
+    'BRACP_REGEXP_USERNAME'                 => '[a-zA-Z0-9]{4,24}',
+    'BRACP_REGEXP_PASSWORD'                 => '[a-zA-Z0-9]{4,20}',
+    'BRACP_REGEXP_EMAIL'                    => '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}',
 ];
+
+// Verifica se dados de instalação foram recebidos e pode escrever o arquivo
+//  de configuração no disco sem problemas.
+if($writeable && isset($_POST) && !empty($_POST))
+{
+    // Inicializa o cabeçalho do arquivo de configurações que será escrito.
+    $configFile = "<?php\n";
+    $configFile .= "/**\n";
+    $configFile .= " * Arquivo de configuração gerado pela instalação do sistema.\n";
+    $configFile .= " */\n";
+    $configFile .= "\n";
+
+    // Varre todas as variaveis de configuração para gravar no arquivo.
+    foreach($config as $k => $v)
+    {
+        // Verifica se a chave enviada pelo post existe no arquivo de configuração
+        //  se existir, substitui o valor e grava a configuração no arquivo.
+        if(array_key_exists($k, $_POST))
+            $v = $_POST[$k];
+
+        // Caso necessário adiciona o escape ao valor.
+        $v = addslashes($v);
+
+        // Se for apenas valores númericos, então converte para inteiro.
+        if(preg_match('/^([0-9]+)$/', $v))
+            $configFile .= "DEFINE('{$k}', {$v}, false);\n";
+        else
+            $configFile .= "DEFINE('{$k}', '{$v}', false);\n";
+    }
+
+    // Configurações finais para o painel de controle.
+    $configFile .= "\n";
+    $configFile .= "if(BRACP_DEVELOP_MODE)\n";
+    $configFile .= "{\n";
+    $configFile .= "    DEFINE('PAG_URL', 'https://sandbox.pagseguro.uol.com.br', false);\n";
+    $configFile .= "    DEFINE('PAG_WS_URL', 'https://ws.sandbox.uol.com.br', false);\n";
+    $configFile .= "    DEFINE('PAG_STC_URL', 'https://stc.sandbox.pagseguro.uol.com.br', false);\n";
+    $configFile .= "}\n";
+    $configFile .= "else\n";
+    $configFile .= "{\n";
+    $configFile .= "    DEFINE('PAG_URL', 'https://pagseguro.uol.com.br', false);\n";
+    $configFile .= "    DEFINE('PAG_WS_URL', 'https://ws.pagseguro.uol.com.br', false);\n";
+    $configFile .= "    DEFINE('PAG_STC_URL', 'https://stc.pagseguro.uol.com.br', false);\n";
+    $configFile .= "}\n";
+    $configFile .= "\n";
+
+    // Finaliza o arquivo e escreve os dados no arquivo de configuração.
+    file_put_contents('config.php', $configFile);
+
+    header('Refresh: 3');
+    header('Content-Type: text/php');
+    header('Content-Disposition: attachment; filename="config.php"');
+    header('Content-Transfer-Encoding: binary');
+    header('Expires: 0');
+    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+    header('Pragma: public');
+    header('Content-Length: ' . filesize('config.php'));
+    readfile('config.php');
+
+    exit;
+}
 
 ?>
 <!DOCTYPE html>
@@ -126,19 +220,28 @@ $config = [
                     as váriaveis de configuração clicando <a href="https://github.com/carloshenrq/brACP#configura%C3%A7%C3%B5es" target="_blank">aqui</a>.
                 </div>
 
+                <div class="bracp-install-info">
+                    <strong>Guarde as informações!</strong> Ao final da instalação você receberá uma cópia do arquivo de instalação do painel de controle!
+                </div>
+
+                <div class="bracp-install-warning">
+                    Se você desejar alterar as configurações do painel de controle no futuro, verifique o arquivo <strong><i>config.php</i></strong>
+                </div>
+
+
                 <br>
 
                 <ul class="bracp-install-tabs">
                     <li><label for="conf-general" class="btn">Configurações Gerais</label></li>
                     <li><label for="conf-mysql" class="btn">MySQL</label></li>
-                    <li><label for="conf-mail" class="btn">Servidor de E-mail</label></li>
+                    <li><label for="conf-mail" class="btn">Servidor de E-mail (SMTP)</label></li>
                     <li><label for="conf-captcha" class="btn">reCAPTCHA</label></li>
                     <li><label for="conf-donation" class="btn">PagSeguro</label></li>
                     <li><label for="conf-others" class="btn">Outros</label></li>
                 </ul>
 
-                <form>
-                    <input name="conf-tab" id="conf-general" class="bracp-install-tab-radio" type="radio" checked/>
+                <form method="post" enctype="application/x-www-form-urlencoded">
+                    <input name="_conf-tab" id="conf-general" class="bracp-install-tab-radio" type="radio" checked/>
                     <div class="bracp-install-tab-div">
                         <h1>Configurações Gerais</h1>
 
@@ -280,10 +383,17 @@ $config = [
                                     <option value="1">Sim</option>
                                 </select>
                             </label>
+                            <label>
+                                Modo manutenção:<br>
+                                <select id="BRACP_MAINTENCE" name="BRACP_MAINTENCE">
+                                    <option value="0">Não</option>
+                                    <option value="1">Sim</option>
+                                </select>
+                            </label>
                         </div>
                     </div>
 
-                    <input name="conf-tab" id="conf-mysql" class="bracp-install-tab-radio" type="radio"/>
+                    <input name="_conf-tab" id="conf-mysql" class="bracp-install-tab-radio" type="radio"/>
                     <div class="bracp-install-tab-div">
                         <h1>MySQL</h1>
                         <div class="bracp-install-warning">
@@ -329,40 +439,268 @@ $config = [
                         </div>
                     </div>
 
-                    <input name="conf-tab" id="conf-mail" class="bracp-install-tab-radio" type="radio"/>
+                    <input name="_conf-tab" id="conf-mail" class="bracp-install-tab-radio" type="radio"/>
                     <div class="bracp-install-tab-div">
-                        <h1>Servidor de E-mail</h1>
+                        <h1>Servidor de E-mail (SMTP)</h1>
+                        <div class="bracp-install-warning">
+                            Essas configurações são de grande importância para a execução correta do painel de controle.<br>
+                            Tome cuidado para não configurar de forma incorreta.
+                        </div>
+                        <br>
                         <div class="bracp-install-label-data">
                             <label>
-                                Permitir recuperar contas:<br>
+                                Permite o envio de e-mails:<br>
+                                <select id="BRACP_ALLOW_MAIL_SEND" name="BRACP_ALLOW_MAIL_SEND">
+                                    <option value="0">Não</option>
+                                    <option value="1">Sim</option>
+                                </select>
+                            </label>
+                        </div>
+                        <div class="bracp-install-label-data">
+                            <label>
+                                Servidor:<br>
+                                <input id="BRACP_MAIL_HOST" name="BRACP_MAIL_HOST" type="text" value="" size="40"/>
+                            </label>
+                            <label>
+                                Porta:<br>
+                                <input id="BRACP_MAIL_PORT" name="BRACP_MAIL_PORT" type="text" value="" size="3"/>
+                            </label>
+                        </div>
+                        <div class="bracp-install-label-data">
+                            <label>
+                                Usuário:<br>
+                                <input id="BRACP_MAIL_USER" name="BRACP_MAIL_USER" type="text" value="" size="20"/>
+                            </label>
+                            <label>
+                                Senha:<br>
+                                <input id="BRACP_MAIL_PASS" name="BRACP_MAIL_PASS" type="text" value="" size="20"/>
+                            </label>
+                            <label>
+                                Remetente e-mail:<br>
+                                <input id="BRACP_MAIL_FROM" name="BRACP_MAIL_FROM" type="text" value="" size="30"/>
+                            </label>
+                            <label>
+                                Remetente:<br>
+                                <input id="BRACP_MAIL_FROM_NAME" name="BRACP_MAIL_FROM_NAME" type="text" value="" size="25"/>
+                            </label>
+                        </div>
+                        <div class="bracp-install-label-data">
+                            <label>
+                                Notificar alterações de senha:<br>
+                                <select id="BRACP_NOTIFY_CHANGE_PASSWORD" name="BRACP_NOTIFY_CHANGE_PASSWORD">
+                                    <option value="0">Não</option>
+                                    <option value="1">Sim</option>
+                                </select>
+                            </label>
+                            <label>
+                                Notificar alterações de e-mail:<br>
+                                <select id="BRACP_NOTIFY_CHANGE_MAIL" name="BRACP_NOTIFY_CHANGE_MAIL">
+                                    <option value="0">Não</option>
+                                    <option value="1">Sim</option>
+                                </select>
+                            </label>
+                            <label>
+                                Permitir recuperação de contas:<br>
                                 <select id="BRACP_ALLOW_RECOVER" name="BRACP_ALLOW_RECOVER">
                                     <option value="0">Não</option>
                                     <option value="1">Sim</option>
                                 </select>
                             </label>
                         </div>
+                        <div class="bracp-install-label-data">
+                            <label>
+                                Recuperar contas por código:<br>
+                                <select id="BRACP_RECOVER_BY_CODE" name="BRACP_RECOVER_BY_CODE">
+                                    <option value="0">Não</option>
+                                    <option value="1">Sim</option>
+                                </select>
+                            </label>
+                            <label>
+                                Código de recuperação expira em (minutos):<br>
+                                <input id="BRACP_RECOVER_CODE_EXPIRE" name="BRACP_RECOVER_CODE_EXPIRE" type="text" value="" size="3"/>
+                            </label>
+                            <label>
+                                Tamanho da senha recuperada:<br>
+                                <input id="BRACP_RECOVER_STRING_LENGTH" name="BRACP_RECOVER_STRING_LENGTH" type="text" value="" size="3"/>
+                            </label>
+                        </div>
+                        <div class="bracp-install-label-data">
+                            <label>
+                                Cadeia de caracteres para gerar senha recuperada:<br>
+                                <input id="BRACP_RECOVER_RANDOM_STRING" name="BRACP_RECOVER_RANDOM_STRING" type="text" value="" size="118"/>
+                            </label>
+                        </div>
                     </div>
 
-                    <input name="conf-tab" id="conf-captcha" class="bracp-install-tab-radio" type="radio"/>
+                    <input name="_conf-tab" id="conf-captcha" class="bracp-install-tab-radio" type="radio"/>
                     <div class="bracp-install-tab-div">
                         <h1>reCAPTCHA</h1>
+                        <div class="bracp-install-info">
+                            O <strong>reCAPTCHA</strong> ajuda você a se proteger de requisições maliciosas, spans e boots.<br>
+                            <br>
+                            Para mais informações sobre o <strong>reCAPTCHA</strong>:
+                                <a href="https://www.google.com/recaptcha/intro/index.html" target="_blank">https://www.google.com/recaptcha/intro/index.html</a>
+                        </div>
+                        <div class="bracp-install-warning">
+                            Esta é uma configuração opcional. Você poderá configura-la mais tarde.
+                        </div>
+                        <div class="bracp-install-label-data">
+                            <label>
+                                Permitir uso do reCAPTCHA:<br>
+                                <select id="BRACP_RECAPTCHA_ENABLED" name="BRACP_RECAPTCHA_ENABLED">
+                                    <option value="0">Não</option>
+                                    <option value="1">Sim</option>
+                                </select>
+                            </label>
+                        </div>
+                        <div class="bracp-install-label-data">
+                            <label>
+                                Chave pública:<br>
+                                <input id="BRACP_RECAPTCHA_PUBLIC_KEY" name="BRACP_RECAPTCHA_PUBLIC_KEY" type="text" value="" size="118"/>
+                            </label>
+                        </div>
+                        <div class="bracp-install-label-data">
+                            <label>
+                                Chave privada:<br>
+                                <input id="BRACP_RECAPTCHA_PRIVATE_KEY" name="BRACP_RECAPTCHA_PRIVATE_KEY" type="text" value="" size="118"/>
+                            </label>
+                        </div>
+                        <div class="bracp-install-label-data">
+                            <label>
+                                Servidor para testar captcha:<br>
+                                <input id="BRACP_RECAPTCHA_PRIVATE_URL" name="BRACP_RECAPTCHA_PRIVATE_URL" type="text" value="" size="118"/>
+                            </label>
+                        </div>
                     </div>
 
-                    <input name="conf-tab" id="conf-donation" class="bracp-install-tab-radio" type="radio"/>
+                    <input name="_conf-tab" id="conf-donation" class="bracp-install-tab-radio" type="radio"/>
                     <div class="bracp-install-tab-div">
                         <h1>PagSeguro</h1>
+                        <div class="bracp-install-success">
+                            <strong>Viva!</strong> O Painel de controle possui suporte nativo ao PagSeguro!
+                        </div>
+                        <div class="bracp-install-info">
+                            <strong>Verifique seu token!</strong> Você deve estar atento a suas configurações do PagSeguro!<br>
+                            Você deverá informar o seu endereço de e-mail e código do token para configurar corretamente o PagSeguro!<br>
+                            Não se esqueça de configurar também o retorno das notificações!<br>
+                            <br>
+                            <a href="https://pagseguro.uol.com.br/preferencias/integracoes.jhtml" target="_blank">Criar token de segurança</a><br>
+                            <a href="https://pagseguro.uol.com.br/v2/guia-de-integracao/como-comecar.html" target="_blank">Como começar</a>
+                        </div>
+                        <div class="bracp-install-label-data">
+                            <label>
+                                Permitir uso do PagSeguro:<br>
+                                <select id="PAG_INSTALL" name="PAG_INSTALL">
+                                    <option value="0">Não</option>
+                                    <option value="1">Sim</option>
+                                </select>
+                            </label>
+                        </div>
+                        <div class="bracp-install-label-data">
+                            <label>
+                                E-mail:<br>
+                                <input id="PAG_EMAIL" name="PAG_EMAIL" type="text" value="" size="60"/>
+                            </label>
+                            <label>
+                                Token:<br>
+                                <input id="PAG_TOKEN" name="PAG_TOKEN" type="text" value="" size="40"/>
+                            </label>
+                        </div>
+                        <div class="bracp-install-label-data">
+                            <label>
+                                Quantidade de bônus a cada R$ 1,00:<br>
+                                <input id="DONATION_AMOUNT_MULTIPLY" name="DONATION_AMOUNT_MULTIPLY" type="text" value="" size="6"/>
+                            </label>
+                            <label>
+                                Permitir cliente assumir taxa:<br>
+                                <select id="DONATION_AMOUNT_USE_RATE" name="DONATION_AMOUNT_USE_RATE">
+                                    <option value="0">Não</option>
+                                    <option value="1">Sim</option>
+                                </select>
+                            </label>
+                            <label>
+                                Exibir cálculo da taxa:<br>
+                                <select id="DONATION_AMOUT_SHOW_RATE_CALC" name="DONATION_AMOUT_SHOW_RATE_CALC">
+                                    <option value="0">Não</option>
+                                    <option value="1">Sim</option>
+                                </select>
+                            </label>
+                        </div>
+                        <div class="bracp-install-label-data">
+                            <label>
+                                Exibir próximas promoções:<br>
+                                <select id="DONATION_SHOW_NEXT_PROMO" name="DONATION_SHOW_NEXT_PROMO">
+                                    <option value="0">Não</option>
+                                    <option value="1">Sim</option>
+                                </select>
+                            </label>
+                            <label>
+                                Tempo (em dias) para exibir as próximas promoções:<br>
+                                <input id="DONATION_INTERVAL_DAYS" name="DONATION_INTERVAL_DAYS" type="text" value="" size="3"/>
+                            </label>
+                        </div>
                     </div>
-
-                    <input name="conf-tab" id="conf-others" class="bracp-install-tab-radio" type="radio"/>
+                    <input name="_conf-tab" id="conf-others" class="bracp-install-tab-radio" type="radio"/>
                     <div class="bracp-install-tab-div">
                         <h1>Outros</h1>
+                        <div class="bracp-install-info">
+                            <strong>Personagens!</strong> Essas configurações permitem os jogadores gerenciar os personagens de suas contas!<br>
+                        </div>
+                        <div class="bracp-install-label-data">
+                            <label>
+                                Permitir resetar aparência:<br>
+                                <select id="BRACP_ALLOW_RESET_APPEAR" name="BRACP_ALLOW_RESET_APPEAR">
+                                    <option value="0">Não</option>
+                                    <option value="1">Sim</option>
+                                </select>
+                            </label>
+                            <label>
+                                Permitir resetar posição:<br>
+                                <select id="BRACP_ALLOW_RESET_POSIT" name="BRACP_ALLOW_RESET_POSIT">
+                                    <option value="0">Não</option>
+                                    <option value="1">Sim</option>
+                                </select>
+                            </label>
+                            <label>
+                                Permitir resetar equipamentos:<br>
+                                <select id="BRACP_ALLOW_RESET_EQUIP" name="BRACP_ALLOW_RESET_EQUIP">
+                                    <option value="0">Não</option>
+                                    <option value="1">Sim</option>
+                                </select>
+                            </label>
+                        </div>
+                        <br>                  
+                        <div class="bracp-install-info">
+                            <strong>Expressões regulares!</strong> As expressões regulares estão aqui para ajudar!<br>
+                            Para alterar as configurações saiba bem o que está fazendo!<br>
+                            <br>
+                            <i>Psiu! Se você precisar de uma pequena ajudinha, <a href="http://www.w3schools.com/tags/att_input_pattern.asp" target="_blank">clique aqui</a>.</i>
+                        </div>
+                        <div class="bracp-install-warning">
+                            <strong>Não se esqueça!</strong> Essas expressões são para HTML5 e não para PHP.
+                        </div>
+                        <div class="bracp-install-label-data">
+                            <label>
+                                Expressão para nome de usuário:<br>
+                                <input id="BRACP_REGEXP_USERNAME" name="BRACP_REGEXP_USERNAME" type="text" value="" size="55"/>
+                            </label>
+                            <label>
+                                Expressão para senha de usuário:<br>
+                                <input id="BRACP_REGEXP_PASSWORD" name="BRACP_REGEXP_PASSWORD" type="text" value="" size="55"/>
+                            </label>
+                        </div>
+                        <div class="bracp-install-label-data">
+                            <label>
+                                Expressão para e-mail:<br>
+                                <input id="BRACP_REGEXP_EMAIL" name="BRACP_REGEXP_EMAIL" type="text" value="" size="100"/>
+                            </label>
+                        </div>
                     </div>
 
                     <div class="bracp-install-submit">
                         <input type="submit" class="btn btn-success" value="Salvar"/>
                         <input type="reset" class="btn btn-link" value="Limpar"/>
                     </div>
-
                 </form>
 
             <?php } ?>
