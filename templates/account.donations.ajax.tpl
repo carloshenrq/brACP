@@ -148,3 +148,38 @@
     {include 'account.donations.table.tpl'}
 </div>
 {/if}
+<br>
+
+{if $smarty.const.DONATION_SHOW_NEXT_PROMO eq true}
+    {if count($promotions) eq 0}
+        <div class="bracp-message-warning">
+            Nenhuma promoção disponível para os próximos <strong>{$smarty.const.DONATION_INTERVAL_DAYS}</strong> dia(s).
+        </div>
+    {else}
+        <table border="1" align="center" class="bracp-table">
+            <caption class="bracp-message-info">Existe(m) <strong>{count($promotions)}</strong> doação(ões) para os próximos <strong>{$smarty.const.DONATION_INTERVAL_DAYS}</strong> dia(s).</caption>
+            <thead>
+                <tr>
+                    <th align="right">Cód.</th>
+                    <th>Descrição</th>
+                    <th align="right">Bônus extra</th>
+                    <th align="center">Inicio</th>
+                    <th align="center">Fim</th>
+                    <th align="left">Duração</th>
+                </tr>
+            </thead>
+            <tbody>
+                {foreach from=$promotions item=row}
+                    <tr>
+                        <td align="right" width="50px">{$row->getId()}</td>
+                        <td>{$row->getDescription()}</td>
+                        <td align="right" width="100px">{$row->getBonusMultiply()}</td>
+                        <td align="center" width="100px">{Format::date($row->getStartDate(), 'd/m/Y')}</td>
+                        <td align="center" width="100px">{Format::date($row->getEndDate(), 'd/m/Y')}</td>
+                        <td align="left">{Format::date_diff($row->getStartDate(), $row->getEndDate(), 'Y-m-d')}</td>
+                    </tr>
+                {/foreach}
+            </tbody>
+        </table>
+    {/if}
+{/if}

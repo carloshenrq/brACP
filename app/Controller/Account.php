@@ -279,11 +279,38 @@ class Account
             }
         }
 
+        // Verifica se existem promoções a serem exibidas em tela.
+        // Se houver, seleciona as promoções com data:
+        // 
+        // 1. Acima do dia de hoje.
+        // 2. Menor que o intervalo definido em tela.
+        $promotions = [];
+        if(DONATION_SHOW_NEXT_PROMO)
+        {
+            $promotions = self::getApp()->getEm()
+                                        ->createQuery('
+                                            SELECT
+                                                promotion
+                                            FROM
+                                                Model\Promotion promotion
+                                            WHERE
+                                                promotion.startDate > :curdate AND
+                                                promotion.startDate <= :nextdate AND
+                                                promotion.canceled = false
+                                            ORDER BY
+                                                promotion.startDate ASC
+                                        ')
+                                        ->setParameter('curdate', date('Y-m-d'))
+                                        ->setParameter('nextdate', date('Y-m-d', time() + (DONATION_INTERVAL_DAYS * 86400)))
+                                        ->getResult();
+        }
+
         // Template de doações carrega com os dados sendo informados.
         self::getApp()->display('account.donations', array_merge($data, [
-            'promotion' => $promotion,
-            'multiply' => $multiply,
-            'donations' => $donations
+            'promotion'     => $promotion,
+            'multiply'      => $multiply,
+            'donations'     => $donations,
+            'promotions'    => $promotions
         ]));
     }
 
