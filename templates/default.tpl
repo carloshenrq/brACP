@@ -67,7 +67,10 @@
     {block name="brACP_HtmlBody"}
         <div class="bracp-content">
             <div class="bracp-header">
-                <div class="bracp-logo ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}" data-target=".bracp-body"></div>
+                <label class="btn" for="_bracp-menu-check-0">
+                    Menu
+                </label>
+                <input type="checkbox" id="_bracp-menu-check-0" class="bracp-menu-check"/>
                 <div class="bracp-menu">
                     {include 'menu.tpl'}
                 </div>
@@ -77,7 +80,7 @@
                     <div class="bracp-message warning">
                         <h3>Lembrete!</h3>
                         O Sistema está sendo executado em modo desenvolvimento!<br>
-                        <i><u>Algumas configurações podem não responder ao esperado.</u></i>
+                        Algumas configurações podem não responder ao esperado.
                     </div>
                 {/if}
                 {if preg_match('/beta$/i', $smarty.const.BRACP_VERSION) eq 1}

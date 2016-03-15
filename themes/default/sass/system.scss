@@ -18,6 +18,58 @@ html, body
     background-color: rgba(255, 255, 255, 1);
 }
 
+.bracp-content
+{
+    .bracp-header
+    {
+        padding: 8px;
+        @include background-gradient(#636363, #424242);
+        position: relative;
+
+        .bracp-menu-check
+        {
+            display: none;
+
+            &:not(:checked) + .bracp-menu
+            {
+                left: -100%;
+            }
+        }
+
+        .bracp-menu
+        {
+            background-color: white;
+
+            position: absolute;
+            left: 0%;
+            top: 100%;
+
+            @include box-shadow(0px 0px 2px black);
+            @include transition(left .5s);
+
+            ul
+            {
+                padding: 0px; margin: 0px;
+                list-style: none;
+
+                li
+                {
+                    padding: 8px; margin: 0px;
+                    border-bottom: 1px solid dotted;
+                    cursor: default;
+
+                    width: 180px;
+
+                    ul
+                    {
+                        display: none;
+                    }
+                }
+            }
+        }
+    }
+}
+
 .bracp-message
 {
     padding: 16px;
@@ -47,6 +99,11 @@ html, body
     {
         margin-top: 1px;
     }
+}
+
+.ajax-url
+{
+    cursor: pointer !important;
 }
 
 .info

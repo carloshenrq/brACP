@@ -13,6 +13,51 @@ html, body {
   background-color: white;
 }
 
+.bracp-content .bracp-header {
+  padding: 8px;
+  background: #636363;
+  background: -moz-linear-gradient(top, #636363 0%, #424242 100%);
+  background: -webkit-linear-gradient(top, #636363 0%, #424242 100%);
+  background: linear-gradient(to bottom, #636363 0%, #424242 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#636363', endColorstr='#424242',GradientType=0 );
+  background-repeat: repeat-x;
+  position: relative;
+}
+.bracp-content .bracp-header .bracp-menu-check {
+  display: none;
+}
+.bracp-content .bracp-header .bracp-menu-check:not(:checked) + .bracp-menu {
+  left: -100%;
+}
+.bracp-content .bracp-header .bracp-menu {
+  background-color: white;
+  position: absolute;
+  left: 0%;
+  top: 100%;
+  box-shadow: 0px 0px 2px black;
+  -moz-box-shadow: 0px 0px 2px black;
+  -webkit-box-shadow: 0px 0px 2px black;
+  transition: left 0.5s;
+  -o-transition: left 0.5s;
+  -moz-transition: left 0.5s;
+  -webkit-transition: left 0.5s;
+}
+.bracp-content .bracp-header .bracp-menu ul {
+  padding: 0px;
+  margin: 0px;
+  list-style: none;
+}
+.bracp-content .bracp-header .bracp-menu ul li {
+  padding: 8px;
+  margin: 0px;
+  border-bottom: 1px solid dotted;
+  cursor: default;
+  width: 180px;
+}
+.bracp-content .bracp-header .bracp-menu ul li ul {
+  display: none;
+}
+
 .bracp-message {
   padding: 16px;
   border: 1px solid;
@@ -37,6 +82,10 @@ html, body {
 }
 .bracp-message + .bracp-message {
   margin-top: 1px;
+}
+
+.ajax-url {
+  cursor: pointer !important;
 }
 
 .info {
