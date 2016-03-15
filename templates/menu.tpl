@@ -23,7 +23,6 @@
         {/if}
         <li>Minha Conta
             <ul data-back="Minha Conta">
-                <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/login" data-target=".bracp-body">Entrar</li>
                 {if $smarty.const.BRACP_ALLOW_RECOVER eq true}
                     <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/recover" data-target=".bracp-body">Recuperar</li>
                 {/if}

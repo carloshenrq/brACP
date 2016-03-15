@@ -271,6 +271,6 @@ input[type="text"], input[type="password"] {
   display: initial;
 }
 
-.ajax-url {
+span.ajax-url {
   font-weight: bold !important;
 }
