@@ -58,8 +58,7 @@ class Account
      */
     public static function login(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
-        self::getApp()->display('account.login',
-                                    (($request->isPost()) ? self::loginAccount($request->getParsedBody()):[]));
+        self::getApp()->display('account.login', self::loginAccount($request->getParsedBody()));
     }
 
     /**

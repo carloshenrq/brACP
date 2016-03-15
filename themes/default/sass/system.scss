@@ -1,4 +1,5 @@
 @import '_mixin';
+@import '_options';
 
 @viewport
 {
@@ -16,6 +17,179 @@ html, body
 {
     margin: 0px; padding: 0px;
     background-color: rgba(255, 255, 255, 1);
+}
+
+input[type="text"], input[type="password"]
+{
+    padding: 6px;
+
+    border: 1px solid lightgray;
+    outline: lightblue;
+
+    @include border-radius(3px);
+}
+
+.modal-container
+{
+    .modal-check
+    {
+        display: none;
+
+        &:not(:checked) + .modal
+        {
+            display: none;
+        }
+
+        &:checked + .modal
+        {
+            display: block;
+        }
+    }
+
+    .modal
+    {
+        font-family: Verdana, Tahoma, Arial;
+        font-size: 12px;
+        background-color: white;
+
+        max-width: 600px;
+
+        @include position-center(fixed);
+        @include box-shadow(0px 0px 10px rgba(0, 0, 0, .45));
+        @include border-radius(2px);
+
+        .modal-header, .modal-body, .modal-footer
+        {
+            padding: 8px;
+        }
+
+        .modal-header
+        {
+            position: relative;
+            border-bottom: 1px solid rgba(0, 0, 0, .25);
+            font-weight: bold;
+            @include max-size(100%, 50px);
+        }
+
+        .modal-body
+        {
+            position: relative;
+            padding: 16px;
+            @include min-size(300px, .0);
+            @include max-size(600px, 400px);
+        }
+
+        .modal-footer
+        {
+            position: relative;
+            border-top: 1px solid rgba(0, 0, 0, .25);
+            @include max-size(100%, 50px);
+        }
+
+        .modal-close
+        {
+            position: absolute;
+            top: 0px;
+            right: 4px;
+            cursor: pointer;
+            padding: 6px;
+            color: transparent;
+            font-size: 15px;
+            text-shadow: 0px 0px black;
+        }
+
+        &.info, &.success, &.error, &.warning
+        {
+            .modal-body
+            {
+                background-color: white;
+            }
+        }
+
+        &.success
+        {
+            @include box-shadow(0px 0px 10px #53913F);
+
+            .modal-header, .modal-footer, .modal-close
+            {
+                border-color: #53913F;
+                color: #53913F;
+            }
+
+            .modal-header
+            {
+                background-color: rgba(120, 209, 90, .5);
+            }
+
+            .modal-footer
+            {
+                background-color: rgba(120, 209, 90, .2);
+            }
+        }
+
+        &.info
+        {
+            @include box-shadow(0px 0px 10px #138EBF);
+
+            .modal-header, .modal-footer, .modal-close
+            {
+                border-color: #138EBF;
+                color: #138EBF;
+            }
+
+            .modal-header
+            {
+                background-color: rgba(0, 183, 255, .2);
+            }
+
+            .modal-footer
+            {
+                background-color: rgba(0, 183, 255, .2);
+            }
+        }
+
+        &.error
+        {
+            @include box-shadow(0px 0px 10px #BD0029);
+
+            .modal-header, .modal-footer, .modal-close
+            {
+                border-color: #BD0029;
+                color: #BD0029;
+            }
+
+            .modal-header
+            {
+                background-color: rgba(255, 0, 0, .2);
+            }
+
+            .modal-footer
+            {
+                background-color: rgba(255, 0, 0, .2);
+            }
+        }
+
+        &.warning
+        {
+            @include box-shadow(0px 0px 10px #ff9900);
+
+            .modal-header, .modal-footer, .modal-close
+            {
+                border-color: #ff9900;
+                color: #ff9900;
+            }
+
+            .modal-header
+            {
+                background-color: rgba(255, 153, 0, .2);
+            }
+
+            .modal-footer
+            {
+                background-color: rgba(255, 153, 0, .2);
+            }
+        }
+    }
 }
 
 .bracp-content
@@ -138,4 +312,37 @@ html, body
     border-color: rgba(255, 153, 0, 0.7);
     background-color: rgba(255, 153, 0, 0.1);
     color: #ff9900;
+}
+
+.ajax-form
+{
+    clear: both;
+    margin: 15px 0px 15px 0px;
+
+    .input-forms
+    {
+        text-align: center;
+        position: relative;
+
+        input, button, div
+        {
+            display: block;
+            margin: 0 auto;
+
+            &+ input, button, div
+            {
+                margin-top: 5px;
+            }
+        }
+
+        input[type="submit"], input[type="reset"]
+        {
+            display: initial;
+        }
+    }
+}
+
+.ajax-url
+{
+    font-weight: bold !important;
 }

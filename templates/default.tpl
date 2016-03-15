@@ -76,9 +76,12 @@
                 </div>
                 <div class="bracp-header-menu">
                     {if isset($smarty.session.BRACP_ISLOGGEDIN) eq false or $smarty.session.BRACP_ISLOGGEDIN eq false}
-                        <label class="btn btn-success">Entrar</label>
-                        <label class="btn btn-info">Cadastre-se</label>
+                        <label for="bracp-modal-login" class="btn btn-success">Entrar</label>
+                        {if $smarty.const.BRACP_ALLOW_CREATE_ACCOUNT eq true}
+                            <label for="bracp-modal-create" class="btn btn-info">Cadastre-se</label>
+                        {/if}
                     {else}
+                        <button data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/logout" data-target=".bracp-body" class="btn btn-error ajax-url">Sair ({$account->getUserid()})</button>
                     {/if}
                 </div>
             </div>
@@ -128,6 +131,27 @@
     {/block}
         <div class="bracp-ajax-loading">
             <div class="bracp-ajax-loading-div"></div>
+        </div>
+
+        <div class="modal-container">
+            {if isset($smarty.session.BRACP_ISLOGGEDIN) eq false or $smarty.session.BRACP_ISLOGGEDIN eq false}
+                <input id="bracp-modal-login" class="modal-check" type="checkbox"/>
+                {include 'account.login.ajax.tpl'}
+
+                <input id="bracp-modal-create" class="modal-check" type="checkbox"/>
+                <div class="modal">
+                    <div class="modal-header">
+                        Criar conta
+                        <label for="bracp-modal-create" class="modal-close">&times;</label>
+                    </div>
+                    <div class="modal-body">
+                        teste
+                    </div>
+                    <div class="modal-footer">
+                        rodapé
+                    </div>
+                </div>
+            {/if}
         </div>
     </body>
 </html>

@@ -53,8 +53,8 @@ class Route
                             ->add(['Controller\Account', 'needLoggout']);
                 }
 
-                $this->map(['GET', 'POST'], '/login', ['Controller\Account', 'login'])
-                        ->add(['Controller\Account', 'needLoggout']);
+                $this->post('/login', ['Controller\Account', 'login'])
+                            ->add(['Controller\Account', 'needLoggout']);
 
                 $this->post('/donations/notification', ['Controller\Account', 'donationsNotify']);
 

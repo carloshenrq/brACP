@@ -13,6 +13,143 @@ html, body {
   background-color: white;
 }
 
+input[type="text"], input[type="password"] {
+  padding: 6px;
+  border: 1px solid lightgray;
+  outline: lightblue;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+
+.modal-container .modal-check {
+  display: none;
+}
+.modal-container .modal-check:not(:checked) + .modal {
+  display: none;
+}
+.modal-container .modal-check:checked + .modal {
+  display: block;
+}
+.modal-container .modal {
+  font-family: Verdana, Tahoma, Arial;
+  font-size: 12px;
+  background-color: white;
+  max-width: 600px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.45);
+  -moz-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.45);
+  -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.45);
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+}
+.modal-container .modal .modal-header, .modal-container .modal .modal-body, .modal-container .modal .modal-footer {
+  padding: 8px;
+}
+.modal-container .modal .modal-header {
+  position: relative;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+  font-weight: bold;
+  max-width: 100%;
+  max-height: 50px;
+  overflow: auto;
+}
+.modal-container .modal .modal-body {
+  position: relative;
+  padding: 16px;
+  min-width: 300px;
+  min-height: 0;
+  max-width: 600px;
+  max-height: 400px;
+  overflow: auto;
+}
+.modal-container .modal .modal-footer {
+  position: relative;
+  border-top: 1px solid rgba(0, 0, 0, 0.25);
+  max-width: 100%;
+  max-height: 50px;
+  overflow: auto;
+}
+.modal-container .modal .modal-close {
+  position: absolute;
+  top: 0px;
+  right: 4px;
+  cursor: pointer;
+  padding: 6px;
+  color: transparent;
+  font-size: 15px;
+  text-shadow: 0px 0px black;
+}
+.modal-container .modal.info .modal-body, .modal-container .modal.success .modal-body, .modal-container .modal.error .modal-body, .modal-container .modal.warning .modal-body {
+  background-color: white;
+}
+.modal-container .modal.success {
+  box-shadow: 0px 0px 10px #53913F;
+  -moz-box-shadow: 0px 0px 10px #53913F;
+  -webkit-box-shadow: 0px 0px 10px #53913F;
+}
+.modal-container .modal.success .modal-header, .modal-container .modal.success .modal-footer, .modal-container .modal.success .modal-close {
+  border-color: #53913F;
+  color: #53913F;
+}
+.modal-container .modal.success .modal-header {
+  background-color: rgba(120, 209, 90, 0.5);
+}
+.modal-container .modal.success .modal-footer {
+  background-color: rgba(120, 209, 90, 0.2);
+}
+.modal-container .modal.info {
+  box-shadow: 0px 0px 10px #138EBF;
+  -moz-box-shadow: 0px 0px 10px #138EBF;
+  -webkit-box-shadow: 0px 0px 10px #138EBF;
+}
+.modal-container .modal.info .modal-header, .modal-container .modal.info .modal-footer, .modal-container .modal.info .modal-close {
+  border-color: #138EBF;
+  color: #138EBF;
+}
+.modal-container .modal.info .modal-header {
+  background-color: rgba(0, 183, 255, 0.2);
+}
+.modal-container .modal.info .modal-footer {
+  background-color: rgba(0, 183, 255, 0.2);
+}
+.modal-container .modal.error {
+  box-shadow: 0px 0px 10px #BD0029;
+  -moz-box-shadow: 0px 0px 10px #BD0029;
+  -webkit-box-shadow: 0px 0px 10px #BD0029;
+}
+.modal-container .modal.error .modal-header, .modal-container .modal.error .modal-footer, .modal-container .modal.error .modal-close {
+  border-color: #BD0029;
+  color: #BD0029;
+}
+.modal-container .modal.error .modal-header {
+  background-color: rgba(255, 0, 0, 0.2);
+}
+.modal-container .modal.error .modal-footer {
+  background-color: rgba(255, 0, 0, 0.2);
+}
+.modal-container .modal.warning {
+  box-shadow: 0px 0px 10px #ff9900;
+  -moz-box-shadow: 0px 0px 10px #ff9900;
+  -webkit-box-shadow: 0px 0px 10px #ff9900;
+}
+.modal-container .modal.warning .modal-header, .modal-container .modal.warning .modal-footer, .modal-container .modal.warning .modal-close {
+  border-color: #ff9900;
+  color: #ff9900;
+}
+.modal-container .modal.warning .modal-header {
+  background-color: rgba(255, 153, 0, 0.2);
+}
+.modal-container .modal.warning .modal-footer {
+  background-color: rgba(255, 153, 0, 0.2);
+}
+
 .bracp-content .bracp-header {
   padding: 8px;
   background: #636363;
@@ -113,4 +250,27 @@ html, body {
   border-color: rgba(255, 153, 0, 0.7);
   background-color: rgba(255, 153, 0, 0.1);
   color: #ff9900;
+}
+
+.ajax-form {
+  clear: both;
+  margin: 15px 0px 15px 0px;
+}
+.ajax-form .input-forms {
+  text-align: center;
+  position: relative;
+}
+.ajax-form .input-forms input, .ajax-form .input-forms button, .ajax-form .input-forms div {
+  display: block;
+  margin: 0 auto;
+}
+.ajax-form .input-forms input + input, .ajax-form .input-forms input button, .ajax-form .input-forms input div, .ajax-form .input-forms button + input, .ajax-form .input-forms button button, .ajax-form .input-forms button div, .ajax-form .input-forms div + input, .ajax-form .input-forms div button, .ajax-form .input-forms div div {
+  margin-top: 5px;
+}
+.ajax-form .input-forms input[type="submit"], .ajax-form .input-forms input[type="reset"] {
+  display: initial;
+}
+
+.ajax-url {
+  font-weight: bold !important;
 }
