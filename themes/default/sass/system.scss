@@ -25,6 +25,7 @@ html, body
         padding: 8px;
         @include background-gradient(#636363, #424242);
         position: relative;
+        clear: both;
 
         .bracp-menu-check
         {
@@ -43,7 +44,9 @@ html, body
 
         .bracp-menu
         {
+            float: left;
             background-color: white;
+            display: inline-block;
 
             position: absolute;
             left: 0%;
@@ -71,6 +74,11 @@ html, body
                     }
                 }
             }
+        }
+
+        .bracp-header-menu
+        {
+            float: right;
         }
     }
 }

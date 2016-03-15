@@ -22,6 +22,7 @@ html, body {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#636363', endColorstr='#424242',GradientType=0 );
   background-repeat: repeat-x;
   position: relative;
+  clear: both;
 }
 .bracp-content .bracp-header .bracp-menu-check {
   display: none;
@@ -33,7 +34,9 @@ html, body {
   left: -20%;
 }
 .bracp-content .bracp-header .bracp-menu {
+  float: left;
   background-color: white;
+  display: inline-block;
   position: absolute;
   left: 0%;
   top: 100%;
@@ -59,6 +62,9 @@ html, body {
 }
 .bracp-content .bracp-header .bracp-menu ul li > ul {
   display: none;
+}
+.bracp-content .bracp-header .bracp-header-menu {
+  float: right;
 }
 
 .bracp-message {

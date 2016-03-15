@@ -74,6 +74,13 @@
                 <div class="bracp-menu">
                     {include 'menu.tpl'}
                 </div>
+                <div class="bracp-header-menu">
+                    {if isset($smarty.session.BRACP_ISLOGGEDIN) eq false or $smarty.session.BRACP_ISLOGGEDIN eq false}
+                        <label class="btn btn-success">Entrar</label>
+                        <label class="btn btn-info">Cadastre-se</label>
+                    {else}
+                    {/if}
+                </div>
             </div>
             <div class="bracp-body-container">
                 {if $smarty.const.BRACP_DEVELOP_MODE eq true}
