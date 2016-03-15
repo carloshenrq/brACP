@@ -26,8 +26,11 @@ html, body {
 .bracp-content .bracp-header .bracp-menu-check {
   display: none;
 }
-.bracp-content .bracp-header .bracp-menu-check:not(:checked) + .bracp-menu {
-  left: -100%;
+.bracp-content .bracp-header .bracp-menu-check + label:before {
+  content: '\2261';
+}
+.bracp-content .bracp-header .bracp-menu-check:not(:checked) + label + .bracp-menu {
+  left: -20%;
 }
 .bracp-content .bracp-header .bracp-menu {
   background-color: white;
@@ -37,10 +40,10 @@ html, body {
   box-shadow: 0px 0px 2px black;
   -moz-box-shadow: 0px 0px 2px black;
   -webkit-box-shadow: 0px 0px 2px black;
-  transition: left 0.5s;
-  -o-transition: left 0.5s;
-  -moz-transition: left 0.5s;
-  -webkit-transition: left 0.5s;
+  transition: left 0.3s;
+  -o-transition: left 0.3s;
+  -moz-transition: left 0.3s;
+  -webkit-transition: left 0.3s;
 }
 .bracp-content .bracp-header .bracp-menu ul {
   padding: 0px;
@@ -54,7 +57,7 @@ html, body {
   cursor: default;
   width: 180px;
 }
-.bracp-content .bracp-header .bracp-menu ul li ul {
+.bracp-content .bracp-header .bracp-menu ul li > ul {
   display: none;
 }
 
@@ -62,9 +65,6 @@ html, body {
   padding: 16px;
   border: 1px solid;
   font-size: 11px;
-  border-radius: 4px;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
 }
 .bracp-message .header, .bracp-message h1, .bracp-message h2, .bracp-message h3, .bracp-message h4 {
   margin: 0px 0px 8px 0px;
@@ -79,9 +79,6 @@ html, body {
   font-style: italic;
   font-weight: none;
   text-transform: none;
-}
-.bracp-message + .bracp-message {
-  margin-top: 1px;
 }
 
 .ajax-url {

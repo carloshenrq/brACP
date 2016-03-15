@@ -30,9 +30,14 @@ html, body
         {
             display: none;
 
-            &:not(:checked) + .bracp-menu
+            &+ label:before
             {
-                left: -100%;
+                content: '\2261';
+            }
+
+            &:not(:checked) + label + .bracp-menu
+            {
+                left: -20%;
             }
         }
 
@@ -45,7 +50,7 @@ html, body
             top: 100%;
 
             @include box-shadow(0px 0px 2px black);
-            @include transition(left .5s);
+            @include transition(left .3s);
 
             ul
             {
@@ -60,7 +65,7 @@ html, body
 
                     width: 180px;
 
-                    ul
+                    &> ul
                     {
                         display: none;
                     }
@@ -75,8 +80,6 @@ html, body
     padding: 16px;
     border: 1px solid;
     font-size: 11px;
-
-    @include border-radius(4px);
 
     .header, h1, h2, h3, h4
     {
@@ -93,11 +96,6 @@ html, body
             font-weight: none;
             text-transform: none;
         }
-    }
-
-    &+ .bracp-message
-    {
-        margin-top: 1px;
     }
 }
 

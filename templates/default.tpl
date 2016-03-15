@@ -67,10 +67,10 @@
     {block name="brACP_HtmlBody"}
         <div class="bracp-content">
             <div class="bracp-header">
+                <input type="checkbox" id="_bracp-menu-check-0" class="bracp-menu-check"/>
                 <label class="btn" for="_bracp-menu-check-0">
                     Menu
                 </label>
-                <input type="checkbox" id="_bracp-menu-check-0" class="bracp-menu-check"/>
                 <div class="bracp-menu">
                     {include 'menu.tpl'}
                 </div>
