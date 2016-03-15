@@ -30,11 +30,11 @@
 
 {if isset($message) eq true}
     {if isset($message['success']) eq true}
-        <p class='bracp-message-success'>
+        <p class='bracp-message success'>
             {$message['success']}
         </p>
     {else}
-        <p class="bracp-message-error">
+        <p class="bracp-message error">
             {$message['error']}
         </p>
     {/if}
@@ -51,13 +51,13 @@
     <li>Ajuda o servidor a crescer e cada vez a ter mais jogadores.</li>
 </ul>
 
-<p class="bracp-message-info">
+<p class="bracp-message info">
     Nós nunca lhe obrigaramos a realizar uma doação ao servidor.<br>
     <strong><i>Você doa por livre e espontânea vontade.</i></strong> 
 </p>
 
 {if is_null($promotion) eq false}
-    <p class="bracp-message-success">
+    <p class="bracp-message success">
         <strong>Promoção ativa!</strong> +{$promotion->getBonusMultiply()} em bônus eletrônico!<br>
         <br>
         <strong>Validade:</strong><br>
@@ -78,7 +78,7 @@
 </p>
 
 {if $smarty.const.DONATION_AMOUNT_USE_RATE eq true}
-    <p class="bracp-message-info">
+    <p class="bracp-message info">
         Nós utilizamos o <a href="https://pagseguro.uol.com.br/" target="_blank">PagSeguro</a> como motor de nossas doações.<br>
         Por conta disso, será adicionado uma taxa de <strong>R$ 0,40 + 3,99%</strong> sobre o valor doado.
         {if $smarty.const.DONATION_AMOUT_SHOW_RATE_CALC eq true}
@@ -138,7 +138,7 @@
 
 {if count($donations) eq 0}
 
-<p class="bracp-message-warning">
+<p class="bracp-message warning">
     Você ainda não realizou doações ao servidor.
 </p>
 
@@ -152,12 +152,12 @@
 
 {if $smarty.const.DONATION_SHOW_NEXT_PROMO eq true}
     {if count($promotions) eq 0}
-        <div class="bracp-message-warning">
+        <div class="bracp-message warning">
             Nenhuma promoção disponível para os próximos <strong>{$smarty.const.DONATION_INTERVAL_DAYS}</strong> dia(s).
         </div>
     {else}
         <table border="1" align="center" class="bracp-table">
-            <caption class="bracp-message-info">Existe(m) <strong>{count($promotions)}</strong> doação(ões) para os próximos <strong>{$smarty.const.DONATION_INTERVAL_DAYS}</strong> dia(s).</caption>
+            <caption class="bracp-message info">Existe(m) <strong>{count($promotions)}</strong> doação(ões) para os próximos <strong>{$smarty.const.DONATION_INTERVAL_DAYS}</strong> dia(s).</caption>
             <thead>
                 <tr>
                     <th align="right">Cód.</th>

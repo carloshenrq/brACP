@@ -20,18 +20,18 @@
 
 {if isset($configs) eq false and isset($message) eq true}
     {if isset($message.success) eq true}
-        <p class="bracp-message-success">{$message.success}</p>
+        <p class="bracp-message success">{$message.success}</p>
     {else}
-        <p class="bracp-message-error">{$message.error}</p>
+        <p class="bracp-message error">{$message.error}</p>
     {/if}
 {else}
     Segue abaixo todas as configurações do arquivo 'config.php' que podem ser alteradas.
 
-    <p class="bracp-message-error">
+    <p class="bracp-message error">
         <strong><u>OBS.:</u> <i>Uma vez alteradas estas configurações, a operação não poderá ser desfeita!</i></strong>
     </p>
 
-    <p class="bracp-message-warning">
+    <p class="bracp-message warning">
         Para previnir que as configurações antigas sejam perdidas, ao salvar, o arquivo <strong>config.php</strong> atual será renomeado para <strong>config.php.bkp</strong>
     </p>
 

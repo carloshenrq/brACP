@@ -19,7 +19,7 @@
 <h1>Minha Conta &raquo; Alterar Email</h1>
 
 {if $account->getGroup_id() >= $smarty.const.BRACP_ALLOW_ADMIN_GMLEVEL}
-    <p class="bracp-message-error">
+    <p class="bracp-message error">
         Nenhum administrador está permitido a alterar seu endereço de email.
         {if $smarty.const.BRACP_ALLOW_ADMIN eq true}
             <br>
@@ -30,7 +30,7 @@
 {else}
 
     {if isset($message) eq true}
-        <p class="bracp-message-{if isset($message.success) eq true}success{else}error{/if}">
+        <p class="bracp-message {if isset($message.success) eq true}success{else}error{/if}">
             {if isset($message.success) eq true}
                 {$message.success}
             {else}
@@ -79,7 +79,7 @@
         {if count($mailChange) gt 0}
             <br>
             <table border="1" align="center" class="bracp-table">
-                <caption class="bracp-message-warning">{min(10, count($mailChange))} última(s) alteração(ões) de e-mail.</caption>
+                <caption class="bracp-message warning">{min(10, count($mailChange))} última(s) alteração(ões) de e-mail.</caption>
                 <thead>
                     <tr>
                         <th>Cód.</th>
@@ -100,7 +100,7 @@
                 </tbody>
             </table>
         {else}
-            <p class="bracp-message-warning">Você ainda não realizou nenhuma mudança de e-mail.</p>
+            <p class="bracp-message warning">Você ainda não realizou nenhuma mudança de e-mail.</p>
         {/if}
     {/if}
 {/if}

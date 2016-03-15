@@ -24,6 +24,6 @@
     }, 2000);
 </script>
 
-<p class="bracp-message-success">
+<p class="bracp-message success">
     Loggout efetuado com sucesso! Aguarde...
 </p>

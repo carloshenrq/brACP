@@ -10,5 +10,55 @@
 html, body {
   margin: 0px;
   padding: 0px;
-  background-color: #003300;
+  background-color: white;
+}
+
+.bracp-message {
+  padding: 16px;
+  border: 1px solid;
+  font-size: 11px;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+}
+.bracp-message .header, .bracp-message h1, .bracp-message h2, .bracp-message h3, .bracp-message h4 {
+  margin: 0px 0px 8px 0px;
+  padding: 0px;
+  font-size: 12px;
+  border-bottom: 1px dotted;
+  text-transform: capitalize;
+  font-weight: bold;
+}
+.bracp-message .header .sub-title, .bracp-message h1 .sub-title, .bracp-message h2 .sub-title, .bracp-message h3 .sub-title, .bracp-message h4 .sub-title {
+  font-size: 10px;
+  font-style: italic;
+  font-weight: none;
+  text-transform: none;
+}
+.bracp-message + .bracp-message {
+  margin-top: 1px;
+}
+
+.info {
+  background-color: rgba(0, 183, 255, 0.1);
+  border-color: rgba(0, 183, 255, 0.7);
+  color: #138EBF;
+}
+
+.error {
+  border-color: rgba(255, 0, 0, 0.7);
+  background-color: rgba(255, 0, 0, 0.1);
+  color: #BD0029;
+}
+
+.success {
+  border-color: rgba(120, 209, 90, 0.7);
+  background-color: rgba(120, 209, 90, 0.1);
+  color: #53913F;
+}
+
+.warning {
+  border-color: rgba(255, 153, 0, 0.7);
+  background-color: rgba(255, 153, 0, 0.1);
+  color: #ff9900;
 }

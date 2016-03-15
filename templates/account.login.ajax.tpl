@@ -19,7 +19,7 @@
 <h1>Minha Conta &raquo; Entrar</h1>
 
 {if isset($message.success) eq true}
-    <p class="bracp-message-success">{$message.success}</p>
+    <p class="bracp-message success">{$message.success}</p>
 
     <script>
         setTimeout(function() {
@@ -31,7 +31,7 @@
 <p>Para acessar os dados de sua conta, você deve realizar o acesso utilizando seu nome de usuário e senha</p>
 
 {if isset($message.error) eq true}
-    <p class="bracp-message-error">{$message.error}</p>
+    <p class="bracp-message error">{$message.error}</p>
 {/if}
 
 <form class="ajax-form" action="{$smarty.const.BRACP_DIR_INSTALL_URL}account/login" autocomplete="off" method="post" target=".bracp-body">

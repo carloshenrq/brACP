@@ -18,7 +18,7 @@
 
 <h1>Acesso negado</h1>
 
-<p class="bracp-message-error">
+<p class="bracp-message error">
     {if $smarty.const.BRACP_MAINTENCE eq true}
         Em manutenção.
     {else}

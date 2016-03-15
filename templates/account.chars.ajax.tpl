@@ -21,17 +21,17 @@
 <p>Segue abaixo a lista dos personagens gerenciaveis para sua conta.</p>
 
 {if count($chars) eq 0}
-    <p class="bracp-message-warning">
+    <p class="bracp-message warning">
         Você não possui personagens criados para gerênciar.
     </p>
 {else}
 
 {if isset($message['success']) eq true}
-    <p class="bracp-message-success">
+    <p class="bracp-message success">
         {$message['success']}
     </p>
 {else if isset($message['error']) eq true}
-    <p class="bracp-message-error">
+    <p class="bracp-message error">
         {$message['error']}
     </p>
 {/if}

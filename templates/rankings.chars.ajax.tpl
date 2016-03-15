@@ -19,7 +19,7 @@
 <h1>Rankings &raquo; Personagens &raquo; Geral</h1>
 
 {if count($chars) eq 0}
-    <p class="bracp-message-warning">
+    <p class="bracp-message warning">
         Não existem personagens para este ranking.
     </p>
 {else}

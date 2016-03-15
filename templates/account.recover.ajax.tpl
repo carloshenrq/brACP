@@ -20,9 +20,9 @@
 
 {if isset($message)}
     {if isset($message.success)}
-        <p class="bracp-message-success">{$message.success}</p>
+        <p class="bracp-message success">{$message.success}</p>
     {else}
-        <p class="bracp-message-error">{$message.error}</p>
+        <p class="bracp-message error">{$message.error}</p>
     {/if}
 {/if}
 

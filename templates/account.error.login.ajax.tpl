@@ -18,7 +18,7 @@
 
 <h1>Acesso Negado</h1>
 
-<p class="bracp-message-error">
+<p class="bracp-message error">
     Você precisa estar logado para realizar esta ação.<br>
     Para entrar, <span class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/login" data-target=".bracp-body">clique aqui</span>.
 </p>
