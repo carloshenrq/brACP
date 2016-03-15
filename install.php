@@ -98,6 +98,8 @@ $config = [
     'BRACP_REGEXP_USERNAME'                 => '[a-zA-Z0-9]{4,24}',
     'BRACP_REGEXP_PASSWORD'                 => '[a-zA-Z0-9]{4,20}',
     'BRACP_REGEXP_EMAIL'                    => '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}',
+    'BRACP_ALLOW_CHOOSE_THEME'              => 1,
+    'BRACP_DEFAULT_THEME'                   => 'default',
 ];
 
 // Verifica se dados de instalação foram recebidos e pode escrever o arquivo
@@ -167,8 +169,8 @@ if($writeable && isset($_POST) && !empty($_POST))
     <head>
         <title>brACP - Instalação do Painel de Controle</title>
 
-        <link rel="stylesheet" type="text/css" href="css/install.css"/>
-        <link rel="stylesheet" type="text/css" href="css/button.css"/>
+        <link rel="stylesheet" type="text/css" href="themes/default/css/install.css"/>
+        <link rel="stylesheet" type="text/css" href="themes/default/css/button.css"/>
 
         <script src="js/jquery-2.1.4.js"></script>
         <script>
