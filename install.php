@@ -205,14 +205,24 @@ if($writeable && isset($_POST) && !empty($_POST))
         <div class="bracp-install-body">
             <h1>Instalação do brACP - Painel de Controle</h1>
 
-            <?php if(!$writeable) { ?>
+            <?php if(!file_exists('vendor') || !is_dir('vendor') || file_exists('vendor') && !file_exists('composer.lock')) { ?>
+
+                <div class="bracp-install-error">
+                    Os arquivos do composer não foram baixados!<br>
+                    Verifique sua instalação e tente novamente.<br>
+                    <br>
+                    Hey, psiu! Talvez isso te ajude:
+                    <a href="http://getcomposer.org/" target="_blank">Composer</a>
+                </div>
+
+            <?php } else if(!$writeable) { ?>
 
                 <div class="bracp-install-error">
                     O Programa de instalação não será capaz criar o arquivo de instalação se você enviar os dados.<br>
                     Verifique as permissões do diretório e tente novamente.<br>
                     <br>
                     Talvez isso ajude!<br>
-                    <strong>chmod -R 0665</strong>
+                    <strong>chmod -R 0777</strong>
                 </div>
 
             <?php } else { ?>
