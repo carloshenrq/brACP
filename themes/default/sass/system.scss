@@ -41,7 +41,8 @@ input[type="text"], input[type="password"], select
 
         &:not(:checked)
         {
-            &+ .modal, &+ .modal-login-body, &+ .modal-create-body
+            &+ .modal, &+ .modal-login-body,
+            &+ .modal-create-body, &+ .modal-recover-body
             {
                 display: none;
             }
@@ -49,7 +50,8 @@ input[type="text"], input[type="password"], select
 
         &:checked + .modal
         {
-            &+ .modal, &+ .modal-login-body, &+ .modal-create-body
+            &+ .modal, &+ .modal-login-body,
+            &+ .modal-create-body, &+ .modal-recover-body
             {
                 display: block;
             }

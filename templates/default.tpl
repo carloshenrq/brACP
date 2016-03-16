@@ -136,6 +136,9 @@
 
                 <input id="bracp-modal-create" class="modal-check" type="checkbox"/>
                 {include 'account.register.ajax.tpl'}
+
+                <input id="bracp-modal-recover" class="modal-check" type="checkbox"/>
+                {include 'account.recover.ajax.tpl'}
             {/if}
         </div>
 

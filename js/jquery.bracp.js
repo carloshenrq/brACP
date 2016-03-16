@@ -20,6 +20,19 @@ var grecaptcha_timer = false;
 
 +function($)
 {
+    // Não permite que mais de um modal continue aberto na tela.
+    $(document).on('click', '.modal-check', function(e) {
+
+        var thisCheked = $(this).is(':checked');
+
+        $(this).closest('.modal-container').find('.modal-check:checked').each(function() {
+            $(this).removeAttr('checked');
+        });
+
+        $(this).prop('checked', thisCheked);
+
+    });
+
     // Ao clicar no botão para doar novamente.
     $(document).on('click', '.donation-checkout', function(e) {
         e.preventDefault();

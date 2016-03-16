@@ -31,10 +31,10 @@ input[type="text"], input[type="password"], select {
 .modal-container .modal-check {
   display: none;
 }
-.modal-container .modal-check:not(:checked) + .modal, .modal-container .modal-check:not(:checked) + .modal-login-body, .modal-container .modal-check:not(:checked) + .modal-create-body {
+.modal-container .modal-check:not(:checked) + .modal, .modal-container .modal-check:not(:checked) + .modal-login-body, .modal-container .modal-check:not(:checked) + .modal-create-body, .modal-container .modal-check:not(:checked) + .modal-recover-body {
   display: none;
 }
-.modal-container .modal-check:checked + .modal + .modal, .modal-container .modal-check:checked + .modal + .modal-login-body, .modal-container .modal-check:checked + .modal + .modal-create-body {
+.modal-container .modal-check:checked + .modal + .modal, .modal-container .modal-check:checked + .modal + .modal-login-body, .modal-container .modal-check:checked + .modal + .modal-create-body, .modal-container .modal-check:checked + .modal + .modal-recover-body {
   display: block;
 }
 .modal-container .modal {

@@ -52,7 +52,7 @@
                 </div>
             </form>
 
-            Perdeu sua conta? clique aqui.<br>
+            Perdeu sua conta? <label class="lbl-link" for="bracp-modal-recover">clique aqui</label>.<br>
             Não possui uma conta? <label class="lbl-link" for="bracp-modal-create">clique aqui</label>.
         </div>
     </div>
