@@ -61,9 +61,9 @@ class Route
                 // Verifica configuração se permite recuperar uma conta.
                 if(BRACP_ALLOW_RECOVER)
                 {
-                    $this->map(['GET', 'POST'], '/recover', ['Controller\Account', 'recover'])
+                    $this->post('/recover', ['Controller\Account', 'recover'])
                             ->add(['Controller\Account', 'needLoggout']);
-                    $this->map(['GET', 'POST'], '/recover/{code}', ['Controller\Account', 'recover'])
+                    $this->get('/recover/{code}', ['Controller\Account', 'recoverByCode'])
                             ->add(['Controller\Account', 'needLoggout']);
                 }
 

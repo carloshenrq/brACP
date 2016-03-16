@@ -22,12 +22,12 @@
             <label for="bracp-modal-create" class="modal-close">&times;</label>
         </div>
         <div class="modal-body">
-            {if isset($message.success) eq true}
-                <div class="bracp-message success">{$message.success}</div>
+            {if isset($register_message.success) eq true}
+                <div class="bracp-message success">{$register_message.success}</div>
             {/if}
 
-            {if isset($message.error) eq true}
-                <div class="bracp-message error">{$message.error}</div>
+            {if isset($register_message.error) eq true}
+                <div class="bracp-message error">{$register_message.error}</div>
             {/if}
 
             Para criar sua conta, é necessário que você informe os dados abaixo corretamente para que seja possivel seu acesso ao jogo e as funções do painel de controle.

@@ -22,11 +22,11 @@
             <label for="bracp-modal-recover" class="modal-close">&times;</label>
         </div>
         <div class="modal-body">
-            {if isset($message)}
-                {if isset($message.success)}
-                    <div class="bracp-message success">{$message.success}</div>
+            {if isset($recover_message)}
+                {if isset($recover_message.success)}
+                    <div class="bracp-message success">{$recover_message.success}</div>
                 {else}
-                    <div class="bracp-message error">{$message.error}</div>
+                    <div class="bracp-message error">{$recover_message.error}</div>
                 {/if}
             {/if}
 

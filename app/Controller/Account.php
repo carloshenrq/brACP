@@ -97,12 +97,24 @@ class Account
      */
     public static function recover(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
-        // Obtém o código de recuperação.
-        $code = ((isset($args['code'])) ? $args['code'] : null);
-
         // Exibe as informações no template de cadastro.
-        self::getApp()->display('account.recover',
-                                    (($request->isPost() || !is_null($code)) ? self::recoverAccount($request->getParsedBody(), $code):[]));
+        self::getApp()->display('account.recover', self::recoverAccount($request->getParsedBody()));
+    }
+
+    /**
+     * Método para recuperar a conta do usuário.
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param array $args
+     */
+    public static function recoverByCode(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        // Código de recuperação.
+        $code = $args['code'];
+
+        // Redireciona para a página principal
+        self::getApp()->display('home', self::recoverAccount($request->getParsedBody(), $code));
     }
 
     /**
@@ -918,14 +930,14 @@ class Account
                 $message[] = 'Equipamento resetado com sucesso para o(s) personagem(ns): <strong>'. implode(', ', $equip) .'</strong>.';
 
             // Retorna mensagem de sucesso para as alterações.
-            return ['message' => ['success' => ((count($message) > 0) ?
+            return ['char_message' => ['success' => ((count($message) > 0) ?
                                                             implode('<br>', $message) :
                                                             'Comando(s) executado(s) com sucesso. Nenhum personagem foi alterado.')]];
         }
         else
         {
             // Caso nenhuma configuração esteja habilitada.
-            return ['message' => ['error' => 'Impossível realizar ação solicitada.']];
+            return ['char_message' => ['error' => 'Impossível realizar ação solicitada.']];
         }
     }
 
@@ -1040,15 +1052,15 @@ class Account
         // Verificação recaptcha para saber se a requisição realizada
         //  é verdadeira e pode continuar.
         if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['g-recaptcha-response']))
-            return ['message' => ['error' => 'Código de verificação inválido. Verifique por favor.']];
+            return ['donation_message' => ['error' => 'Código de verificação inválido. Verifique por favor.']];
 
         // Verifica se a doação foi aceita pelo jogador.
         if(!isset($data['acceptdonation']) or $data['acceptdonation'] <> 'on')
-            return ['message' => ['error' => 'Você deve aceitar os termos de doação antes de continuar.']];
+            return ['donation_message' => ['error' => 'Você deve aceitar os termos de doação antes de continuar.']];
 
         // Verifica se o valor digitado está em formato incorreto.
         if(floatval($data['donationValue']) <= 0)
-            return ['message' => ['error' => 'Valor para a doação incorreto. Verifique por favor.']];
+            return ['donation_message' => ['error' => 'Valor para a doação incorreto. Verifique por favor.']];
 
         // Valor para doações.
         $donationValue = floatval($data['donationValue']);
@@ -1124,13 +1136,13 @@ class Account
             self::getApp()->getEm()->flush();
 
              // Retorna os dados de checkout para o painel de controle abrir o PagSeguro.
-            return ['message' => ['success' => 'Sua doação foi registrada em nosso sistema! Muito obrigado!'],
+            return ['donation_message' => ['success' => 'Sua doação foi registrada em nosso sistema! Muito obrigado!'],
                     'checkoutCode' => $donation->getCheckoutCode(),
                     'donationId' => $donation->getId()];
         }
         catch(\Exception $ex)
         {
-            return ['message' =>
+            return ['donation_message' =>
                         [
                             'error' => ((BRACP_DEVELOP_MODE) ? $ex->getMessage():'Ocorreu um erro durante o registro da sua doação.')
                         ]
@@ -1177,31 +1189,31 @@ class Account
     {
         // Verifica se a conta é do tipo administrador e não deixa realizar a alteração de e-mail
         if(self::loggedUser()->getGroup_id() >= BRACP_ALLOW_ADMIN_GMLEVEL)
-            return ['message' => ['error' => 'Usuários administradores não podem realizar alteração de e-mail.']];
+            return ['email_message' => ['error' => 'Usuários administradores não podem realizar alteração de e-mail.']];
 
         // Verificação recaptcha para saber se a requisição realizada
         //  é verdadeira e pode continuar.
         if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['g-recaptcha-response']))
-            return ['message' => ['error' => 'Código de verificação inválido. Verifique por favor.']];
+            return ['email_message' => ['error' => 'Código de verificação inválido. Verifique por favor.']];
 
         // Verifica se o email atual digitado é igual ao email atual.
         if(hash('md5', self::loggedUser()->getEmail()) !== hash('md5', $data['email']))
-            return ['message' => ['error' => 'E-mail atual não confere com o digitado.']];
+            return ['email_message' => ['error' => 'E-mail atual não confere com o digitado.']];
 
         // Verifica se o email novo digitado é igual ao email de confirmação.
         if(hash('md5', $data['email_new']) !== hash('md5', $data['email_conf']))
-            return ['message' => ['error' => 'Os e-mails digitados não conferem.']];
+            return ['email_message' => ['error' => 'Os e-mails digitados não conferem.']];
 
         // Verifica se o email atual é igual ao email novo digitado.
         if(hash('md5', self::loggedUser()->getEmail()) === hash('md5', $data['email_new']))
-            return ['message' => ['error' => 'O Novo endereço de e-mail não pode ser igual ao atual.']];
+            return ['email_message' => ['error' => 'O Novo endereço de e-mail não pode ser igual ao atual.']];
 
         // Verifica se foi possivel alterar o endereço de e-mail do usuário.
         if(self::changeMail(self::loggedUser()->getAccount_id(), $data['email_new']))
-            return ['message' => ['success' => 'Seu endereço de e-mail foi alterado com sucesso.']];
+            return ['email_message' => ['success' => 'Seu endereço de e-mail foi alterado com sucesso.']];
         else
             // Ocorre quando o endereço de e-mail já está em uso.
-            return ['message' => ['error' => 'Ocorreu um erro durante a alteração do seu endereço.']];
+            return ['email_message' => ['error' => 'Ocorreu um erro durante a alteração do seu endereço.']];
     }
 
     /**
@@ -1216,12 +1228,12 @@ class Account
         // Se administradores não podem atualizar senha, verifica nivel do usuário logado e
         //  retorna erro caso nivel administrador.
         if(!BRACP_ALLOW_ADMIN_CHANGE_PASSWORD && self::loggedUser()->getGroup_id() >= BRACP_ALLOW_ADMIN_GMLEVEL)
-            return ['message' => ['error' => 'Usuários do tipo administrador não podem realizar alteração de senha.']];
+            return ['password_message' => ['error' => 'Usuários do tipo administrador não podem realizar alteração de senha.']];
 
         // Verificação recaptcha para saber se a requisição realizada
         //  é verdadeira e pode continuar.
         if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['g-recaptcha-response']))
-            return ['message' => ['error' => 'Código de verificação inválido. Verifique por favor.']];
+            return ['password_message' => ['error' => 'Código de verificação inválido. Verifique por favor.']];
 
         // Obtém a senha atual do jogador para aplicação do md5 na comparação da senha.
         $user_pass = self::loggedUser()->getUser_pass();
@@ -1230,21 +1242,21 @@ class Account
 
         // Verifica senha atual digitada.
         if(hash('md5', $data['user_pass']) !== $user_pass)
-            return ['message' => ['error' => 'Senha atual digitada não confere.']];
+            return ['password_message' => ['error' => 'Senha atual digitada não confere.']];
 
         // Verifica novas senhas digitadas.
         if(hash('md5', $data['user_pass_new']) !== hash('md5', $data['user_pass_conf']))
-            return ['message' => ['error' => 'Novas senhas digitadas não conferem.']];
+            return ['password_message' => ['error' => 'Novas senhas digitadas não conferem.']];
 
         // Verifica se a senha nova é igual a anterior.
         if(hash('md5', $data['user_pass_new']) === $user_pass)
-            return ['message' => ['error' => 'Sua nova senha não pode ser igual a senha anterior.']];
+            return ['password_message' => ['error' => 'Sua nova senha não pode ser igual a senha anterior.']];
 
         // Senha alterada com sucesso.
         if(self::changePass(self::loggedUser()->getAccount_id(), $data['user_pass_new']))
-            return ['message' => ['success' => 'Sua senha foi alterada com sucesso!']];
+            return ['password_message' => ['success' => 'Sua senha foi alterada com sucesso!']];
         else
-            return ['message' => ['error' => 'Ocorreu um erro durante a alteração de sua senha.']];
+            return ['password_message' => ['error' => 'Ocorreu um erro durante a alteração de sua senha.']];
     }
 
     /**
@@ -1280,7 +1292,7 @@ class Account
 
             // Não foi encontrado código de recuperação para a conta.
             if(is_null($recover))
-                return ['message' => ['error' => 'O Código de recuperação já foi utilizado ou é inválido.']];
+                return ['recover_message' => ['error' => 'O Código de recuperação já foi utilizado ou é inválido.']];
 
             // Calcula a nova senha de usuário.
             $user_pass = self::getApp()->randomString(BRACP_RECOVER_STRING_LENGTH, BRACP_RECOVER_RANDOM_STRING);
@@ -1301,11 +1313,11 @@ class Account
                         'password' => $user_pass
                     ]);
 
-                return ['message' => ['success' => 'A Nova senha foi enviada para seu endereço de e-mail.']];
+                return ['recover_message' => ['success' => 'A Nova senha foi enviada para seu endereço de e-mail.']];
             }
             else
             {
-                return ['message' => ['error' => 'Não foi possível recuperar a senha de usuário.']];
+                return ['recover_message' => ['error' => 'Não foi possível recuperar a senha de usuário.']];
             }
         }
         else
@@ -1313,7 +1325,7 @@ class Account
             // Verificação recaptcha para saber se a requisição realizada
             //  é verdadeira e pode continuar.
             if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['g-recaptcha-response']))
-                return ['message' => ['error' => 'Código de verificação inválido. Verifique por favor.']];
+                return ['recover_message' => ['error' => 'Código de verificação inválido. Verifique por favor.']];
 
             // Obtém a conta que está sendo solicitada a requisição para 
             //  recuperação de senha.
@@ -1323,7 +1335,7 @@ class Account
 
             // Objeto da conta não encontrado.
             if(is_null($account))
-                return ['message' => ['error' => 'Combinação de usuário e e-mail não encontrados.']];
+                return ['recover_message' => ['error' => 'Combinação de usuário e e-mail não encontrados.']];
 
             // Se o painel de controle estiver configurado para usar md5 ou recuperação de código
             //  via e-mail, então, inicializa os códigos.
@@ -1371,11 +1383,11 @@ class Account
                         'userid' => $account->getUserid(),
                         'code' => $recover->getCode(),
                         'expire' => $recover->getExpire(),
-                        'href' => BRACP_URL . BRACP_DIR_INSTALL_URL . 'account/recover'
+                        'href' => BRACP_URL . 'account/recover'
                     ]);
 
                 // Informa que o código de recuperação foi enviado ao e-mail do usuário.
-                return ['message' => ['success' => 'Foi enviado um e-mail contendo os dados de recuperação. Verifique seu e-mail.']];
+                return ['recover_message' => ['success' => 'Foi enviado um e-mail contendo os dados de recuperação. Verifique seu e-mail.']];
             }
             else
             {
@@ -1387,7 +1399,7 @@ class Account
                     ]);
 
                 // Retorna informação que foi retornado os dados da conta.
-                return ['message' => ['success' => 'Os dados de sua conta foram enviados ao seu e-mail.']];
+                return ['recover_message' => ['success' => 'Os dados de sua conta foram enviados ao seu e-mail.']];
             }
         }
     }
@@ -1404,7 +1416,7 @@ class Account
         // Verificação recaptcha para saber se a requisição realizada
         //  é verdadeira e pode continuar.
         if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['g-recaptcha-response']))
-            return ['message' => ['error' => 'Código de verificação inválido. Verifique por favor.']];
+            return ['login_message' => ['error' => 'Código de verificação inválido. Verifique por favor.']];
 
         // Obtém a senha que será utilizada para realizar login.
         $user_pass = ((BRACP_MD5_PASSWORD_HASH) ? hash('md5', $data['user_pass']) : $data['user_pass']);
@@ -1417,19 +1429,19 @@ class Account
         // Se a conta retornada for igual a null, não foi encontrada
         //  Então, retorna mensagem de erro.
         if(is_null($account))
-            return ['message' => ['error' => 'Combinação de usuário e senha incorretos.']];
+            return ['login_message' => ['error' => 'Combinação de usuário e senha incorretos.']];
 
         // Se a conta do usuário é inferior ao nivel mínimo permitido
         //  para login, então retorna mensagem de erro.
         if($account->getGroup_id() < BRACP_ALLOW_LOGIN_GMLEVEL || $account->getState() != 0)
-            return ['message' => ['error' => 'Acesso negado. Você não pode realizar login.']];
+            return ['login_message' => ['error' => 'Acesso negado. Você não pode realizar login.']];
 
         // Define os dados de sessão para o usuário.
         $_SESSION['BRACP_ISLOGGEDIN'] = true;
         $_SESSION['BRACP_ACCOUNTID'] = $account->getAccount_id();
 
         // Retorna mensagem de login realizado com sucesso.
-        return ['message' => ['success' => 'Login realizado com sucesso. Aguarde...']];
+        return ['login_message' => ['success' => 'Login realizado com sucesso. Aguarde...']];
     }
 
     /**
@@ -1445,18 +1457,18 @@ class Account
         // Verificação recaptcha para saber se a requisição realizada
         //  é verdadeira e pode continuar.
         if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['g-recaptcha-response']))
-            return ['message' => ['error' => 'Código de verificação inválido. Verifique por favor.']];
+            return ['register_message' => ['error' => 'Código de verificação inválido. Verifique por favor.']];
 
         if(hash('md5', $data['user_pass']) !== hash('md5', $data['user_pass_conf']))
-            return ['message' => ['error' => 'As senhas digitadas não conferem!']];
+            return ['register_message' => ['error' => 'As senhas digitadas não conferem!']];
 
         // Verifica se os emails enviados são iguais.
         if(hash('md5', $data['email']) !== hash('md5', $data['email_conf']))
-            return ['message' => ['error' => 'Os endereços de e-mail digitados não conferem!']];
+            return ['register_message' => ['error' => 'Os endereços de e-mail digitados não conferem!']];
 
         // Verifica se já existe usuário cadastrado para o userid indicado.
         if(self::checkUser($data['userid']) || (BRACP_MAIL_REGISTER_ONCE && self::checkMail($data['email'])))
-            return ['message' => ['error' => 'Nome de usuário ou endereço de e-mail já está em uso.']];
+            return ['register_message' => ['error' => 'Nome de usuário ou endereço de e-mail já está em uso.']];
 
         // Se a senha for hash md5, troca o valor para hash-md5.
         if(BRACP_MD5_PASSWORD_HASH)
@@ -1479,7 +1491,7 @@ class Account
                                     'mail.create', ['userid' => $account->getUserid()]);
 
         // Retorna mensagem que a conta foi criada com sucesso.
-        return ['message' => ['success' => 'Sua conta foi criada com sucesso! Você já pode realizar login.']];
+        return ['register_message' => ['success' => 'Sua conta foi criada com sucesso! Você já pode realizar login.']];
     }
 
     /**

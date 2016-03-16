@@ -23,16 +23,14 @@
             <label for="bracp-modal-login" class="modal-close">&times;</label>
         </div>
         <div class="modal-body">
-            {if isset($message.success) eq true}
-                <div class="bracp-message success">{$message.success}</div>
+            {if isset($login_message.success) eq true}
+                <div class="bracp-message success">{$login_message.success}</div>
 
                 <script>
-                    setTimeout(function() {
-                        window.location.reload(true);
-                    }, 100);
+                    window.location.href = '{$smarty.const.BRACP_DIR_INSTALL_URL}';
                 </script>
-            {else if isset($message.error) eq true}
-                <div class="bracp-message error">{$message.error}</div>
+            {else if isset($login_message.error) eq true}
+                <div class="bracp-message error">{$login_message.error}</div>
             {/if}
 
             Para acessar os dados de sua conta, você deve realizar o acesso utilizando seu nome de usuário e senha.

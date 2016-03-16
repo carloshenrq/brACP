@@ -59,6 +59,19 @@
                             "BRACP_TEMPLATE_DIR: {$smarty.const.BRACP_TEMPLATE_DIR} \n" + 
                             "BRACP_DEFAULT_TIMEZONE: {$smarty.const.BRACP_DEFAULT_TIMEZONE} \n");
         {/if}
+
+        +function($)
+        {
+
+            $(document).ready(function() {
+                {if isset($recover_message) eq true}
+                    $('#bracp-modal-recover').prop('checked', true);
+                    window.history.replaceState("", "", "{$smarty.const.BRACP_DIR_INSTALL_URL}");
+                {/if}
+            });
+
+        } (window.jQuery);
+
         {block name="brACP_JavaScript"}
         {/block}
         </script>
