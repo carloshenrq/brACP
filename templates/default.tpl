@@ -25,7 +25,6 @@
         <link rel="shortcut icon" href="{$smarty.const.BRACP_DIR_INSTALL_URL}fav.ico">
         <!-- Here loads all CSS files. -->
         <link rel="stylesheet" type="text/css" href="{$smarty.const.BRACP_DIR_INSTALL_URL}themes/{$smarty.const.BRACP_DEFAULT_THEME}/css/system.css"/>
-        <link rel="stylesheet" type="text/css" href="{$smarty.const.BRACP_DIR_INSTALL_URL}themes/{$smarty.const.BRACP_DEFAULT_THEME}/css/menu.css"/>
         <link rel="stylesheet" type="text/css" href="{$smarty.const.BRACP_DIR_INSTALL_URL}themes/{$smarty.const.BRACP_DEFAULT_THEME}/css/modal.css"/>
         <link rel="stylesheet" type="text/css" href="{$smarty.const.BRACP_DIR_INSTALL_URL}themes/{$smarty.const.BRACP_DEFAULT_THEME}/css/button.css"/>
         <style>
