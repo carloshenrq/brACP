@@ -23,6 +23,9 @@
 if(file_exists(__DIR__ . DIRECTORY_SEPARATOR . 'config.php'))
     exit;
 
+if(!defined('PHP_VERSION'))
+    define('PHP_VERSION', phpversion(), false);
+
 // Obtém as permissões de arquivo para notificar o usuário sobre as informações.
 $writeable = is_writable(__DIR__);
 
@@ -205,14 +208,22 @@ if($writeable && isset($_POST) && !empty($_POST))
         <div class="bracp-install-body">
             <h1>Instalação do brACP - Painel de Controle</h1>
 
-            <?php if(!file_exists('vendor') || !is_dir('vendor') || file_exists('vendor') && !file_exists('composer.lock')) { ?>
+            <?php if(version_compare(PHP_VERSION, '5.4.0', '<')) { ?>
+                <div class="bracp-install-error">
+                    Sua versão de instalação do PHP é inferior a requerida para execução do painel de controle.<br>
+                    A Versão minima para execução é a 5.4.0 ou superior.<br>
+                    <br>
+                    <strong><i>Hey, psiu! Talvez isso te ajude:
+                    <a href="http://php.net/" target="_blank">PHP.net</a></i></strong>
+                </div>
+            <?php } else if(!file_exists('vendor') || !is_dir('vendor') || file_exists('vendor') && !file_exists('composer.lock')) { ?>
 
                 <div class="bracp-install-error">
                     Os arquivos do composer não foram baixados!<br>
                     Verifique sua instalação e tente novamente.<br>
                     <br>
-                    Hey, psiu! Talvez isso te ajude:
-                    <a href="http://getcomposer.org/" target="_blank">Composer</a>
+                    <strong><i>Hey, psiu! Talvez isso te ajude:
+                    <a href="http://getcomposer.org/" target="_blank">Composer</a>.</i></strong>
                 </div>
 
             <?php } else if(!$writeable) { ?>
