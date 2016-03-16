@@ -50,7 +50,7 @@
             </div>
         </form>
 
-        Perdeu sua conta? <span class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/recover" data-target=".bracp-body">clique aqui</span>.<br>
-        Não possui uma conta? <span class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/register" data-target=".bracp-body">clique aqui</span>.
+        Perdeu sua conta? clique aqui.<br>
+        Não possui uma conta? <label class="lbl-link" for="bracp-modal-create">clique aqui</label>.
     </div>
 </div>

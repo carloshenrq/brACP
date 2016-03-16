@@ -392,9 +392,10 @@ input[type="text"], input[type="password"], select
     }
 }
 
-span.ajax-url
+span.ajax-url, label.lbl-link
 {
     font-weight: bold !important;
+    cursor: pointer;
 }
 
 .bracp-ajax-loading
