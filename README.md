@@ -222,3 +222,33 @@ Permitir as próximas doações.
 
 ####DONATION_INTERVAL_DAYS _(integer)_
 Tempo, em dias, para exibir as próximas promoções.
+
+####BRACP_ALLOW_CHOOSE_THEME _(true|false)_
+Permitir usuário escolher o tema.
+
+####BRACP_DEFAULT_THEME _(string)_
+Pasta para o tema que o usuário ou o sistema escolheu.
+
+##Recomendações
+
+Se você desejar uma outra opção de painel de controle, nós recomendamos o [FluxCP](https://github.com/HerculesWS/FluxCP).
+
+##Agradecimentos
+
+[Protimus](http://forum.brathena.org/index.php/user/1-protimus/) : Por fornecer dicas de segurança.
+
+[Tidus](http://forum.brathena.org/index.php/user/6106-tidus/) : Por fornecer o banco de dados em que o todos os testes foram realizados.
+
+[Aly](http://forum.brathena.org/index.php/user/294-aly/) : Incentivar o desenvolvimento do painel de controle e permitir que isso acontecesse.
+
+[Kaoozie](http://forum.brathena.org/index.php/user/3605-kaoozie/) : Realizar os teste do painel de controle.
+
+[Sir Will](http://forum.brathena.org/index.php/user/18776-sir-will/) : Realizar os teste do painel de controle.
+
+[Twitter Bootstrap](http://getbootstrap.com/) : Estilização dos botões no tema padrão do painel de controle, foram obtidos em [boostrap 2.3.2](http://getbootstrap.com/2.3.2/)
+
+[Megasantos](http://forum.brathena.org/index.php/user/947-jonatas/) : Traduzir as classes no FluxCP e deixar disponivel.
+
+##Desenvolvedores
+
+[CarlosHenrq](http://forum.brathena.org/index.php/user/60-carloshenrq/)
