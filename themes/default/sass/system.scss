@@ -39,14 +39,20 @@ input[type="text"], input[type="password"], select
     {
         display: none;
 
-        &:not(:checked) + .modal
+        &:not(:checked)
         {
-            display: none;
+            &+ .modal, &+ .modal-login-body, &+ .modal-create-body
+            {
+                display: none;
+            }
         }
 
         &:checked + .modal
         {
-            display: block;
+            &+ .modal, &+ .modal-login-body, &+ .modal-create-body
+            {
+                display: block;
+            }
         }
     }
 
@@ -83,11 +89,6 @@ input[type="text"], input[type="password"], select
             position: relative;
             padding: 16px;
             @include max-size(600px, 600px);
-
-            &.modal-create-body, .modal-login-body
-            {
-                width: 90%;
-            }
         }
 
         .modal-footer

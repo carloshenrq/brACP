@@ -31,10 +31,10 @@ input[type="text"], input[type="password"], select {
 .modal-container .modal-check {
   display: none;
 }
-.modal-container .modal-check:not(:checked) + .modal {
+.modal-container .modal-check:not(:checked) + .modal, .modal-container .modal-check:not(:checked) + .modal-login-body, .modal-container .modal-check:not(:checked) + .modal-create-body {
   display: none;
 }
-.modal-container .modal-check:checked + .modal {
+.modal-container .modal-check:checked + .modal + .modal, .modal-container .modal-check:checked + .modal + .modal-login-body, .modal-container .modal-check:checked + .modal + .modal-create-body {
   display: block;
 }
 .modal-container .modal {
@@ -69,9 +69,6 @@ input[type="text"], input[type="password"], select {
   max-width: 600px;
   max-height: 600px;
   overflow: auto;
-}
-.modal-container .modal .modal-body.modal-create-body, .modal-container .modal .modal-body .modal-login-body {
-  width: 90%;
 }
 .modal-container .modal .modal-footer {
   position: relative;
