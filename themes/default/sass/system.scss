@@ -31,6 +31,10 @@ input[type="text"], input[type="password"], select
 
 .modal-container
 {
+    position: absolute;
+    top: 0px; left: 0px;
+    width: 100%;
+
     .modal-check
     {
         display: none;
@@ -54,7 +58,10 @@ input[type="text"], input[type="password"], select
 
         max-width: 600px;
 
-        @include position-center(fixed);
+        position: relative;
+        top: 16px;
+        margin: auto;
+
         @include box-shadow(0px 0px 10px rgba(0, 0, 0, .45));
         @include border-radius(2px);
 
@@ -75,12 +82,11 @@ input[type="text"], input[type="password"], select
         {
             position: relative;
             padding: 16px;
-            @include min-size(300px, .0);
             @include max-size(600px, 600px);
 
             &.modal-create-body, .modal-login-body
             {
-                width: 530px;
+                width: 90%;
             }
         }
 
@@ -217,7 +223,7 @@ input[type="text"], input[type="password"], select
 
             &:not(:checked) + label + .bracp-menu
             {
-                left: -20%;
+                left: -60%;
             }
         }
 

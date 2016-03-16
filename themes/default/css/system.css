@@ -22,6 +22,12 @@ input[type="text"], input[type="password"], select {
   -webkit-border-radius: 3px;
 }
 
+.modal-container {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+}
 .modal-container .modal-check {
   display: none;
 }
@@ -36,12 +42,9 @@ input[type="text"], input[type="password"], select {
   font-size: 12px;
   background-color: white;
   max-width: 600px;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  -webkit-transform: translate(-50%, -50%);
+  position: relative;
+  top: 16px;
+  margin: auto;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.45);
   -moz-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.45);
   -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.45);
@@ -63,14 +66,12 @@ input[type="text"], input[type="password"], select {
 .modal-container .modal .modal-body {
   position: relative;
   padding: 16px;
-  min-width: 300px;
-  min-height: 0;
   max-width: 600px;
   max-height: 600px;
   overflow: auto;
 }
 .modal-container .modal .modal-body.modal-create-body, .modal-container .modal .modal-body .modal-login-body {
-  width: 530px;
+  width: 90%;
 }
 .modal-container .modal .modal-footer {
   position: relative;
@@ -171,7 +172,7 @@ input[type="text"], input[type="password"], select {
   content: '\2261';
 }
 .bracp-content .bracp-header .bracp-menu-check:not(:checked) + label + .bracp-menu {
-  left: -20%;
+  left: -60%;
 }
 .bracp-content .bracp-header .bracp-menu {
   float: left;
