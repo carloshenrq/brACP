@@ -19,7 +19,5 @@
 {extends file="mail.default.tpl"}
 
 {block name="mail_body"}
-    Agradecemos seu registro e esperamos que você tenha muitas horas de diversão em nosso servidor.<br>
-    <br>
-    Se você precisar recuperar sua conta, <a href="{$smarty.const.BRACP_URL}{$smarty.const.BRACP_DIR_INSTALL_URL}account/recover" target="_blank">clique aqui</a>.
+    Agradecemos seu registro e esperamos que você tenha muitas horas de diversão em nosso servidor.
 {/block}

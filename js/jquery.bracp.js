@@ -16,6 +16,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+var grecaptcha_timer = false;
+
 +function($)
 {
     // Ao clicar no botão para doar novamente.
@@ -83,6 +85,32 @@
         $(this).val((value/decimalMultiply).toFixed(decimalPlaces).toString());
     });
 
+    $(document).ready(function() {
+        grecaptcha_timer = setInterval(function() {
+            // Se a biblioteca do google ainda não estiver pronta,
+            //  mantém o timer rodando.
+            if(grecaptcha == undefined)
+                return;
+
+            // Limpa o intervalo caso seja carregado.
+            clearInterval(grecaptcha_timer);
+
+            // Adicionado renderização para o código re-captcha na página atual.
+            // Verificações serão adicionadas via servidor.
+            if($('.bracp-g-recaptcha').length > 0)
+            {
+                $('.bracp-g-recaptcha').each(function(){
+                    if($(this).html().length == 0)
+                    {
+                        grecaptcha.render(this, {
+                            'sitekey' : $(this).data('sitekey')
+                        });
+                    }
+                });
+            }
+        }, 100);
+    });
+
     $.ajaxSetup({
         'beforeSend' : function(jqXHR, settings) {
             // Ajusta a tela de acordo com a largura.
@@ -96,9 +124,9 @@
 
             // Adicionado renderização para o código re-captcha na página atual.
             // Verificações serão adicionadas via servidor.
-            if($('.g-recaptcha').length > 0)
+            if($('.bracp-g-recaptcha').length > 0)
             {
-                $('.g-recaptcha').each(function(){
+                $('.bracp-g-recaptcha').each(function(){
                     if($(this).html().length == 0)
                     {
                         grecaptcha.render(this, {

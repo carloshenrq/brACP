@@ -19,12 +19,12 @@ html, body
     background-color: rgba(255, 255, 255, 1);
 }
 
-input[type="text"], input[type="password"]
+input[type="text"], input[type="password"], select
 {
     padding: 6px;
 
     border: 1px solid lightgray;
-    outline: lightblue;
+    outline-color: red;
 
     @include border-radius(3px);
 }
@@ -76,7 +76,12 @@ input[type="text"], input[type="password"]
             position: relative;
             padding: 16px;
             @include min-size(300px, .0);
-            @include max-size(600px, 400px);
+            @include max-size(600px, 600px);
+
+            &.modal-create-body, .modal-login-body
+            {
+                width: 530px;
+            }
         }
 
         .modal-footer
@@ -324,14 +329,59 @@ input[type="text"], input[type="password"]
         text-align: center;
         position: relative;
 
+        input[type="radio"], input[type="checkbox"]
+        {
+            display: none;
+
+            &+ label
+            {
+                margin: 0px;
+                padding: 6px;
+                display: inline-block;
+                cursor: pointer;
+
+                background-color: white;
+
+                &:before
+                {
+                    content: 'O';
+                    margin-right: 4px;
+                }
+            }
+
+            &:required:not(:checked) + label
+            {
+                background-color: rgba(255, 0, 0, 0.1);
+                color: #BD0029;
+            }
+
+            &:checked + label
+            {
+                background-color: rgba(120, 209, 90, 0.3);
+                color: #53913F;
+
+                &:before
+                {
+                    content: '\221A';
+                }
+            }
+        }
+
+        input[type="text"], input[type="password"]
+        {
+            width: 50%;
+        }
+
         input, button, div
         {
             display: block;
             margin: 0 auto;
 
-            &+ input, button, div
+            &+ input,
+            &+ button,
+            &+ div
             {
-                margin-top: 5px;
+                margin-top: 10px;
             }
         }
 
@@ -345,4 +395,11 @@ input[type="text"], input[type="password"]
 span.ajax-url
 {
     font-weight: bold !important;
+}
+
+.bracp-ajax-loading
+{
+    position: fixed;
+    top: 0px; left: 0px;
+    background-color: rgba(0, 0, 0, .3);
 }

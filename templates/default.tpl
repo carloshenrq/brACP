@@ -129,29 +129,18 @@
             </div>
         </div>
     {/block}
-        <div class="bracp-ajax-loading">
-            <div class="bracp-ajax-loading-div"></div>
-        </div>
-
         <div class="modal-container">
             {if isset($smarty.session.BRACP_ISLOGGEDIN) eq false or $smarty.session.BRACP_ISLOGGEDIN eq false}
                 <input id="bracp-modal-login" class="modal-check" type="checkbox"/>
                 {include 'account.login.ajax.tpl'}
 
                 <input id="bracp-modal-create" class="modal-check" type="checkbox"/>
-                <div class="modal">
-                    <div class="modal-header">
-                        Criar conta
-                        <label for="bracp-modal-create" class="modal-close">&times;</label>
-                    </div>
-                    <div class="modal-body">
-                        teste
-                    </div>
-                    <div class="modal-footer">
-                        rodapé
-                    </div>
-                </div>
+                {include 'account.register.ajax.tpl'}
             {/if}
+        </div>
+
+        <div class="bracp-ajax-loading">
+            <div class="bracp-ajax-loading-div"></div>
         </div>
     </body>
 </html>

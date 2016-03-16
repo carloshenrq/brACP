@@ -19,9 +19,7 @@
 <h1>Minha Conta &raquo; Sair</h1>
 
 <script>
-    setTimeout(function() {
-        window.location.href = '{$smarty.const.BRACP_DIR_INSTALL_URL}';
-    }, 2000);
+    window.location.href = '{$smarty.const.BRACP_DIR_INSTALL_URL}';
 </script>
 
 <p class="bracp-message success">

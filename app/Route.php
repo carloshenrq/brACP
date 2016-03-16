@@ -49,7 +49,7 @@ class Route
                 // Verifica configuração se permite criação de nova conta.
                 if(BRACP_ALLOW_CREATE_ACCOUNT)
                 {
-                    $this->map(['GET', 'POST'], '/register', ['Controller\Account', 'register'])
+                    $this->post('/register', ['Controller\Account', 'register'])
                             ->add(['Controller\Account', 'needLoggout']);
                 }
 

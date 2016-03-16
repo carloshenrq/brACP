@@ -18,9 +18,6 @@
 <ul>
     <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}" data-target=".bracp-body">Principal</li>
     {if isset($smarty.session.BRACP_ISLOGGEDIN) eq false or $smarty.session.BRACP_ISLOGGEDIN eq false}
-        {if $smarty.const.BRACP_ALLOW_CREATE_ACCOUNT eq true}
-            <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/register" data-target=".bracp-body">Criar Conta</li>
-        {/if}
         <li>Minha Conta
             <ul data-back="Minha Conta">
                 {if $smarty.const.BRACP_ALLOW_RECOVER eq true}

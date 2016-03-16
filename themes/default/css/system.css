@@ -13,10 +13,10 @@ html, body {
   background-color: white;
 }
 
-input[type="text"], input[type="password"] {
+input[type="text"], input[type="password"], select {
   padding: 6px;
   border: 1px solid lightgray;
-  outline: lightblue;
+  outline-color: red;
   border-radius: 3px;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
@@ -66,8 +66,11 @@ input[type="text"], input[type="password"] {
   min-width: 300px;
   min-height: 0;
   max-width: 600px;
-  max-height: 400px;
+  max-height: 600px;
   overflow: auto;
+}
+.modal-container .modal .modal-body.modal-create-body, .modal-container .modal .modal-body .modal-login-body {
+  width: 530px;
 }
 .modal-container .modal .modal-footer {
   position: relative;
@@ -260,12 +263,40 @@ input[type="text"], input[type="password"] {
   text-align: center;
   position: relative;
 }
+.ajax-form .input-forms input[type="radio"], .ajax-form .input-forms input[type="checkbox"] {
+  display: none;
+}
+.ajax-form .input-forms input[type="radio"] + label, .ajax-form .input-forms input[type="checkbox"] + label {
+  margin: 0px;
+  padding: 6px;
+  display: inline-block;
+  cursor: pointer;
+  background-color: white;
+}
+.ajax-form .input-forms input[type="radio"] + label:before, .ajax-form .input-forms input[type="checkbox"] + label:before {
+  content: 'O';
+  margin-right: 4px;
+}
+.ajax-form .input-forms input[type="radio"]:required:not(:checked) + label, .ajax-form .input-forms input[type="checkbox"]:required:not(:checked) + label {
+  background-color: rgba(255, 0, 0, 0.1);
+  color: #BD0029;
+}
+.ajax-form .input-forms input[type="radio"]:checked + label, .ajax-form .input-forms input[type="checkbox"]:checked + label {
+  background-color: rgba(120, 209, 90, 0.3);
+  color: #53913F;
+}
+.ajax-form .input-forms input[type="radio"]:checked + label:before, .ajax-form .input-forms input[type="checkbox"]:checked + label:before {
+  content: '\221A';
+}
+.ajax-form .input-forms input[type="text"], .ajax-form .input-forms input[type="password"] {
+  width: 50%;
+}
 .ajax-form .input-forms input, .ajax-form .input-forms button, .ajax-form .input-forms div {
   display: block;
   margin: 0 auto;
 }
-.ajax-form .input-forms input + input, .ajax-form .input-forms input button, .ajax-form .input-forms input div, .ajax-form .input-forms button + input, .ajax-form .input-forms button button, .ajax-form .input-forms button div, .ajax-form .input-forms div + input, .ajax-form .input-forms div button, .ajax-form .input-forms div div {
-  margin-top: 5px;
+.ajax-form .input-forms input + input, .ajax-form .input-forms input + button, .ajax-form .input-forms input + div, .ajax-form .input-forms button + input, .ajax-form .input-forms button + button, .ajax-form .input-forms button + div, .ajax-form .input-forms div + input, .ajax-form .input-forms div + button, .ajax-form .input-forms div + div {
+  margin-top: 10px;
 }
 .ajax-form .input-forms input[type="submit"], .ajax-form .input-forms input[type="reset"] {
   display: initial;
@@ -273,4 +304,11 @@ input[type="text"], input[type="password"] {
 
 span.ajax-url {
   font-weight: bold !important;
+}
+
+.bracp-ajax-loading {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  background-color: rgba(0, 0, 0, 0.3);
 }

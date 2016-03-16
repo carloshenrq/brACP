@@ -24,7 +24,7 @@
 
         // Se não houver restrições para definir o URL no envio do form, então
         //  não permite que o URL do navegador seja alterado.
-        if($(this).data('block') === undefined)
+        if($(this).data('block') === undefined || $(this).closest('.modal').length == 0)
         {
             // Define o url da página.
             window.history.pushState("", "", $(this).attr('action'));
@@ -56,13 +56,18 @@
     // Caso realize o click em um elemento com ajax-url
     $(document).on('click', '.ajax-url', function() {
 
-        // Define o url da página.
-        window.history.pushState(null, null, $(this).data('url'));
+        var target = $($(this).data('target')) || this;
+
+        if($(this).data('block') === undefined || target.closest('.modal').length == 0)
+        {
+            // Define o url da página.
+            window.history.pushState(null, null, $(this).data('url'));
+        }
 
         // Realiza a requisição ajax no contexto atual.
         $.ajax({
             'url'       : $(this).data('url'),
-            'context'   : $($(this).data('target')) || this,
+            'context'   : target,
             'method'    : $(this).data('method') || "GET",
             'data'      : $(this).data('data') || {},
             'cache'     : false,

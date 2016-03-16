@@ -50,7 +50,7 @@ $config = [
     'BRACP_ALLOW_RANKING_ZENY_SHOW_ZENY'    => 1,
     'BRACP_DEVELOP_MODE'                    => 0,
     'BRACP_MAINTENCE'                       => 0,
-    'BRACP_VERSION'                         =>'0.1.1-beta',
+    'BRACP_VERSION'                         =>'0.2.1-beta',
 
     // MySQL
     'BRACP_SQL_DRIVER'                      => 'pdo_mysql',
