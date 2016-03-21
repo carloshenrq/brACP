@@ -144,13 +144,16 @@
         <div class="modal-container">
             {if isset($smarty.session.BRACP_ISLOGGEDIN) eq false or $smarty.session.BRACP_ISLOGGEDIN eq false}
                 <input id="bracp-modal-login" class="modal-check" type="checkbox"/>
-                {include 'account.login.ajax.tpl'}
+                <div class="modal-login-body">{include 'account.login.ajax.tpl'}</div>
 
                 <input id="bracp-modal-create" class="modal-check" type="checkbox"/>
-                {include 'account.register.ajax.tpl'}
+                <div class="modal-create-body">{include 'account.register.ajax.tpl'}</div>
 
                 <input id="bracp-modal-recover" class="modal-check" type="checkbox"/>
-                {include 'account.recover.ajax.tpl'}
+                <div class="modal-recover-body">{include 'account.recover.ajax.tpl'}</div>
+            {else}
+                <input id="bracp-modal-changepass" class="modal-check" = type="checkbox"/>
+                <div class="modal-changepass-body">{include 'account.change.password.ajax.tpl'}</div>
             {/if}
         </div>
 
