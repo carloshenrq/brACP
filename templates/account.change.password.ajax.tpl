@@ -37,7 +37,7 @@
             {if isset($password_message.success) eq true}
                 <div class="bracp-message success">{$password_message.success}</div>
             {else if isset($password_message.error) eq true}
-                <div class="bracp-message errpassword_messageor">{$password_message.error}</div>
+                <div class="bracp-message error">{$password_message.error}</div>
             {/if}
 
             Para realizar a alteração de sua senha é necessário que você digite sua senha atual, sua nova senha e confirme.
