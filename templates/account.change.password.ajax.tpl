@@ -18,7 +18,7 @@
 <div class="modal">
     <div class="modal-header">
         Minha Conta &raquo; Alterar Senha
-        <label for="bracp-modal-login" class="modal-close">&times;</label>
+        <label for="bracp-modal-changepass" class="modal-close">&times;</label>
     </div>
     <div class="modal-body">
         {if $smarty.const.BRACP_ALLOW_ADMIN_CHANGE_PASSWORD eq false and $account->getGroup_id() >= $smarty.const.BRACP_ALLOW_ADMIN_GMLEVEL}
@@ -46,6 +46,8 @@
                 <div class="input-forms">
                     <input type="password" id="user_pass" name="user_pass" placeholder="Senha atual" size="24" maxlength="24" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>
 
+                    <input type="password" id="user_pass_new" name="user_pass_new" placeholder="Digite sua nova senha" size="24" maxlength="24" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>
+                    
                     <input type="password" id="user_pass_conf" name="user_pass_conf" placeholder="Confirme sua nova senha" size="24" maxlength="24" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>
 
                     {if $smarty.const.BRACP_RECAPTCHA_ENABLED eq true}

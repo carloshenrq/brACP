@@ -146,14 +146,23 @@
                 <input id="bracp-modal-login" class="modal-check" type="checkbox"/>
                 <div class="modal-login-body">{include 'account.login.ajax.tpl'}</div>
 
-                <input id="bracp-modal-create" class="modal-check" type="checkbox"/>
-                <div class="modal-create-body">{include 'account.register.ajax.tpl'}</div>
+                {if $smarty.const.BRACP_ALLOW_CREATE_ACCOUNT eq true}
+                    <input id="bracp-modal-create" class="modal-check" type="checkbox"/>
+                    <div class="modal-create-body">{include 'account.register.ajax.tpl'}</div>
+                {/if}
 
-                <input id="bracp-modal-recover" class="modal-check" type="checkbox"/>
-                <div class="modal-recover-body">{include 'account.recover.ajax.tpl'}</div>
+                {if $smarty.const.BRACP_ALLOW_RECOVER eq true}
+                    <input id="bracp-modal-recover" class="modal-check" type="checkbox"/>
+                    <div class="modal-recover-body">{include 'account.recover.ajax.tpl'}</div>
+                {/if}
             {else}
-                <input id="bracp-modal-changepass" class="modal-check" = type="checkbox"/>
+                <input id="bracp-modal-changepass" class="modal-check" type="checkbox"/>
                 <div class="modal-changepass-body">{include 'account.change.password.ajax.tpl'}</div>
+
+                {if $smarty.const.BRACP_ALLOW_CHANGE_MAIL eq true}
+                    <input id="bracp-modal-changemail" class="modal-check" type="checkbox"/>
+                    <div class="modal-changemail-body">{include 'account.change.mail.ajax.tpl'}</div>
+                {/if}
             {/if}
         </div>
 

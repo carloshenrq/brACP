@@ -15,92 +15,49 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *}
-
-<h1>Minha Conta &raquo; Alterar Email</h1>
-
-{if $account->getGroup_id() >= $smarty.const.BRACP_ALLOW_ADMIN_GMLEVEL}
-    <p class="bracp-message error">
-        Nenhum administrador está permitido a alterar seu endereço de email.
-        {if $smarty.const.BRACP_ALLOW_ADMIN eq true}
-            <br>
-            Você pode alterar acessando o
-                <span class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}admin/manage/account" data-target=".bracp-body">painel administrativo</span>.
-        {/if}
-    </p>
-{else}
-
-    {if isset($message) eq true}
-        <p class="bracp-message {if isset($message.success) eq true}success{else}error{/if}">
-            {if isset($message.success) eq true}
-                {$message.success}
-            {else}
-                {$message.error}
-            {/if}
-        </p>
-    {/if}
-
-    <p>
-        Para realizar a alteração de seu endereço de e-mail é necessário que você digite seu e-mail atual, seu novo endereço de email e confirme!
-    </p>
-
-    <form class="ajax-form" action="{$smarty.const.BRACP_DIR_INSTALL_URL}account/change/mail" autocomplete="off" method="post" target=".bracp-body">
-        <div class="bracp-form">
-            <div class="bracp-form-field">
-                <label>
-                    Email atual:<br>
-                    <input type="text" id="email" name="email" placeholder="Email atual" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
-                </label>
+<div class="modal">
+    <div class="modal-header">
+        Minha Conta &raquo; Alterar Email
+        <label for="bracp-modal-changemail" class="modal-close">&times;</label>
+    </div>
+    <div class="modal-body">
+        {if $smarty.const.BRACP_ALLOW_CHANGE_MAIL eq false}
+            <div class="bracp-message error">
+                Alteração de e-mail está desativada.
             </div>
-            <div class="bracp-form-field">
-                <label>
-                    Novo email:<br>
-                    <input type="text" id="email_new" name="email_new" placeholder="Novo email" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
-                </label>
+        {else if $account->getGroup_id() >= $smarty.const.BRACP_ALLOW_ADMIN_GMLEVEL}
+            <div class="bracp-message error">
+                Nenhum administrador está permitido a alterar seu endereço de email.
             </div>
-            <div class="bracp-form-field">
-                <label>
-                    Confirme:<br>
-                    <input type="text" id="email_conf" name="email_conf" placeholder="Confirme seu novo email" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
-                </label>
-
-                {if $smarty.const.BRACP_RECAPTCHA_ENABLED eq true}
-                    <div class="g-recaptcha" data-sitekey="{$smarty.const.BRACP_RECAPTCHA_PUBLIC_KEY}"></div>
-                {/if}
-
-                <div class="bracp-form-submit">
-                    <input class="btn" type="submit" value="Alterar"/>
-                    <input class="btn" type="reset" value="Resetar"/>
-                </div>
-            </div>
-        </div>
-    </form>
-
-    {if $smarty.const.BRACP_MAIL_SHOW_LOG eq true}
-        {if count($mailChange) gt 0}
-            <br>
-            <table border="1" align="center" class="bracp-table">
-                <caption class="bracp-message warning">{min(10, count($mailChange))} última(s) alteração(ões) de e-mail.</caption>
-                <thead>
-                    <tr>
-                        <th>Cód.</th>
-                        <th>Antigo</th>
-                        <th>Novo</th>
-                        <th>Data</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {foreach from=$mailChange item=change}
-                        <tr>
-                            <td>{$change->getId()}</td>
-                            <td>{Format::protectMail($change->getFrom())}</td>
-                            <td>{Format::protectMail($change->getTo())}</td>
-                            <td>{Format::date($change->getDate())}</td>
-                        </tr>
-                    {/foreach}
-                </tbody>
-            </table>
         {else}
-            <p class="bracp-message warning">Você ainda não realizou nenhuma mudança de e-mail.</p>
+            {if isset($email_message) eq true}
+                <p class="bracp-message {if isset($email_message.success) eq true}success{else}error{/if}">
+                    {if isset($email_message.success) eq true}
+                        {$email_message.success}
+                    {else}
+                        {$email_message.error}
+                    {/if}
+                </p>
+            {/if}
+
+            Para realizar a alteração de seu endereço de e-mail é necessário que você digite seu e-mail atual, seu novo endereço de email e confirme!
+
+            <form class="ajax-form" action="{$smarty.const.BRACP_DIR_INSTALL_URL}account/change/mail" autocomplete="off" method="post" target=".modal-changemail-body" data-block="1">
+                <div class="input-forms">
+                    <input type="text" id="email" name="email" placeholder="Email atual" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
+
+                    <input type="text" id="email_new" name="email_new" placeholder="Novo email" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
+                    
+                    <input type="text" id="email_conf" name="email_conf" placeholder="Confirme seu novo email" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
+
+                    {if $smarty.const.BRACP_RECAPTCHA_ENABLED eq true}
+                        <div class="bracp-g-recaptcha" data-sitekey="{$smarty.const.BRACP_RECAPTCHA_PUBLIC_KEY}"></div>
+                    {/if}
+
+                    <input class="btn btn-success" type="submit" value="Alterar"/>
+                    <input class="btn" type="reset" value="Limpar"/>
+                </div>
+            </form>
         {/if}
-    {/if}
-{/if}
+    </div>
+</div>

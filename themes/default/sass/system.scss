@@ -61,7 +61,7 @@ input[type="text"], input[type="password"], select
         {
             &+ .modal, &+ .modal-login-body,
             &+ .modal-create-body, &+ .modal-recover-body,
-            &+ .modal-changepass-body
+            &+ .modal-changepass-body, &+ .modal-changemail-body
             {
                 display: none;
             }
@@ -71,7 +71,7 @@ input[type="text"], input[type="password"], select
         {
             &+ .modal, &+ .modal-login-body,
             &+ .modal-create-body, &+ .modal-recover-body,
-            &+ .modal-changepass-body
+            &+ .modal-changepass-body, &+ .modal-changemail-body
             {
                 display: block;
             }
