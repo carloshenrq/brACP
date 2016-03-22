@@ -87,7 +87,7 @@
                     {include 'menu.tpl'}
                 </div>
                 <div class="bracp-header-menu">
-                    {if isset($app->getSession()->BRACP_ISLOGGEDIN) eq false or $app->getSession()->BRACP_ISLOGGEDIN eq false}
+                    {if isset($session->BRACP_ISLOGGEDIN) eq false or $session->BRACP_ISLOGGEDIN eq false}
                         <label for="bracp-modal-login" class="btn btn-success">Entrar</label>
                         {if $smarty.const.BRACP_ALLOW_CREATE_ACCOUNT eq true}
                             <label for="bracp-modal-create" class="btn btn-info">Cadastre-se</label>
@@ -142,7 +142,7 @@
         </div>
     {/block}
         <div class="modal-container">
-            {if isset($app->getSession()->BRACP_ISLOGGEDIN) eq false or $app->getSession()->BRACP_ISLOGGEDIN eq false}
+            {if isset($session->BRACP_ISLOGGEDIN) eq false or $session->BRACP_ISLOGGEDIN eq false}
                 <input id="bracp-modal-login" class="modal-check" type="checkbox"/>
                 <div class="modal-login-body">{include 'account.login.ajax.tpl'}</div>
 

@@ -189,7 +189,7 @@ class brACPApp extends Slim\App
 
         // Adiciona o navegador aos dados para o template.
         $data = array_merge($data, [
-            'app' => $this,
+            'app' => $this->getSession(),
             'navigator' => Navigator::getBrowser($this->getContainer()->get('request')->getHeader('user-agent')[0]),
             'ipAddress' => ((is_null($ip_address)) ? $_SERVER['REMOTE_ADDR'] : $ip_address)
         ]);
