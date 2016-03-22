@@ -17,7 +17,7 @@
  *}
 <ul>
     <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}" data-target=".bracp-body">Principal</li>
-    {if isset($smarty.session.BRACP_ISLOGGEDIN) eq false or $smarty.session.BRACP_ISLOGGEDIN eq false}
+    {if isset($app->getSession()->BRACP_ISLOGGEDIN) eq false or $app->getSession()->BRACP_ISLOGGEDIN eq false}
         <li>Minha Conta
             <ul data-back="Minha Conta">
                 {if $smarty.const.BRACP_ALLOW_RECOVER eq true}

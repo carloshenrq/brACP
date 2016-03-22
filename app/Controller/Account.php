@@ -33,6 +33,7 @@ use \PagSeguro\CheckoutItem;
 use \PagSeguro\Transaction;
 
 use \Format;
+use \Session;
 
 /**
  * Controlador para dados de conta.
@@ -70,7 +71,7 @@ class Account
      */
     public static function logout(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
-        unset($_SESSION['BRACP_ISLOGGEDIN'], $_SESSION['BRACP_ACCOUNTID']);
+        unset(self::getApp()->getSession()->BRACP_ISLOGGEDIN, self::getApp()->getSession()->BRACP_ACCOUNTID);
         self::getApp()->display('account.logout');
     }
 
@@ -504,7 +505,8 @@ class Account
      */
     public static function isLoggedIn()
     {
-        return isset($_SESSION['BRACP_ISLOGGEDIN']) and $_SESSION['BRACP_ISLOGGEDIN'] == true;
+        return isset(self::getApp()->getSession()->BRACP_ISLOGGEDIN)
+                    and self::getApp()->getSession()->BRACP_ISLOGGEDIN == true;
     }
 
     /**
@@ -519,7 +521,7 @@ class Account
         if(is_null(self::$user))
             self::$user = self::getApp()->getEm()
                                         ->getRepository('Model\Login')
-                                        ->findOneBy(['account_id' => $_SESSION['BRACP_ACCOUNTID']]);
+                                        ->findOneBy(['account_id' => self::getApp()->getSession()->BRACP_ACCOUNTID]);
         // Retorna o usuário logado.
         return self::$user;
     }
@@ -1437,8 +1439,8 @@ class Account
             return ['login_message' => ['error' => 'Acesso negado. Você não pode realizar login.']];
 
         // Define os dados de sessão para o usuário.
-        $_SESSION['BRACP_ISLOGGEDIN'] = true;
-        $_SESSION['BRACP_ACCOUNTID'] = $account->getAccount_id();
+        self::getApp()->getSession()->BRACP_ISLOGGEDIN = true;
+        self::getApp()->getSession()->BRACP_ACCOUNTID = $account->getAccount_id();
 
         // Retorna mensagem de login realizado com sucesso.
         return ['login_message' => ['success' => 'Login realizado com sucesso. Aguarde...']];

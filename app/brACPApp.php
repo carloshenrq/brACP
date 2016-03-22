@@ -46,14 +46,18 @@ class brACPApp extends Slim\App
     private $em;
 
     /**
+     * Tratamento de sessão como objeto.
+     * @var Session
+     */
+    private $session;
+
+    /**
      * Construtor e inicializador para o painel de controle.
      */
     public function __construct()
     {
         // Initialize session for this app.
-        session_cache_limiter(false);
-        session_start();
-
+        $this->session = new Session();
         // Loads the default settings for this app.
         parent::__construct();
 
@@ -185,6 +189,7 @@ class brACPApp extends Slim\App
 
         // Adiciona o navegador aos dados para o template.
         $data = array_merge($data, [
+            'app' => $this,
             'navigator' => Navigator::getBrowser($this->getContainer()->get('request')->getHeader('user-agent')[0]),
             'ipAddress' => ((is_null($ip_address)) ? $_SERVER['REMOTE_ADDR'] : $ip_address)
         ]);
@@ -224,6 +229,16 @@ class brACPApp extends Slim\App
             throw new \Exception('EntityManager not defined.');
 
         return $this->em;
+    }
+
+    /**
+     * Obtém os dados de sessão.
+     *
+     * @return Session
+     */
+    public function getSession()
+    {
+        return $this->session;
     }
 
     /**
