@@ -85,8 +85,7 @@ class Account
     public static function register(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
         // Exibe as informações no template de cadastro.
-        self::getApp()->display('account.register',
-                                    (($request->isPost()) ? self::registerAccount($request->getParsedBody()):[]));
+        self::getApp()->display('account.register', self::registerAccount($request->getParsedBody()));
     }
 
     /**
@@ -128,7 +127,7 @@ class Account
     public static function password(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
         // Exibe as informações no template de cadastro.
-        self::getApp()->display('account.change.password', (($request->isPost()) ? self::passwordAccount($request->getParsedBody()):[])  );
+        self::getApp()->display('account.change.password', self::passwordAccount($request->getParsedBody()));
     }
 
     /**
@@ -140,36 +139,8 @@ class Account
      */
     public static function email(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
-        // Dados a serem enviados a tela.
-        $data = $mailChanges = [];
-        if($request->isPost())
-            $data = self::emailAccount($request->getParsedBody());
-
-        // Se estiver configurado para realizar leitura
-        if(BRACP_MAIL_SHOW_LOG)
-        {
-            // Obtém todas as ultimas alterações de e-mail.
-            $mailChanges = self::getApp()->getEm()
-                            ->createQuery('
-                                SELECT
-                                    log, login
-                                FROM
-                                    Model\EmailLog log
-                                INNER JOIN
-                                    log.account login
-                                WHERE
-                                    login.account_id = :account_id
-                                ORDER BY
-                                    log.id DESC
-                            ')
-                            ->setParameter('account_id', self::loggedUser()->getAccount_id())
-                            ->setMaxResults(10)
-                            ->getResult();
-        }
-
         // Exibe as informações no template de cadastro.
-        self::getApp()->display('account.change.mail', array_merge($data,
-                                                        ['mailChange' => $mailChanges]));
+        self::getApp()->display('account.change.mail', self::emailAccount($request->getParsedBody()));
     }
 
     /**
