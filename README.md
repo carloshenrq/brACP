@@ -100,9 +100,6 @@ Verifique se seu servidor também está com essa opção ativada.
 ####BRACP_MAIL_REGISTER_ONCE _(true|false)_
 Não permite que o endereço de e-mail seja cadastrado mais de uma vez.
 
-####BRACP_MAIL_SHOW_LOG _(true|false)_
-Exibe para o usuário todas as alterações de e-mail realizadas na conta dele.
-
 ####BRACP_CHANGE_MAIL_DELAY _integer_
 Tempo de espera até a próxima troca de e-mail. (Em minutos)
 
