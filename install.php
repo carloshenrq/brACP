@@ -39,7 +39,6 @@ $config = [
     'BRACP_ENTITY_DIR'                      => __DIR__ . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'Model' . DIRECTORY_SEPARATOR . 'Entity',
     'BRACP_MD5_PASSWORD_HASH'               => 1,
     'BRACP_MAIL_REGISTER_ONCE'              => 1,
-    'BRACP_MAIL_SHOW_LOG'                   => 1,
     'BRACP_CHANGE_MAIL_DELAY'               => 60,
     'BRACP_ALLOW_CHANGE_MAIL'               => 1,
     'BRACP_ALLOW_CREATE_ACCOUNT'            => 1,
@@ -314,13 +313,6 @@ if($writeable && isset($_POST) && !empty($_POST))
                             <label>
                                 Permitir alterar e-mail:<br>
                                 <select id="BRACP_ALLOW_CHANGE_MAIL" name="BRACP_ALLOW_CHANGE_MAIL">
-                                    <option value="0">Não</option>
-                                    <option value="1">Sim</option>
-                                </select>
-                            </label>
-                            <label>
-                                Exibir alterações de e-mail:<br>
-                                <select id="BRACP_MAIL_SHOW_LOG" name="BRACP_MAIL_SHOW_LOG">
                                     <option value="0">Não</option>
                                     <option value="1">Sim</option>
                                 </select>
