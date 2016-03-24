@@ -246,7 +246,7 @@ input[type="text"], input[type="password"], select
 
             &:not(:checked) + label + .bracp-menu
             {
-                left: -60%;
+                left: -80%;
             }
         }
 
@@ -255,6 +255,7 @@ input[type="text"], input[type="password"], select
             float: left;
             background-color: white;
             display: inline-block;
+            padding: 4px;
 
             position: absolute;
             left: 0%;
@@ -267,18 +268,70 @@ input[type="text"], input[type="password"], select
             {
                 padding: 0px; margin: 0px;
                 list-style: none;
+                background-color: white;
+                color: black;
 
                 li
                 {
-                    padding: 8px; margin: 0px;
-                    border-bottom: 1px solid dotted;
+                    padding: 0px; margin: 0px;
                     cursor: default;
 
-                    width: 180px;
+                    width: 200px;
+                    @include transition(width .1s ease-in-out);
 
-                    &> ul
+                    label
+                    {
+                        padding: 8px;
+                        display: block;
+                        cursor: pointer;
+
+                        &:after
+                        {
+                            float: right;
+                            @include transition(transform .1s ease-in-out);
+                        }
+                    }
+
+                    .bracp-menu-item-check
                     {
                         display: none;
+
+                        &+ label:after
+                        {
+                            content: '\203A';
+                        }
+
+                        &:not(:checked) + label + ul
+                        {
+                            display: none;
+                        }
+
+                        &:checked
+                        {
+                            &+ label:after
+                            {
+                                @include transform(rotate(90deg));
+                            }
+                        }
+                    }
+
+                    &+ li
+                    {
+                        margin-top: 5px;
+                        border-top: 1px dashed black;
+                    }
+
+                    ul
+                    {
+                        padding: 4px;
+                        margin: 1px 5px 1px 5px;
+                        @include box-shadow(0px 0px 2px rgba(0, 0, 0, .45));
+
+                        li
+                        {
+                            width: initial;
+                            margin-top: 0px;
+                        }
                     }
                 }
             }
