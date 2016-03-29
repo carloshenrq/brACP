@@ -486,3 +486,227 @@ span.ajax-url, label.lbl-link
     top: 0px; left: 0px;
     background-color: rgba(0, 0, 0, .3);
 }
+
+.table
+{
+    border-color: lightgray;
+    border-collapse: collapse;
+    width: 100%;
+
+    caption
+    {
+        padding: 2px;
+    }
+
+    thead tr th
+    {
+        background-color: rgba(0, 0, 0, .5);
+        color: white;
+    }
+
+    tr
+    {
+        td, th
+        {
+            padding: 4px;
+            border-color: lightgray;
+        }
+    }
+
+    tbody
+    {
+        tr
+        {
+            &:nth-child(even)
+            {
+                background-color: rgba(0, 0, 0, .1);
+            }
+
+            &:nth-child(odd)
+            {
+                background-color: white !important;
+            }
+
+            &.info
+            {
+                td
+                {
+                    border-color: rgba(0, 183, 255, 0.7) !important;
+                }
+
+                &:nth-child(even)
+                {
+                    background-color: rgba(0, 183, 255, .1) !important;
+                }
+            }
+
+            &.error
+            {
+                td
+                {
+                    border-color: rgba(255, 0, 0, 0.7) !important;
+                }
+
+                &:nth-child(even)
+                {
+                    background-color: rgba(255, 0, 0, .1) !important;
+                }
+            }
+
+            &.success
+            {
+                td
+                {
+                    border-color: rgba(120, 209, 90, 0.7) !important;
+                }
+
+                &:nth-child(even)
+                {
+                    background-color: rgba(120, 209, 90, .1) !important;
+                }
+            }
+
+            &.warning
+            {
+                td
+                {
+                    border-color: rgba(255, 153, 0, 0.7) !important;
+                }
+
+                &:nth-child(even)
+                {
+                    background-color: rgba(255, 153, 0, .1) !important;
+                }
+            }
+        }
+    }
+
+    &.ranking
+    {
+        tbody tr
+        {
+            &:nth-child(-n+10)
+            {
+                color: #138EBF;
+                font-weight: bold;
+
+                td
+                {
+                    border-color: rgba(0, 183, 255, 0.7);
+                }
+
+                &:nth-child(even)
+                {
+                    background-color: rgba(0, 183, 255, .1) !important;
+                }
+            }
+
+        }
+    }
+
+    &.info
+    {
+        thead tr th
+        {
+            background-color: rgba(0, 183, 255, 1);
+            border-color: white;
+        }
+
+        tbody
+        {
+            tr td
+            {
+                border-color: rgba(0, 183, 255, 0.7);
+            }
+
+            tr:nth-child(even)
+            {
+                background-color: rgba(0, 183, 255, .1);
+            }
+        }
+    }
+
+    &.error
+    {
+        thead tr th
+        {
+            background-color: rgba(255, 0, 0, 1);
+            border-color: white;
+        }
+
+        tbody
+        {
+            tr td
+            {
+                border-color: rgba(255, 0, 0, 0.7);
+            }
+
+            tr:nth-child(even)
+            {
+                background-color: rgba(255, 0, 0, .1);
+            }
+        }
+    }
+
+    &.success
+    {
+        thead tr th
+        {
+            background-color: rgba(120, 209, 90, 1);
+            border-color: white;
+        }
+
+        tbody
+        {
+            tr td
+            {
+                border-color: rgba(120, 209, 90, 0.7);
+            }
+
+            tr:nth-child(even)
+            {
+                background-color: rgba(120, 209, 90, .1);
+            }
+        }
+    }
+
+    &.warning
+    {
+        thead tr th
+        {
+            background-color: rgba(255, 153, 0, 1);
+            border-color: white;
+        }
+
+        tbody
+        {
+            tr td
+            {
+                border-color: rgba(255, 153, 0, 0.7);
+            }
+
+            tr:nth-child(even)
+            {
+                background-color: rgba(255, 153, 0, .1);
+            }
+        }
+    }
+}
+
+.mobile-only
+{
+    display: none;
+}
+
+@media screen and (min-width: $Width_Tiny) and (max-width: $Width_Big)
+{
+    .no-mobile
+    {
+        display: none;
+    }
+
+    .mobile-only
+    {
+        display: block;
+    }
+}

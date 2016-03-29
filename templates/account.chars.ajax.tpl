@@ -38,7 +38,7 @@
 
 <form class="ajax-form" action="{$smarty.const.BRACP_DIR_INSTALL_URL}account/chars" autocomplete="off" method="post" target=".bracp-body">
 
-    <table border="1" align="center" class="bracp-table">
+    <table border="1" align="center" class="table">
         <caption style="text-align: right">
             <input type="submit" class="btn" value="Enviar"/>
             <input type="reset" class="btn" value="Limpar"/>
@@ -48,12 +48,12 @@
                 <th align="right" rowspan="2">Cód.</th>
                 <th align="left" rowspan="2">Nome</th>
                 <th align="left" rowspan="2">Classe</th>
-                <th align="right" rowspan="2">Nível</th>
-                <th align="right" rowspan="2">Zeny</th>
+                <th align="right" rowspan="2" class="no-mobile">Nível</th>
+                <th align="right" rowspan="2" class="no-mobile">Zeny</th>
                 <th align="left" rowspan="2">Mapa</th>
-                <th align="left" rowspan="2">Retorno</th>
+                <th align="left" rowspan="2" class="no-mobile">Retorno</th>
                 {if $smarty.const.BRACP_ALLOW_SHOW_CHAR_STATUS eq true}
-                    <th align="center" rowspan="2">Status</th>
+                    <th align="center" rowspan="2" class="no-mobile">Status</th>
                 {/if}
                 {if $actions neq 0}
                     <th colspan="3">Resetar</th>
@@ -77,12 +77,12 @@
                     <td align="right">{$row->getChar_id()}</td>
                     <td align="left">{$row->getName()}</td>
                     <td align="left">{Format::job($row->getClass())}</td>
-                    <td align="right">{$row->getBase_level()}/{$row->getJob_level()}</td>
-                    <td align="right">{Format::zeny($row->getZeny())}</td>
+                    <td align="right" class="no-mobile">{$row->getBase_level()}/{$row->getJob_level()}</td>
+                    <td align="right" class="no-mobile">{Format::zeny($row->getZeny())}</td>
                     <td align="left">{$row->getLast_map()} ({$row->getLast_x()}, {$row->getLast_y()})</td>
-                    <td align="left">{$row->getSave_map()} ({$row->getSave_x()}, {$row->getSave_y()})</td>
+                    <td align="left" class="no-mobile">{$row->getSave_map()} ({$row->getSave_x()}, {$row->getSave_y()})</td>
                     {if $smarty.const.BRACP_ALLOW_SHOW_CHAR_STATUS eq true}
-                        <td align="center">{Format::status($row->getOnline())}</td>
+                        <td align="center" class="no-mobile">{Format::status($row->getOnline())}</td>
                     {/if}
 
                     {if $actions&1 eq 1}

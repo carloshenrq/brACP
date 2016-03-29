@@ -372,3 +372,114 @@ span.ajax-url, label.lbl-link {
   left: 0px;
   background-color: rgba(0, 0, 0, 0.3);
 }
+
+.table {
+  border-color: lightgray;
+  border-collapse: collapse;
+  width: 100%;
+}
+.table caption {
+  padding: 2px;
+}
+.table thead tr th {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+}
+.table tr td, .table tr th {
+  padding: 4px;
+  border-color: lightgray;
+}
+.table tbody tr:nth-child(even) {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.table tbody tr:nth-child(odd) {
+  background-color: white !important;
+}
+.table tbody tr.info td {
+  border-color: rgba(0, 183, 255, 0.7) !important;
+}
+.table tbody tr.info:nth-child(even) {
+  background-color: rgba(0, 183, 255, 0.1) !important;
+}
+.table tbody tr.error td {
+  border-color: rgba(255, 0, 0, 0.7) !important;
+}
+.table tbody tr.error:nth-child(even) {
+  background-color: rgba(255, 0, 0, 0.1) !important;
+}
+.table tbody tr.success td {
+  border-color: rgba(120, 209, 90, 0.7) !important;
+}
+.table tbody tr.success:nth-child(even) {
+  background-color: rgba(120, 209, 90, 0.1) !important;
+}
+.table tbody tr.warning td {
+  border-color: rgba(255, 153, 0, 0.7) !important;
+}
+.table tbody tr.warning:nth-child(even) {
+  background-color: rgba(255, 153, 0, 0.1) !important;
+}
+.table.ranking tbody tr:nth-child(-n+10) {
+  color: #138EBF;
+  font-weight: bold;
+}
+.table.ranking tbody tr:nth-child(-n+10) td {
+  border-color: rgba(0, 183, 255, 0.7);
+}
+.table.ranking tbody tr:nth-child(-n+10):nth-child(even) {
+  background-color: rgba(0, 183, 255, 0.1) !important;
+}
+.table.info thead tr th {
+  background-color: #00b7ff;
+  border-color: white;
+}
+.table.info tbody tr td {
+  border-color: rgba(0, 183, 255, 0.7);
+}
+.table.info tbody tr:nth-child(even) {
+  background-color: rgba(0, 183, 255, 0.1);
+}
+.table.error thead tr th {
+  background-color: red;
+  border-color: white;
+}
+.table.error tbody tr td {
+  border-color: rgba(255, 0, 0, 0.7);
+}
+.table.error tbody tr:nth-child(even) {
+  background-color: rgba(255, 0, 0, 0.1);
+}
+.table.success thead tr th {
+  background-color: #78d15a;
+  border-color: white;
+}
+.table.success tbody tr td {
+  border-color: rgba(120, 209, 90, 0.7);
+}
+.table.success tbody tr:nth-child(even) {
+  background-color: rgba(120, 209, 90, 0.1);
+}
+.table.warning thead tr th {
+  background-color: #ff9900;
+  border-color: white;
+}
+.table.warning tbody tr td {
+  border-color: rgba(255, 153, 0, 0.7);
+}
+.table.warning tbody tr:nth-child(even) {
+  background-color: rgba(255, 153, 0, 0.1);
+}
+
+.mobile-only {
+  display: none;
+}
+
+@media screen and (min-width: 320px) and (max-width: 800px) {
+  .no-mobile {
+    display: none;
+  }
+
+  .mobile-only {
+    display: block;
+  }
+}

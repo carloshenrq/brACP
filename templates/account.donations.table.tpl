@@ -17,7 +17,7 @@
  *}
 
 <form class="ajax-form" action="{$smarty.const.BRACP_DIR_INSTALL_URL}account/donations/check" autocomplete="off" method="post" target=".donation-table" data-block="1">
-    <table border="1" align="center" class="bracp-table">
+    <table border="1" align="center" class="table">
         <caption style="text-align: right">
             <input class="btn" type="submit" value="Verificar"/>
             <input class="btn" type="reset" value="Limpar"/>
@@ -37,7 +37,7 @@
         </thead>
         <tbody>
             {foreach from=$donations item=row}
-                <tr class="bracp-table-row{if $row->getStatus() eq 'CANCELADO'}-canceled{else if $row->getStatus() eq 'PAGO'}-paid{/if}">
+                <tr class="{if $row->getStatus() eq 'CANCELADO'}error{else if $row->getStatus() eq 'PAGO'}success{/if}">
                     <td align="right">{$row->getId()}</td>
                     <td align="center">{Format::date($row->getDate(), 'd/m/Y')}</td>
                     <td align="center">{$row->getStatus()}</td>

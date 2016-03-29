@@ -23,11 +23,11 @@
         Não existem personagens para este ranking.
     </p>
 {else}
-    <table border="1" align="center" class="bracp-table">
+    <table border="1" align="center" class="table ranking">
         <caption><strong>Top 100 jogadores mais ricos</strong></caption>
         <thead>
             <tr>
-                <th align="right" rowspan="2">Pos.</th>
+                <th align="right">Pos.</th>
                 <th align="left">Nome</th>
                 <th align="left">Classe</th>
                 <th align="right">Nível</th>

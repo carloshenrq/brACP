@@ -23,7 +23,7 @@
         Não existem personagens para este ranking.
     </p>
 {else}
-    <table border="1" align="center" class="bracp-table">
+    <table border="1" align="center" class="table ranking">
         <caption><strong>Top 100 jogadores do servidor</strong></caption>
         <thead>
             <tr>
