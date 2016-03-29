@@ -30,12 +30,12 @@
                 <th align="right">Pos.</th>
                 <th align="left">Nome</th>
                 <th align="left">Classe</th>
-                <th align="right">Nível</th>
+                <th align="right" class="no-mobile">Nível</th>
                 {if $smarty.const.BRACP_ALLOW_RANKING_ZENY_SHOW_ZENY eq true}
                     <th align="right">Zeny</th>
                 {/if}
                 {if $smarty.const.BRACP_ALLOW_SHOW_CHAR_STATUS eq true}
-                    <th align="center">Status</th>
+                    <th align="center" class="no-mobile">Status</th>
                 {/if}
             </tr>
         </thead>
@@ -45,12 +45,12 @@
                     <td align="right">{($i+1)}.º</td>
                     <td align="left">{$char->getName()}</td>
                     <td align="left">{Format::job($char->getClass())}</td>
-                    <td align="right">{$char->getBase_level()}/{$char->getJob_level()}</td>
+                    <td align="right" class="no-mobile">{$char->getBase_level()}/{$char->getJob_level()}</td>
                     {if $smarty.const.BRACP_ALLOW_RANKING_ZENY_SHOW_ZENY eq true}
                         <td align="right">{Format::zeny($char->getZeny())}</td>
                     {/if}
                     {if $smarty.const.BRACP_ALLOW_SHOW_CHAR_STATUS eq true}
-                        <td align="center">{Format::status($char->getOnline())}</td>
+                        <td align="center" class="no-mobile">{Format::status($char->getOnline())}</td>
                     {/if}
                 </tr>
             {/foreach}
