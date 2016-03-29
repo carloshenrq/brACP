@@ -40,7 +40,7 @@
                 Personagens
             </label></li>
             {if $smarty.const.PAG_INSTALL eq true}
-                <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/donations" data-target=".bracp-body"><label>
+                <li class="ajax-url no-mobile" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/donations" data-target=".bracp-body"><label>
                     Doações
                 </label></li>
             {/if}
