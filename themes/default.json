@@ -1,0 +1,9 @@
+{
+    "name" : "Padrao",
+    "version" : "0.2.1-beta",
+    "folder" : "default",
+    "authors" : [{
+        "name" : "CarlosHenrq",
+        "link" : "http://forum.brathena.org/index.php/user/60-carloshenrq/"
+    }]
+}

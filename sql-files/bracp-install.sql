@@ -71,4 +71,14 @@ CREATE TABLE IF NOT EXISTS `bracp_change_mail_log` (
     INDEX (`AccountID`)
 ) ENGINE=InnoDB COLLATE='utf8_swedish_ci';
 
+DROP TABLE IF EXISTS `bracp_themes`;
+CREATE TABLE IF NOT EXISTS `bracp_themes` (
+    `ThemeID` INTEGER NOT NULL PRIMARY KEY,
+    `Name` VARCHAR(20) NOT NULL DEFAULT '',
+    `Version` VARCHAR(10) NOT NULL DEFAULT '',
+    `Folder` VARCHAR(100) NOT NULL DEFAULT '',
+    `ImportTime` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00', 
+    UNIQUE INDEX (`Folder`)
+) ENGINE=MyISAM COLLATE='utf8_swedish_ci';
+
 SET FOREIGN_KEY_CHECKS = 1;

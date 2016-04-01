@@ -39,6 +39,10 @@ class Route
         //  cada endereço.
         if(!BRACP_MAINTENCE)
         {
+            // Se o arquivo cache não existe, então, realiza o cache global
+            if(!file_exists( __DIR__ . '/../theme.cache'))
+                Themes::cacheAll();
+
             // Define a rota para a tela principal.
             self::getApp()->get('/', ['Controller\Home', 'index']);
 

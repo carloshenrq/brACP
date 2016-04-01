@@ -26,6 +26,12 @@ if(file_exists(__DIR__ . DIRECTORY_SEPARATOR . 'config.php'))
 if(!defined('PHP_VERSION'))
     define('PHP_VERSION', phpversion(), false);
 
+// Adicionado leitura da classe principal para teste dos temas.
+require_once __DIR__ . '/app/Themes.php';
+
+// Obtém todos os temas contidos na pasta
+$themes = Themes::readAll();
+
 // Obtém as permissões de arquivo para notificar o usuário sobre as informações.
 $writeable = is_writable(__DIR__);
 
@@ -102,7 +108,8 @@ $config = [
     'BRACP_REGEXP_EMAIL'                    => '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}',
     'BRACP_ALLOW_CHOOSE_THEME'              => 1,
     'BRACP_DEFAULT_THEME'                   => 'default',
-];
+]; 
+
 
 // Verifica se dados de instalação foram recebidos e pode escrever o arquivo
 //  de configuração no disco sem problemas.
@@ -320,6 +327,16 @@ if($writeable && isset($_POST) && !empty($_POST))
                             <label>
                                 Delay para mudar e-mail (minutos):<br>
                                 <input id="BRACP_CHANGE_MAIL_DELAY" name="BRACP_CHANGE_MAIL_DELAY" type="text" value="" size="3"/>
+                            </label>
+                            <label>
+                                Tema padrão:<br>
+                                <select id="BRACP_DEFAULT_THEME" name="BRACP_DEFAULT_THEME"><?php
+                                    foreach($themes as $theme) { ?>
+                                        <option value="<?php echo $theme->folder; ?>">
+                                            <?php echo $theme->name; ?> (<?php echo $theme->version; ?>)
+                                        </option>
+                                    <?php } ?>
+                                ?></select>
                             </label>
                         </div>
                         <div class="bracp-install-label-data">
@@ -716,6 +733,11 @@ if($writeable && isset($_POST) && !empty($_POST))
                         <input type="submit" class="btn btn-success" value="Salvar"/>
                         <input type="reset" class="btn btn-link" value="Limpar"/>
                     </div>
+
+                    <?php foreach($themes as $theme) { ?>
+                        <input type="hidden" name="themes[]" value="<?php echo base64_encode(json_encode($theme)); ?>"/>
+                    <?php } ?>
+
                 </form>
 
             <?php } ?>
