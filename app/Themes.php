@@ -35,8 +35,6 @@ class Themes
      */
     public static function cacheAll()
     {
-        try
-        {
         // Obtém todos os temas no banco e os remove da tabela.
         $themes = brACPApp::getInstance()->getEm()->getRepository('Model\Theme')->findAll();
         foreach($themes as $theme)
@@ -63,11 +61,7 @@ class Themes
 
         // Cria o arquivo de cache de temas.
         file_put_contents(__DIR__ . '/../theme.cache', '1');
-        }
-        catch(Exception $ex)
-        {
-            echo $ex->getMessage();
-        }
+
         return;
     }
 
