@@ -34,6 +34,7 @@ use \PagSeguro\Transaction;
 
 use \Format;
 use \Session;
+use \LogWriter;
 
 /**
  * Controlador para dados de conta.
@@ -840,6 +841,9 @@ class Account
      */
     public static function charsAccount($data)
     {
+        // Escreve acesso de log aos dados de personagem:
+        LogWriter::write("Atualizando informações de personagem com os dados recebidos...\n" .
+            print_r($data, true));
 
         // Verifica se alguma opção do painel de controle está habilitada.
         // Se não estiver, envia mensagem de erro no retorno.
@@ -909,6 +913,10 @@ class Account
         }
         else
         {
+            // Escreve acesso de log aos dados de personagem:
+            LogWriter::write("Configurações para alteração de personagem estão desabilitadas.\n" .
+                print_r($data, true), 1);
+
             // Caso nenhuma configuração esteja habilitada.
             return ['char_message' => ['error' => 'Impossível realizar ação solicitada.']];
         }
@@ -923,6 +931,9 @@ class Account
      */
     public static function donationCheck(Donation $donation)
     {
+        // Escreve acesso de log aos dados de personagem:
+        LogWriter::write("Iniciando verificação de doação com transção via PagSeguro.\n\n".print_r($donation, true));
+
         // Obtém os dados de transação para o código informado.
         $transaction = Transaction::checkTransaction($donation->getTransactionCode());
 
@@ -936,6 +947,9 @@ class Account
         // 4: Disponivel (Sem disputa)
         else if($donation->getStatus() != 'PAGO' && ($transaction->status == 3 || $transaction->status == 4))
         {
+            // Escreve acesso de log aos dados de personagem:
+            LogWriter::write("Atualizando informações de doação com estado pago.\n\n".print_r($donation, true));
+
             $donation->setStatus('PAGO');
             $donation->setPaymentDate(date('Y-m-d H:i:s'));
 
@@ -943,6 +957,9 @@ class Account
             //  a sua conta, então gerar a compensação para o jogador.
             if($donation->getReceiveBonus())
             {
+                // Escreve acesso de log aos dados de personagem:
+                LogWriter::write("Adicionado estado de compensação.\n\n".print_r($donation, true));
+
                 // Cria o objeto de compensação no banco de dados
                 //  para identificar que é nessário dar ao jogador in-game as informações.
                 $compensate = new Compensate();
@@ -962,17 +979,26 @@ class Account
         else if($donation->getStatus() != 'CANCELADO'
             && ($transaction->status == 7 || $transaction->status == 8 || $transaction->status == 5 || $transaction->status == 6 || $transaction->status == 9))
         {
+            // Escreve acesso de log aos dados de personagem:
+            LogWriter::write("Alterando estado de doação para cancelado.\n\n".print_r($donation, true));
+
             // Se a doação antes estava paga, bloqueia a conta do jogador.
             if($donation->getStatus() == 'PAGO' && $donation->getCompensate())
             {
                 // Se a doação já foi compensada, então, bloqueará a conta do jogador.
                 if($donation->getCompensate())
                 {
+                    // Escreve acesso de log aos dados de personagem:
+                    LogWriter::write("Doação já compensada, bloqueando conta do jogador.\n\n".print_r($donation, true));
+
                     $donation->getAccount()->setState(5);
                     self::getApp()->getEm()->merge($donation->getAccount());
                 }
                 else
                 {
+                    // Escreve acesso de log aos dados de personagem:
+                    LogWriter::write("Removendo compensação do banco de dados.\n\n".print_r($donation, true));
+
                     // Obtém o objeto da compensação da doação.
                     $compensate = self::getApp()->getEm()
                                                 ->createQuery('
