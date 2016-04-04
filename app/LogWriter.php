@@ -31,7 +31,7 @@ class LogWriter
      */
     private static function info($message)
     {
-        return self::write2file($message, 'info.log');
+        return self::write2file($message, 'log_0_info.log');
     }
 
     /**
@@ -43,7 +43,7 @@ class LogWriter
      */
     private static function warning($message)
     {
-        return self::write2file($message, 'warning.log');
+        return self::write2file($message, 'log_1_warning.log');
     }
 
     /**
@@ -55,7 +55,7 @@ class LogWriter
      */
     private static function error($message)
     {
-        return self::write2file($message, 'error.log');
+        return self::write2file($message, 'log_2_error.log');
     }
 
     /**
@@ -85,13 +85,14 @@ class LogWriter
      *
      * @return boolean
      */
-    public static function write($message, $type = 0, $file = 'global.log')
+    public static function write($message, $type = 0, $file = 'log_global.log')
     {
         // Verifica o modo desenvolvedor. Somente escreve os logs se estiver em modo desenvolvedor.
         if(!BRACP_DEVELOP_MODE)
             return false;
 
-        $formatedLog = date('Y-m-d H:i:s') . "    -    {$type}    -    " . PHP_VERSION . "\n";
+        $formatedLog = "DATE: " . date('Y-m-d H:i:s') . "\n";
+        $formatedLog .= "PHP_VERSION: " . PHP_VERSION . "\n";
         $formatedLog .= "PHP_INI_LOADED : ".php_ini_loaded_file() . "\n";
         $formatedLog .= "PHP_INI_SCANNED: ".php_ini_scanned_files() . "\n";
         $formatedLog .= "LOADED_EXTENSIONS: ".implode(', ', get_loaded_extensions()) . "\n";
