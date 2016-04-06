@@ -244,6 +244,16 @@ class brACPApp extends Slim\App
     }
 
     /**
+     * Método para criar um backup do painel de controle.
+     * NOTA.: Este backup não é um backup do banco de dados. É somente de todos os arquivos
+     *        contidos na pasta painel de controle. É um backup completo, incluindo as pastas de cache e vendor.
+     */
+    public function createBackup()
+    {
+        return;
+    }
+
+    /**
      * Obtém a instância de aplicação para o brACP.
      *
      * @return brACPApp
