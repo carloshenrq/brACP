@@ -44,5 +44,6 @@ else
 
     // Calls the slim
     $app = new brACPApp();
-    $app->run();
+    $app->createBackup();
+    // $app->run();
 }

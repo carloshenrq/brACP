@@ -250,7 +250,64 @@ class brACPApp extends Slim\App
      */
     public function createBackup()
     {
+        // Caminho completo da pasta do sistema.
+        $realpath = realpath(__DIR__ . '/../');
+
+        // Obtém todas as entradas para os arquivos.
+        $entries = $this->readDir($realpath);
+
+        // Cria o arquivo ZIP e adiciona as entradas ao arquivo.
+        $zipArchive = new ZipArchive;
+        $zipArchive->open('backup/' . date('Ymd_His') . '_brACP-' . BRACP_VERSION . '_'.substr(hash('md5', microtime(true)), 0, 7).'.zip', ZIPARCHIVE::CREATE);
+        foreach($entries as $entry)
+        {
+            $full = $realpath . '/' . $entry;
+
+            if(is_file($full))
+            {
+                $zipArchive->addFile($full, $entry);
+            }
+            else if(is_dir($full))
+            {
+                $zipArchive->addEmptyDir($entry);
+            }
+        }
+        $zipArchive->close();
+
         return;
+    }
+
+    /**
+     * Retorna a lista de todos os arquivos dentro do diretório de forma recursiva.
+     *
+     * @param string $path Caminho real a ser verificado.
+     * @param string $relative Caminho relativo a ser adicionado no retorno.
+     *
+     * @return Array
+     */
+    private function readDir($path, $relative = '')
+    {
+        $entries = [];
+
+        $dir = new DirectoryIterator($path);
+
+        foreach($dir as $entry)
+        {
+            if($entry->isDot() || $entry->getFilename() == 'backup' || $entry->getFilename() == 'updates')
+                continue;
+
+            $entries[] = $relative . $entry->getFilename();
+
+            if($entry->isDir())
+            {
+                $entries = array_merge($entries,
+                                    $this->readDir($path . '/' . $entry->getFilename(),
+                                        $relative . $entry->getFilename() . '/')
+                            );
+            }
+        }
+
+        return $entries;
     }
 
     /**
