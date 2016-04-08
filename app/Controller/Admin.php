@@ -21,6 +21,7 @@ namespace Controller;
 
 use \Psr\Http\Message\ServerRequestInterface;
 use \Psr\Http\Message\ResponseInterface;
+use \Themes;
 
 /**
  * Controlador para dados de conta.
@@ -44,6 +45,22 @@ class Admin
         self::getApp()->display('admin.backup', [
             'bkp_response' => self::getApp()->createBackup()
         ]);
+    }
+
+    /**
+     * Método inicial para exibição dos templates na tela.
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param array $args
+     */
+    public static function theme(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        // Refaz o cache para os temas.
+        Themes::cacheAll();
+
+        // Exibe o display para home.
+        self::getApp()->display('home');
     }
 
 }

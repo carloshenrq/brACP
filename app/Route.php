@@ -120,6 +120,7 @@ class Route
             {
                 self::getApp()->group('/admin', function() {
                     $this->get('/backup', ['Controller\Admin', 'backup']);
+                    $this->get('/theme', ['Controller\Admin', 'theme']);
                 })
                 ->add(['Controller\Account', 'needAdmin'])
                 ->add(['Controller\Account', 'needLogin']);
