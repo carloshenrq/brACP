@@ -283,7 +283,10 @@ class brACPApp extends Slim\App
         return [
             'fileName' => $backupFile,
             'fileSize' => filesize($backupFile),
-            'fileCount' => $fileCount
+            'fileCount' => $fileCount,
+            'fileHashMD5' => hash_file('md5', $backupFile),
+            'fileHashSHA1' => hash_file('sha1', $backupFile),
+            'fileHashSHA512' => hash_file('sha512', $backupFile),
         ];
     }
 

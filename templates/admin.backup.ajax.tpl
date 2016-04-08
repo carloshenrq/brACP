@@ -20,5 +20,13 @@
 
 <div class="bracp-message success">
     O Arquivo <strong>{$bkp_response.fileName}</strong> foi criado com 
-    <strong>{$bkp_response.fileCount}</strong> arquivos possuindo tamanho de <strong>{Format::bytes($bkp_response.fileSize)}</strong><br>
+    <strong>{$bkp_response.fileCount}</strong> arquivos possuindo tamanho de <strong>{Format::bytes($bkp_response.fileSize)}</strong>.
+    <br>
+    <br>
+    <div class="bracp-message info">
+        <h1>Soma de verificação</h1>
+        <strong>md5:</strong> {$bkp_response.fileHashMD5} <br>
+        <strong>sha1:</strong> {$bkp_response.fileHashSHA1} <br>
+        <strong>sha512:</strong> {$bkp_response.fileHashSHA512}
+    </div>
 </div>
