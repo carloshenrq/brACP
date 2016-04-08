@@ -256,9 +256,12 @@ class brACPApp extends Slim\App
         // Obtém todas as entradas para os arquivos.
         $entries = $this->readDir($realpath);
 
+        // Nome do arquivo de backup que fora criado.
+        $backupFile = $realpath . '/backup/' . date('Ymd_His') . '_brACP-' . BRACP_VERSION . '_'.substr(hash('md5', microtime(true)), 0, 7).'.zip';
+
         // Cria o arquivo ZIP e adiciona as entradas ao arquivo.
         $zipArchive = new ZipArchive;
-        $zipArchive->open('backup/' . date('Ymd_His') . '_brACP-' . BRACP_VERSION . '_'.substr(hash('md5', microtime(true)), 0, 7).'.zip', ZIPARCHIVE::CREATE);
+        $zipArchive->open($backupFile, ZIPARCHIVE::CREATE);
         foreach($entries as $entry)
         {
             $full = $realpath . '/' . $entry;
@@ -272,9 +275,16 @@ class brACPApp extends Slim\App
                 $zipArchive->addEmptyDir($entry);
             }
         }
+
+        $fileCount = $zipArchive->numFiles;
+
         $zipArchive->close();
 
-        return;
+        return [
+            'fileName' => $backupFile,
+            'fileSize' => filesize($backupFile),
+            'fileCount' => $fileCount
+        ];
     }
 
     /**

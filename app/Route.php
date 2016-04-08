@@ -110,6 +110,18 @@ class Route
                 });
             }
 
+            /**
+             * ROTAS ADMINISTRATIVAS, AQUI, SOMENTE ADMINISTRADORES PODEM ENTRAR.
+             */
+            if(BRACP_ALLOW_ADMIN)
+            {
+                self::getApp()->group('/admin', function() {
+                    $this->get('/backup', ['Controller\Admin', 'backup']);
+                })
+                ->add(['Controller\Account', 'needAdmin'])
+                ->add(['Controller\Account', 'needLogin']);
+            }
+
         }
 
         // Chama o próximo middleware.

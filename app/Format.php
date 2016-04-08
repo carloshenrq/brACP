@@ -24,6 +24,18 @@
  */
 class Format
 {
+    public static function bytes($bytes)
+    {
+        $format = ['B', 'KB', 'MB', 'GB'];
+
+        $bytes = $totalBytes = max(0, $bytes);
+        $pow = floor(log($bytes)/log(1024));
+
+        $bytes /= pow(1024, $pow);
+
+        return sprintf('%.2f %s (%d bytes)', $bytes, $format[$pow], $totalBytes);
+    }
+
     /**
      * Formata informações de data do formato indicado até o destino.
      *
