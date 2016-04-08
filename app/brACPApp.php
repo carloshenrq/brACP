@@ -67,6 +67,11 @@ class brACPApp extends Slim\App
         $this->view->setTemplateDir(BRACP_TEMPLATE_DIR);
         $this->view->setCaching(false);
 
+        // Verifica se a variavel de tema para a sessão está definida.
+        // Se não estiver, define como a do tema padrão.
+        if(!isset($this->session->BRACP_THEME))
+            $this->session->BRACP_THEME = BRACP_DEFAULT_THEME;
+
         // Adiciona os middlewares na rota para serem executados.
         $this->add(new Route());
         $this->add(new Database());
