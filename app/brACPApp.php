@@ -191,11 +191,15 @@ class brACPApp extends Slim\App
                 $data['exception'] = $ex;
         }
 
+        // Obtém todos os temas que estão em cache no banco de dados.
+        $themes = $this->getEm()->getRepository('Model\Theme')->findAll();
+
         // Obtém o endereço de ip do cliente.
         $ip_address = $this->getContainer()->get('request')->getAttribute('ip_address');
 
         // Adiciona o navegador aos dados para o template.
         $data = array_merge($data, [
+            'themes' => $themes,
             'session' => $this->getSession(),
             'navigator' => Navigator::getBrowser($this->getContainer()->get('request')->getHeader('user-agent')[0]),
             'ipAddress' => ((is_null($ip_address)) ? $_SERVER['REMOTE_ADDR'] : $ip_address)

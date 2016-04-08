@@ -183,6 +183,22 @@ function donation(donationId, checkoutCode, url)
 }
 
 /**
+ * Altera o tema padrão do painel de controle.
+ */
+function changeTheme(theme, url)
+{
+    $.ajax({
+        'url'       : url,
+        'method'    : 'POST',
+        'data'      : { 'BRACP_THEME' : theme },
+        'async'     : false,
+        'success'   : function() {
+            window.location.reload();
+        }
+    });
+}
+
+/**
  * Atualiza a doação com um código de transção.
  *
  * @param integer donationId Código da doação.

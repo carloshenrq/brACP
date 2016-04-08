@@ -38,6 +38,25 @@ class Home
      * @param ResponseInterface $response
      * @param array $args
      */
+    public static function theme(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        // Atualiza informações do tema.
+        $post = $request->getParsedBody();
+
+        // Realiza a alteração de tema se for necessário.
+        if(isset($post['BRACP_THEME']))
+        {
+            self::getApp()->getSession()->BRACP_THEME = $post['BRACP_THEME'];
+        }
+    }
+
+    /**
+     * Método inicial para exibição dos templates na tela.
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param array $args
+     */
     public static function index(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
         // Exibe o display para home.

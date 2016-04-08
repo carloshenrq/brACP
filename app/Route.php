@@ -46,6 +46,9 @@ class Route
             // Define a rota para a tela principal.
             self::getApp()->get('/', ['Controller\Home', 'index']);
 
+            // Adiciona a rota para alteração de temas.
+            self::getApp()->post('/theme', ['Controller\Home', 'theme']);
+
             // Mapeia o grupo account.
             self::getApp()->group('/account', function() {
                 // Rotas que não necessitam de login para entrar.

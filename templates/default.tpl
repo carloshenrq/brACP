@@ -67,6 +67,13 @@
                     $('#bracp-modal-recover').prop('checked', true);
                     window.history.replaceState("", "", "{$smarty.const.BRACP_DIR_INSTALL_URL}");
                 {/if}
+
+                $('.theme-select')
+                    .val("{$session->BRACP_THEME}")
+                    .on('change', function() {
+                        // Altera o tema padrão do painel de controle.
+                        changeTheme($(this).val(), '{$smarty.const.BRACP_DIR_INSTALL_URL}theme');
+                    });
             });
 
         } (window.jQuery);
@@ -138,6 +145,13 @@
                     </div>
                 {/if}
                 <div class="nav-ipaddress">{$ipAddress}</div>
+                <div class="nav-theme">
+                    <select class="theme-select">
+                    {foreach from=$themes item=theme}
+                        <option value="{$theme->getFolder()}">{$theme->getName()} ({$theme->getVersion()})</option>
+                    {/foreach}
+                    </select>
+                </div>
             </div>
         </div>
     {/block}
