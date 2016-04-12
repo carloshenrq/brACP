@@ -48,6 +48,7 @@ $config = [
     'BRACP_CHANGE_MAIL_DELAY'               => 60,
     'BRACP_ALLOW_CHANGE_MAIL'               => 1,
     'BRACP_ALLOW_CREATE_ACCOUNT'            => 1,
+    'BRACP_CONFIRM_ACCOUNT'                 => 0,
     'BRACP_ALLOW_ADMIN'                     => 1,
     'BRACP_ALLOW_ADMIN_GMLEVEL'             => 99,
     'BRACP_ALLOW_LOGIN_GMLEVEL'             => 0,
@@ -348,6 +349,13 @@ if($writeable && isset($_POST) && !empty($_POST))
                                 </select>
                             </label>
                             <label>
+                                Confirmar novas contas:<br>
+                                <select id="BRACP_CONFIRM_ACCOUNT" name="BRACP_CONFIRM_ACCOUNT">
+                                    <option value="0">Não</option>
+                                    <option value="1">Sim</option>
+                                </select>
+                            </label>
+                            <label>
                                 Bloquear novas contas com e-mails duplicado:<br>
                                 <select id="BRACP_MAIL_REGISTER_ONCE" name="BRACP_MAIL_REGISTER_ONCE">
                                     <option value="0">Não</option>
@@ -361,12 +369,12 @@ if($writeable && isset($_POST) && !empty($_POST))
                                     <option value="1">Sim</option>
                                 </select>
                             </label>
+                        </div>
+                        <div class="bracp-install-label-data">
                             <label>
                                 Nivel administrador:<br>
                                 <input id="BRACP_ALLOW_ADMIN_GMLEVEL" name="BRACP_ALLOW_ADMIN_GMLEVEL" type="text" value="" size="3"/>
                             </label>
-                        </div>
-                        <div class="bracp-install-label-data">
                             <label>
                                 Nivel para login:<br>
                                 <input id="BRACP_ALLOW_LOGIN_GMLEVEL" name="BRACP_ALLOW_LOGIN_GMLEVEL" type="text" value="" size="3"/>

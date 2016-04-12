@@ -1480,14 +1480,27 @@ class Account
         $account->setSex($data['sex']);
         $account->setEmail($data['email']);
 
+        // 2016-04-12, CHLFZ: Adicionado para quando conta necessitar confirmação, criar com status 5
+        if(BRACP_CONFIRM_ACCOUNT)
+            $account->setState(5);
+
         // Salva os dados na tabela de usuário.
         self::getApp()->getEm()->persist($account);
         self::getApp()->getEm()->flush();
 
-        // Envia o e-mail para usuário caso o painel de controle esteja com as configurações
-        //  de envio ativas.
-        self::getApp()->sendMail('Conta Registrada', [$account->getEmail()],
-                                    'mail.create', ['userid' => $account->getUserid()]);
+        // Se não for necessário a confirmação da conta do usuário, então, envia um e-mail de boas vindas
+        // Se não, enfia um e-mail para confirmar a conta do usuario.
+        if(!BRACP_CONFIRM_ACCOUNT)
+        {
+            // Envia o e-mail para usuário caso o painel de controle esteja com as configurações
+            //  de envio ativas.
+            self::getApp()->sendMail('Conta Registrada', [$account->getEmail()],
+                                        'mail.create', ['userid' => $account->getUserid()]);
+        }
+        else
+        {
+            // @Todo: issue #6
+        }
 
         // Retorna mensagem que a conta foi criada com sucesso.
         return ['register_message' => ['success' => 'Sua conta foi criada com sucesso! Você já pode realizar login.']];

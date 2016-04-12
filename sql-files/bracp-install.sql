@@ -81,4 +81,18 @@ CREATE TABLE IF NOT EXISTS `bracp_themes` (
     UNIQUE INDEX (`Folder`)
 ) ENGINE=MyISAM COLLATE='utf8_swedish_ci';
 
+DROP TABLE IF EXISTS `bracp_account_confirm`;
+CREATE TABLE IF NOT EXISTS `bracp_account_confirm` (
+    `ConfirmationID` INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `AccountID` INTEGER NOT NULL,
+    `ConfirmationCode` VARCHAR(32) NOT NULL,
+    `ConfirmationDate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `ConfirmationExpire` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `ConfirmationUsed` BOOLEAN NOT NULL DEFAULT FALSE,
+    UNIQUE INDEX (`ConfirmationCode`),
+    INDEX (`AccountID`)
+) ENGINE=MyISAM COLLATE='utf8_swedish_ci';
+
+BRACP_CONFIRM_ACCOUNT
+
 SET FOREIGN_KEY_CHECKS = 1;
