@@ -27,6 +27,7 @@ use \Model\Recover;
 use \Model\EmailLog;
 use \Model\Donation;
 use \Model\Compensate;
+use \Model\Confirmation;
 
 use \PagSeguro\Checkout;
 use \PagSeguro\CheckoutItem;
@@ -87,6 +88,19 @@ class Account
     {
         // Exibe as informações no template de cadastro.
         self::getApp()->display('account.register', self::registerAccount($request->getParsedBody()));
+    }
+
+    /**
+     * Método para dados de registro da conta
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param array $args
+     */
+    public static function registerByCode(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        // Exibe as informações no template de cadastro.
+        self::getApp()->display('account.register', self::registerAccount($request->getParsedBody(), $args['code']));
     }
 
     /**
@@ -1451,59 +1465,141 @@ class Account
      *
      * @return array
      */
-    public static function registerAccount($data)
+    public static function registerAccount($data, $code = null)
     {
-        // Verificação recaptcha para saber se a requisição realizada
-        //  é verdadeira e pode continuar.
-        if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['g-recaptcha-response']))
-            return ['register_message' => ['error' => 'Código de verificação inválido. Verifique por favor.']];
-
-        if(hash('md5', $data['user_pass']) !== hash('md5', $data['user_pass_conf']))
-            return ['register_message' => ['error' => 'As senhas digitadas não conferem!']];
-
-        // Verifica se os emails enviados são iguais.
-        if(hash('md5', $data['email']) !== hash('md5', $data['email_conf']))
-            return ['register_message' => ['error' => 'Os endereços de e-mail digitados não conferem!']];
-
-        // Verifica se já existe usuário cadastrado para o userid indicado.
-        if(self::checkUser($data['userid']) || (BRACP_MAIL_REGISTER_ONCE && self::checkMail($data['email'])))
-            return ['register_message' => ['error' => 'Nome de usuário ou endereço de e-mail já está em uso.']];
-
-        // Se a senha for hash md5, troca o valor para hash-md5.
-        if(BRACP_MD5_PASSWORD_HASH)
-           $data['user_pass'] = hash('md5', $data['user_pass']);
-
-        // Cria o objeto da conta para ser salvo no banco de dados.
-        $account = new Login;
-        $account->setUserid($data['userid']);
-        $account->setUser_pass($data['user_pass']);
-        $account->setSex($data['sex']);
-        $account->setEmail($data['email']);
-
-        // 2016-04-12, CHLFZ: Adicionado para quando conta necessitar confirmação, criar com status 5
-        if(BRACP_CONFIRM_ACCOUNT)
-            $account->setState(5);
-
-        // Salva os dados na tabela de usuário.
-        self::getApp()->getEm()->persist($account);
-        self::getApp()->getEm()->flush();
-
-        // Se não for necessário a confirmação da conta do usuário, então, envia um e-mail de boas vindas
-        // Se não, enfia um e-mail para confirmar a conta do usuario.
-        if(!BRACP_CONFIRM_ACCOUNT)
+        // Definições confirmação de contas.
+        if(BRACP_CONFIRM_ACCOUNT && !is_null($code))
         {
+            // Verificação do banco de dados para saber se o código de recuperação foi
+            //  enviado com sucesso.
+            // -          2016-04-14, CHLFZ.
+            // -> Verificar o state = 11, previne que contas bloqueadas (@block) consigam retornar ao jogo se caso possuirem um
+            //    código de state = 5.
+            // -> Dúvidas sobre os códigos de state: 'https://github.com/brAthena/brAthena/blob/master/src/login/login.c#L1317'
+            //    state - 1 => Indica o código do switch case.
+            $confirmation = self::getApp()->getEm()
+                                        ->createQuery('
+                                            SELECT
+                                                confirmation, login
+                                            FROM
+                                                Model\Confirmation confirmation
+                                            INNER JOIN
+                                                recover.account login
+                                            WHERE
+                                                confirmation.code = :code AND
+                                                confirmation.used = false AND
+                                                login.state = 11 AND
+                                                :CURDATETIME BETWEEN confirmation.date AND confirmation.expire
+                                        ')
+                                        ->setParameter('code', $code)
+                                        ->setParameter('CURDATETIME', date('Y-m-d H:i:s'))
+                                        ->getOneOrNullResult();
+
+            // Se não houver código de confirmação, então será informado mensagem de erro.
+            if(is_null($confirmation))
+                return ['register_message' => ['error' => 'O Código de confirmação já foi utilizado ou é inválido.']];
+
+            // Define como utilizado e atualiza a conta do usuário como autorizada.
+            $confirmation->setUsed(true);
+
+            // Atualiza o registro como usado no banco de dados.
+            self::getApp()->getEm()->merge($confirmation);
+            self::getApp()->getEm()->flush();
+
+            // Defina a conta de confirmação como OK.
+            $confirmation->getAccount()->setState(0);
+
+            // Atualiza a conta como ativa no banco de dados.
+            self::getApp()->getEm()->merge($confirmation->getAccount());
+            self::getApp()->getEm()->flush();
+
             // Envia o e-mail para usuário caso o painel de controle esteja com as configurações
             //  de envio ativas.
-            self::getApp()->sendMail('Conta Registrada', [$account->getEmail()],
-                                        'mail.create', ['userid' => $account->getUserid()]);
+            self::getApp()->sendMail('Conta Confirmada', [$confirmation->getAccount()->getEmail()],
+                                        'mail.create', ['userid' => $confirmation->getAccount()->getUserid()]);
+
+            // Retorna mensagem que a conta foi criada com sucesso.
+            return ['register_message' => ['success' => 'Você confirmou com sucesso sua conta. Você já pode realizar login.']];
         }
         else
         {
-            // @Todo: issue #6
-        }
+            // Verificação recaptcha para saber se a requisição realizada
+            //  é verdadeira e pode continuar.
+            if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['g-recaptcha-response']))
+                return ['register_message' => ['error' => 'Código de verificação inválido. Verifique por favor.']];
 
-        // Retorna mensagem que a conta foi criada com sucesso.
-        return ['register_message' => ['success' => 'Sua conta foi criada com sucesso! Você já pode realizar login.']];
+            if(hash('md5', $data['user_pass']) !== hash('md5', $data['user_pass_conf']))
+                return ['register_message' => ['error' => 'As senhas digitadas não conferem!']];
+
+            // Verifica se os emails enviados são iguais.
+            if(hash('md5', $data['email']) !== hash('md5', $data['email_conf']))
+                return ['register_message' => ['error' => 'Os endereços de e-mail digitados não conferem!']];
+
+            // Verifica se já existe usuário cadastrado para o userid indicado.
+            if(self::checkUser($data['userid']) || (BRACP_MAIL_REGISTER_ONCE && self::checkMail($data['email'])))
+                return ['register_message' => ['error' => 'Nome de usuário ou endereço de e-mail já está em uso.']];
+
+            // Se a senha for hash md5, troca o valor para hash-md5.
+            if(BRACP_MD5_PASSWORD_HASH)
+               $data['user_pass'] = hash('md5', $data['user_pass']);
+
+            // Cria o objeto da conta para ser salvo no banco de dados.
+            $account = new Login;
+            $account->setUserid($data['userid']);
+            $account->setUser_pass($data['user_pass']);
+            $account->setSex($data['sex']);
+            $account->setEmail($data['email']);
+
+            // 2016-04-12, CHLFZ: Adicionado para quando conta necessitar confirmação, criar com status 5 
+            // 2016-04-14, CHLFZ: De acordo com 'https://github.com/brAthena/brAthena/blob/master/src/login/login.c#L1317'
+            //                    o melhor estado para este tipo de confirmação é o 11. (result == -1, autorizado sendo state = 0)
+            //                    Alterado de status 5 -> 11.
+            if(BRACP_CONFIRM_ACCOUNT)
+                $account->setState(11);
+
+            // Salva os dados na tabela de usuário.
+            self::getApp()->getEm()->persist($account);
+            self::getApp()->getEm()->flush();
+
+            // Se não for necessário a confirmação da conta do usuário, então, envia um e-mail de boas vindas
+            // Se não, enfia um e-mail para confirmar a conta do usuario.
+            if(!BRACP_CONFIRM_ACCOUNT)
+            {
+                // Envia o e-mail para usuário caso o painel de controle esteja com as configurações
+                //  de envio ativas.
+                self::getApp()->sendMail('Conta Registrada', [$account->getEmail()],
+                                            'mail.create', ['userid' => $account->getUserid()]);
+
+                // Retorna mensagem que a conta foi criada com sucesso.
+                return ['register_message' => ['success' => 'Sua conta foi criada com sucesso! Você já pode realizar login.']];
+            }
+            else
+            {
+                // Cria a instância do objeto de confirmação para a conta.
+                $confirmation = new Confirmation;
+                $confirmation->setAccount($account);
+                $confirmation->setCode(hash('md5', microtime(true)));
+                $confirmation->setDate(date('Y-m-d H:i:s'));
+                $confirmation->setExpire(date('Y-m-d H:i:s', time() + (60*BRACP_RECOVER_CODE_EXPIRE)));
+                $confirmation->setUsed(false);
+
+                // Grava o código no banco de dados e envia o email.
+                self::getApp()->getEm()->persist($confirmation);
+                self::getApp()->getEm()->flush();
+
+                // Envia o e-mail para usuário caso o painel de controle esteja com as configurações
+                //  de envio ativas.
+                self::getApp()->sendMail('Confirma seu Registro', [$account->getEmail()],
+                                            'mail.create.code',
+                                            [
+                                                'userid' => $account->getUserid(),
+                                                'code' => $confirmation->getCode(),
+                                                'expire' => $confirmation->getExpire(),
+                                                'href' => BRACP_URL . 'account/register'
+                                            ]);
+
+            }
+        }
     }
 
     /**

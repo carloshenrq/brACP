@@ -58,6 +58,20 @@ class Route
                 {
                     $this->post('/register', ['Controller\Account', 'register'])
                             ->add(['Controller\Account', 'needLoggout']);
+
+                    // Caso esteja configurado para confirmar a conta criada no painel de controle
+                    // Que já exibe os dados de confirmação caso, esteja tudo ok.
+                    if(BRACP_CONFIRM_ACCOUNT)
+                    {
+                        // Registra os dados do jogador.
+                        $this->get('/register/{code}', ['Controller\Account', 'registerByCode'])
+                                ->add(['Controller\Account', 'needLoggout']);
+
+                        // @Todo: Fazer rota de re-envio de e-mail com código de ativação.
+                        // // Re-envia o código de ativação do jogador.
+                        // $this->post('/register/resend', ['Controller\Account', 'registerResendCode'])
+                        //         ->add(['Controller\Account', 'needLoggout']);
+                    }
                 }
 
                 $this->post('/login', ['Controller\Account', 'login'])
