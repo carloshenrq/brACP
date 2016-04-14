@@ -179,6 +179,12 @@ if($writeable && isset($_POST) && !empty($_POST))
     <head>
         <title>brACP - Instalação do Painel de Controle</title>
 
+        <!--
+            2016-04-14, CHLFZ: Problemas de CHARSET identificado por pelo Sir Will e postado no fórum.
+                                -> @issue 7
+        -->
+        <meta charset="UTF-8">
+
         <link rel="stylesheet" type="text/css" href="themes/default/css/install.css"/>
         <link rel="stylesheet" type="text/css" href="themes/default/css/button.css"/>
 

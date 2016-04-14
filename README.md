@@ -240,11 +240,13 @@ Se você desejar uma outra opção de painel de controle, nós recomendamos o [F
 
 [Kaoozie](http://forum.brathena.org/index.php/user/3605-kaoozie/) : Realizar os teste do painel de controle.
 
-[Sir Will](http://forum.brathena.org/index.php/user/18776-sir-will/) : Realizar os teste do painel de controle.
+[Sir Will](http://forum.brathena.org/index.php/user/18776-sir-will/) : Realizar os teste do painel de controle. (issue #7)
 
 [Twitter Bootstrap](http://getbootstrap.com/) : Estilização dos botões no tema padrão do painel de controle, foram obtidos em [boostrap 2.3.2](http://getbootstrap.com/2.3.2/)
 
 [Megasantos](http://forum.brathena.org/index.php/user/947-jonatas/) : Traduzir as classes no FluxCP e deixar disponivel.
+
+[JulioCF](http://forum.brathena.org/index.php/user/45-juliocf/) : Sugestões de incremento ao painel de controle. (issue #6)
 
 ##Desenvolvedores
 
