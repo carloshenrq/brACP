@@ -20,6 +20,11 @@
     <head>
         <title>brACP - {block name="brACP_Title"}Welcome{/block} {if $smarty.const.BRACP_DEVELOP_MODE eq true}(DEVELOPER MODE){/if}</title>
 
+        <!--
+            2016-04-14, CHLFZ: Problemas de CHARSET identificado por pelo Sir Will e postado no fórum.
+                                -> @issue 7
+        -->
+        <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1.0">
 
         <link rel="shortcut icon" href="{$smarty.const.BRACP_DIR_INSTALL_URL}fav.ico">
