@@ -67,10 +67,9 @@ class Route
                         $this->get('/register/{code}', ['Controller\Account', 'registerByCode'])
                                 ->add(['Controller\Account', 'needLoggout']);
 
-                        // @Todo: Fazer rota de re-envio de e-mail com código de ativação.
-                        // // Re-envia o código de ativação do jogador.
-                        // $this->post('/register/resend', ['Controller\Account', 'registerResendCode'])
-                        //         ->add(['Controller\Account', 'needLoggout']);
+                        // Re-envia o código de ativação do jogador.
+                        $this->get('/register/resend/{$account_id}', ['Controller\Account', 'registerResendCode'])
+                                ->add(['Controller\Account', 'needLoggout']);
                     }
                 }
 

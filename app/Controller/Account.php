@@ -104,6 +104,19 @@ class Account
     }
 
     /**
+     * Método para dados de registro da conta
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param array $args
+     */
+    public static function registerResendCode(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        // Exibe as informações no template de cadastro.
+        self::getApp()->display('account.register', self::registerResend($args['account_id']));
+    }
+
+    /**
      * Método para recuperar a conta do usuário.
      *
      * @param ServerRequestInterface $request
@@ -1455,6 +1468,20 @@ class Account
 
         // Retorna mensagem de login realizado com sucesso.
         return ['login_message' => ['success' => 'Login realizado com sucesso. Aguarde...']];
+    }
+
+    /**
+     * Método utilizado para re-envio do código de ativação da conta.
+     *
+     * @static
+     *
+     * @param integer $account_id
+     *
+     * @return array
+     */
+    public static function registerResend($account_id)
+    {
+        return ['register_message' => ['error' => '@Todo: Terminando o desenvolvimento dessa parte aqui. (>e_w_e)>']];
     }
 
     /**
