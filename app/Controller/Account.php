@@ -1294,6 +1294,10 @@ class Account
      */
     public static function recoverAccount($data, $code = null)
     {
+        // Estiver desativado então, não permite recuperação de contas.
+        if(!BRACP_ALLOW_MAIL_SEND || !BRACP_ALLOW_RECOVER)
+            return ['recover_message' => ['error' => 'Esta opção está desativada. Verifique com o administrador.']];
+
         // Se o código não foi enviado.
         if(!is_null($code) && (BRACP_MD5_PASSWORD_HASH || BRACP_RECOVER_BY_CODE))
         {
@@ -1481,7 +1485,67 @@ class Account
      */
     public static function registerResend($account_id)
     {
-        return ['register_message' => ['error' => '@Todo: Terminando o desenvolvimento dessa parte aqui. (>e_w_e)>']];
+        // Se não estiver configurado, não permite que seja utilizado a recuperação do código de ativação.
+        if(!BRACP_ALLOW_MAIL_SEND || !BRACP_CONFIRM_ACCOUNT)
+            return ['register_message' => ['error' => 'Esta opção está desativada. Verifique com o administrador.']];
+
+        // Obtém a conta que irá ser verificado para re-envio do código de ativação.
+        $account = self::getApp()
+                        ->getEm()
+                        ->getRepository('Model\Login')
+                        ->findOneBy(['account_id' => $account_id, 'state' => 11]);
+
+        // Conta inexistente para recuperação
+        if(is_null($account))
+            return ['register_message' => ['error' => 'Conta para enviar o código de ativação é inválida.']];
+
+        // Verifica se algum código de ativação já foi criado dentro do periodo de configuração.
+        $confirmation = self::getApp()->getEm()
+                                        ->createQuery('
+                                            SELECT
+                                                confirmation, login
+                                            FROM
+                                                Model\Confirmation confirmation
+                                            INNER JOIN
+                                                confirmation.account login
+                                            WHERE
+                                                login.account_id = :account_id AND
+                                                confirmation.used = false AND
+                                                :CURDATETIME BETWEEN confirmation.date AND confirmation.expire
+                                        ')
+                                        ->setParameter('account_id', $account->getAccount_id())
+                                        ->setParameter('CURDATETIME', date('Y-m-d H:i:s'))
+                                        ->getOneOrNullResult();
+
+        // Se não há confirmação criada, então cria um código de ativação para
+        // a conta solicitada.
+        if(is_null($confirmation))
+        {
+            $confirmation = new Confirmation;
+            $confirmation->setAccount($account);
+            $confirmation->setCode(hash('md5', microtime(true)));
+            $confirmation->setDate(date('Y-m-d H:i:s'));
+            $confirmation->setExpire(date('Y-m-d H:i:s', time() + (60*BRACP_RECOVER_CODE_EXPIRE)));
+            $confirmation->setUsed(false);
+
+            // Grava o código no banco de dados e envia o email.
+            self::getApp()->getEm()->persist($confirmation);
+            self::getApp()->getEm()->flush();
+        }
+
+        // Envia o e-mail para usuário caso o painel de controle esteja com as configurações
+        //  de envio ativas.
+        self::getApp()->sendMail('Confirma seu Registro', [$account->getEmail()],
+                                    'mail.create.code',
+                                    [
+                                        'userid' => $account->getUserid(),
+                                        'code' => $confirmation->getCode(),
+                                        'expire' => $confirmation->getExpire(),
+                                        'href' => BRACP_URL . 'account/register'
+                                    ]);
+
+        // Retorna a resposta que o e-mail foi enviado para o jogador.
+        return ['register_message' => ['success' => 'O Código de ativação foi enviado com sucesso para o endereço de e-mail cadastrado.']];
     }
 
     /**
@@ -1495,7 +1559,7 @@ class Account
     public static function registerAccount($data, $code = null)
     {
         // Definições confirmação de contas.
-        if(BRACP_CONFIRM_ACCOUNT && !is_null($code))
+        if(BRACP_ALLOW_MAIL_SEND && BRACP_CONFIRM_ACCOUNT && !is_null($code))
         {
             // Verificação do banco de dados para saber se o código de recuperação foi
             //  enviado com sucesso.
@@ -1581,7 +1645,8 @@ class Account
             // 2016-04-14, CHLFZ: De acordo com 'https://github.com/brAthena/brAthena/blob/master/src/login/login.c#L1317'
             //                    o melhor estado para este tipo de confirmação é o 11. (result == -1, autorizado sendo state = 0)
             //                    Alterado de status 5 -> 11.
-            if(BRACP_CONFIRM_ACCOUNT)
+            // 2016-04-15, CHLFZ: Se não tiver configurado para envio de e-mails, não irá existir confirmação de contas por e-mail.
+            if(BRACP_ALLOW_MAIL_SEND && BRACP_CONFIRM_ACCOUNT)
                 $account->setState(11);
 
             // Salva os dados na tabela de usuário.
@@ -1590,7 +1655,7 @@ class Account
 
             // Se não for necessário a confirmação da conta do usuário, então, envia um e-mail de boas vindas
             // Se não, enfia um e-mail para confirmar a conta do usuario.
-            if(!BRACP_CONFIRM_ACCOUNT)
+            if(!BRACP_ALLOW_MAIL_SEND || !BRACP_CONFIRM_ACCOUNT)
             {
                 // Envia o e-mail para usuário caso o painel de controle esteja com as configurações
                 //  de envio ativas.
@@ -1602,29 +1667,8 @@ class Account
             }
             else
             {
-                // Cria a instância do objeto de confirmação para a conta.
-                $confirmation = new Confirmation;
-                $confirmation->setAccount($account);
-                $confirmation->setCode(hash('md5', microtime(true)));
-                $confirmation->setDate(date('Y-m-d H:i:s'));
-                $confirmation->setExpire(date('Y-m-d H:i:s', time() + (60*BRACP_RECOVER_CODE_EXPIRE)));
-                $confirmation->setUsed(false);
-
-                // Grava o código no banco de dados e envia o email.
-                self::getApp()->getEm()->persist($confirmation);
-                self::getApp()->getEm()->flush();
-
-                // Envia o e-mail para usuário caso o painel de controle esteja com as configurações
-                //  de envio ativas.
-                self::getApp()->sendMail('Confirma seu Registro', [$account->getEmail()],
-                                            'mail.create.code',
-                                            [
-                                                'userid' => $account->getUserid(),
-                                                'code' => $confirmation->getCode(),
-                                                'expire' => $confirmation->getExpire(),
-                                                'href' => BRACP_URL . 'account/register'
-                                            ]);
-
+                // Envia o código de ativação para o cliente.
+                return self::registerResend($account->getAccount_id())
             }
         }
     }

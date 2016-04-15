@@ -61,7 +61,7 @@ class Route
 
                     // Caso esteja configurado para confirmar a conta criada no painel de controle
                     // Que já exibe os dados de confirmação caso, esteja tudo ok.
-                    if(BRACP_CONFIRM_ACCOUNT)
+                    if(BRACP_ALLOW_MAIL_SEND && BRACP_CONFIRM_ACCOUNT)
                     {
                         // Registra os dados do jogador.
                         $this->get('/register/{code}', ['Controller\Account', 'registerByCode'])
@@ -79,7 +79,7 @@ class Route
                 $this->post('/donations/notification', ['Controller\Account', 'donationsNotify']);
 
                 // Verifica configuração se permite recuperar uma conta.
-                if(BRACP_ALLOW_RECOVER)
+                if(BRACP_ALLOW_MAIL_SEND && BRACP_ALLOW_RECOVER)
                 {
                     $this->post('/recover', ['Controller\Account', 'recover'])
                             ->add(['Controller\Account', 'needLoggout']);
