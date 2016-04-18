@@ -116,29 +116,22 @@
             <div class="bracp-body-container">
                 {if $smarty.const.BRACP_DEVELOP_MODE eq true}
                     <div class="bracp-message warning">
-                        <h3>Lembrete!</h3>
-                        O Sistema está sendo executado em modo desenvolvimento!<br>
-                        Algumas configurações podem não responder ao esperado.
+                        <h3>{Language::translate('DEFAULT_DEVELOP_TITLE')}</h3>
+                        {Language::translateLn('DEFAULT_DEVELOP_MESSAGE', 0)}<br>
+                        {Language::translateLn('DEFAULT_DEVELOP_MESSAGE', 1)}
                     </div>
                 {/if}
                 {if preg_match('/beta$/i', $smarty.const.BRACP_VERSION) eq 1}
                     <div class="bracp-message info">
-                        <h3>Você está executando uma versão beta! <i>({$smarty.const.BRACP_VERSION})</i></h3>
-                        A Versão do sistema que está em execução não é estavel e ainda está em fase de testes!<br>
-                        Por favor, fique atento as atualizações pois muitos erros podem ser corrigidos.
+                        <h3>Você está executando uma versão beta!<i> ({$smarty.const.BRACP_VERSION})</i></h3>
+                        {Language::translateLn('DEFAULT_BETA_MESSAGE', 0)}<br>
+                        {Language::translateLn('DEFAULT_BETA_MESSAGE', 1)}
                     </div>
                 {/if}
                 {if isset($account) eq true && $account->getGroup_id() >= BRACP_ALLOW_ADMIN_GMLEVEL}
                     <div class="bracp-message error">
-                        <h3>Lembrete aos adminsitradores</h3>
-                        Por questões de segurança:
-                        <ul>
-                            <li>Você não pode realizar alterações de e-mail pelo painel de controle.</li>
-                            {if $smarty.const.BRACP_ALLOW_ADMIN_CHANGE_PASSWORD eq false}
-                                <li>Você não pode alterar sua senha pelo item do menu.<br>
-                                    Verifique o menu administrativo.</li>
-                            {/if}
-                        </ul>
+                        <h3>{Language::translate('DEFAULT_ADMIN_TITLE')}</h3>
+                        {Language::translate('DEFAULT_ADMIN_MESSAGE')}
                     </div>
                 {/if}
                 <div class="bracp-body">

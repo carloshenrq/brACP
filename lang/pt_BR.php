@@ -42,6 +42,32 @@ return
     'MENU_RANKING_ECONOMY'      => 'Economia',
 
     /**
+     * @refer templates/default.tpl
+     * @author carloshenrq
+     */
+    'DEFAULT_DEVELOP_TITLE'     => 'Lembrete!',
+    'DEFAULT_DEVELOP_MESSAGE'   => [
+        'O Sistema está sendo executado em modo desenvolvimento!',
+        'Algumas configurações podem não responder ao esperado.',
+    ],
+    'DEFAULT_BETA_TITLE'        => 'Você está executando uma versão beta!',
+    'DEFAULT_BETA_MESSAGE'      => [
+        'A Versão do sistema que está em execução não é estavel e ainda está em fase de testes!',
+        'Por favor, fique atento as atualizações pois muitos erros podem ser corrigidos.'
+    ],
+    'DEFAULT_ADMIN_TITLE'       => 'Lembrete aos adminsitradores',
+    'DEFAULT_ADMIN_MESSAGE'     => 'Algumas opções podem não estar habilitadas para administradores devido a questões de segurança.',
+
+    /**
+     * @refer templates/home.tpl
+     * @author carloshenrq
+     */
+    'HOME_TITLE'                => 'Principal',
+    'HOME_MESSAGE'              => [
+        'Seja muito bem vindo ao painel de controle.'
+    ],
+
+    /**
      * Define o status do jogador com o texto formatado.
      */
     'STATUS' => [

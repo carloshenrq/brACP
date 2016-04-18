@@ -16,6 +16,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *}
 
-<h1>Principal</h1>
+<h1>{Language::translate('HOME_TITLE')}</h1>
 
-<p>Seja muito bem vindo ao painel de controle.</p>
+<p>{Language::translateLn('HOME_MESSAGE', 0)}</p>
