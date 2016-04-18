@@ -16,7 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *}
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html>
     <head>
         <title>brACP - {block name="brACP_Title"}Welcome{/block} {if $smarty.const.BRACP_DEVELOP_MODE eq true}(DEVELOPER MODE){/if}</title>
 
@@ -97,7 +97,7 @@
             <div class="bracp-header">
                 <input type="checkbox" id="_bracp-menu-check-0" class="bracp-menu-check"/>
                 <label class="btn" for="_bracp-menu-check-0">
-                    Menu
+                    {_('MENU')}
                 </label>
                 <div class="bracp-menu">
                     {include 'menu.tpl'}

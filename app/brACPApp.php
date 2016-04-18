@@ -85,6 +85,13 @@ class brACPApp extends Slim\App
         $this->add(new Database());
         $this->add(new IpAddress(true, ['10.0.0.1', '10.0.0.2']));
 
+        // Define a linguagem do painel de controle.
+        // ----- @Temporario para linguagem atual do painel de controle. (pt_BR não funcionando adequadamente)
+        putenv("LANG=en_US");
+        setlocale(LC_ALL, 'en_US');
+        bindtextdomain('translate', './locale/');
+        textdomain('translate');
+
         // Define a instância global como sendo o proprio.
         self::$app = $this;
     }

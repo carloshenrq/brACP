@@ -1,0 +1,52 @@
+#: template/menu.tpl
+
+msgid "MENU"
+msgstr "Menu"
+
+msgid "MENU_HOME"
+msgstr "Principal"
+
+msgid "MENU_ADMIN"
+msgstr "Administração"
+
+msgid "MENU_ADMIN_BACKUP"
+msgstr "Criar Backup"
+
+msgid "MENU_ADMIN_THEMES"
+msgstr "Atualizar Temas"
+
+msgid "MENU_MYACC"
+msgstr "Minha Conta"
+
+msgid "MENU_MYACC_LOGIN"
+msgstr "Entrar"
+
+msgid "MENU_MYACC_CREATE"
+msgstr "Registrar"
+
+msgid "MENU_MYACC_RECOVER"
+msgstr "Recuperar Senha"
+
+msgid "MENU_MYACC_CHANGEPASS"
+msgstr "Mudar Senha"
+
+msgid "MENU_MYACC_CHANGEMAIL"
+msgstr "Mudar Email"
+
+msgid "MENU_MYACC_CHARS"
+msgstr "Personagens"
+
+msgid "MENU_MYACC_DONATIONS"
+msgstr "Doações"
+
+msgid "MENU_MYACC_LOGOUT"
+msgstr "Sair"
+
+msgid "MENU_RANKINGS"
+msgstr "Classificações"
+
+msgid "MENU_RANKINGS_CHARS"
+msgstr "Jogadores"
+
+msgid "MENU_RANKING_ECONOMY"
+msgstr "Economia"
