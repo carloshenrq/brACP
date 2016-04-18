@@ -44,13 +44,18 @@ class Language
      */
     public static function parse($textToTranslate)
     {
-        // Faz a tradução das variaveis do arquivo para ser exibido.
-        while(preg_match('/(##([^##]+)##)/i', $textToTranslate, $matches))
+        if(preg_match_all('/##([^##]+)##/', $textToTranslate, $matches) > 0)
         {
-            if(preg_match('/^([^,]+),(.*)$/i', $matches[2], $lnMatch))
-                $textToTranslate = str_replace($matches[1], self::translateLn($lnMatch[1], $lnMatch[2]), $textToTranslate);
-            else
-                $textToTranslate = str_replace($matches[1], self::translate($matches[2]), $textToTranslate);
+            $index = $matches[0];
+            $value = $matches[1];
+
+            foreach($index as $i => $var)
+            {
+                if(preg_match('/##([^,]+),(.*)##/', $var, $matches))
+                    $textToTranslate = str_replace($var, self::translateLn($matches[1], $matches[2]), $textToTranslate);
+                else
+                    $textToTranslate = str_replace($var, self::translate($value[$i]), $textToTranslate);
+            }
         }
 
         // Retorna o texto de tradução para a tela.
@@ -79,6 +84,6 @@ class Language
      */
     private static function translateLn($str, $index = 0)
     {
-        return ((isset(self::$translation[$str])) ? self::$translation[$str][$index] : $str.'_'.$index);
+        return ((isset(self::$translation[$str])) ? self::$translation[$str][trim($index)] : $str.'_'.trim($index));
     }
 }

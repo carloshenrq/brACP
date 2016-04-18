@@ -182,7 +182,7 @@ class brACPApp extends Slim\App
      */
     public function display($template, $data = [], $ajax = true)
     {
-        echo Language::parse($this->render($template, $data, $ajax));
+        echo $this->render($template, $data, $ajax);
     }
 
     /**
@@ -231,7 +231,7 @@ class brACPApp extends Slim\App
             $template .= '.ajax';
 
         // Renderiza o template.
-        return $this->view->fetch($template . '.tpl');
+        return Language::parse($this->view->fetch($template . '.tpl'));
     }
 
     /**
