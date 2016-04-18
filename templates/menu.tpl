@@ -19,6 +19,21 @@
     <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}" data-target=".bracp-body"><label>
         Principal
     </label></li>
+    {if isset($session->BRACP_ISLOGGEDIN) eq true and $session->BRACP_ISLOGGEDIN eq true and
+            $account->getGroup_id() >= BRACP_ALLOW_ADMIN_GMLEVEL}
+        <li style='color: red; font-weight: bold;'>
+            <input id="menu-admin" type="checkbox" class="bracp-menu-item-check"/>
+            <label for="menu-admin">Administração</label>
+            <ul>
+                <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}admin/backup" data-target=".bracp-body"><label>
+                    Criar Backup
+                </label></li>
+                <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}admin/theme" data-target=".bracp-body"><label>
+                    Atualizar temas
+                </label></li>
+            </ul>
+        </li>
+    {/if}
     <li>
         <input id="menu-myaccount" type="checkbox" class="bracp-menu-item-check"/>
         <label for="menu-myaccount">Minha Conta</label>
