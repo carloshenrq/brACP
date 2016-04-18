@@ -40,13 +40,31 @@ class Language
     }
 
     /**
+     * Realiza o parse de informações para traduzir os dados de arquivos.
+     */
+    public static function parse($textToTranslate)
+    {
+        // Faz a tradução das variaveis do arquivo para ser exibido.
+        while(preg_match('/(##([^##]+)##)/i', $textToTranslate, $matches))
+        {
+            if(preg_match('/^([^,]+),(.*)$/i', $matches[2], $lnMatch))
+                $textToTranslate = str_replace($matches[1], self::translateLn($lnMatch[1], $lnMatch[2]), $textToTranslate);
+            else
+                $textToTranslate = str_replace($matches[1], self::translate($matches[2]), $textToTranslate);
+        }
+
+        // Retorna o texto de tradução para a tela.
+        return $textToTranslate;
+    }
+
+    /**
      * Tradução para o texto enviado ao sistema.
      *
      * @param string $str 
      *
      * @return string
      */
-    public static function translate($str)
+    private static function translate($str)
     {
         return ((isset(self::$translation[$str])) ? self::$translation[$str] : $str);
     }
@@ -59,7 +77,7 @@ class Language
      *
      * @return string
      */
-    public static function translateLn($str, $index = 0)
+    private static function translateLn($str, $index = 0)
     {
         return ((isset(self::$translation[$str])) ? self::$translation[$str][$index] : $str.'_'.$index);
     }

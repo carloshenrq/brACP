@@ -182,7 +182,7 @@ class brACPApp extends Slim\App
      */
     public function display($template, $data = [], $ajax = true)
     {
-        echo $this->render($template, $data, $ajax);
+        echo Language::parse($this->render($template, $data, $ajax));
     }
 
     /**

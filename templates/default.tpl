@@ -97,41 +97,41 @@
             <div class="bracp-header">
                 <input type="checkbox" id="_bracp-menu-check-0" class="bracp-menu-check"/>
                 <label class="btn" for="_bracp-menu-check-0">
-                    {Language::translate('MENU')}
+                    ##MENU##
                 </label>
                 <div class="bracp-menu">
                     {include 'menu.tpl'}
                 </div>
                 <div class="bracp-header-menu">
                     {if isset($session->BRACP_ISLOGGEDIN) eq false or $session->BRACP_ISLOGGEDIN eq false}
-                        <label for="bracp-modal-login" class="btn btn-success">{Language::translate('MENU_MYACC_LOGIN')}</label>
+                        <label for="bracp-modal-login" class="btn btn-success">##MENU_MYACC_LOGIN##</label>
                         {if $smarty.const.BRACP_ALLOW_CREATE_ACCOUNT eq true}
-                            <label for="bracp-modal-create" class="btn btn-info">{Language::translate('MENU_MYACC_CREATE')}</label>
+                            <label for="bracp-modal-create" class="btn btn-info">##MENU_MYACC_CREATE##</label>
                         {/if}
                     {else}
-                        <button data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/logout" data-target=".bracp-body" class="btn btn-error ajax-url">{Language::translate('MENU_MYACC_LOGOUT')} ({$account->getUserid()})</button>
+                        <button data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/logout" data-target=".bracp-body" class="btn btn-error ajax-url">##MENU_MYACC_LOGOUT## ({$account->getUserid()})</button>
                     {/if}
                 </div>
             </div>
             <div class="bracp-body-container">
                 {if $smarty.const.BRACP_DEVELOP_MODE eq true}
                     <div class="bracp-message warning">
-                        <h3>{Language::translate('DEFAULT_DEVELOP_TITLE')}</h3>
-                        {Language::translateLn('DEFAULT_DEVELOP_MESSAGE', 0)}<br>
-                        {Language::translateLn('DEFAULT_DEVELOP_MESSAGE', 1)}
+                        <h3>##DEFAULT_DEVELOP_TITLE##</h3>
+                        ##DEFAULT_DEVELOP_MESSAGE,0##<br>
+                        ##DEFAULT_DEVELOP_MESSAGE,1##
                     </div>
                 {/if}
                 {if preg_match('/beta$/i', $smarty.const.BRACP_VERSION) eq 1}
                     <div class="bracp-message info">
-                        <h3>Você está executando uma versão beta!<i> ({$smarty.const.BRACP_VERSION})</i></h3>
-                        {Language::translateLn('DEFAULT_BETA_MESSAGE', 0)}<br>
-                        {Language::translateLn('DEFAULT_BETA_MESSAGE', 1)}
+                        <h3>##DEFAULT_BETA_TITLE##<i> ({$smarty.const.BRACP_VERSION})</i></h3>
+                        ##DEFAULT_BETA_MESSAGE,0##<br>
+                        ##DEFAULT_BETA_MESSAGE,1##
                     </div>
                 {/if}
                 {if isset($account) eq true && $account->getGroup_id() >= BRACP_ALLOW_ADMIN_GMLEVEL}
                     <div class="bracp-message error">
-                        <h3>{Language::translate('DEFAULT_ADMIN_TITLE')}</h3>
-                        {Language::translate('DEFAULT_ADMIN_MESSAGE')}
+                        <h3>##DEFAULT_ADMIN_TITLE##</h3>
+                        ##DEFAULT_ADMIN_MESSAGE##
                     </div>
                 {/if}
                 <div class="bracp-body">

@@ -16,6 +16,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *}
 
-<h1>{Language::translate('HOME_TITLE')}</h1>
+<h1>##HOME_TITLE##</h1>
 
-<p>{Language::translateLn('HOME_MESSAGE', 0)}</p>
+<p>##HOME_MESSAGE,0##</p>
