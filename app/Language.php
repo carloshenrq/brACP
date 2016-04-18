@@ -43,9 +43,24 @@ class Language
      * Tradução para o texto enviado ao sistema.
      *
      * @param string $str 
+     *
+     * @return string
      */
     public static function translate($str)
     {
         return ((isset(self::$translation[$str])) ? self::$translation[$str] : $str);
+    }
+
+    /**
+     * Tradução para quando existe indices.
+     *
+     * @param string $str Código da string para tradução
+     * @param mixed $index Código da linha que será utilizada
+     *
+     * @return string
+     */
+    public static function translateLn($str, $index = 0)
+    {
+        return ((isset(self::$translation[$str])) ? self::$translation[$str][$index] : $str.'_'.$index);
     }
 }
