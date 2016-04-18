@@ -59,8 +59,16 @@ class brACPApp extends Slim\App
     {
         // Initialize session for this app.
         $this->session = new Session();
+
+        // Configurações alternativas.
+        $configs = [
+            'settings' => [
+                'displayErrorDetails' => BRACP_DEVELOP_MODE
+            ]
+        ];
+
         // Loads the default settings for this app.
-        parent::__construct();
+        parent::__construct($configs);
 
         // Cria a instância do smarty.
         $this->view = new Smarty;

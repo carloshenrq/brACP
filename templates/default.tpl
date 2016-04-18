@@ -71,7 +71,7 @@
                 {if isset($recover_message) eq true or isset($register_message) eq true}
                     {if isset($recover_message) eq true}
                         $('#bracp-modal-recover').prop('checked', true);
-                    {else if(isset($register_message) eq true)}
+                    {else if isset($register_message) eq true}
                         $('#bracp-modal-create').prop('checked', true);
                     {/if}
                     window.history.replaceState("", "", "{$smarty.const.BRACP_DIR_INSTALL_URL}");

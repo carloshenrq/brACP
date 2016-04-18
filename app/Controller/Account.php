@@ -100,7 +100,7 @@ class Account
     public static function registerByCode(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
         // Exibe as informações no template de cadastro.
-        self::getApp()->display('account.register', self::registerAccount($request->getParsedBody(), $args['code']));
+        self::getApp()->display('home', self::registerAccount($request->getParsedBody(), $args['code']));
     }
 
     /**
@@ -1575,7 +1575,7 @@ class Account
                                             FROM
                                                 Model\Confirmation confirmation
                                             INNER JOIN
-                                                recover.account login
+                                                confirmation.account login
                                             WHERE
                                                 confirmation.code = :code AND
                                                 confirmation.used = false AND
@@ -1668,7 +1668,7 @@ class Account
             else
             {
                 // Envia o código de ativação para o cliente.
-                return self::registerResend($account->getAccount_id())
+                return self::registerResend($account->getAccount_id());
             }
         }
     }
