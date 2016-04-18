@@ -97,19 +97,19 @@
             <div class="bracp-header">
                 <input type="checkbox" id="_bracp-menu-check-0" class="bracp-menu-check"/>
                 <label class="btn" for="_bracp-menu-check-0">
-                    {_('MENU')}
+                    {Language::translate('MENU')}
                 </label>
                 <div class="bracp-menu">
                     {include 'menu.tpl'}
                 </div>
                 <div class="bracp-header-menu">
                     {if isset($session->BRACP_ISLOGGEDIN) eq false or $session->BRACP_ISLOGGEDIN eq false}
-                        <label for="bracp-modal-login" class="btn btn-success">Entrar</label>
+                        <label for="bracp-modal-login" class="btn btn-success">{Language::translate('MENU_MYACC_LOGIN')}</label>
                         {if $smarty.const.BRACP_ALLOW_CREATE_ACCOUNT eq true}
-                            <label for="bracp-modal-create" class="btn btn-info">Cadastre-se</label>
+                            <label for="bracp-modal-create" class="btn btn-info">{Language::translate('MENU_MYACC_CREATE')}</label>
                         {/if}
                     {else}
-                        <button data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/logout" data-target=".bracp-body" class="btn btn-error ajax-url">Sair ({$account->getUserid()})</button>
+                        <button data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/logout" data-target=".bracp-body" class="btn btn-error ajax-url">{Language::translate('MENU_MYACC_LOGOUT')} ({$account->getUserid()})</button>
                     {/if}
                 </div>
             </div>
