@@ -19,12 +19,13 @@
 {extends file="mail.default.tpl"}
 
 {block name="mail_body"}
-	
-    Uma tentativa de recuperação de senha foi realizada na sua conta.<br>
-    Para confirmar essa tentativa de recuperação, por favor, clique no link abaixo ou copie e cole o endereço em seu navegador.<br>
+
+    ##MAIL_RECOVERCODE_MSG,0##<br>
+    ##MAIL_RECOVERCODE_MSG,1##<br>
     <br>
     <a href="{$href}/{$code}" target="_blank">{$href}/{$code}</a><br>
-    <i>Link válido até <strong>{Format::date($expire)}</strong>.</i><br>
+    <i>##MAIL_RECOVERCODE_MSG,2## <strong>{Format::date($expire)}</strong>.</i><br>
     <br>
-    Após acessar o link, você receberá um segundo e-mail com a nova senha gerada aleatóriamente pelo sistema.
+    ##MAIL_RECOVERCODE_MSG,3##
+
 {/block}

@@ -19,5 +19,5 @@
 {extends file="mail.default.tpl"}
 
 {block name="mail_body"}
-	Este e-mail é apenas uma notificação para informar que sua senha foi alterada.
+	##MAIL_CHANGEPASS_MSG,0##
 {/block}

@@ -19,11 +19,12 @@
 {extends file="mail.default.tpl"}
 
 {block name="mail_body"}
-	
-    Para confirmar a criação da sua conta, é necessário que você confirme sua identidade de e-mail clicando no link abaixo.<br>
+
+    ##MAIL_CREATECODE_MSG,0##<br>
     <br>
     <a href="{$href}/{$code}" target="_blank">{$href}/{$code}</a><br>
-    <i>Link válido até <strong>{Format::date($expire)}</strong>.</i><br>
+    <i>##MAIL_CREATECODE_MSG,1## <strong>{Format::date($expire)}</strong>.</i><br>
     <br>
-    Após acessar o link, você receberá um segundo e-mail informando que sua conta foi confirmada com sucesso.
+    ##MAIL_CREATECODE_MSG,2##
+
 {/block}

@@ -30,7 +30,7 @@
 	</head>
 
 	<body>
-		Olá, <strong>{$userid}</strong>.<br>
+		##MAIL_TITLE## <strong>{$userid}</strong>.<br>
 		--------------------------------------------------------------------------------<br>
 		<br>
         {block name="mail_body"}
@@ -38,8 +38,8 @@
 		<br>
 		<br>
 		--------------------------------------------------------------------------------<br>
-		<i>Este e-mail foi enviado por <strong>{$smarty.const.BRACP_MAIL_FROM}</strong> através da solicitação feita pelo endereço ip <strong>{$ipAddress}</strong> às <strong>{date('d/m/Y H:i:s')}</strong>.<br>
-		Se não foi você que fez essa solicitação, por favor, desconsidere esta mensagem.</i>
+		<i>##MAIL_MSG,0## <strong>{$smarty.const.BRACP_MAIL_FROM}</strong> ##MAIL_MSG,1## <strong>{$ipAddress}</strong> ##MAIL_MSG,2## <strong>{date('Y-m-d H:i:s')}</strong>.<br>
+		##MAIL_MSG,3##</i>
 	</body>
 
 </html>

@@ -19,5 +19,5 @@
 {extends file="mail.default.tpl"}
 
 {block name="mail_body"}
-    Agradecemos seu registro e esperamos que você tenha muitas horas de diversão em nosso servidor.
+    ##MAIL_CREATE_MSG,0##
 {/block}

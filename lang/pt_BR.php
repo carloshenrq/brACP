@@ -92,6 +92,13 @@ return
     ],
 
     /**
+     * @refer templates/account.logout.ajax.tpl
+     * @author carloshenrq
+     */
+    'LOGOUT_TITLE'              => 'Minha Conta &raquo; Sair',
+    'LOGOUT_SUCCESS'            => 'Logout efetuado com sucesso! Aguarde...',
+
+    /**
      * @refer templates/account.register.ajax.tpl
      * @author carloshenrq
      */
@@ -302,6 +309,54 @@ return
      * Mensagens de erro padrão.
      */
     'ERR_RECAPTCHA'             => 'Código de verificação inválido. Verifique por favor.',
+
+    /**
+     *
+     *
+     * Configuração para e-mail.
+     *
+     *
+     */
+    'MAIL_TITLE'                => 'Olá, ',
+    'MAIL_MSG'                  => [
+        'Este e-mail foi enviado por',
+        'através da solicitação feita pelo endereço ip',
+        'às',
+        'Se não foi você que fez essa solicitação, por favor, desconsidere esta mensagem.'
+    ],
+
+    'MAIL_RECOVER_MSG'          => [
+        'Sua senha foi recuperada com sucesso. Segue abaixo sua senha para login no jogo:',
+        'Sua senha:',
+        'Para realizar login utilize esta senha apartir de agora.',
+    ],
+
+    'MAIL_RECOVERCODE_MSG'      => [
+        'Uma tentativa de recuperação de senha foi realizada na sua conta.',
+        'Para confirmar essa tentativa de recuperação, por favor, clique no link abaixo ou copie e cole o endereço em seu navegador.',
+        'Link válido até',
+        'Após acessar o link, você receberá um segundo e-mail com a nova senha gerada aleatóriamente pelo sistema.',
+    ],
+
+    'MAIL_CREATE_MSG'           => [
+        'Agradecemos seu registro e esperamos que você tenha muitas horas de diversão em nosso servidor.',
+    ],
+
+    'MAIL_CREATECODE_MSG'       => [
+        'Para confirmar a criação da sua conta, é necessário que você confirme sua identidade de e-mail clicando no link abaixo.',
+        'Link válido até',
+        'Após acessar o link, você receberá um segundo e-mail informando que sua conta foi confirmada com sucesso.',
+    ],
+
+    'MAIL_CHANGEPASS_MSG'       => [
+        'Este e-mail é apenas uma notificação para informar que sua senha foi alterada.',
+    ],
+
+    'MAIL_CHANGEMAIL_MSG'       => [
+        'Este e-mail é apenas uma notificação para informar que seu endereço de email foi alterado.',
+        'Antigo:',
+        'Novo:',
+    ],
 
     /**
      * Define o status do jogador com o texto formatado.

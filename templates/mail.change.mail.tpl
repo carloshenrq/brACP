@@ -19,7 +19,7 @@
 {extends file="mail.default.tpl"}
 
 {block name="mail_body"}
-	Este e-mail é apenas uma notificação para informar que seu endereço de email foi alterado.<br>
-	Antigo: <strong>{$mailOld}</strong>.<br>
-	Novo: <strong>{$mailNew}</strong>.
+	##MAIL_CHANGEMAIL_MSG,0##<br>
+	##MAIL_CHANGEMAIL_MSG,1## <strong>{$mailOld}</strong>.<br>
+	##MAIL_CHANGEMAIL_MSG,2## <strong>{$mailNew}</strong>.
 {/block}

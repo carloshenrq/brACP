@@ -19,10 +19,11 @@
 {extends file="mail.default.tpl"}
 
 {block name="mail_body"}
-	
-    Sua senha foi recuperada com sucesso. Segue abaixo sua senha para login no jogo:<br>
+
+    ##MAIL_RECOVER_MSG,0##<br>
     <br>
-    Sua senha: <strong>{$password}</strong><br>
+    ##MAIL_RECOVER_MSG,1## <strong>{$password}</strong><br>
     <br>
-    Para realizar login utilize esta senha apartir de agora.
+    ##MAIL_RECOVER_MSG,2##
+
 {/block}
