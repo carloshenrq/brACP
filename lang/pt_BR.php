@@ -217,6 +217,9 @@ return
     'CHANGEPASS_MSG'            => [
         'Para realizar a alteração de sua senha é necessário que você digite sua senha atual, sua nova senha e confirme.',
     ],
+    'CHANGEPASS_MAIL'           => [
+        'NOTIFY_CHANGED'    => 'Notificação: Alteração de Senha',
+    ],
     'CHANGEPASS_PLACEHOLDER'    => [
         'ACTUAL_PASSWORD'       => 'Senha atual',
         'NEW_PASSWORD'          => 'Digite sua nova senha',
@@ -244,6 +247,9 @@ return
     'CHANGEMAIL_SUCCESS'        => 'Seu endereço de e-mail foi alterado com sucesso.',
     'CHANGEMAIL_MSG'            => [
         'Para realizar a alteração de seu endereço de e-mail é necessário que você digite seu e-mail atual, seu novo endereço de email e confirme!',
+    ],
+    'CHANGEMAIL_MAIL'           => [
+        'NOTIFY_CHANGED' => 'Notificação: Alteração de E-mail'
     ],
     'CHANGEMAIL_PLACEHOLDER'    => [
         'EMAIL'     => 'Email atual',

@@ -152,7 +152,7 @@ class brACPApp extends Slim\App
         // Mailer para envio dos dados.
         $mailer = \Swift_Mailer::newInstance($transport);
         // Mensagem para enviar.
-        $message = \Swift_Message::newInstance($subject)
+        $message = \Swift_Message::newInstance(Language::parse($subject))
                                     ->setFrom([BRACP_MAIL_FROM => BRACP_MAIL_FROM_NAME])
                                     ->setTo($to)
                                     ->setBody($this->render($template, $data, false), 'text/html');

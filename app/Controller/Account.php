@@ -685,7 +685,7 @@ class Account
         if(BRACP_NOTIFY_CHANGE_MAIL)
         {
             // Envia um email para o endereço antigo informando a alteração.
-            self::getApp()->sendMail('Notificação: Alteração de E-mail',
+            self::getApp()->sendMail('##CHANGEMAIL_MAIL,NOTIFY_CHANGED##',
                                         [$log->getFrom()],
                                         'mail.change.mail',
                                         [
@@ -695,7 +695,7 @@ class Account
                                         ]);
 
             // Envia o e-mail para o novo endereço.
-            self::getApp()->sendMail('Notificação: Alteração de E-mail',
+            self::getApp()->sendMail('##CHANGEMAIL_MAIL,NOTIFY_CHANGED##',
                                         [$log->getTo()],
                                         'mail.change.mail',
                                         [
@@ -742,7 +742,7 @@ class Account
                                         ->findOneBy(['account_id' => $account_id]);
 
             // Envia o e-mail com os dados de recuperação do usuário.
-            self::getApp()->sendMail('Notificação: Alteração de Senha', [$account->getEmail()],
+            self::getApp()->sendMail('##CHANGEPASS_MAIL,NOTIFY_CHANGED##', [$account->getEmail()],
                 'mail.change.password', [
                     'userid' => $account->getUserid()
                 ]);
@@ -1337,7 +1337,7 @@ class Account
                 self::getApp()->getEm()->flush();
 
                 // Envia o e-mail com os dados de recuperação do usuário.
-                self::getApp()->sendMail(Language::translateLn('RECOVER_MAIL', 'TITLE'), [$recover->getAccount()->getEmail()],
+                self::getApp()->sendMail('##RECOVER_MAIL,TITLE##', [$recover->getAccount()->getEmail()],
                     'mail.recover', [
                         'userid' => $recover->getAccount()->getUserid(),
                         'password' => $user_pass
@@ -1408,7 +1408,7 @@ class Account
                 }
 
                 // Envia o e-mail para o usuário.
-                self::getApp()->sendMail(Language::translateLn('RECOVER_MAIL', 'TITLE_SEND'), [$account->getEmail()],
+                self::getApp()->sendMail('##RECOVER_MAIL,TITLE_SEND#', [$account->getEmail()],
                     'mail.recover.code', [
                         'userid' => $account->getUserid(),
                         'code' => $recover->getCode(),
@@ -1422,7 +1422,7 @@ class Account
             else
             {
                 // Envia o e-mail com os dados de recuperação do usuário.
-                self::getApp()->sendMail(Language::translateLn('RECOVER_MAIL', 'TITLE_SEND'), [$account->getEmail()],
+                self::getApp()->sendMail('##RECOVER_MAIL,TITLE_SEND##', [$account->getEmail()],
                     'mail.recover', [
                         'userid' => $account->getUserid(),
                         'password' => $account->getUser_pass()
@@ -1535,7 +1535,7 @@ class Account
 
         // Envia o e-mail para usuário caso o painel de controle esteja com as configurações
         //  de envio ativas.
-        self::getApp()->sendMail(Language::translateLn('CREATE_MAIL', 'TITLE_CONFIRM'),
+        self::getApp()->sendMail('##CREATE_MAIL,TITLE_CONFIRM##',
                                     [$account->getEmail()],
                                     'mail.create.code',
                                     [
@@ -1607,7 +1607,7 @@ class Account
 
             // Envia o e-mail para usuário caso o painel de controle esteja com as configurações
             //  de envio ativas.
-            self::getApp()->sendMail(Language::translateLn('CREATE_MAIL','TITLE_CONFIRMED'),
+            self::getApp()->sendMail('##CREATE_MAIL,TITLE_CONFIRMED##',
                                         [$confirmation->getAccount()->getEmail()],
                                         'mail.create', ['userid' => $confirmation->getAccount()->getUserid()]);
 
@@ -1661,7 +1661,7 @@ class Account
             {
                 // Envia o e-mail para usuário caso o painel de controle esteja com as configurações
                 //  de envio ativas.
-                self::getApp()->sendMail(Language::translateLn('CREATE_MAIL', 'TITLE_SUCCESS'),
+                self::getApp()->sendMail('##CREATE_MAIL,TITLE_SUCCESS##',
                                             [$account->getEmail()],
                                             'mail.create', ['userid' => $account->getUserid()]);
 
