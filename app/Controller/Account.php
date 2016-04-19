@@ -1215,31 +1215,31 @@ class Account
     {
         // Verifica se a conta é do tipo administrador e não deixa realizar a alteração de e-mail
         if(self::loggedUser()->getGroup_id() >= BRACP_ALLOW_ADMIN_GMLEVEL)
-            return ['email_message' => ['error' => 'Usuários administradores não podem realizar alteração de e-mail.']];
+            return ['email_message' => ['error' => '##CHANGEMAIL_ERR,NO_ADMIN##']];
 
         // Verificação recaptcha para saber se a requisição realizada
         //  é verdadeira e pode continuar.
         if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['g-recaptcha-response']))
-            return ['email_message' => ['error' => 'Código de verificação inválido. Verifique por favor.']];
+            return ['email_message' => ['error' => '##ERR_RECAPTCHA##']];
 
         // Verifica se o email atual digitado é igual ao email atual.
         if(hash('md5', self::loggedUser()->getEmail()) !== hash('md5', $data['email']))
-            return ['email_message' => ['error' => 'E-mail atual não confere com o digitado.']];
+            return ['email_message' => ['error' => '##CHANGEMAIL_ERR,MISMATCH1##']];
 
         // Verifica se o email novo digitado é igual ao email de confirmação.
         if(hash('md5', $data['email_new']) !== hash('md5', $data['email_conf']))
-            return ['email_message' => ['error' => 'Os e-mails digitados não conferem.']];
+            return ['email_message' => ['error' => '##CHANGEMAIL_ERR,MISMATCH2##']];
 
         // Verifica se o email atual é igual ao email novo digitado.
         if(hash('md5', self::loggedUser()->getEmail()) === hash('md5', $data['email_new']))
-            return ['email_message' => ['error' => 'O Novo endereço de e-mail não pode ser igual ao atual.']];
+            return ['email_message' => ['error' => '##CHANGEMAIL_ERR,EQUALS##']];
 
         // Verifica se foi possivel alterar o endereço de e-mail do usuário.
         if(self::changeMail(self::loggedUser()->getAccount_id(), $data['email_new']))
-            return ['email_message' => ['success' => 'Seu endereço de e-mail foi alterado com sucesso.']];
+            return ['email_message' => ['success' => '##CHANGEMAIL_SUCCESS##']];
         else
             // Ocorre quando o endereço de e-mail já está em uso.
-            return ['email_message' => ['error' => 'Ocorreu um erro durante a alteração do seu endereço.']];
+            return ['email_message' => ['error' => '##CHANGEMAIL_ERR,OTHER##']];
     }
 
     /**

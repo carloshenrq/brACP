@@ -196,10 +196,10 @@ return
     ],
 
     /**
-     * @refer templates/account.change.mail.ajax.tpl
+     * @refer templates/account.change.password.ajax.tpl
      * @author carloshenrq
      */
-    'CHANGEPASS_TITLE'          => 'Minha Conta &raquo; Alterar Senha',
+    'CHANGEPASS_TITLE'          => 'Minha Conta &raquo; Mudar Senha',
     'CHANGEPASS_NOADMIN'        => 'Nenhum administrador está permitido a alterar sua senha aqui.',
     'CHANGEPASS_NOADMIN_MSG'    => [
         '<strong>Nota.:</strong> Por motivos de segurança é recomendado que a alteração de senha para adminsitradores seja desabilitada!',
@@ -225,6 +225,34 @@ return
     'CHANGEPASS_BUTTONS'        => [
         'SUBMIT'                => 'Alterar',
         'RESET'                 => 'Limpar',
+    ],
+
+    /**
+     * @refer templates/account.change.mail.ajax.tpl
+     * @author carloshenrq
+     */
+    'CHANGEMAIL_TITLE'          => 'Minha Conta &raquo; Mudar Email',
+    'CHANGEMAIL_ERR'            => [
+        'DISABLED'      => 'Alteração de e-mail está desativada.',
+        'NO_ADMIN'      => 'Nenhum administrador está permitido a alterar seu endereço de email.',
+
+        'MISMATCH1'     => 'E-mail atual não confere com o digitado.',
+        'MISMATCH2'     => 'Os e-mails digitados não conferem.',
+        'EQUALS'        => 'O Novo endereço de e-mail não pode ser igual ao atual.',
+        'OTHER'         => 'Ocorreu um erro durante a alteração do seu endereço.',
+    ],
+    'CHANGEMAIL_SUCCESS'        => 'Seu endereço de e-mail foi alterado com sucesso.',
+    'CHANGEMAIL_MSG'            => [
+        'Para realizar a alteração de seu endereço de e-mail é necessário que você digite seu e-mail atual, seu novo endereço de email e confirme!',
+    ],
+    'CHANGEMAIL_PLACEHOLDER'    => [
+        'EMAIL'     => 'Email atual',
+        'NEW_EMAIL' => 'Novo email',
+        'CONFIRM'   => 'Confirme seu novo email',
+    ],
+    'CHANGEMAIL_BUTTONS'        => [
+        'SUBMIT'    => 'Mudar',
+        'RESET'     => 'Limpar',
     ],
 
     /**
