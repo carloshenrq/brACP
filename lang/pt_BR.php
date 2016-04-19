@@ -156,6 +156,7 @@ return
         'TBL_POS'       => 'Pos.',
         'TBL_NAME'      => 'Nome',
         'TBL_LEVEL'     => 'Nível',
+        'TBL_CLASS'     => 'Classe',
         'TBL_STATUS'    => 'Status',
         'TBL_ZENY'      => 'Zeny',
     ],
