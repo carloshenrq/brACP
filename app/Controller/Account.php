@@ -1296,7 +1296,7 @@ class Account
     {
         // Estiver desativado então, não permite recuperação de contas.
         if(!BRACP_ALLOW_MAIL_SEND || !BRACP_ALLOW_RECOVER)
-            return ['recover_message' => ['error' => 'Esta opção está desativada. Verifique com o administrador.']];
+            return ['recover_message' => ['error' => '##RECOVER_ERR,DISABLED#']];
 
         // Se o código não foi enviado.
         if(!is_null($code) && (BRACP_MD5_PASSWORD_HASH || BRACP_RECOVER_BY_CODE))
@@ -1322,7 +1322,7 @@ class Account
 
             // Não foi encontrado código de recuperação para a conta.
             if(is_null($recover))
-                return ['recover_message' => ['error' => 'O Código de recuperação já foi utilizado ou é inválido.']];
+                return ['recover_message' => ['error' => '##RECOVER_ERR,CODE_INVALID##']];
 
             // Calcula a nova senha de usuário.
             $user_pass = self::getApp()->randomString(BRACP_RECOVER_STRING_LENGTH, BRACP_RECOVER_RANDOM_STRING);
@@ -1337,17 +1337,17 @@ class Account
                 self::getApp()->getEm()->flush();
 
                 // Envia o e-mail com os dados de recuperação do usuário.
-                self::getApp()->sendMail('Redefinição de Senha', [$recover->getAccount()->getEmail()],
+                self::getApp()->sendMail(Language::translateLn('RECOVER_MAIL', 'TITLE'), [$recover->getAccount()->getEmail()],
                     'mail.recover', [
                         'userid' => $recover->getAccount()->getUserid(),
                         'password' => $user_pass
                     ]);
 
-                return ['recover_message' => ['success' => 'A Nova senha foi enviada para seu endereço de e-mail.']];
+                return ['recover_message' => ['success' => '##RECOVER_SUCCESS,CODE_SEND##']];
             }
             else
             {
-                return ['recover_message' => ['error' => 'Não foi possível recuperar a senha de usuário.']];
+                return ['recover_message' => ['error' => '##RECOVER_ERR,CODE_OTHER##']];
             }
         }
         else
@@ -1355,7 +1355,7 @@ class Account
             // Verificação recaptcha para saber se a requisição realizada
             //  é verdadeira e pode continuar.
             if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['g-recaptcha-response']))
-                return ['recover_message' => ['error' => 'Código de verificação inválido. Verifique por favor.']];
+                return ['recover_message' => ['error' => '##ERR_RECAPTCHA##']];
 
             // Obtém a conta que está sendo solicitada a requisição para 
             //  recuperação de senha.
@@ -1365,7 +1365,7 @@ class Account
 
             // Objeto da conta não encontrado.
             if(is_null($account))
-                return ['recover_message' => ['error' => 'Combinação de usuário e e-mail não encontrados.']];
+                return ['recover_message' => ['error' => '##RECOVER_ERR,MISMATCH##']];
 
             // Se o painel de controle estiver configurado para usar md5 ou recuperação de código
             //  via e-mail, então, inicializa os códigos.
@@ -1408,7 +1408,7 @@ class Account
                 }
 
                 // Envia o e-mail para o usuário.
-                self::getApp()->sendMail('Recuperação de Usuário', [$account->getEmail()],
+                self::getApp()->sendMail(Language::translateLn('RECOVER_MAIL', 'TITLE_SEND'), [$account->getEmail()],
                     'mail.recover.code', [
                         'userid' => $account->getUserid(),
                         'code' => $recover->getCode(),
@@ -1417,19 +1417,19 @@ class Account
                     ]);
 
                 // Informa que o código de recuperação foi enviado ao e-mail do usuário.
-                return ['recover_message' => ['success' => 'Foi enviado um e-mail contendo os dados de recuperação. Verifique seu e-mail.']];
+                return ['recover_message' => ['success' => '##RECOVER_SUCCESS,0##']];
             }
             else
             {
                 // Envia o e-mail com os dados de recuperação do usuário.
-                self::getApp()->sendMail('Recuperação de Senha', [$account->getEmail()],
+                self::getApp()->sendMail(Language::translateLn('RECOVER_MAIL', 'TITLE_SEND'), [$account->getEmail()],
                     'mail.recover', [
                         'userid' => $account->getUserid(),
                         'password' => $account->getUser_pass()
                     ]);
 
                 // Retorna informação que foi retornado os dados da conta.
-                return ['recover_message' => ['success' => 'Os dados de sua conta foram enviados ao seu e-mail.']];
+                return ['recover_message' => ['success' => '##RECOVER_SUCCESS,1##']];
             }
         }
     }
