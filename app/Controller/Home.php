@@ -32,7 +32,7 @@ class Home
     use \TApplication;
 
     /**
-     * Método inicial para exibição dos templates na tela.
+     * Método para alterar o tema padrão do painel de controle.
      *
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
@@ -47,6 +47,25 @@ class Home
         if(isset($post['BRACP_THEME']))
         {
             self::getApp()->getSession()->BRACP_THEME = $post['BRACP_THEME'];
+        }
+    }
+
+    /**
+     * Método para alterar a linguagem padrão do painel de controle.
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param array $args
+     */
+    public static function lang(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        // Atualiza informações do tema.
+        $post = $request->getParsedBody();
+
+        // Realiza a alteração de tema se for necessário.
+        if(isset($post['BRACP_LANGUAGE']))
+        {
+            self::getApp()->getSession()->BRACP_LANGUAGE = $post['BRACP_LANGUAGE'];
         }
     }
 

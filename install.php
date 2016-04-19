@@ -28,9 +28,13 @@ if(!defined('PHP_VERSION'))
 
 // Adicionado leitura da classe principal para teste dos temas.
 require_once __DIR__ . '/app/Themes.php';
+require_once __DIR__ . '/app/Language.php';
 
 // Obtém todos os temas contidos na pasta
 $themes = Themes::readAll();
+
+// Obtém todas as linguagens disponiveis.
+$langs = Language::readAll();
 
 // Obtém as permissões de arquivo para notificar o usuário sobre as informações.
 $writeable = is_writable(__DIR__);
@@ -109,6 +113,7 @@ $config = [
     'BRACP_REGEXP_EMAIL'                    => '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}',
     'BRACP_ALLOW_CHOOSE_THEME'              => 1,
     'BRACP_DEFAULT_THEME'                   => 'default',
+    'BRACP_DEFAULT_LANGUAGE'                => 'pt_BR',
 ]; 
 
 
@@ -368,11 +373,23 @@ if($writeable && isset($_POST) && !empty($_POST))
                                     <option value="1">Sim</option>
                                 </select>
                             </label>
+                        </div>
+                        <div class="bracp-install-label-data">
                             <label>
                                 Modo administrador:<br>
                                 <select id="BRACP_ALLOW_ADMIN" name="BRACP_ALLOW_ADMIN">
                                     <option value="0">Não</option>
                                     <option value="1">Sim</option>
+                                </select>
+                            </label>
+                            <label>
+                                Idioma Padrão:<br>
+                                <select id="BRACP_DEFAULT_LANGUAGE" name="BRACP_DEFAULT_LANGUAGE">
+                                    <?php foreach($langs as $lang) { ?>
+                                        <option value="<?php echo $lang; ?>">
+                                            <?php echo $lang; ?>
+                                        </option>
+                                    <?php } ?>
                                 </select>
                             </label>
                         </div>
@@ -392,6 +409,8 @@ if($writeable && isset($_POST) && !empty($_POST))
                                     <option value="1">Sim</option>
                                 </select>
                             </label>
+                        </div>
+                        <div class="bracp-install-label-data">
                             <label>
                                 Exibir rankings:<br>
                                 <select id="BRACP_ALLOW_RANKING" name="BRACP_ALLOW_RANKING">

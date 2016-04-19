@@ -86,4 +86,27 @@ class Language
     {
         return ((isset(self::$translation[$str])) ? self::$translation[$str][trim($index)] : $str.'_'.trim($index));
     }
+
+    /**
+     * Realiza a leitura de todas as linguagens na pasta e retorna um array contendo as informações.
+     *
+     * @static
+     *
+     * @return ArrayObject
+     */
+    public static function readAll()
+    {
+        // Obtém todos os arquivos .php presentes na pasta lang.
+        //  Nota: Os arquivos devem possuir todos os atributos para serem considerados
+        //        arquivos de tradução, caso contrario, falhará.
+        $tmp_langs = array_filter(scandir(__DIR__ . '/../lang'), function($file) {
+            return preg_match('/^([a-z]{2})_([A-Z]{2}).php$/', $file) != 0;
+        });
+
+        $langs = [];
+        foreach($tmp_langs as $lang)
+            $langs[] = substr($lang, 0, 5);
+
+        return $langs;
+    }
 }

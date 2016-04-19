@@ -199,6 +199,22 @@ function changeTheme(theme, url)
 }
 
 /**
+ * Altera a linguagem padrão do painel de controle.
+ */
+function changeLanguage(lang, url)
+{
+    $.ajax({
+        'url'       : url,
+        'method'    : 'POST',
+        'data'      : { 'BRACP_LANGUAGE' : lang },
+        'async'     : false,
+        'success'   : function() {
+            window.location.reload();
+        }
+    });
+}
+
+/**
  * Atualiza a doação com um código de transção.
  *
  * @param integer donationId Código da doação.

@@ -66,9 +66,6 @@ class brACPApp extends Slim\App
         // Initialize session for this app.
         $this->session = new Session();
 
-        // Inicializa a linguagem em modo PORTUGUÊS BR.
-        //  @Temporario, pois será alterado para variavel de sessão.
-        Language::load('pt_BR');
 
         // Configurações alternativas.
         $configs = [
@@ -77,6 +74,19 @@ class brACPApp extends Slim\App
             ]
         ];
 
+        // Variavel de sessão para definir a linguagem padrão do painel de controle.
+        if(!isset($this->session->BRACP_LANGUAGE))
+            $this->session->BRACP_LANGUAGE = BRACP_DEFAULT_LANGUAGE;
+
+        // Inicializa a linguagem em modo PORTUGUÊS BR.
+        //  @Temporario, pois será alterado para variavel de sessão.
+        Language::load($this->session->BRACP_LANGUAGE);
+
+        // Verifica se a variavel de tema para a sessão está definida.
+        // Se não estiver, define como a do tema padrão.
+        if(!isset($this->session->BRACP_THEME))
+            $this->session->BRACP_THEME = BRACP_DEFAULT_THEME;
+
         // Loads the default settings for this app.
         parent::__construct($configs);
 
@@ -84,11 +94,6 @@ class brACPApp extends Slim\App
         $this->view = new Smarty;
         $this->view->setTemplateDir(BRACP_TEMPLATE_DIR);
         $this->view->setCaching(false);
-
-        // Verifica se a variavel de tema para a sessão está definida.
-        // Se não estiver, define como a do tema padrão.
-        if(!isset($this->session->BRACP_THEME))
-            $this->session->BRACP_THEME = BRACP_DEFAULT_THEME;
 
         // Adiciona os middlewares na rota para serem executados.
         $this->add(new Route());
@@ -218,6 +223,7 @@ class brACPApp extends Slim\App
         // Adiciona o navegador aos dados para o template.
         $data = array_merge($data, [
             'themes' => $themes,
+            'langs' => Language::readAll(),
             'session' => $this->getSession(),
             'navigator' => Navigator::getBrowser($this->getContainer()->get('request')->getHeader('user-agent')[0]),
             'ipAddress' => ((is_null($ip_address)) ? $_SERVER['REMOTE_ADDR'] : $ip_address)

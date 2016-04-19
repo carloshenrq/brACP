@@ -49,6 +49,9 @@ class Route
             // Adiciona a rota para alteração de temas.
             self::getApp()->post('/theme', ['Controller\Home', 'theme']);
 
+            // Adiciona a rota para alteração de temas.
+            self::getApp()->post('/lang', ['Controller\Home', 'lang']);
+
             // Mapeia o grupo account.
             self::getApp()->group('/account', function() {
                 // Rotas que não necessitam de login para entrar.

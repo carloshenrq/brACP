@@ -83,6 +83,13 @@
                         // Altera o tema padrão do painel de controle.
                         changeTheme($(this).val(), '{$smarty.const.BRACP_DIR_INSTALL_URL}theme');
                     });
+
+                $('.lang-select')
+                    .val("{$session->BRACP_LANGUAGE}")
+                    .on('change', function() {
+                        // Altera o tema padrão do painel de controle.
+                        changeLanguage($(this).val(), '{$smarty.const.BRACP_DIR_INSTALL_URL}lang');
+                    });
             });
 
         } (window.jQuery);
@@ -151,6 +158,13 @@
                     <select class="theme-select">
                     {foreach from=$themes item=theme}
                         <option value="{$theme->getFolder()}">{$theme->getName()} ({$theme->getVersion()})</option>
+                    {/foreach}
+                    </select>
+                </div>
+                <div class="nav-lang">
+                    <select class="lang-select">
+                    {foreach from=$langs item=lang}
+                        <option value="{$lang}">{$lang}</option>
                     {/foreach}
                     </select>
                 </div>
