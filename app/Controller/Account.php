@@ -1487,7 +1487,7 @@ class Account
     {
         // Se não estiver configurado, não permite que seja utilizado a recuperação do código de ativação.
         if(!BRACP_ALLOW_MAIL_SEND || !BRACP_CONFIRM_ACCOUNT)
-            return ['register_message' => ['error' => 'Esta opção está desativada. Verifique com o administrador.']];
+            return ['register_message' => ['error' => '##CREATE_ERR,CONFIRM_DISABLED##']];
 
         // Obtém a conta que irá ser verificado para re-envio do código de ativação.
         $account = self::getApp()
@@ -1497,7 +1497,7 @@ class Account
 
         // Conta inexistente para recuperação
         if(is_null($account))
-            return ['register_message' => ['error' => 'Conta para enviar o código de ativação é inválida.']];
+            return ['register_message' => ['error' => '##CREATE_ERR,CONFIRM_NOACC##']];
 
         // Verifica se algum código de ativação já foi criado dentro do periodo de configuração.
         $confirmation = self::getApp()->getEm()
@@ -1535,7 +1535,8 @@ class Account
 
         // Envia o e-mail para usuário caso o painel de controle esteja com as configurações
         //  de envio ativas.
-        self::getApp()->sendMail('Confirma seu Registro', [$account->getEmail()],
+        self::getApp()->sendMail(Language::translateLn('CREATE_MAIL', 'TITLE_CONFIRM'),
+                                    [$account->getEmail()],
                                     'mail.create.code',
                                     [
                                         'userid' => $account->getUserid(),
@@ -1545,7 +1546,7 @@ class Account
                                     ]);
 
         // Retorna a resposta que o e-mail foi enviado para o jogador.
-        return ['register_message' => ['success' => 'O Código de ativação foi enviado com sucesso para o endereço de e-mail cadastrado.']];
+        return ['register_message' => ['success' => '##CREATE_SUCCESS,CONFIRM_SEND##']];
     }
 
     /**
@@ -1588,7 +1589,7 @@ class Account
 
             // Se não houver código de confirmação, então será informado mensagem de erro.
             if(is_null($confirmation))
-                return ['register_message' => ['error' => 'O Código de confirmação já foi utilizado ou é inválido.']];
+                return ['register_message' => ['error' => '##CREATE_ERR,CONFIRM_USED##']];
 
             // Define como utilizado e atualiza a conta do usuário como autorizada.
             $confirmation->setUsed(true);
@@ -1606,29 +1607,30 @@ class Account
 
             // Envia o e-mail para usuário caso o painel de controle esteja com as configurações
             //  de envio ativas.
-            self::getApp()->sendMail('Conta Confirmada', [$confirmation->getAccount()->getEmail()],
+            self::getApp()->sendMail(Language::translateLn('CREATE_MAIL','TITLE_CONFIRMED'),
+                                        [$confirmation->getAccount()->getEmail()],
                                         'mail.create', ['userid' => $confirmation->getAccount()->getUserid()]);
 
             // Retorna mensagem que a conta foi criada com sucesso.
-            return ['register_message' => ['success' => 'Você confirmou com sucesso sua conta. Você já pode realizar login.']];
+            return ['register_message' => ['success' => '##CREATE_SUCCESS,CONFIRM##']];
         }
         else
         {
             // Verificação recaptcha para saber se a requisição realizada
             //  é verdadeira e pode continuar.
             if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['g-recaptcha-response']))
-                return ['register_message' => ['error' => 'Código de verificação inválido. Verifique por favor.']];
+                return ['register_message' => ['error' => '##ERR_RECAPTCHA##']];
 
             if(hash('md5', $data['user_pass']) !== hash('md5', $data['user_pass_conf']))
-                return ['register_message' => ['error' => 'As senhas digitadas não conferem!']];
+                return ['register_message' => ['error' => '##CREATE_ERR,MISMATCH_PASS##']];
 
             // Verifica se os emails enviados são iguais.
             if(hash('md5', $data['email']) !== hash('md5', $data['email_conf']))
-                return ['register_message' => ['error' => 'Os endereços de e-mail digitados não conferem!']];
+                return ['register_message' => ['error' => '##CREATE_ERR,MISMATCH_MAIL##']];
 
             // Verifica se já existe usuário cadastrado para o userid indicado.
             if(self::checkUser($data['userid']) || (BRACP_MAIL_REGISTER_ONCE && self::checkMail($data['email'])))
-                return ['register_message' => ['error' => 'Nome de usuário ou endereço de e-mail já está em uso.']];
+                return ['register_message' => ['error' => '##CREATE_ERR,USERID_USED##']];
 
             // Se a senha for hash md5, troca o valor para hash-md5.
             if(BRACP_MD5_PASSWORD_HASH)
@@ -1659,11 +1661,12 @@ class Account
             {
                 // Envia o e-mail para usuário caso o painel de controle esteja com as configurações
                 //  de envio ativas.
-                self::getApp()->sendMail('Conta Registrada', [$account->getEmail()],
+                self::getApp()->sendMail(Language::translateLn('CREATE_MAIL', 'TITLE_SUCCESS'),
+                                            [$account->getEmail()],
                                             'mail.create', ['userid' => $account->getUserid()]);
 
                 // Retorna mensagem que a conta foi criada com sucesso.
-                return ['register_message' => ['success' => 'Sua conta foi criada com sucesso! Você já pode realizar login.']];
+                return ['register_message' => ['success' => '##CREATE_SUCCESS,0##']];
             }
             else
             {

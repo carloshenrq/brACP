@@ -68,7 +68,7 @@ return
     ],
 
     /**
-     * @refer templates/home.tpl
+     * @refer templates/account.login.ajax.tpl
      * @author carloshenrq
      */
     'LOGIN_TITLE'               => 'Minha Conta &raquo; Entrar',
@@ -89,6 +89,51 @@ return
     'LOGIN_BUTTONS'             => [
         'SUBMIT'                => 'Entrar',
         'RESET'                 => 'Limpar',
+    ],
+
+    /**
+     * @refer templates/account.register.ajax.tpl
+     * @author carloshenrq
+     */
+    'CREATE_TITLE'              => 'Registrar',
+    'CREATE_ERR'                => [
+        'DISABLED'          => 'Criação de contas está desativada.',
+        'MISMATCH_PASS'     => 'As senhas digitadas não conferem!',
+        'MISMATCH_MAIL'     => 'Os endereços de e-mail digitados não conferem!',
+        'USERID_USED'       => 'Nome de usuário ou endereço de e-mail já está em uso.',
+
+        'CONFIRM_DISABLED'  => 'Esta opção está desativada. Verifique com o administrador.',
+        'CONFIRM_USED'      => 'O Código de confirmação já foi utilizado ou é inválido.',
+        'CONFIRM_NOACC'     => 'Conta para enviar o código de ativação é inválida.,'
+    ],
+    'CREATE_SUCCESS'            => [
+        'Sua conta foi criada com sucesso! Você já pode realizar login.',
+        'CONFIRM'       => 'Você confirmou com sucesso sua conta. Você já pode realizar login.',
+        'CONFIRM_SEND'  => 'O Código de ativação foi enviado com sucesso para o endereço de e-mail cadastrado.',
+    ],
+    'CREATE_MAIL'               => [
+        'TITLE_CONFIRM'     => 'Confirme seu Registro',
+        'TITLE_CONFIRMED'   => 'Conta Confirmada',
+        'TITLE_SUCCESS'     => 'Conta Registrada',
+    ],
+    'CREATE_MSG'                => [
+        'Para criar sua conta, é necessário que você informe os dados abaixo corretamente para que seja possivel seu acesso ao jogo e as funções do painel de controle.',
+    ],
+    'CREATE_PLACEHOLDER'        => [
+        'USERID'            => 'Nome de usuário',
+        'PASSWORD'          => 'Senha de usuário',
+        'CONFIRM_PASS'      => 'Confirme a senha',
+        'EMAIL'             => 'Endereço de e-mail',
+        'CONFIRM_EMAIL'     => 'Confirme o email',
+    ],
+    'CREATE_SEX'                => [
+        'M' => 'Masculino',
+        'F' => 'Feminino',
+    ],
+    'CREATE_BUTTONS'            => [
+        'ACCEPT'    => 'Eu concordo com os termos do servidor.',
+        'SUBMIT'    => 'Registrar',
+        'RESET'     => 'Limpar',
     ],
 
     /**
