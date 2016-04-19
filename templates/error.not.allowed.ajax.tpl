@@ -16,13 +16,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *}
 
-<h1>Acesso negado</h1>
+<h1>##ERR_TITLE##</h1>
 
 <p class="bracp-message error">
     {if $smarty.const.BRACP_MAINTENCE eq true}
-        Em manutenção.
+        ##ERR_MAINTENCE##
     {else}
-        Você não possui direito de acesso a este local!
+        ##ERR_ACCESS_DENIED##
         {if $smarty.const.BRACP_DEVELOP_MODE eq true and isset($exception) eq true}
             <br><br>
             <strong>{$exception->getMessage()}</strong>

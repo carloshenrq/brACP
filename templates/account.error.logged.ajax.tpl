@@ -16,9 +16,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *}
 
-<h1>Acesso Negado</h1>
+<h1>##ERR_TITLE##</h1>
 
 <p class="bracp-message error">
-    Você não pode estar logado para realizar esta ação.<br>
-    Para sair, <span class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/logout" data-target=".bracp-body">clique aqui</span>.
+    ##ERR_NEED_SIGNOUT,0##<br>
+    ##ERR_NEED_SIGNOUT,1##
 </p>

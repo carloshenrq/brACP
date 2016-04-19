@@ -308,7 +308,18 @@ return
     /**
      * Mensagens de erro padrão.
      */
+    'ERR_TITLE'                 => 'Acesso negado',
     'ERR_RECAPTCHA'             => 'Código de verificação inválido. Verifique por favor.',
+    'ERR_MAINTENCE'             => 'Em manutenção.',
+    'ERR_ACCESS_DENIED'         => 'Você não possui direito de acesso a este local!',
+    'ERR_NEED_SIGNIN'           => [
+        'Você precisa estar logado para realizar esta ação.',
+        'Para entrar, <label class="lbl-link" for="bracp-modal-login">clique aqui</label>.',
+    ],
+    'ERR_NEED_SIGNOUT'          => [
+        'Você não pode estar logado para realizar esta ação.',
+        'Para sair, <span class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/logout" data-target=".bracp-body">clique aqui</span>.',
+    ],
 
     /**
      *
