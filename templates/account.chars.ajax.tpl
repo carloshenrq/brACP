@@ -16,13 +16,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *}
 
-<h1>Minha Conta &raquo; Personagens</h1>
+<h1>##CHARS_TITLE##</h1>
 
-<p>Segue abaixo a lista dos personagens gerenciaveis para sua conta.</p>
+<p>##CHARS_MSG,0##</p>
 
 {if count($chars) eq 0}
     <p class="bracp-message warning">
-        Você não possui personagens criados para gerênciar.
+        ##CHARS_ERR,NO_CHARS##
     </p>
 {else}
 
@@ -40,34 +40,34 @@
 
     <table border="1" align="center" class="table">
         <caption style="text-align: right">
-            <input type="submit" class="btn" value="Enviar"/>
-            <input type="reset" class="btn" value="Limpar"/>
+            <input type="submit" class="btn" value="##CHARS_BUTTONS,SUBMIT##"/>
+            <input type="reset" class="btn" value="##CHARS_BUTTONS,RESET##"/>
         </caption>
         <thead>
             <tr>
-                <th align="right" rowspan="2">Cód.</th>
-                <th align="left" rowspan="2">Nome</th>
-                <th align="left" rowspan="2">Classe</th>
-                <th align="right" rowspan="2" class="no-mobile">Nível</th>
-                <th align="right" rowspan="2" class="no-mobile">Zeny</th>
-                <th align="left" rowspan="2">Mapa</th>
-                <th align="left" rowspan="2" class="no-mobile">Retorno</th>
+                <th align="right" rowspan="2">##CHARS_TABLE,CHARID##</th>
+                <th align="left" rowspan="2">##CHARS_TABLE,NAME##</th>
+                <th align="left" rowspan="2">##CHARS_TABLE,CLASS##</th>
+                <th align="right" rowspan="2" class="no-mobile">##CHARS_TABLE,LEVEL##</th>
+                <th align="right" rowspan="2" class="no-mobile">##CHARS_TABLE,ZENY##</th>
+                <th align="left" rowspan="2">##CHARS_TABLE,MAP##</th>
+                <th align="left" rowspan="2" class="no-mobile">##CHARS_TABLE,MAP_RETURN##</th>
                 {if $smarty.const.BRACP_ALLOW_SHOW_CHAR_STATUS eq true}
-                    <th align="center" rowspan="2" class="no-mobile">Status</th>
+                    <th align="center" rowspan="2" class="no-mobile">##CHARS_TABLE,STATUS##</th>
                 {/if}
                 {if $actions neq 0}
-                    <th colspan="3">Resetar</th>
+                    <th colspan="3">##CHARS_TABLE,RESET##</th>
                 {/if}
             </tr>
             <tr>
                 {if $actions&1 eq 1}
-                    <th>Visual</th>
+                    <th>##CHARS_TABLE,RESET_APPEAR##</th>
                 {/if}
                 {if $actions&2 eq 2}
-                    <th>Local</th>
+                    <th>##CHARS_TABLE,RESET_POSIT##</th>
                 {/if}
                 {if $actions&4 eq 4}
-                    <th>Equip</th>
+                    <th>##CHARS_TABLE,RESET_EQUIP##</th>
                 {/if}
             </tr>
         </thead>

@@ -262,6 +262,43 @@ return
     ],
 
     /**
+     * @refer templates/account.chars.ajax.tpl
+     * @author carloshenrq
+     */
+    'CHARS_TITLE'               => 'Minha Conta &raquo; Personagens',
+    'CHARS_MSG'                 => [
+        'Segue abaixo a lista dos personagens gerenciaveis para sua conta.',
+    ],
+    'CHARS_ERR'                 => [
+        'NO_CHARS'  => 'Você não possui personagens criados para gerênciar.',
+        'OTHER'     => 'Impossível realizar ação solicitada.',
+    ],
+    'CHARS_SUCCESS'             => [
+        'APPEAR'        => 'Visual resetado com sucesso.',
+        'POSIT'         => 'Posição resetado com sucesso.',
+        'EQUIP'         => 'Equipamento resetado com sucesso.',
+        'NO_CHANGES'    => 'Comando(s) executado(s) com sucesso. Nenhum personagem foi alterado.',
+    ],
+    'CHARS_BUTTONS'             => [
+        'SUBMIT'    => 'Enviar',
+        'RESET'     => 'Limpar'
+    ],
+    'CHARS_TABLE' => [
+        'CHARID'        => 'Cód.',
+        'NAME'          => 'Nome',
+        'CLASS'         => 'Classe',
+        'ZENY'          => 'Zeny',
+        'LEVEL'         => 'Nível',
+        'STATUS'        => 'Status',
+        'MAP'           => 'Mapa',
+        'MAP_RETURN'    => 'Retorno',
+        'RESET'         => 'Resetar',
+        'RESET_APPEAR'  => 'Visual',
+        'RESET_POSIT'   => 'Local',
+        'RESET_EQUIP'   => 'Equip',
+    ],
+
+    /**
      * Mensagens de erro padrão.
      */
     'ERR_RECAPTCHA'             => 'Código de verificação inválido. Verifique por favor.',

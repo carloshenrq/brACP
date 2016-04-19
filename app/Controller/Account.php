@@ -927,16 +927,16 @@ class Account
             // Verifica se algum das informações foi resetado com sucesso para dar de informação
             //  na tela a mensagem.
             if(count($appear) > 0)
-                $message[] = 'Visual resetado com sucesso para o(s) personagem(ns): <strong>'. implode(', ', $appear) .'</strong>.';
+                $message[] = '##CHARS_SUCCESS,APPEAR##';
             if(count($posit) > 0)
-                $message[] = 'Local resetado com sucesso para o(s) personagem(ns): <strong>'. implode(', ', $posit) .'</strong>.';
+                $message[] = '##CHARS_SUCCESS,POSIT##';
             if(count($equip) > 0)
-                $message[] = 'Equipamento resetado com sucesso para o(s) personagem(ns): <strong>'. implode(', ', $equip) .'</strong>.';
+                $message[] = '##CHARS_SUCCESS,EQUIP##';
 
             // Retorna mensagem de sucesso para as alterações.
             return ['char_message' => ['success' => ((count($message) > 0) ?
                                                             implode('<br>', $message) :
-                                                            'Comando(s) executado(s) com sucesso. Nenhum personagem foi alterado.')]];
+                                                            '##CHARS_SUCCESS,NO_CHANGES##')]];
         }
         else
         {
@@ -945,7 +945,7 @@ class Account
                 print_r($data, true), 1);
 
             // Caso nenhuma configuração esteja habilitada.
-            return ['char_message' => ['error' => 'Impossível realizar ação solicitada.']];
+            return ['char_message' => ['error' => '##CHARS_ERR,OTHER##']];
         }
     }
 
