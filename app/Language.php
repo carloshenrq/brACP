@@ -69,7 +69,7 @@ class Language
      *
      * @return string
      */
-    private static function translate($str)
+    public static function translate($str)
     {
         return ((isset(self::$translation[$str])) ? self::$translation[$str] : $str);
     }
@@ -82,7 +82,7 @@ class Language
      *
      * @return string
      */
-    private static function translateLn($str, $index = 0)
+    public static function translateLn($str, $index = 0)
     {
         return ((isset(self::$translation[$str])) ? self::$translation[$str][trim($index)] : $str.'_'.trim($index));
     }

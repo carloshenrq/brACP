@@ -16,23 +16,23 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *}
 
-<h1>Rankings &raquo; Personagens &raquo; Geral</h1>
+<h1>##RANKINGS_MSG,CHARS_TITLE##</h1>
 
 {if count($chars) eq 0}
     <p class="bracp-message warning">
-        Não existem personagens para este ranking.
+        ##RANKINGS_MSG,NO_CHARS##
     </p>
 {else}
     <table border="1" align="center" class="table ranking">
-        <caption><strong>Top 100 jogadores do servidor</strong></caption>
+        <caption><strong>##RANKINGS_MSG,CHARS_TBL_TITLE##</strong></caption>
         <thead>
             <tr>
-                <th align="right">Pos.</th>
-                <th align="left">Nome</th>
-                <th align="left">Classe</th>
-                <th align="right" class="no-mobile">Nível</th>
+                <th align="right">##RANKINGS_MSG,TBL_POS##</th>
+                <th align="left">##RANKINGS_MSG,TBL_NAME##</th>
+                <th align="left">##RANKINGS_MSG,TBL_CLASS##</th>
+                <th align="right" class="no-mobile">##RANKINGS_MSG,TBL_LEVEL##</th>
                 {if $smarty.const.BRACP_ALLOW_SHOW_CHAR_STATUS eq true}
-                    <th align="center" class="no-mobile">Status</th>
+                    <th align="center" class="no-mobile">##RANKINGS_MSG,TBL_STATUS##</th>
                 {/if}
             </tr>
         </thead>

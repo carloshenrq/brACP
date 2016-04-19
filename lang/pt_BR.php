@@ -137,6 +137,30 @@ return
     ],
 
     /**
+     * @refer templates/rankings.chars.ajax.tpl
+     * @author carloshenrq
+     */
+    'RANKINGS_MSG'                  => [
+        // Mensagens padrão.
+        'NO_CHARS'      => 'Não existem personagens para este ranking.',
+
+        // Ranking de personagens.
+        'CHARS_TITLE'       => 'Rankings &raquo; Personagens &raquo; Geral',
+        'CHARS_TBL_TITLE'   => 'Top 100 jogadores do servidor',
+
+        // Ranking de economia
+        'ECONOMY_TITLE'     => 'Rankings &raquo; Personagens &raquo; Economia',
+        'ECONOMY_TBL_TITLE' => 'Top 100 jogadores mais ricos',
+
+        // Tradução de informações de tabela.
+        'TBL_POS'       => 'Pos.',
+        'TBL_NAME'      => 'Nome',
+        'TBL_LEVEL'     => 'Nível',
+        'TBL_STATUS'    => 'Status',
+        'TBL_ZENY'      => 'Zeny',
+    ],
+
+    /**
      * @refer templates/account.recover.ajax.tpl
      * @author carloshenrq
      */

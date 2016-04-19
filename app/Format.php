@@ -125,7 +125,7 @@ class Format
      */
     public static function status($online)
     {
-        return sprintf(self::$online[$online], '##STATUS_'.$online.'##');
+        return sprintf(self::$online[$online], '##STATUS,'.$online.'##');
     }
 
     /**
