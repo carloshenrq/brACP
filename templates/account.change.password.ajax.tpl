@@ -17,20 +17,20 @@
  *}
 <div class="modal">
     <div class="modal-header">
-        Minha Conta &raquo; Alterar Senha
+        ##CHANGEPASS_TITLE##
         <label for="bracp-modal-changepass" class="modal-close">&times;</label>
     </div>
     <div class="modal-body">
         {if $smarty.const.BRACP_ALLOW_ADMIN_CHANGE_PASSWORD eq false and $account->getGroup_id() >= $smarty.const.BRACP_ALLOW_ADMIN_GMLEVEL}
             <div class="bracp-message error">
-                Nenhum administrador está permitido a alterar sua senha aqui.
+                ##CHANGEPASS_NOADMIN##
             </div>
         {else}
             {if $account->getGroup_id() >= $smarty.const.BRACP_ALLOW_ADMIN_GMLEVEL}
                 <div class="bracp-message warning">
-                    <strong>Nota.:</strong> Por motivos de segurança é recomendado que a alteração de senha para adminsitradores seja desabilitada!<br>
-                    <br>
-                    Para alterar, edite o arquivo <strong>config.php</strong> e mude a configuração <strong>BRACP_ALLOW_ADMIN_CHANGE_PASSWORD</strong> para <strong>false</strong>
+                    ##CHANGEPASS_NOADMIN_MSG,0##<br>
+                    ##CHANGEPASS_NOADMIN_MSG,1##<br>
+                    ##CHANGEPASS_NOADMIN_MSG,2##
                 </div>
             {/if}
 
@@ -40,22 +40,22 @@
                 <div class="bracp-message error">{$password_message.error}</div>
             {/if}
 
-            Para realizar a alteração de sua senha é necessário que você digite sua senha atual, sua nova senha e confirme.
+            ##CHANGEPASS_MSG,0##
 
             <form class="ajax-form" action="{$smarty.const.BRACP_DIR_INSTALL_URL}account/change/password" autocomplete="off" method="post" target=".modal-changepass-body" data-block="1">
                 <div class="input-forms">
-                    <input type="password" id="user_pass" name="user_pass" placeholder="Senha atual" size="24" maxlength="24" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>
+                    <input type="password" id="user_pass" name="user_pass" placeholder="##CHANGEPASS_PLACEHOLDER,ACTUAL_PASSWORD##" size="24" maxlength="24" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>
 
-                    <input type="password" id="user_pass_new" name="user_pass_new" placeholder="Digite sua nova senha" size="24" maxlength="24" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>
+                    <input type="password" id="user_pass_new" name="user_pass_new" placeholder="##CHANGEPASS_PLACEHOLDER,NEW_PASSWORD##" size="24" maxlength="24" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>
                     
-                    <input type="password" id="user_pass_conf" name="user_pass_conf" placeholder="Confirme sua nova senha" size="24" maxlength="24" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>
+                    <input type="password" id="user_pass_conf" name="user_pass_conf" placeholder="##CHANGEPASS_PLACEHOLDER,CONFIRM_PASSWORD##" size="24" maxlength="24" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>
 
                     {if $smarty.const.BRACP_RECAPTCHA_ENABLED eq true}
                         <div class="bracp-g-recaptcha" data-sitekey="{$smarty.const.BRACP_RECAPTCHA_PUBLIC_KEY}"></div>
                     {/if}
 
-                    <input class="btn btn-success" type="submit" value="Alterar"/>
-                    <input class="btn" type="reset" value="Limpar"/>
+                    <input class="btn btn-success" type="submit" value="##CHANGEPASS_BUTTONS,SUBMIT##"/>
+                    <input class="btn" type="reset" value="##CHANGEPASS_BUTTONS,RESET##"/>
                 </div>
             </form>
         {/if}

@@ -68,6 +68,67 @@ return
     ],
 
     /**
+     * @refer templates/home.tpl
+     * @author carloshenrq
+     */
+    'LOGIN_TITLE'               => 'Minha Conta &raquo; Entrar',
+    'LOGIN_ERR'                 => [
+        'MISMATCH'  => 'Combinação de usuário e senha incorretos.',
+        'DENIED'    => 'Acesso negado. Você não pode realizar login.',
+    ],
+    'LOGIN_SUCCESS'             => 'Login realizado com sucesso. Aguarde...',
+    'LOGIN_MSG'                 => [
+        'Para acessar os dados de sua conta, você deve realizar o acesso utilizando seu nome de usuário e senha.',
+        'LOST_ACC'      => 'Perdeu sua conta? <label class="lbl-link" for="bracp-modal-recover">clique aqui</label>',
+        'CREATE_ACC'    => 'Não possui uma conta? <label class="lbl-link" for="bracp-modal-create">clique aqui</label>',
+    ],
+    'LOGIN_PLACEHOLDER'         => [
+        'USERID'    => 'Nome de usuário',
+        'PASSWD'    => 'Senha de usuário',
+    ],
+    'LOGIN_BUTTONS'             => [
+        'SUBMIT'                => 'Entrar',
+        'RESET'                 => 'Limpar',
+    ],
+
+    /**
+     * @refer templates/account.change.mail.ajax.tpl
+     * @author carloshenrq
+     */
+    'CHANGEPASS_TITLE'          => 'Minha Conta &raquo; Alterar Senha',
+    'CHANGEPASS_NOADMIN'        => 'Nenhum administrador está permitido a alterar sua senha aqui.',
+    'CHANGEPASS_NOADMIN_MSG'    => [
+        '<strong>Nota.:</strong> Por motivos de segurança é recomendado que a alteração de senha para adminsitradores seja desabilitada!',
+        '',
+        'Para alterar, edite o arquivo <strong>config.php</strong> e mude a configuração <strong>BRACP_ALLOW_ADMIN_CHANGE_PASSWORD</strong> para <strong>false</strong>',
+    ],
+    'CHANGEPASS_ERR'            => [
+        'ADMIN'                 => 'Usuários do tipo administrador não podem realizar alteração de senha.',
+        'MISMATCH1'             => 'Senha atual digitada não confere.',
+        'MISMATCH2'             => 'Novas senhas digitadas não conferem.',
+        'EQUALS'                => 'Sua nova senha não pode ser igual a senha anterior.',
+        'OTHER'                 => 'Ocorreu um erro durante a alteração de sua senha.',
+    ],
+    'CHANGEPASS_SUCCESS'        => 'Sua senha foi alterada com sucesso!',
+    'CHANGEPASS_MSG'            => [
+        'Para realizar a alteração de sua senha é necessário que você digite sua senha atual, sua nova senha e confirme.',
+    ],
+    'CHANGEPASS_PLACEHOLDER'    => [
+        'ACTUAL_PASSWORD'       => 'Senha atual',
+        'NEW_PASSWORD'          => 'Digite sua nova senha',
+        'CONFIRM_PASSWORD'      => 'Confirme sua nova senha',
+    ],
+    'CHANGEPASS_BUTTONS'        => [
+        'SUBMIT'                => 'Alterar',
+        'RESET'                 => 'Limpar',
+    ],
+
+    /**
+     * Mensagens de erro padrão.
+     */
+    'ERR_RECAPTCHA'             => 'Código de verificação inválido. Verifique por favor.',
+
+    /**
      * Define o status do jogador com o texto formatado.
      */
     'STATUS' => [

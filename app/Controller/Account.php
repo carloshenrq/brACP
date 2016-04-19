@@ -1254,12 +1254,12 @@ class Account
         // Se administradores não podem atualizar senha, verifica nivel do usuário logado e
         //  retorna erro caso nivel administrador.
         if(!BRACP_ALLOW_ADMIN_CHANGE_PASSWORD && self::loggedUser()->getGroup_id() >= BRACP_ALLOW_ADMIN_GMLEVEL)
-            return ['password_message' => ['error' => 'Usuários do tipo administrador não podem realizar alteração de senha.']];
+            return ['password_message' => ['error' => '##CHANGEPASS_ERR,ADMIN##']];
 
         // Verificação recaptcha para saber se a requisição realizada
         //  é verdadeira e pode continuar.
         if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['g-recaptcha-response']))
-            return ['password_message' => ['error' => 'Código de verificação inválido. Verifique por favor.']];
+            return ['password_message' => ['error' => '##ERR_RECAPTCHA##']];
 
         // Obtém a senha atual do jogador para aplicação do md5 na comparação da senha.
         $user_pass = self::loggedUser()->getUser_pass();
@@ -1268,21 +1268,21 @@ class Account
 
         // Verifica senha atual digitada.
         if(hash('md5', $data['user_pass']) !== $user_pass)
-            return ['password_message' => ['error' => 'Senha atual digitada não confere.']];
+            return ['password_message' => ['error' => '##CHANGEPASS_ERR,MISMATCH1##']];
 
         // Verifica novas senhas digitadas.
         if(hash('md5', $data['user_pass_new']) !== hash('md5', $data['user_pass_conf']))
-            return ['password_message' => ['error' => 'Novas senhas digitadas não conferem.']];
+            return ['password_message' => ['error' => '##CHANGEPASS_ERR,MISMATCH2##']];
 
         // Verifica se a senha nova é igual a anterior.
         if(hash('md5', $data['user_pass_new']) === $user_pass)
-            return ['password_message' => ['error' => 'Sua nova senha não pode ser igual a senha anterior.']];
+            return ['password_message' => ['error' => '##CHANGEPASS_ERR,EQUALS##']];
 
         // Senha alterada com sucesso.
         if(self::changePass(self::loggedUser()->getAccount_id(), $data['user_pass_new']))
-            return ['password_message' => ['success' => 'Sua senha foi alterada com sucesso!']];
+            return ['password_message' => ['success' => '##CHANGEPASS_SUCCESS##']];
         else
-            return ['password_message' => ['error' => 'Ocorreu um erro durante a alteração de sua senha.']];
+            return ['password_message' => ['error' => '##CHANGEPASS_ERR,OTHER##']];
     }
 
     /**
@@ -1446,7 +1446,7 @@ class Account
         // Verificação recaptcha para saber se a requisição realizada
         //  é verdadeira e pode continuar.
         if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['g-recaptcha-response']))
-            return ['login_message' => ['error' => 'Código de verificação inválido. Verifique por favor.']];
+            return ['login_message' => ['error' => '##ERR_RECAPTCHA##']];
 
         // Obtém a senha que será utilizada para realizar login.
         $user_pass = ((BRACP_MD5_PASSWORD_HASH) ? hash('md5', $data['user_pass']) : $data['user_pass']);
@@ -1459,19 +1459,19 @@ class Account
         // Se a conta retornada for igual a null, não foi encontrada
         //  Então, retorna mensagem de erro.
         if(is_null($account))
-            return ['login_message' => ['error' => 'Combinação de usuário e senha incorretos.']];
+            return ['login_message' => ['error' => '##LOGIN_ERR,MISMATCH##']];
 
         // Se a conta do usuário é inferior ao nivel mínimo permitido
         //  para login, então retorna mensagem de erro.
         if($account->getGroup_id() < BRACP_ALLOW_LOGIN_GMLEVEL || $account->getState() != 0)
-            return ['login_message' => ['error' => 'Acesso negado. Você não pode realizar login.']];
+            return ['login_message' => ['error' => '##LOGIN_ERR,DENIED##']];
 
         // Define os dados de sessão para o usuário.
         self::getApp()->getSession()->BRACP_ISLOGGEDIN = true;
         self::getApp()->getSession()->BRACP_ACCOUNTID = $account->getAccount_id();
 
         // Retorna mensagem de login realizado com sucesso.
-        return ['login_message' => ['success' => 'Login realizado com sucesso. Aguarde...']];
+        return ['login_message' => ['success' => '##LOGIN_SUCCESS##']];
     }
 
     /**
