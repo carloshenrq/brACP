@@ -88,7 +88,7 @@
                     .val("{$session->BRACP_LANGUAGE}")
                     .on('change', function() {
                         // Altera o tema padrão do painel de controle.
-                        changeLanguage($(this).val(), '{$smarty.const.BRACP_DIR_INSTALL_URL}lang');
+                        changeLanguage($(this).val(), '{$smarty.const.BRACP_DIR_INSTALL_URL}language');
                     });
             });
 

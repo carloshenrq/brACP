@@ -57,7 +57,7 @@ class Home
      * @param ResponseInterface $response
      * @param array $args
      */
-    public static function lang(ServerRequestInterface $request, ResponseInterface $response, $args)
+    public static function language(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
         // Atualiza informações do tema.
         $post = $request->getParsedBody();

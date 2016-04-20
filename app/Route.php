@@ -50,7 +50,7 @@ class Route
             self::getApp()->post('/theme', ['Controller\Home', 'theme']);
 
             // Adiciona a rota para alteração de temas.
-            self::getApp()->post('/lang', ['Controller\Home', 'lang']);
+            self::getApp()->post('/language', ['Controller\Home', 'language']);
 
             // Mapeia o grupo account.
             self::getApp()->group('/account', function() {

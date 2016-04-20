@@ -45,7 +45,12 @@ class Language
 
         // Obtém os dados do brACP de linguagem do cache ou da memória.
         self::$translation = Cache::get('BRACP_LANGUAGE_'.$lang, function() use ($lang) {
-            return include_once(realpath(__DIR__ . '/../lang/') . '/' . $lang . '.php');
+
+            $langFile = realpath(__DIR__ . '/../lang/') . '/' . $lang . '.php';
+            if(!file_exists($langFile))
+                $langFile = realpath(__DIR__ . '/../lang/') . '/' . BRACP_DEFAULT_LANGUAGE . '.php';
+
+            return include_once($langFile);
         });
     }
 
