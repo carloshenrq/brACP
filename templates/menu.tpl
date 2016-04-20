@@ -55,8 +55,8 @@
                 ##MENU_MYACC_CHARS##
             </label></li>
             {if $smarty.const.PAG_INSTALL eq true}
-                <li class="ajax-url no-mobile" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/donations" data-target=".bracp-body"><label>
-                    ##MENU_MYACC_DONATIONS##
+                <li class="ajax-url no-mobile" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/pagseguro" data-target=".bracp-body"><label>
+                    ##MENU_MYACC_DONATIONS## (PagSeguro)
                 </label></li>
             {/if}
             <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/logout" data-target=".bracp-body"><label>

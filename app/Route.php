@@ -100,14 +100,19 @@ class Route
                 $this->map(['GET', 'POST'], '/chars', ['Controller\Account', 'chars'])
                         ->add(['Controller\Account', 'needLogin']);
 
-                $this->map(['GET', 'POST'], '/donations', ['Controller\Account', 'donations'])
-                        ->add(['Controller\Account', 'needLogin']);
+                // Como é que eu fui esquecer de testar a configuração de doações e deixar a rota aberta?
+                // 2016-04-20, CHLFZ
+                if(PAG_INSTALL)
+                {
+                    $this->map(['GET', 'POST'], '/pagseguro', ['Controller\Account', 'pagseguro'])
+                            ->add(['Controller\Account', 'needLogin']);
 
-                $this->post('/donations/transaction', ['Controller\Account', 'transaction'])
-                        ->add(['Controller\Account', 'needLogin']);
+                    $this->post('/pagseguro/transaction', ['Controller\Account', 'pagseguroTransaction'])
+                            ->add(['Controller\Account', 'needLogin']);
 
-                $this->post('/donations/check', ['Controller\Account', 'donationsCheck'])
-                        ->add(['Controller\Account', 'needLogin']);
+                    $this->post('/pagseguro/check', ['Controller\Account', 'pagseguroCheck'])
+                            ->add(['Controller\Account', 'needLogin']);
+                }
 
                 $this->get('/logout', ['Controller\Account', 'logout'])
                         ->add(['Controller\Account', 'needLogin']);

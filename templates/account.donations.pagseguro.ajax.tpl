@@ -16,7 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *}
 
-<h1>Minha Conta &raquo; Doações</h1>
+<h1>Minha Conta &raquo; Doações &raquo; PagSeguro</h1>
 
 {if isset($donationId) eq true && isset($checkoutCode) eq true}
 <script>
@@ -24,7 +24,7 @@
         checkoutCode = '{$checkoutCode}';
 
     // Inicializa os parametros de doação.
-    donation(donationId, checkoutCode, '{$smarty.const.BRACP_DIR_INSTALL_URL}account/donations/transaction');
+    donation(donationId, checkoutCode, '{$smarty.const.BRACP_DIR_INSTALL_URL}account/pagseguro/transaction');
 </script>
 {/if}
 
@@ -97,7 +97,7 @@
         </p>
     {/if}
 
-    <form class="ajax-form" action="{$smarty.const.BRACP_DIR_INSTALL_URL}account/donations" autocomplete="off" method="post" target=".bracp-body">
+    <form class="ajax-form" action="{$smarty.const.BRACP_DIR_INSTALL_URL}account/pagseguro" autocomplete="off" method="post" target=".bracp-body">
         <div class="bracp-form">
             <div style="width: 50%; margin: auto;">
                 <div class="bracp-form-field">
@@ -151,7 +151,7 @@
     {else}
     <br>
     <div class="donation-table">
-        {include 'account.donations.table.tpl'}
+        {include 'account.donations.pagseguro.table.tpl'}
     </div>
     {/if}
     <br>

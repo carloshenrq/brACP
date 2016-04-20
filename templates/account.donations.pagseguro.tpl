@@ -18,5 +18,5 @@
 
 {extends file="default.tpl"}
 {block name="brACP_Body"}
-    {include 'account.donations.ajax.tpl'}
+    {include 'account.donations.pagseguro.ajax.tpl'}
 {/block}

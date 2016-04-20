@@ -158,7 +158,7 @@ if($writeable && isset($_POST) && !empty($_POST))
     $configFile .= "if(BRACP_DEVELOP_MODE)\n";
     $configFile .= "{\n";
     $configFile .= "    DEFINE('PAG_URL', 'https://sandbox.pagseguro.uol.com.br', false);\n";
-    $configFile .= "    DEFINE('PAG_WS_URL', 'https://ws.sandbox.uol.com.br', false);\n";
+    $configFile .= "    DEFINE('PAG_WS_URL', 'https://ws.sandbox.pagseguro.uol.com.br', false);\n";
     $configFile .= "    DEFINE('PAG_STC_URL', 'https://stc.sandbox.pagseguro.uol.com.br', false);\n";
     $configFile .= "}\n";
     $configFile .= "else\n";

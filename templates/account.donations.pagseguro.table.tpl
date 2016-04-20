@@ -16,7 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *}
 
-<form class="ajax-form" action="{$smarty.const.BRACP_DIR_INSTALL_URL}account/donations/check" autocomplete="off" method="post" target=".donation-table" data-block="1">
+<form class="ajax-form" action="{$smarty.const.BRACP_DIR_INSTALL_URL}account/pagseguro/check" autocomplete="off" method="post" target=".donation-table" data-block="1">
     <table border="1" align="center" class="table">
         <caption style="text-align: right">
             <input class="btn" type="submit" value="Verificar"/>

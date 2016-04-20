@@ -224,7 +224,7 @@ class Account
      * @param ResponseInterface $response
      * @param array $args
      */
-    public static function donations(ServerRequestInterface $request, ResponseInterface $response, $args)
+    public static function pagseguro(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
         // Dados iniciais.
         $data = [];
@@ -317,7 +317,7 @@ class Account
         }
 
         // Template de doações carrega com os dados sendo informados.
-        self::getApp()->display('account.donations', array_merge($data, [
+        self::getApp()->display('account.donations.pagseguro', array_merge($data, [
             'promotion'     => $promotion,
             'multiply'      => $multiply,
             'donations'     => $donations,
@@ -332,7 +332,7 @@ class Account
      * @param ResponseInterface $response
      * @param array $args
      */
-    public static function donationsNotify(ServerRequestInterface $request, ResponseInterface $response, $args)
+    public static function pagseguroNotify(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
         // Somente aceita requisições do tipo POST.
         if(!$request->isPost())
@@ -370,7 +370,7 @@ class Account
         //  Se existir, faz uma atualização da doação do jogador.
         if(!is_null($donation))
         {
-            self::donationCheck($donation);
+            self::pagseguroDonationCheck($donation);
         }
     }
 
@@ -381,7 +381,7 @@ class Account
      * @param ResponseInterface $response
      * @param array $args
      */
-    public static function donationsCheck(ServerRequestInterface $request, ResponseInterface $response, $args)
+    public static function pagseguroCheck(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
         // Todas as doações para o usuário atual.
         $donations = self::getApp()->getEm()
@@ -421,13 +421,13 @@ class Account
                 //  realiza uma requisição ao PagSeguro para 
                 if(in_array($donation->getId(), $DonationID) && !empty($donation->getTransactionCode()))
                 {
-                    self::donationCheck($donation);
+                    self::pagseguroDonationCheck($donation);
                 }
             }
         }
 
         // Template de doações carrega com os dados sendo informados.
-        self::getApp()->display('account.donations.table', [
+        self::getApp()->display('account.donations.pagseguro.table', [
             'donations' => $donations
         ], false);
     }
@@ -439,7 +439,7 @@ class Account
      * @param ResponseInterface $response
      * @param array $args
      */
-    public static function transaction(ServerRequestInterface $request, ResponseInterface $response, $args)
+    public static function pagseguroTransaction(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
         // Recebe os dados relacionados a transação informada.
         $data = $request->getParsedBody();
@@ -956,7 +956,7 @@ class Account
      *
      * @return boolean
      */
-    public static function donationCheck(Donation $donation)
+    public static function pagseguroDonationCheck(Donation $donation)
     {
         // Escreve acesso de log aos dados de personagem:
         LogWriter::write("Iniciando verificação de doação com transção via PagSeguro.\n\n".print_r($donation, true));
@@ -1154,6 +1154,8 @@ class Account
                                         ->addMetaKey('PLAYER_ID', $donation->getAccount()->getAccount_id())
                                         ->sendRequest();
 
+            print_r($checkoutResponse);
+
             // Define o código de checkout para a doação.
             $donation->setCheckoutCode($checkoutResponse->code);
 
@@ -1168,6 +1170,7 @@ class Account
         }
         catch(\Exception $ex)
         {
+            print_r($ex->getMessage());
             return ['donation_message' =>
                         [
                             'error' => ((BRACP_DEVELOP_MODE) ? $ex->getMessage():'Ocorreu um erro durante o registro da sua doação.')

@@ -24,7 +24,7 @@
 
         // Se não houver restrições para definir o URL no envio do form, então
         //  não permite que o URL do navegador seja alterado.
-        if($(this).data('block') === undefined || $(this).closest('.modal').length == 0)
+        if($(this).data('block') === undefined)
         {
             // Define o url da página.
             window.history.pushState("", "", $(this).attr('action'));
