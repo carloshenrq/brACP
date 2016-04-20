@@ -29,6 +29,7 @@ if(!defined('PHP_VERSION'))
 // Adicionado leitura da classe principal para teste dos temas.
 require_once __DIR__ . '/app/Themes.php';
 require_once __DIR__ . '/app/Language.php';
+require_once __DIR__ . '/app/Cache.php';
 
 // Obtém todos os temas contidos na pasta
 $themes = Themes::readAll();

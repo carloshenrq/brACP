@@ -54,21 +54,25 @@ class Language
      */
     public static function parse($textToTranslate)
     {
-        if(preg_match_all('/##([^##]+)##/', $textToTranslate, $matches) > 0)
-        {
-            $index = $matches[0];
-            $value = $matches[1];
+        // Define que irá obter o cache do arquivo de traduções.
+        return Cache::get('BRACP_LANG_' . self::$lang . '_' . hash('md5', $textToTranslate),
+            function() use ($textToTranslate) {
+                if(preg_match_all('/##([^##]+)##/', $textToTranslate, $matches) > 0)
+                {
+                    $index = $matches[0];
+                    $value = $matches[1];
 
-            foreach($index as $i => $var)
-            {
-                if(preg_match('/##([^,]+),(.*)##/', $var, $matches))
-                    $textToTranslate = str_replace($var, self::translateLn($matches[1], $matches[2]), $textToTranslate);
-                else
-                    $textToTranslate = str_replace($var, self::translate($value[$i]), $textToTranslate);
-            }
-        }
+                    foreach($index as $i => $var)
+                    {
+                        if(preg_match('/##([^,]+),(.*)##/', $var, $matches))
+                            $textToTranslate = str_replace($var, self::translateLn($matches[1], $matches[2]), $textToTranslate);
+                        else
+                            $textToTranslate = str_replace($var, self::translate($value[$i]), $textToTranslate);
+                    }
+                }
 
-        return $textToTranslate;
+                return $textToTranslate;
+            });
     }
 
     /**
