@@ -19,6 +19,8 @@
 
 namespace Controller;
 
+use \Cache;
+
 use \Psr\Http\Message\ServerRequestInterface;
 use \Psr\Http\Message\ResponseInterface;
 
@@ -40,20 +42,25 @@ class Ranking
      */
     public static function chars(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
-        $chars = self::getApp()->getEm()
-                                ->createQuery('
-                                    SELECT
-                                        chars
-                                    FROM
-                                        Model\Char chars
-                                    ORDER BY
-                                        chars.base_level DESC,
-                                        chars.job_level DESC,
-                                        chars.base_exp DESC,
-                                        chars.job_exp DESC
-                                ')
-                                ->setMaxResults(100)
-                                ->getResult();
+        // Define que irá carregar o cache de personagens a serem exibidos
+        //  ou criar o cache.
+        $app = self::getApp();
+        $chars = Cache::get('BRACP_RANKING_CHARS', function() use ($app) {
+            return $app->getEm()
+                        ->createQuery('
+                            SELECT
+                                chars
+                            FROM
+                                Model\Char chars
+                            ORDER BY
+                                chars.base_level DESC,
+                                chars.job_level DESC,
+                                chars.base_exp DESC,
+                                chars.job_exp DESC
+                        ')
+                        ->setMaxResults(100)
+                        ->getResult();
+        });
 
         // Exibe o display para home.
         self::getApp()->display('rankings.chars', ['chars' => $chars]);
@@ -68,17 +75,22 @@ class Ranking
      */
     public static function economy(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
-        $chars = self::getApp()->getEm()
-                                ->createQuery('
-                                    SELECT
-                                        chars
-                                    FROM
-                                        Model\Char chars
-                                    ORDER BY
-                                        chars.zeny DESC
-                                ')
-                                ->setMaxResults(100)
-                                ->getResult();
+        // Define que irá carregar o cache de personagens a serem exibidos
+        //  ou criar o cache.
+        $app = self::getApp();
+        $chars = Cache::get('BRACP_RANKING_ECONOMY', function() use ($app) {
+            return $app->getEm()
+                        ->createQuery('
+                            SELECT
+                                chars
+                            FROM
+                                Model\Char chars
+                            ORDER BY
+                                chars.zeny DESC
+                        ')
+                        ->setMaxResults(100)
+                        ->getResult();
+        });
 
         // Exibe o display para home.
         self::getApp()->display('rankings.chars.economy', ['chars' => $chars]);
