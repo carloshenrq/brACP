@@ -37,7 +37,7 @@ class Cache
     {
         // Se existir a biblioteca de memcache e a mesma estiver habilitada
         if(extension_loaded('memcache') && BRACP_MEMCACHE)
-            self::$memcache = memcache_connect(BRACP_MEMCACHE_SERVER ,BRACP_MEMCACHE_PORT);
+            self::$memcache = memcache_connect(BRACP_MEMCACHE_SERVER, BRACP_MEMCACHE_PORT);
     }
 
     /**
