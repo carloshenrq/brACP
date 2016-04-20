@@ -226,6 +226,24 @@ Permitir usuário escolher o tema.
 ####BRACP_DEFAULT_THEME _(string)_
 Pasta para o tema que o usuário ou o sistema escolheu.
 
+####BRACP_CONFIRM_ACCOUNT _(true|false)_
+Permitir que o painel de controle crie um código de ativação para testar se o endereço de e-mail cadastrado é real.
+
+####BRACP_DEFAULT_LANGUAGE _(string)_
+Idioma padrão do painel de controle.
+
+####BRACP_MEMCACHE
+Permitir que o painel de controle utilize um servidor [memcached](https://memcached.org/)
+
+####BRACP_MEMCACHE_SERVER
+Endereço do servidor para ser utilizado o cache.
+
+####BRACP_MEMCACHE_PORT
+Porta que o serviço está em execução no endereço indicado.
+
+####BRACP_MEMCACHE_EXPIRE
+Tempo que o cache gerado demorará para expirar no servidor.
+
 ##Recomendações
 
 Se você desejar uma outra opção de painel de controle, nós recomendamos o [FluxCP](https://github.com/HerculesWS/FluxCP).
@@ -247,6 +265,8 @@ Se você desejar uma outra opção de painel de controle, nós recomendamos o [F
 [Megasantos](http://forum.brathena.org/index.php/user/947-jonatas/) : Traduzir as classes no FluxCP e deixar disponivel.
 
 [JulioCF](http://forum.brathena.org/index.php/user/45-juliocf/) : Sugestões de incremento ao painel de controle. (issue #6)
+
+[Shiraz](http://forum.brathena.org/index.php/user/321-shiraz/) : Ajuda com implementações relacionadas ao [memcached](https://memcached.org/)
 
 ##Desenvolvedores
 
