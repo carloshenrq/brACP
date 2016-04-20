@@ -16,17 +16,17 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *}
 
-<h1>Administração &raquo; Backup</h1>
+<h1>##ADMIN_BACKUP_TITLE##</h1>
 
 <div class="bracp-message success">
-    O Arquivo <strong>{$bkp_response.fileName}</strong> foi criado com 
-    <strong>{$bkp_response.fileCount}</strong> arquivos possuindo tamanho de <strong>{Format::bytes($bkp_response.fileSize)}</strong>.
+    ##ADMIN_BACKUP_MSG,0## <strong>{$bkp_response.fileName}</strong><br>
+    <strong>{$bkp_response.fileCount}</strong> ##ADMIN_BACKUP_MSG,1## <strong>{Format::bytes($bkp_response.fileSize)}</strong>.
     <br>
     <br>
     <div class="bracp-message info">
-        <h1>Soma de verificação</h1>
-        <strong>md5:</strong> {$bkp_response.fileHashMD5} <br>
-        <strong>sha1:</strong> {$bkp_response.fileHashSHA1} <br>
-        <strong>sha512:</strong> {$bkp_response.fileHashSHA512}
+        <h1>##ADMIN_BACKUP_MSG,CHKSUM##</h1>
+        <strong>##ADMIN_BACKUP_MSG,MD5##:</strong> {$bkp_response.fileHashMD5} <br>
+        <strong>##ADMIN_BACKUP_MSG,SHA1##:</strong> {$bkp_response.fileHashSHA1} <br>
+        <strong>##ADMIN_BACKUP_MSG,SHA512##:</strong> {$bkp_response.fileHashSHA512}
     </div>
 </div>

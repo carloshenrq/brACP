@@ -306,6 +306,20 @@ return
     ],
 
     /**
+     * @refer templates/admin.backup.ajax.tpl
+     * @author carloshenrq
+     */
+    'ADMIN_BACKUP_TITLE'        => 'Administração &raquo; Backup',
+    'ADMIN_BACKUP_MSG'          => [
+        'O Arquivo de backup foi criado com sucesso! Nome:',
+        'arquivos no tamanho de',
+        'CHECKSUM'  => 'Soma de verificação',
+        'MD5'       => 'md5',
+        'SHA1'      => 'sha1',
+        'SHA512'    => 'sha512',
+    ],
+
+    /**
      * Mensagens de erro padrão.
      */
     'ERR_TITLE'                 => 'Acesso negado',
