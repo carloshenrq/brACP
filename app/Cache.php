@@ -58,6 +58,10 @@ class Cache
         if($force === false && ($fromCache = memcache_get(self::$memcache, $index, 0)) !== false)
             return $fromCache;
 
+        // Se forcando, então deleta o indice do cache.
+        if($force === true)
+            self::delete($index);
+
         // Para o valor padrão retornado.
         $fromDefault = ((is_callable($defaultValue)) ? $defaultValue():$defaultValue);
 
