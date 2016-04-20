@@ -74,6 +74,9 @@ class brACPApp extends Slim\App
             ]
         ];
 
+        // Inicializa o sistema de cache.
+        Cache::init();
+
         // Variavel de sessão para definir a linguagem padrão do painel de controle.
         if(!isset($this->session->BRACP_LANGUAGE))
             $this->session->BRACP_LANGUAGE = BRACP_DEFAULT_LANGUAGE;
@@ -215,7 +218,9 @@ class brACPApp extends Slim\App
         }
 
         // Obtém todos os temas que estão em cache no banco de dados.
-        $themes = $this->getEm()->getRepository('Model\Theme')->findAll();
+        $themes = Cache::get('BRACP_THEMES', function() {
+            return brACPApp::getInstance()->getEm()->getRepository('Model\Theme')->findAll();
+        });
 
         // Obtém o endereço de ip do cliente.
         $ip_address = $this->getContainer()->get('request')->getAttribute('ip_address');

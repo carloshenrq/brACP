@@ -43,6 +43,7 @@ class Themes
             brACPApp::getInstance()->getEm()->flush();
         }
         unset($themes, $theme);
+        Cache::delete('BRACP_THEMES');
 
         // Realiza a leitura da tabela do banco.
         $themes = self::readAll();

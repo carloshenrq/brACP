@@ -30,13 +30,23 @@ class Language
     private static $translation;
 
     /**
+     * Linguagem que será utilizada para uso do painel.
+     */
+    private static $lang;
+
+    /**
      * Inicializador da classe de traduções.
      *
      * @param string $lang Tradução da linguagem a ser utilizada
      */
     public static function load($lang = 'pt_BR')
     {
-        self::$translation = include_once(realpath(__DIR__ . '/../lang/') . '/' .$lang.'.php');
+        self::$lang = $lang;
+
+        // Obtém os dados do brACP de linguagem do cache ou da memória.
+        self::$translation = Cache::get('BRACP_LANGUAGE_'.$lang, function() use ($lang) {
+            return include_once(realpath(__DIR__ . '/../lang/') . '/' . $lang . '.php');
+        });
     }
 
     /**
@@ -44,22 +54,27 @@ class Language
      */
     public static function parse($textToTranslate)
     {
-        if(preg_match_all('/##([^##]+)##/', $textToTranslate, $matches) > 0)
-        {
-            $index = $matches[0];
-            $value = $matches[1];
+        // Obtém o cache para ser tratado.
+        $cache_index = strtoupper('BRACP_LANG_'.self::$lang.'_'.hash('md5', $textToTranslate));
 
-            foreach($index as $i => $var)
+        // Retorna informações sobre o cache do arquivo tratados para uso.
+        return Cache::get($cache_index, function() use ($textToTranslate) {
+            if(preg_match_all('/##([^##]+)##/', $textToTranslate, $matches) > 0)
             {
-                if(preg_match('/##([^,]+),(.*)##/', $var, $matches))
-                    $textToTranslate = str_replace($var, self::translateLn($matches[1], $matches[2]), $textToTranslate);
-                else
-                    $textToTranslate = str_replace($var, self::translate($value[$i]), $textToTranslate);
-            }
-        }
+                $index = $matches[0];
+                $value = $matches[1];
 
-        // Retorna o texto de tradução para a tela.
-        return $textToTranslate;
+                foreach($index as $i => $var)
+                {
+                    if(preg_match('/##([^,]+),(.*)##/', $var, $matches))
+                        $textToTranslate = str_replace($var, Language::translateLn($matches[1], $matches[2]), $textToTranslate);
+                    else
+                        $textToTranslate = str_replace($var, Language::translate($value[$i]), $textToTranslate);
+                }
+            }
+
+            return $textToTranslate;
+        });
     }
 
     /**
@@ -96,17 +111,20 @@ class Language
      */
     public static function readAll()
     {
-        // Obtém todos os arquivos .php presentes na pasta lang.
-        //  Nota: Os arquivos devem possuir todos os atributos para serem considerados
-        //        arquivos de tradução, caso contrario, falhará.
-        $tmp_langs = array_filter(scandir(__DIR__ . '/../lang'), function($file) {
-            return preg_match('/^([a-z]{2})_([A-Z]{2}).php$/', $file) != 0;
+        // Obtém o retorno dos linguagens.
+        return Cache::get('BRACP_LANGUAGES', function() {
+            // Obtém todos os arquivos .php presentes na pasta lang.
+            //  Nota: Os arquivos devem possuir todos os atributos para serem considerados
+            //        arquivos de tradução, caso contrario, falhará.
+            $tmp_langs = array_filter(scandir(__DIR__ . '/../lang'), function($file) {
+                return preg_match('/^([a-z]{2})_([A-Z]{2}).php$/', $file) != 0;
+            });
+
+            $langs = [];
+            foreach($tmp_langs as $lang)
+                $langs[] = substr($lang, 0, 5);
+
+            return $langs;
         });
-
-        $langs = [];
-        foreach($tmp_langs as $lang)
-            $langs[] = substr($lang, 0, 5);
-
-        return $langs;
     }
 }

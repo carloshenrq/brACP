@@ -114,6 +114,12 @@ $config = [
     'BRACP_ALLOW_CHOOSE_THEME'              => 1,
     'BRACP_DEFAULT_THEME'                   => 'default',
     'BRACP_DEFAULT_LANGUAGE'                => 'pt_BR',
+
+    // Memcache
+    'BRACP_MEMCACHE'                        => ((extension_loaded('memcache')) ? 1:0),
+    'BRACP_MEMCACHE_SERVER'                 => '127.0.0.1',
+    'BRACP_MEMCACHE_PORT'                   => 11211,
+    'BRACP_MEMCACHE_EXPIRE'                 => 600,
 ]; 
 
 
@@ -275,9 +281,10 @@ if($writeable && isset($_POST) && !empty($_POST))
                 <ul class="bracp-install-tabs">
                     <li><label for="conf-general" class="btn">Configurações Gerais</label></li>
                     <li><label for="conf-mysql" class="btn">MySQL</label></li>
-                    <li><label for="conf-mail" class="btn">Servidor de E-mail (SMTP)</label></li>
+                    <li><label for="conf-mail" class="btn">SMTP (E-mails)</label></li>
                     <li><label for="conf-captcha" class="btn">reCAPTCHA</label></li>
                     <li><label for="conf-donation" class="btn">PagSeguro</label></li>
+                    <li><label for="conf-memcache" class="btn">Memcache</label></li>
                     <li><label for="conf-others" class="btn">Outros</label></li>
                 </ul>
 
@@ -704,6 +711,48 @@ if($writeable && isset($_POST) && !empty($_POST))
                                 <input id="DONATION_INTERVAL_DAYS" name="DONATION_INTERVAL_DAYS" type="text" value="" size="3"/>
                             </label>
                         </div>
+                    </div>
+                    <input name="_conf-tab" id="conf-memcache" class="bracp-install-tab-radio" type="radio"/>
+                    <div class="bracp-install-tab-div">
+                        <h1>Memcache</h1>
+                        <?php
+                            if(!extension_loaded('memcache')) {
+                        ?>
+                            <div class="bracp-install-error">
+                                Você não pode configurar o memcache porque não possui a biblioteca local instalada.
+                            </div>
+                        <?php
+                            }
+                            else
+                            {
+                        ?>
+                            <div class="bracp-install-info">
+                                Habilitar o <strong><i>memcache</i></strong> é extremamente recomendado.
+                            </div>
+                            <br>
+
+                            <div class="bracp-install-label-data">
+                                <label>
+                                    Habilitar:<br>
+                                    <select id="BRACP_MEMCACHE" name="BRACP_MEMCACHE">
+                                        <option value="0">Não</option>
+                                        <option value="1">Sim</option>
+                                    </select>
+                                </label>
+                            </div>
+                            <div class="bracp-install-label-data">
+                                <label>
+                                    Servidor:<br>
+                                    <input id="BRACP_MEMCACHE_SERVER" name="BRACP_MEMCACHE_SERVER" type="text" value="" size="50"/>
+                                </label>
+                                <label>
+                                    Porta:<br>
+                                    <input id="BRACP_MEMCACHE_PORT" name="BRACP_MEMCACHE_PORT" type="text" value="" size="6"/>
+                                </label>
+                            </div>
+                       <?php
+                            }
+                        ?>
                     </div>
                     <input name="_conf-tab" id="conf-others" class="bracp-install-tab-radio" type="radio"/>
                     <div class="bracp-install-tab-div">
