@@ -24,7 +24,7 @@
     <br>
     <br>
     <div class="bracp-message info">
-        <h1>##ADMIN_BACKUP_MSG,CHKSUM##</h1>
+        <h1>##ADMIN_BACKUP_MSG,CHECKSUM##</h1>
         <strong>##ADMIN_BACKUP_MSG,MD5##:</strong> {$bkp_response.fileHashMD5} <br>
         <strong>##ADMIN_BACKUP_MSG,SHA1##:</strong> {$bkp_response.fileHashSHA1} <br>
         <strong>##ADMIN_BACKUP_MSG,SHA512##:</strong> {$bkp_response.fileHashSHA512}
