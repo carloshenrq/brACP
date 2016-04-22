@@ -42,6 +42,9 @@
             <li><label for="bracp-modal-login">##MENU_MYACC_LOGIN##</label></li>
             {if $smarty.const.BRACP_ALLOW_CREATE_ACCOUNT eq true}
                 <li><label for="bracp-modal-create">##MENU_MYACC_CREATE##</label></li>
+                {if $smarty.const.BRACP_CONFIRM_ACCOUNT eq true}
+                    <li><label for="bracp-modal-create-resend">##MENU_MYACC_CREATE_RESEND##</label></li>
+                {/if}
             {/if}
             {if $smarty.const.BRACP_ALLOW_RECOVER eq true}
                 <li><label for="bracp-modal-recover">##MENU_MYACC_RECOVER##</label></li>

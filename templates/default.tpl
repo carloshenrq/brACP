@@ -185,6 +185,11 @@
                     <input id="bracp-modal-recover" class="modal-check" type="checkbox"/>
                     <div class="modal-recover-body">{include 'account.recover.ajax.tpl'}</div>
                 {/if}
+
+                {if $smarty.const.BRACP_CONFIRM_ACCOUNT eq true}
+                    <input id="bracp-modal-create-resend" class="modal-check" type="checkbox"/>
+                    <div class="modal-create-resend-body">{include 'account.register.resend.ajax.tpl'}</div>
+                {/if}
             {else}
                 <input id="bracp-modal-changepass" class="modal-check" type="checkbox"/>
                 <div class="modal-changepass-body">{include 'account.change.password.ajax.tpl'}</div>

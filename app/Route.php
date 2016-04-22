@@ -71,7 +71,7 @@ class Route
                                 ->add(['Controller\Account', 'needLoggout']);
 
                         // Re-envia o código de ativação do jogador.
-                        $this->get('/register/resend/{$account_id}', ['Controller\Account', 'registerResendCode'])
+                        $this->post('/register/resend', ['Controller\Account', 'registerResendCode'])
                                 ->add(['Controller\Account', 'needLoggout']);
                     }
                 }

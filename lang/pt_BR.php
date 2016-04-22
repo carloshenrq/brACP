@@ -31,6 +31,7 @@ return
     'MENU_MYACC'                => 'Minha Conta',
     'MENU_MYACC_LOGIN'          => 'Entrar',
     'MENU_MYACC_CREATE'         => 'Registrar',
+    'MENU_MYACC_CREATE_RESEND'  => 'Código de Ativação',
     'MENU_MYACC_RECOVER'        => 'Recuperar Conta',
     'MENU_MYACC_CHANGEPASS'     => 'Mudar Senha',
     'MENU_MYACC_CHANGEMAIL'     => 'Mudar E-mail',
@@ -140,6 +141,28 @@ return
     'CREATE_BUTTONS'            => [
         'ACCEPT'    => 'Eu concordo com os termos do servidor.',
         'SUBMIT'    => 'Registrar',
+        'RESET'     => 'Limpar',
+    ],
+
+    /**
+     * @refer templates/account.register.resend.ajax.tpl
+     * @author carloshenrq
+     */
+    'RESEND_TITLE'          => 'Registrar &raquo; Enviar Código de Ativação',
+    'RESEND_ERR'            => [
+        'DISABLED'  => 'O código de ativação de contas está desativado.',
+        'NOACC'     => 'Dados para reenvio do código de confirmação é inválido.'
+    ],
+    'RESEND_SUCCESS'        => 'Código de confirmação enviado com sucesso para o e-mail cadastrado.',
+    'RESEND_MSG'            => [
+        'Para reenviar o código de ativação de sua conta, você deve digitar seu nome de usuário e endereço de e-mail cadastrados para que sejam reenviados com sucesso.',
+    ],
+    'RESEND_PLACEHOLDER'    => [
+        'USERID'    => 'Nome de usuário',
+        'EMAIL'     => 'E-mail cadastradado',
+    ],
+    'RESEND_BUTTONS'    => [
+        'SUBMIT'    => 'Reenviar',
         'RESET'     => 'Limpar',
     ],
 

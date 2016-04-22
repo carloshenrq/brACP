@@ -112,8 +112,8 @@ class Account
      */
     public static function registerResendCode(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
-        // Exibe as informações no template de cadastro.
-        self::getApp()->display('account.register', self::registerResend($args['account_id']));
+        // Exibe as informações no template de re-envio do código de ativação da conta.
+        self::getApp()->display('account.register.resend', self::registerResendByUserId($request->getParsedBody()));
     }
 
     /**
@@ -1478,29 +1478,41 @@ class Account
     }
 
     /**
-     * Método utilizado para re-envio do código de ativação da conta.
+     * Método para re-enviar o código de ativação para conta.
      *
-     * @static
-     *
-     * @param integer $account_id
+     * @param string $userid
+     * @param string $email
      *
      * @return array
      */
-    public static function registerResend($account_id)
+    public static function registerResendByUserId($data)
+    {
+        return ['resend_message' => self::confirmationCode($data['userid'], $data['email'])];
+    }
+
+    /**
+     * Código de confirmação para conta por nome de usuário e e-mail.
+     *
+     * @param string $userid
+     * @param string $email
+     *
+     * @return array
+     */
+    public static function confirmationCode($userid, $email)
     {
         // Se não estiver configurado, não permite que seja utilizado a recuperação do código de ativação.
         if(!BRACP_ALLOW_MAIL_SEND || !BRACP_CONFIRM_ACCOUNT)
-            return ['register_message' => ['error' => '##CREATE_ERR,CONFIRM_DISABLED##']];
+            return ['error' => '##RESEND_ERR,DISABLED##'];
 
-        // Obtém a conta que irá ser verificado para re-envio do código de ativação.
-        $account = self::getApp()
-                        ->getEm()
-                        ->getRepository('Model\Login')
-                        ->findOneBy(['account_id' => $account_id, 'state' => 11]);
+        // Obtém a conta que está sendo solicitada a requisição para 
+        //  confirmação de contas.
+        $account = self::getApp()->getEm()
+                                    ->getRepository('Model\Login')
+                                    ->findOneBy(['userid' => $userid, 'email' => $email, 'state' => 11]);
 
-        // Conta inexistente para recuperação
+        // Conta inexistente para reenvio de confirmação.
         if(is_null($account))
-            return ['register_message' => ['error' => '##CREATE_ERR,CONFIRM_NOACC##']];
+            return ['error' => '##RESEND_ERR,NOACC##'];
 
         // Verifica se algum código de ativação já foi criado dentro do periodo de configuração.
         $confirmation = self::getApp()->getEm()
@@ -1519,7 +1531,6 @@ class Account
                                         ->setParameter('account_id', $account->getAccount_id())
                                         ->setParameter('CURDATETIME', date('Y-m-d H:i:s'))
                                         ->getOneOrNullResult();
-
         // Se não há confirmação criada, então cria um código de ativação para
         // a conta solicitada.
         if(is_null($confirmation))
@@ -1549,7 +1560,7 @@ class Account
                                     ]);
 
         // Retorna a resposta que o e-mail foi enviado para o jogador.
-        return ['register_message' => ['success' => '##CREATE_SUCCESS,CONFIRM_SEND##']];
+        return ['success' => '##RESEND_SUCCESS##'];
     }
 
     /**
@@ -1674,7 +1685,7 @@ class Account
             else
             {
                 // Envia o código de ativação para o cliente.
-                return self::registerResend($account->getAccount_id());
+                return ['register_message' => self::confirmationCode($account->getUserid(), $account->getEmail())];
             }
         }
     }
