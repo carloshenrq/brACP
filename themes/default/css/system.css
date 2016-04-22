@@ -265,6 +265,9 @@ input[type="text"], input[type="password"], select {
 .bracp-content .bracp-header .bracp-header-menu {
   float: right;
 }
+.bracp-content .bracp-body {
+  padding: 8px;
+}
 .bracp-content .bracp-footer {
   padding: 8px;
   background: #636363;
@@ -282,14 +285,19 @@ input[type="text"], input[type="password"], select {
   display: inline;
 }
 .bracp-content .bracp-footer .nav-ipaddress, .bracp-content .bracp-footer .nav-theme, .bracp-content .bracp-footer .nav-lang {
-  margin-left: 1.3em;
+  margin-left: 1em;
 }
 .bracp-content .bracp-footer .nav-theme select, .bracp-content .bracp-footer .nav-lang select {
   padding: 0px;
+  margin: 0px;
   border-radius: 0px;
   border: 0;
   background-color: transparent;
   color: white;
+  font-size: 10px;
+}
+.bracp-content .bracp-footer .nav-theme select option, .bracp-content .bracp-footer .nav-lang select option {
+  font-size: 10px;
 }
 .bracp-content .bracp-footer .nav-ipaddress:before {
   content: '\00a0';
@@ -533,10 +541,10 @@ span.ajax-url, label.lbl-link {
 
 @media screen and (min-width: 320px) and (max-width: 800px) {
   .no-mobile {
-    display: none;
+    display: none !important;
   }
 
   .mobile-only {
-    display: block;
+    display: block !important;
   }
 }

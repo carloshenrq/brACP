@@ -153,7 +153,7 @@
                         <div class="nav-version">{$navigator->getVersion()}</div>
                     </div>
                 {/if}
-                <div class="nav-ipaddress">{$ipAddress}</div>
+                <div class="nav-ipaddress no-mobile">{$ipAddress}</div>
                 <div class="nav-theme">
                     <select class="theme-select">
                     {foreach from=$themes item=theme}

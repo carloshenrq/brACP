@@ -345,6 +345,11 @@ input[type="text"], input[type="password"], select
         }
     }
 
+    .bracp-body
+    {
+        padding: 8px;
+    }
+
     .bracp-footer
     {
         padding: 8px;
@@ -361,18 +366,24 @@ input[type="text"], input[type="password"], select
 
         .nav-ipaddress, .nav-theme, .nav-lang
         {
-            margin-left: 1.3em;
+            margin-left: 1em;
         }
 
         .nav-theme, .nav-lang
         {
             select
             {
-                padding: 0px;
+                padding: 0px; margin: 0px;
                 border-radius: 0px;
                 border: 0;
                 background-color: transparent;
                 color: white;
+                font-size: 10px;
+
+                option
+                {
+                    font-size: 10px;
+                }
             }
         }
 
@@ -794,11 +805,11 @@ span.ajax-url, label.lbl-link
 {
     .no-mobile
     {
-        display: none;
+        display: none !important;
     }
 
     .mobile-only
     {
-        display: block;
+        display: block !important;
     }
 }

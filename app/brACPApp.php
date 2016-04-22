@@ -101,7 +101,7 @@ class brACPApp extends Slim\App
         // Adiciona os middlewares na rota para serem executados.
         $this->add(new Route());
         $this->add(new Database());
-        $this->add(new IpAddress(true, ['10.0.0.1', '10.0.0.2']));
+        // $this->add(new IpAddress(true, ['10.0.0.1', '10.0.0.2']));
 
         // Define a instância global como sendo o proprio.
         self::$app = $this;
@@ -222,16 +222,13 @@ class brACPApp extends Slim\App
             return brACPApp::getInstance()->getEm()->getRepository('Model\Theme')->findAll();
         });
 
-        // Obtém o endereço de ip do cliente.
-        $ip_address = $this->getContainer()->get('request')->getAttribute('ip_address');
-
         // Adiciona o navegador aos dados para o template.
         $data = array_merge($data, [
             'themes' => $themes,
             'langs' => Language::readAll(),
             'session' => $this->getSession(),
             'navigator' => Navigator::getBrowser($this->getContainer()->get('request')->getHeader('user-agent')[0]),
-            'ipAddress' => ((is_null($ip_address)) ? $_SERVER['REMOTE_ADDR'] : $ip_address)
+            'ipAddress' => $this->getIpAddress(),
         ]);
 
         // Atribui os dados ao smarty.
@@ -243,6 +240,28 @@ class brACPApp extends Slim\App
 
         // Renderiza o template.
         return Language::parse($this->view->fetch($template . '.tpl'));
+    }
+
+    /**
+     * Recebe o endereço IP do cliente que está realizando a requisição.
+     *
+     * @return string
+     */
+    private function getIpAddress()
+    {
+        // Possiveis variaveis para se obter o endereço ip do cliente.
+        $_vars = ['HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED',
+                  'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR'];
+
+        // Varre as opções para retornar os dados ao painel de controle.
+        foreach( $_vars as $ip )
+        {
+            if(getenv($ip) !== false)
+                return getenv($ip);
+        }
+
+        // Devolve o endereço ip do cliente.
+        return '?.?.?.?';
     }
 
     /**
