@@ -344,6 +344,96 @@ input[type="text"], input[type="password"], select
             float: right;
         }
     }
+
+    .bracp-footer
+    {
+        padding: 8px;
+        @include background-gradient(#636363, #424242);
+        position: relative;
+        clear: both;
+        color: white;
+        text-align: center;
+
+        .nav-theme, .nav-ipaddress, .bracp-navigator, .nav-lang
+        {
+            display: inline;
+        }
+
+        .nav-ipaddress, .nav-theme, .nav-lang
+        {
+            margin-left: 1.3em;
+        }
+
+        .nav-theme, .nav-lang
+        {
+            select
+            {
+                padding: 0px;
+                border-radius: 0px;
+                border: 0;
+                background-color: transparent;
+                color: white;
+            }
+        }
+
+        .nav-ipaddress
+        {
+            &:before
+            {
+                content: '\00a0';
+                padding-right: 16px;
+                background-repeat: no-repeat;
+                background-position: center center;
+                background-image: url(../img/ip.png);
+            }
+        }
+
+        .bracp-navigator
+        {
+            &.nav-chrome, &.nav-firefox, &.nav-ie,
+            &.nav-safari, &.nav-opera
+            {
+                &:before
+                {
+                    content: '\00a0';
+                    padding-right: 16px;
+                    background-repeat: no-repeat;
+                    background-position: center center;
+                }
+            }
+
+            &.nav-chrome:before
+            {
+                background-image: url(../img/chrome.png);
+            }
+
+            &.nav-firefox:before
+            {
+                background-image: url(../img/firefox.png);
+            }
+
+            &.nav-ie:before
+            {
+                background-image: url(../img/ie.png);
+            }
+
+            &.nav-safari:before
+            {
+                background-image: url(../img/safari.png);
+            }
+
+            &.nav-opera:before
+            {
+                background-image: url(../img/opera.png);
+            }
+
+            .nav-name, .nav-version
+            {
+                display: inline;
+            }
+        }
+
+    }
 }
 
 .bracp-message

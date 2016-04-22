@@ -265,6 +265,63 @@ input[type="text"], input[type="password"], select {
 .bracp-content .bracp-header .bracp-header-menu {
   float: right;
 }
+.bracp-content .bracp-footer {
+  padding: 8px;
+  background: #636363;
+  background: -moz-linear-gradient(top, #636363 0%, #424242 100%);
+  background: -webkit-linear-gradient(top, #636363 0%, #424242 100%);
+  background: linear-gradient(to bottom, #636363 0%, #424242 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#636363', endColorstr='#424242',GradientType=0 );
+  background-repeat: repeat-x;
+  position: relative;
+  clear: both;
+  color: white;
+  text-align: center;
+}
+.bracp-content .bracp-footer .nav-theme, .bracp-content .bracp-footer .nav-ipaddress, .bracp-content .bracp-footer .bracp-navigator, .bracp-content .bracp-footer .nav-lang {
+  display: inline;
+}
+.bracp-content .bracp-footer .nav-ipaddress, .bracp-content .bracp-footer .nav-theme, .bracp-content .bracp-footer .nav-lang {
+  margin-left: 1.3em;
+}
+.bracp-content .bracp-footer .nav-theme select, .bracp-content .bracp-footer .nav-lang select {
+  padding: 0px;
+  border-radius: 0px;
+  border: 0;
+  background-color: transparent;
+  color: white;
+}
+.bracp-content .bracp-footer .nav-ipaddress:before {
+  content: '\00a0';
+  padding-right: 16px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-image: url(../img/ip.png);
+}
+.bracp-content .bracp-footer .bracp-navigator.nav-chrome:before, .bracp-content .bracp-footer .bracp-navigator.nav-firefox:before, .bracp-content .bracp-footer .bracp-navigator.nav-ie:before, .bracp-content .bracp-footer .bracp-navigator.nav-safari:before, .bracp-content .bracp-footer .bracp-navigator.nav-opera:before {
+  content: '\00a0';
+  padding-right: 16px;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+.bracp-content .bracp-footer .bracp-navigator.nav-chrome:before {
+  background-image: url(../img/chrome.png);
+}
+.bracp-content .bracp-footer .bracp-navigator.nav-firefox:before {
+  background-image: url(../img/firefox.png);
+}
+.bracp-content .bracp-footer .bracp-navigator.nav-ie:before {
+  background-image: url(../img/ie.png);
+}
+.bracp-content .bracp-footer .bracp-navigator.nav-safari:before {
+  background-image: url(../img/safari.png);
+}
+.bracp-content .bracp-footer .bracp-navigator.nav-opera:before {
+  background-image: url(../img/opera.png);
+}
+.bracp-content .bracp-footer .bracp-navigator .nav-name, .bracp-content .bracp-footer .bracp-navigator .nav-version {
+  display: inline;
+}
 
 .bracp-message {
   padding: 16px;
