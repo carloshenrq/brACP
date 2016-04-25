@@ -25,6 +25,12 @@
             <input id="menu-admin" type="checkbox" class="bracp-menu-item-check"/>
             <label for="menu-admin">##MENU_ADMIN##</label>
             <ul>
+                <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}admin/players" data-target=".bracp-body"><label>
+                    ##MENU_ADMIN_PLAYERS##
+                </label></li>
+                <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}admin/donation" data-target=".bracp-body"><label>
+                    ##MENU_ADMIN_DONATION##
+                </label></li>
                 <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}admin/backup" data-target=".bracp-body"><label>
                     ##MENU_ADMIN_BACKUP##
                 </label></li>

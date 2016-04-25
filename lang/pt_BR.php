@@ -28,6 +28,8 @@ return
     'MENU_ADMIN'                => 'Administração',
     'MENU_ADMIN_BACKUP'         => 'Criar Backup',
     'MENU_ADMIN_THEMES'         => 'Atualizar Temas',
+    'MENU_ADMIN_PLAYERS'        => 'Jogadores',
+    'MENU_ADMIN_DONATION'       => 'Doações',
     'MENU_MYACC'                => 'Minha Conta',
     'MENU_MYACC_LOGIN'          => 'Entrar',
     'MENU_MYACC_CREATE'         => 'Registrar',
