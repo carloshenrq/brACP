@@ -16,7 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *}
 
-<h1>@@ADMIN,DONATION(TITLE)</h1>
+<h1>@@ADMIN,MODS(TITLE)</h1>
 
 <div class="bracp-message error mobile-only">
     @@ERRORS(NO_MOBILE)

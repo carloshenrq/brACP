@@ -121,6 +121,9 @@ $config = [
     'BRACP_MEMCACHE_SERVER'                 => '127.0.0.1',
     'BRACP_MEMCACHE_PORT'                   => 11211,
     'BRACP_MEMCACHE_EXPIRE'                 => 600,
+
+    // Mods a serem aplicados no painel de controle. (Recomenda-se uso do xdiff, sem isso, tera de ser aplicado manualmente o diff)
+    'BRACP_ALLOW_MODS'                      => ((extension_loaded('xdiff')) ? 1:0),
 ]; 
 
 

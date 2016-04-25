@@ -31,6 +31,11 @@
                 <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}admin/donation" data-target=".bracp-body"><label>
                     @@MENU,ADMIN(DONATION)
                 </label></li>
+                {if $smarty.const.BRACP_ALLOW_MODS eq true}
+                    <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}admin/mods" data-target=".bracp-body"><label>
+                        @@MENU,ADMIN(MODS)
+                    </label></li>
+                {/if}
                 <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}admin/backup" data-target=".bracp-body"><label>
                     @@MENU,ADMIN(BACKUP)
                 </label></li>

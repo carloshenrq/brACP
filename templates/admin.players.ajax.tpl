@@ -16,16 +16,16 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *}
 
-<h1>##ADMIN_PLAYER_TITLE##</h1>
+<h1>@@ADMIN,PLAYER(TITLE)</h1>
 
 <div class="bracp-message error mobile-only">
-    ##ERR_MOBILE_ACCESS##
+    @@ERRORS(NO_MOBILE)
 </div>
 
 <div class="no-mobile">
 
     <div class="bracp-message info">
-        ##ERR_MAINTENCE##
+        @@ERRORS(MAINTENCE)
     </div>
 
 </div>

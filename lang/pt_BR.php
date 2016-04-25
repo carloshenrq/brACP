@@ -30,6 +30,7 @@ return
             'TITLE'     => 'Administração',
             'BACKUP'    => 'Criar Backup',
             'THEMES'    => 'Atualizar Temas',
+            'MODS'      => 'Customizações',
             'PLAYERS'   => 'Jogadores',
             'DONATION'  => 'Doações',
         ],
@@ -382,18 +383,21 @@ return
      */
     'ADMIN_DONATION_TITLE'        => 'Administração &raquo; Doações',
 
+    'ADMIN'     => [
+    ],
+
     /**
      * Mensagens de erro padrão.
      */
 
     'ERRORS'    => [
         'RECAPTCHA' => 'Código de verificação inválido. Verifique por favor.',
+        'NO_MOBILE' => 'Indisponivel para acesso mobile.',
+        'MAINTENCE' => 'Em manutenção.',
     ],
 
     'ERR_TITLE'                 => 'Acesso negado',
-    'ERR_MAINTENCE'             => 'Em manutenção.',
     'ERR_ACCESS_DENIED'         => 'Você não possui direito de acesso a este local!',
-    'ERR_MOBILE_ACCESS'         => 'Indisponivel para acesso mobile.',
     'ERR_NEED_SIGNIN'           => [
         'Você precisa estar logado para realizar esta ação.',
         'Para entrar, <label class="lbl-link" for="bracp-modal-login">clique aqui</label>.',

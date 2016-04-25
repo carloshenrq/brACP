@@ -144,6 +144,11 @@ class Route
                     $this->get('/theme', ['Controller\Admin', 'theme']);
                     $this->get('/players', ['Controller\Admin', 'players']);
                     $this->get('/donation', ['Controller\Admin', 'donation']);
+
+                    if(BRACP_ALLOW_MODS)
+                    {
+                        $this->get('/mods', ['Controller\Admin', 'mods']);
+                    }
                 })
                 ->add(['Controller\Account', 'needAdmin'])
                 ->add(['Controller\Account', 'needLogin']);

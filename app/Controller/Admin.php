@@ -39,6 +39,20 @@ class Admin
      * @param ResponseInterface $response
      * @param array $args
      */
+    public static function mods(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        // Exibe o display para home.
+        self::getApp()->display('admin.mods', [
+        ]);
+    }
+
+    /**
+     * Método inicial para exibição dos templates na tela.
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param array $args
+     */
     public static function players(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
         // Exibe o display para home.
