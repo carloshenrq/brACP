@@ -29,8 +29,7 @@
 {/if}
 
 <div class="bracp-message error mobile-only">
-    <h1>Ops!</h1>
-    Você não pode acessar esta tela usando dispositivos moveis!
+    ##ERR_MOBILE_ACCESS##
 </div>
 
 <div class="no-mobile">

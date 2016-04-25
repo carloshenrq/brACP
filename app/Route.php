@@ -142,6 +142,8 @@ class Route
                 self::getApp()->group('/admin', function() {
                     $this->get('/backup', ['Controller\Admin', 'backup']);
                     $this->get('/theme', ['Controller\Admin', 'theme']);
+                    $this->get('/players', ['Controller\Admin', 'players']);
+                    $this->get('/donation', ['Controller\Admin', 'donation']);
                 })
                 ->add(['Controller\Account', 'needAdmin'])
                 ->add(['Controller\Account', 'needLogin']);

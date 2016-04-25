@@ -345,12 +345,25 @@ return
     ],
 
     /**
+     * @refer templates/admin.players.ajax.tpl
+     * @author carloshenrq
+     */
+    'ADMIN_PLAYER_TITLE'        => 'Administração &raquo; Jogadores',
+
+    /**
+     * @refer templates/admin.players.ajax.tpl
+     * @author carloshenrq
+     */
+    'ADMIN_DONATION_TITLE'        => 'Administração &raquo; Doações',
+
+    /**
      * Mensagens de erro padrão.
      */
     'ERR_TITLE'                 => 'Acesso negado',
     'ERR_RECAPTCHA'             => 'Código de verificação inválido. Verifique por favor.',
     'ERR_MAINTENCE'             => 'Em manutenção.',
     'ERR_ACCESS_DENIED'         => 'Você não possui direito de acesso a este local!',
+    'ERR_MOBILE_ACCESS'         => 'Indisponivel para acesso mobile.',
     'ERR_NEED_SIGNIN'           => [
         'Você precisa estar logado para realizar esta ação.',
         'Para entrar, <label class="lbl-link" for="bracp-modal-login">clique aqui</label>.',
