@@ -104,7 +104,7 @@
             <div class="bracp-header">
                 <input type="checkbox" id="_bracp-menu-check-0" class="bracp-menu-check"/>
                 <label class="btn" for="_bracp-menu-check-0">
-                    ##MENU##
+                    @@MENU(TITLE)
                 </label>
                 <div class="bracp-menu">
                     {include 'menu.tpl'}

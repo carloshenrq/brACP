@@ -59,25 +59,76 @@ class Language
      */
     public static function parse($textToTranslate)
     {
-        // Define que irá obter o cache do arquivo de traduções.
-        return Cache::get('BRACP_LANG_' . self::$lang . '_' . hash('md5', $textToTranslate),
-            function() use ($textToTranslate) {
-                if(preg_match_all('/##([^##]+)##/', $textToTranslate, $matches) > 0)
-                {
-                    $index = $matches[0];
-                    $value = $matches[1];
+        if(preg_match_all('/\@\@([^\(]+)\(([^\)]+)*\)/', $textToTranslate, $matches))
+        {
+            $origins = $matches[0];
+            $indexes = $matches[1];
+            $values  = $matches[2];
 
-                    foreach($index as $i => $var)
-                    {
-                        if(preg_match('/##([^,]+),(.*)##/', $var, $matches))
-                            $textToTranslate = str_replace($var, self::translateLn($matches[1], $matches[2]), $textToTranslate);
-                        else
-                            $textToTranslate = str_replace($var, self::translate($value[$i]), $textToTranslate);
-                    }
+            $count = count($origins);
+
+            for($i = 0; $i < $count; $i++)
+            {
+                $itens = explode(',', $indexes[$i]);
+                $lang = null;
+
+                foreach($itens as $item)
+                {
+                    if(is_null($lang))
+                        $lang = self::$translation[trim($item)];
+                    else
+                        $lang = $lang[$item];
                 }
 
-                return $textToTranslate;
-            });
+                // Obtém os dados a serem utilizados.
+                $data = explode(',', trim($values[$i]));
+
+                // Primeiro elemento diz que será o index a ser alterado.
+                $data2Pop = array_shift($data);
+
+                foreach($data as &$ptr)
+                {
+                    $ptr = trim($ptr);
+                }
+
+                // Se a variavel for definida na tradução, então realiza a tradução da linha.
+                if(isset($lang[$data2Pop]))
+                {
+                    // Chama o sprintf e obtém o texto a ser alterado.
+                    $find = call_user_func_array('sprintf', array_merge([$lang[$data2Pop]], $data));
+
+                    // Troca no texto as variaveis informadas.
+                    $textToTranslate = str_replace($origins[$i], $find, $textToTranslate);
+                }
+
+                // Remove da memória as variaveis identificadas.
+                unset($lang, $find, $data2Pop, $data, $itens);
+            }
+
+            unset($i, $count, $values, $indexes, $origins);
+        }
+        unset($maches);
+
+        return $textToTranslate;
+        // // Define que irá obter o cache do arquivo de traduções.
+        // return Cache::get('BRACP_LANG_' . self::$lang . '_' . hash('md5', $textToTranslate),
+        //     function() use ($textToTranslate) {
+        //         if(preg_match_all('/##([^##]+)##/', $textToTranslate, $matches) > 0)
+        //         {
+        //             $index = $matches[0];
+        //             $value = $matches[1];
+
+        //             foreach($index as $i => $var)
+        //             {
+        //                 if(preg_match('/##([^,]+),(.*)##/', $var, $matches))
+        //                     $textToTranslate = str_replace($var, self::translateLn($matches[1], $matches[2]), $textToTranslate);
+        //                 else
+        //                     $textToTranslate = str_replace($var, self::translate($value[$i]), $textToTranslate);
+        //             }
+        //         }
+
+        //         return $textToTranslate;
+        //     });
     }
 
     /**

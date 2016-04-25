@@ -23,26 +23,40 @@ return
      * @refer templates/menu.tpl
      * @author carloshenrq
      */
-    'MENU'                      => 'Menu',
-    'MENU_HOME'                 => 'Principal',
-    'MENU_ADMIN'                => 'Administração',
-    'MENU_ADMIN_BACKUP'         => 'Criar Backup',
-    'MENU_ADMIN_THEMES'         => 'Atualizar Temas',
-    'MENU_ADMIN_PLAYERS'        => 'Jogadores',
-    'MENU_ADMIN_DONATION'       => 'Doações',
-    'MENU_MYACC'                => 'Minha Conta',
-    'MENU_MYACC_LOGIN'          => 'Entrar',
-    'MENU_MYACC_CREATE'         => 'Registrar',
-    'MENU_MYACC_CREATE_RESEND'  => 'Código de Ativação',
-    'MENU_MYACC_RECOVER'        => 'Recuperar Conta',
-    'MENU_MYACC_CHANGEPASS'     => 'Mudar Senha',
-    'MENU_MYACC_CHANGEMAIL'     => 'Mudar E-mail',
-    'MENU_MYACC_CHARS'          => 'Personagens',
-    'MENU_MYACC_DONATIONS'      => 'Doações',
-    'MENU_MYACC_LOGOUT'         => 'Sair',
-    'MENU_RANKINGS'             => 'Classificações',
-    'MENU_RANKINGS_CHARS'       => 'Jogadores',
-    'MENU_RANKING_ECONOMY'      => 'Economia',
+    'MENU'  => [
+        'TITLE'     => 'Menu',
+        'HOME'      => 'Principal',
+        'ADMIN'     => [
+            'TITLE'     => 'Administração',
+            'BACKUP'    => 'Criar Backup',
+            'THEMES'    => 'Atualizar Temas',
+            'PLAYERS'   => 'Jogadores',
+            'DONATION'  => 'Doações',
+        ],
+        'MYACC'     => [
+            'TITLE'         => 'Minha Conta',
+            'UNAUTHENTICATED'   => [
+                'LOGIN'         => 'Entrar',
+                'CREATE'        => 'Registrar',
+                'CREATE_SEND'   => 'Código de Ativação',
+                'RECOVER'       => 'Recuperar',
+                ],
+            'AUTHENTICATED'     => [
+                'CHANGE'    => [
+                    'PASS'  => 'Alterar Senha',
+                    'MAIL'  => 'Mudar E-mail',
+                ],
+                'CHARS'     => 'Personagens',
+                'DONATION'  => 'Doações (%s)',
+                'LOGOUT'    => 'Sair (%s)',
+            ],
+        ],
+        'RANKINGS'  =>  [
+            'TITLE'     => 'Classificações',
+            'CHARS'     => 'Jogadores',
+            'ECONOMY'   => 'Economia',
+        ],
+    ],
 
     /**
      * @refer templates/default.tpl
