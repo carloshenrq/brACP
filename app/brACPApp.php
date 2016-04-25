@@ -99,9 +99,9 @@ class brACPApp extends Slim\App
         $this->view->setCaching(false);
 
         // Adiciona os middlewares na rota para serem executados.
+        $this->add(new RouteCustom());
         $this->add(new Route());
         $this->add(new Database());
-        // $this->add(new IpAddress(true, ['10.0.0.1', '10.0.0.2']));
 
         // Define a instância global como sendo o proprio.
         self::$app = $this;
