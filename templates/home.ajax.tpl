@@ -16,6 +16,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *}
 
-<h1>##HOME_TITLE##</h1>
+<h1>@@HOME(TITLE)</h1>
 
-<p>##HOME_MESSAGE,0##</p>
+<p>@@HOME(MESSAGE)</p>

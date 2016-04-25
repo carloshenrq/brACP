@@ -1449,7 +1449,7 @@ class Account
         // Verificação recaptcha para saber se a requisição realizada
         //  é verdadeira e pode continuar.
         if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['g-recaptcha-response']))
-            return ['login_message' => ['error' => '##ERR_RECAPTCHA##']];
+            return ['login_message' => ['error' => '@@ERRORS(RECAPTCHA)']];
 
         // Obtém a senha que será utilizada para realizar login.
         $user_pass = ((BRACP_MD5_PASSWORD_HASH) ? hash('md5', $data['user_pass']) : $data['user_pass']);
@@ -1462,19 +1462,19 @@ class Account
         // Se a conta retornada for igual a null, não foi encontrada
         //  Então, retorna mensagem de erro.
         if(is_null($account))
-            return ['login_message' => ['error' => '##LOGIN_ERR,MISMATCH##']];
+            return ['login_message' => ['error' => '@@LOGIN,ERROR(MISMATCH)']];
 
         // Se a conta do usuário é inferior ao nivel mínimo permitido
         //  para login, então retorna mensagem de erro.
         if($account->getGroup_id() < BRACP_ALLOW_LOGIN_GMLEVEL || $account->getState() != 0)
-            return ['login_message' => ['error' => '##LOGIN_ERR,DENIED##']];
+            return ['login_message' => ['error' => '@@LOGIN,ERROR(DENIED)']];
 
         // Define os dados de sessão para o usuário.
         self::getApp()->getSession()->BRACP_ISLOGGEDIN = true;
         self::getApp()->getSession()->BRACP_ACCOUNTID = $account->getAccount_id();
 
         // Retorna mensagem de login realizado com sucesso.
-        return ['login_message' => ['success' => '##LOGIN_SUCCESS##']];
+        return ['login_message' => ['success' => '@@LOGIN(SUCCESS)']];
     }
 
     /**

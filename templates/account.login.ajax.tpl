@@ -17,7 +17,7 @@
  *}
 <div class="modal">
     <div class="modal-header">
-        ##LOGIN_TITLE##
+        @@LOGIN(TITLE)
         <label for="bracp-modal-login" class="modal-close">&times;</label>
     </div>
     <div class="modal-body">
@@ -31,24 +31,24 @@
             <div class="bracp-message error">{$login_message.error}</div>
         {/if}
 
-        ##LOGIN_MSG,0##
+        @@LOGIN,MESSAGE(HEADER)
 
         <form class="ajax-form" action="{$smarty.const.BRACP_DIR_INSTALL_URL}account/login" autocomplete="off" method="post" target=".modal-login-body" data-block="1">
             <div class="input-forms">
-                <input type="text" id="userid" name="userid" placeholder="##LOGIN_PLACEHOLDER,USERID##" size="24" maxlength="24" pattern="{$smarty.const.BRACP_REGEXP_USERNAME}" required/>
+                <input type="text" id="userid" name="userid" placeholder="@@LOGIN,HOLDER(USERID)" size="24" maxlength="24" pattern="{$smarty.const.BRACP_REGEXP_USERNAME}" required/>
 
-                <input type="password" id="user_pass" name="user_pass" placeholder="##LOGIN_PLACEHOLDER,PASSWD##" size="24" maxlength="24" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>
+                <input type="password" id="user_pass" name="user_pass" placeholder="@@LOGIN,HOLDER(PASSWD)" size="24" maxlength="24" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>
 
                 {if $smarty.const.BRACP_RECAPTCHA_ENABLED eq true}
                     <div class="bracp-g-recaptcha" data-sitekey="{$smarty.const.BRACP_RECAPTCHA_PUBLIC_KEY}"></div>
                 {/if}
 
-                <input class="btn btn-success" type="submit" value="##LOGIN_BUTTONS,SUBMIT##"/>
-                <input class="btn" type="reset" value="##LOGIN_BUTTONS,RESET##"/>
+                <input class="btn btn-success" type="submit" value="@@LOGIN,BUTTONS(SUBMIT)"/>
+                <input class="btn" type="reset" value="@@LOGIN,BUTTONS(RESET)"/>
             </div>
         </form>
 
-        ##LOGIN_MSG,LOST_ACC##<br>
-        ##LOGIN_MSG,CREATE_ACC##
+        @@LOGIN,MESSAGE(LOST_ACC)<br>
+        @@LOGIN,MESSAGE(CREATE_ACC)
     </div>
 </div>

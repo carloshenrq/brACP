@@ -81,30 +81,38 @@ return
      * @refer templates/home.tpl
      * @author carloshenrq
      */
-    'HOME_TITLE'                => 'Principal',
-    'HOME_MESSAGE'              => [
-        'Seja muito bem vindo ao painel de controle.'
+    'HOME'      => [
+        'TITLE'     => 'Principal',
+        'MESSAGE'   =>  'Seja muito bem vindo ao painel de controle.'
     ],
 
     /**
      * @refer templates/account.login.ajax.tpl
      * @author carloshenrq
      */
-    'LOGIN_TITLE'               => 'Minha Conta &raquo; Entrar',
-    'LOGIN_ERR'                 => [
-        'MISMATCH'  => 'Combinação de usuário e senha incorretos.',
-        'DENIED'    => 'Acesso negado. Você não pode realizar login.',
+    'LOGIN'     => [
+        'TITLE'     => 'Minha Conta &raquo; Entrar',
+
+        'ERROR'     => [
+            'MISMATCH'  => 'Combinação de usuário e senha incorretos.',
+            'DENIED'    => 'Acesso negado. Você não pode realizar login.',
+        ],
+        'SUCCESS'   => 'Login realizado com sucesso. Aguarde...',
+        'MESSAGE'   => [
+            'HEADER'     => 'Para acessar os dados de sua conta, você deve realizar o acesso utilizando seu nome de usuário e senha.',
+            'LOST_ACC'      => 'Perdeu sua conta? <label class="lbl-link" for="bracp-modal-recover">clique aqui</label>',
+            'CREATE_ACC'    => 'Não possui uma conta? <label class="lbl-link" for="bracp-modal-create">clique aqui</label>',
+        ],
+        'HOLDER'    => [
+            'USERID'    => 'Nome de usuário',
+            'PASSWD'    => 'Senha de usuário',
+        ],
+        'BUTTONS'   => [
+            'SUBMIT'    => 'Entrar',
+            'RESET'     => 'Limpar',
+        ],
     ],
-    'LOGIN_SUCCESS'             => 'Login realizado com sucesso. Aguarde...',
-    'LOGIN_MSG'                 => [
-        'Para acessar os dados de sua conta, você deve realizar o acesso utilizando seu nome de usuário e senha.',
-        'LOST_ACC'      => 'Perdeu sua conta? <label class="lbl-link" for="bracp-modal-recover">clique aqui</label>',
-        'CREATE_ACC'    => 'Não possui uma conta? <label class="lbl-link" for="bracp-modal-create">clique aqui</label>',
-    ],
-    'LOGIN_PLACEHOLDER'         => [
-        'USERID'    => 'Nome de usuário',
-        'PASSWD'    => 'Senha de usuário',
-    ],
+
     'LOGIN_BUTTONS'             => [
         'SUBMIT'                => 'Entrar',
         'RESET'                 => 'Limpar',
@@ -114,8 +122,10 @@ return
      * @refer templates/account.logout.ajax.tpl
      * @author carloshenrq
      */
-    'LOGOUT_TITLE'              => 'Minha Conta &raquo; Sair',
-    'LOGOUT_SUCCESS'            => 'Logout efetuado com sucesso! Aguarde...',
+    'LOGOUT'    => [
+        'TITLE'     => 'Minha Conta &raquo; Sair',
+        'SUCCESS'   => 'Logout efetuado com sucesso! Aguarde...',
+    ],
 
     /**
      * @refer templates/account.register.ajax.tpl
@@ -375,8 +385,12 @@ return
     /**
      * Mensagens de erro padrão.
      */
+
+    'ERRORS'    => [
+        'RECAPTCHA' => 'Código de verificação inválido. Verifique por favor.',
+    ],
+
     'ERR_TITLE'                 => 'Acesso negado',
-    'ERR_RECAPTCHA'             => 'Código de verificação inválido. Verifique por favor.',
     'ERR_MAINTENCE'             => 'Em manutenção.',
     'ERR_ACCESS_DENIED'         => 'Você não possui direito de acesso a este local!',
     'ERR_MOBILE_ACCESS'         => 'Indisponivel para acesso mobile.',

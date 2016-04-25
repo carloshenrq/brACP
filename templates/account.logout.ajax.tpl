@@ -16,12 +16,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *}
 
-<h1>##LOGOUT_TITLE##</h1>
+<h1>@@LOGOUT(TITLE)</h1>
 
 <script>
     window.location.href = '{$smarty.const.BRACP_DIR_INSTALL_URL}';
 </script>
 
 <p class="bracp-message success">
-    ##LOGOUT_SUCCESS##
+    @@LOGOUT(SUCCESS)
 </p>
