@@ -93,6 +93,4 @@ CREATE TABLE IF NOT EXISTS `bracp_account_confirm` (
     INDEX (`AccountID`)
 ) ENGINE=MyISAM COLLATE='utf8_swedish_ci';
 
-BRACP_CONFIRM_ACCOUNT
-
 SET FOREIGN_KEY_CHECKS = 1;
