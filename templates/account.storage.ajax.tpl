@@ -36,7 +36,7 @@
         <tbody>
             {foreach from=$storage item=row}
                 <tr class="{if $row->getAttribute() > 0}error{/if}">
-                    <td align="left">{Format::storage($row)}</td>
+                    <td align="left">{Format::inventory($row)}</td>
                     <td align="right">{Format::zeny($row->getAmount())}</td>
                     <td align="left">@@ITEM,TYPE({$row->getItem()->getType()})</td>
                 </tr>
