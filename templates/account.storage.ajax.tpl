@@ -23,9 +23,36 @@
         @@STORAGE,ERROR(NO_ITEMS)
     </div>
 {else}
+    @@STORAGE,MESSAGE(HEADER)
+
+    <input id="item-radio-0" name="item-radio" type="radio" class="item-radio item-radio-0" checked/>
+    <input id="item-radio-2" name="item-radio" type="radio" class="item-radio item-radio-2"/>
+    <input id="item-radio-3" name="item-radio" type="radio" class="item-radio item-radio-3"/>
+    <input id="item-radio-4" name="item-radio" type="radio" class="item-radio item-radio-4"/>
+    <input id="item-radio-5" name="item-radio" type="radio" class="item-radio item-radio-5"/>
+    <input id="item-radio-6" name="item-radio" type="radio" class="item-radio item-radio-6"/>
+    <input id="item-radio-7" name="item-radio" type="radio" class="item-radio item-radio-7"/>
+    <input id="item-radio-8" name="item-radio" type="radio" class="item-radio item-radio-8"/>
+    <input id="item-radio-10" name="item-radio" type="radio" class="item-radio item-radio-10"/>
+    <input id="item-radio-11" name="item-radio" type="radio" class="item-radio item-radio-11"/>
+    <input id="item-radio-12" name="item-radio" type="radio" class="item-radio item-radio-12"/>
+    <input id="item-radio-18" name="item-radio" type="radio" class="item-radio item-radio-18"/>
 
     <table border="1" align="center" class="table">
-        <caption>@@STORAGE,MESSAGE(HEADER)</caption>
+        <caption>
+            <label class="btn btn-item-radio-0" for="item-radio-0">@@ITEM,TYPE(0)</label>
+            <label class="btn btn-item-radio-2" for="item-radio-2">@@ITEM,TYPE(2)</label>
+            <label class="btn btn-item-radio-3" for="item-radio-3">@@ITEM,TYPE(3)</label>
+            <label class="btn btn-item-radio-4" for="item-radio-4">@@ITEM,TYPE(4)</label>
+            <label class="btn btn-item-radio-5" for="item-radio-5">@@ITEM,TYPE(5)</label>
+            <label class="btn btn-item-radio-6" for="item-radio-6">@@ITEM,TYPE(6)</label>
+            <label class="btn btn-item-radio-7" for="item-radio-7">@@ITEM,TYPE(7)</label>
+            <label class="btn btn-item-radio-8" for="item-radio-8">@@ITEM,TYPE(8)</label>
+            <label class="btn btn-item-radio-10" for="item-radio-10">@@ITEM,TYPE(10)</label>
+            <label class="btn btn-item-radio-11" for="item-radio-11">@@ITEM,TYPE(11)</label>
+            <label class="btn btn-item-radio-12" for="item-radio-12">@@ITEM,TYPE(12)</label>
+            <label class="btn btn-item-radio-18" for="item-radio-18">@@ITEM,TYPE(18)</label>
+        </caption>
         <thead>
             <tr>
                 <th align="left">Descrição do Item</th>
@@ -35,7 +62,7 @@
         </thead>
         <tbody>
             {foreach from=$storage item=row}
-                <tr class="{if $row->getAttribute() > 0}error{/if}">
+                <tr class="{if $row->getAttribute() > 0}error{/if} item-type item-type-{$row->getItem()->getType()}">
                     <td align="left">{Format::inventory($row)}</td>
                     <td align="right">{Format::zeny($row->getAmount())}</td>
                     <td align="left">@@ITEM,TYPE({$row->getItem()->getType()})</td>

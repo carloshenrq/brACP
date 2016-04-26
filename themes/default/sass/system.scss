@@ -47,6 +47,43 @@ input[type="text"], input[type="password"], select
     @include border-radius(3px);
 }
 
+.item-radio
+{
+    display: none;
+}
+
+.item-radio-0:not(:checked) ~ .table tr.item-type-0,
+.item-radio-2:not(:checked) ~ .table tr.item-type-2,
+.item-radio-3:not(:checked) ~ .table tr.item-type-3,
+.item-radio-4:not(:checked) ~ .table tr.item-type-4,
+.item-radio-5:not(:checked) ~ .table tr.item-type-5,
+.item-radio-6:not(:checked) ~ .table tr.item-type-6,
+.item-radio-7:not(:checked) ~ .table tr.item-type-7,
+.item-radio-8:not(:checked) ~ .table tr.item-type-8,
+.item-radio-10:not(:checked) ~ .table tr.item-type-10,
+.item-radio-11:not(:checked) ~ .table tr.item-type-11,
+.item-radio-12:not(:checked) ~ .table tr.item-type-12,
+.item-radio-18:not(:checked) ~ .table tr.item-type-18
+{
+    display: none;
+}
+
+.item-radio-0:checked ~ .table caption .btn-item-radio-0,
+.item-radio-2:checked ~ .table caption .btn-item-radio-2,
+.item-radio-3:checked ~ .table caption .btn-item-radio-3,
+.item-radio-4:checked ~ .table caption .btn-item-radio-4,
+.item-radio-5:checked ~ .table caption .btn-item-radio-5,
+.item-radio-6:checked ~ .table caption .btn-item-radio-6,
+.item-radio-7:checked ~ .table caption .btn-item-radio-7,
+.item-radio-8:checked ~ .table caption .btn-item-radio-8,
+.item-radio-10:checked ~ .table caption .btn-item-radio-10,
+.item-radio-11:checked ~ .table caption .btn-item-radio-11,
+.item-radio-12:checked ~ .table caption .btn-item-radio-12,
+.item-radio-18:checked ~ .table caption .btn-item-radio-18
+{
+    font-weight: bold !important;
+}
+
 .modal-container
 {
     position: absolute;
