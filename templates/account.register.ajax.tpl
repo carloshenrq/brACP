@@ -17,13 +17,13 @@
  *}
 <div class="modal">
     <div class="modal-header">
-        ##CREATE_TITLE##
+        @@CREATE(TITLE)
         <label for="bracp-modal-create" class="modal-close">&times;</label>
     </div>
     <div class="modal-body">
         {if $smarty.const.BRACP_ALLOW_CREATE_ACCOUNT eq false}
             <div class="bracp-message error">
-                ##CREATE_ERR,DISABLED##
+                @@CREATE,ERROR(DISABLED)
             </div>
         {else}
             {if isset($register_message.success) eq true}
@@ -34,33 +34,33 @@
                 <div class="bracp-message error">{$register_message.error}</div>
             {/if}
 
-            ##CREATE_MSG,0##
+            @@CREATE,MESSAGE(HEADER)
 
             <form class="ajax-form" action="{$smarty.const.BRACP_DIR_INSTALL_URL}account/register" autocomplete="off" method="post" target=".modal-create-body" data-block="1">
 
                 <div class="input-forms">
-                    <input type="text" id="userid" name="userid" placeholder="##CREATE_PLACEHOLDER,USERID##" size="30" maxlength="30" pattern="{$smarty.const.BRACP_REGEXP_USERNAME}" required/>
+                    <input type="text" id="userid" name="userid" placeholder="@@CREATE,HOLDER(USERID)" size="30" maxlength="30" pattern="{$smarty.const.BRACP_REGEXP_USERNAME}" required/>
 
-                    <input type="password" id="user_pass" name="user_pass" placeholder="##CREATE_PLACEHOLDER,PASSWORD##" size="30" maxlength="30" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>
+                    <input type="password" id="user_pass" name="user_pass" placeholder="@@CREATE,HOLDER(PASSWORD)" size="30" maxlength="30" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>
 
-                    <input type="password" id="user_pass_conf" name="user_pass_conf" placeholder="##CREATE_PLACEHOLDER,CONFIRM_PASS##" size="30" maxlength="30" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>
+                    <input type="password" id="user_pass_conf" name="user_pass_conf" placeholder="@@CREATE,HOLDER(PASSWORD_CONFIRM)" size="30" maxlength="30" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>
 
                     <div>
                         <input id="sex_m" name="sex" value="M" type="radio" checked/>
-                        <label for="sex_m">##CREATE_SEX,M##</label>
+                        <label for="sex_m">@@CREATE,HOLDER(MALE)</label>
 
                         <input id="sex_f" name="sex" value="F" type="radio"/>
-                        <label for="sex_f">##CREATE_SEX,F##</label>
+                        <label for="sex_f">@@CREATE,HOLDER(FEMALE)</label>
                     </div>
 
-                    <input type="text" id="email" name="email" placeholder="##CREATE_PLACEHOLDER,EMAIL##" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
+                    <input type="text" id="email" name="email" placeholder="@@CREATE,HOLDER(EMAIL)" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
 
-                    <input type="text" id="email_conf" name="email_conf" placeholder="##CREATE_PLACEHOLDER,CONFIRM_EMAIL##" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
+                    <input type="text" id="email_conf" name="email_conf" placeholder="@@CREATE,HOLDER(EMAIL_CONFIRM)" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
 
                     <div>
-                        <input type="checkbox" id="terms" name="terms" title="Você precisa aceitar os termos para continuar." required/>
+                        <input type="checkbox" id="terms" name="terms" required/>
                         <label for="terms">
-                            ##CREATE_BUTTONS,ACCEPT##
+                            @@CREATE,HOLDER(ACCEPT_TERMS)
                         </label>
                     </div>
 
@@ -68,8 +68,8 @@
                         <div class="bracp-g-recaptcha" data-sitekey="{$smarty.const.BRACP_RECAPTCHA_PUBLIC_KEY}"></div>
                     {/if}
 
-                    <input class="btn btn-success" type="submit" value="##CREATE_BUTTONS,SUBMIT##"/>
-                    <input class="btn" type="reset" value="##CREATE_BUTTONS,RESET##"/>
+                    <input class="btn btn-success" type="submit" value="@@CREATE,BUTTONS(SUBMIT)"/>
+                    <input class="btn" type="reset" value="@@CREATE,BUTTONS(RESET)"/>
                 </div>
 
             </form>

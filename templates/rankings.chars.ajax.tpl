@@ -16,23 +16,23 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *}
 
-<h1>##RANKINGS_MSG,CHARS_TITLE##</h1>
+<h1>@@RANKINGS,CHARS(TITLE)</h1>
 
 {if count($chars) eq 0}
     <p class="bracp-message warning">
-        ##RANKINGS_MSG,NO_CHARS##
+        @@RANKINGS,CHARS(NO_CHARS)
     </p>
 {else}
     <table border="1" align="center" class="table ranking">
-        <caption><strong>##RANKINGS_MSG,CHARS_TBL_TITLE##</strong></caption>
+        <caption><strong>@@RANKINGS,CHARS(CAPTION)</strong></caption>
         <thead>
             <tr>
-                <th align="right">##RANKINGS_MSG,TBL_POS##</th>
-                <th align="left">##RANKINGS_MSG,TBL_NAME##</th>
-                <th align="left">##RANKINGS_MSG,TBL_CLASS##</th>
-                <th align="right" class="no-mobile">##RANKINGS_MSG,TBL_LEVEL##</th>
+                <th align="right">@@RANKINGS,TABLE(POSIT)</th>
+                <th align="left">@@RANKINGS,TABLE(NAME)</th>
+                <th align="left">@@RANKINGS,TABLE(LEVEL)</th>
+                <th align="right" class="no-mobile">@@RANKINGS,TABLE(CLASS)</th>
                 {if $smarty.const.BRACP_ALLOW_SHOW_CHAR_STATUS eq true}
-                    <th align="center" class="no-mobile">##RANKINGS_MSG,TBL_STATUS##</th>
+                    <th align="center" class="no-mobile">@@RANKINGS,TABLE(STATUS)</th>
                 {/if}
             </tr>
         </thead>
