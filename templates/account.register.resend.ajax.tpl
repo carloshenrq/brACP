@@ -17,13 +17,13 @@
  *}
 <div class="modal">
     <div class="modal-header">
-        ##RESEND_TITLE##
+        @@RESEND(TITLE)
         <label for="bracp-modal-create-resend" class="modal-close">&times;</label>
     </div>
     <div class="modal-body">
         {if $smarty.const.BRACP_CONFIRM_ACCOUNT eq false}
             <div class="bracp-message error">
-                ##RESEND_ERR,DISABLED##
+                @@RESEND,ERROR(DISABLED)
             </div>
         {else}
         
@@ -35,17 +35,17 @@
                 <div class="bracp-message error">{$resend_message.error}</div>
             {/if}
 
-            ##RESEND_MSG,0##
+            @@RESEND,MESSAGE(HEADER)
 
             <form class="ajax-form" action="{$smarty.const.BRACP_DIR_INSTALL_URL}account/register/resend" autocomplete="off" method="post" target=".modal-create-resend-body" data-block="1">
 
                 <div class="input-forms">
-                    <input type="text" id="userid" name="userid" placeholder="##RESEND_PLACEHOLDER,USERID##" size="30" maxlength="30" pattern="{$smarty.const.BRACP_REGEXP_USERNAME}" required/>
+                    <input type="text" id="userid" name="userid" placeholder="@@RESEND,HOLDER(USERID)" size="30" maxlength="30" pattern="{$smarty.const.BRACP_REGEXP_USERNAME}" required/>
 
-                    <input type="text" id="email" name="email" placeholder="##RESEND_PLACEHOLDER,EMAIL##" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
+                    <input type="text" id="email" name="email" placeholder="@@RESEND,HOLDER(EMAIL)" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
 
-                    <input class="btn btn-success" type="submit" value="##RESEND_BUTTONS,SUBMIT##"/>
-                    <input class="btn" type="reset" value="##RESEND_BUTTONS,RESET##"/>
+                    <input class="btn btn-success" type="submit" value="@@RESEND,BUTTONS(SUBMIT)"/>
+                    <input class="btn" type="reset" value="@@RESEND,BUTTONS(RESET)"/>
                 </div>
 
             </form>

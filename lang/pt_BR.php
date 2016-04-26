@@ -132,92 +132,94 @@ return
      * @refer templates/account.register.ajax.tpl
      * @author carloshenrq
      */
-    'CREATE_TITLE'              => 'Registrar',
-    'CREATE_ERR'                => [
-        'DISABLED'          => 'Criação de contas está desativada.',
-        'MISMATCH_PASS'     => 'As senhas digitadas não conferem!',
-        'MISMATCH_MAIL'     => 'Os endereços de e-mail digitados não conferem!',
-        'USERID_USED'       => 'Nome de usuário ou endereço de e-mail já está em uso.',
-
-        'CONFIRM_DISABLED'  => 'Esta opção está desativada. Verifique com o administrador.',
-        'CONFIRM_USED'      => 'O Código de confirmação já foi utilizado ou é inválido.',
-        'CONFIRM_NOACC'     => 'Conta para enviar o código de ativação é inválida.,'
-    ],
-    'CREATE_SUCCESS'            => [
-        'Sua conta foi criada com sucesso! Você já pode realizar login.',
-        'CONFIRM'       => 'Você confirmou com sucesso sua conta. Você já pode realizar login.',
-        'CONFIRM_SEND'  => 'O Código de ativação foi enviado com sucesso para o endereço de e-mail cadastrado.',
-    ],
-    'CREATE_MAIL'               => [
-        'TITLE_CONFIRM'     => 'Confirme seu Registro',
-        'TITLE_CONFIRMED'   => 'Conta Confirmada',
-        'TITLE_SUCCESS'     => 'Conta Registrada',
-    ],
-    'CREATE_MSG'                => [
-        'Para criar sua conta, é necessário que você informe os dados abaixo corretamente para que seja possivel seu acesso ao jogo e as funções do painel de controle.',
-    ],
-    'CREATE_PLACEHOLDER'        => [
-        'USERID'            => 'Nome de usuário',
-        'PASSWORD'          => 'Senha de usuário',
-        'CONFIRM_PASS'      => 'Confirme a senha',
-        'EMAIL'             => 'Endereço de e-mail',
-        'CONFIRM_EMAIL'     => 'Confirme o email',
-    ],
-    'CREATE_SEX'                => [
-        'M' => 'Masculino',
-        'F' => 'Feminino',
-    ],
-    'CREATE_BUTTONS'            => [
-        'ACCEPT'    => 'Eu concordo com os termos do servidor.',
-        'SUBMIT'    => 'Registrar',
-        'RESET'     => 'Limpar',
+    'CREATE'    => [
+        'TITLE'     => 'Minha Conta &raquo; Registrar',
+        'ERROR'     => [
+            'DISABLED'  => 'Criação de contas está desativada.',
+            'MISMATCH'  => [
+                'PASSWORD'  => 'As senhas digitadas não conferem!',
+                'EMAIL'     => 'Os endereços de e-mail digitados não conferem!',
+            ],
+            'USED'      => 'Nome de usuário ou endereço de e-mail já está em uso.',
+        ],
+        'SUCCESS'   => 'Sua conta foi criada com sucesso! Você já pode realizar login.',
+        'MESSAGE'   => [
+            'HEADER'    => 'Para criar sua conta, é necessário que você informe os dados abaixo corretamente para que seja possivel seu acesso ao jogo e as funções do painel de controle.',
+        ],
+        'MAIL'      => [
+            'TITLE' => 'Conta Registrada',
+        ],
+        'HOLDER'    => [
+            'USERID'                => 'Nome de usuário',
+            'PASSWORD'              => 'Senha de usuário',
+            'PASSWORD_CONFIRM'      => 'Confime a senha',
+            'MALE'                  => 'Masculino',
+            'FEMALE'                => 'Feminino',
+            'EMAIL'                 => 'Endereço de e-mail',
+            'EMAIL_CONFIRM'         => 'Confirme o e-mail',
+            'ACCEPT_TERMS'          => 'Eu concordo com os termos do servidor.',
+        ],
+        'BUTTONS'   => [
+            'SUBMIT'    => 'Registrar',
+            'RESET'     => 'Limpar'
+        ],
     ],
 
     /**
      * @refer templates/account.register.resend.ajax.tpl
      * @author carloshenrq
      */
-    'RESEND_TITLE'          => 'Registrar &raquo; Enviar Código de Ativação',
-    'RESEND_ERR'            => [
-        'DISABLED'  => 'O código de ativação de contas está desativado.',
-        'NOACC'     => 'Dados para reenvio do código de confirmação é inválido.'
-    ],
-    'RESEND_SUCCESS'        => 'Código de confirmação enviado com sucesso para o e-mail cadastrado.',
-    'RESEND_MSG'            => [
-        'Para reenviar o código de ativação de sua conta, você deve digitar seu nome de usuário e endereço de e-mail cadastrados para que sejam reenviados com sucesso.',
-    ],
-    'RESEND_PLACEHOLDER'    => [
-        'USERID'    => 'Nome de usuário',
-        'EMAIL'     => 'E-mail cadastradado',
-    ],
-    'RESEND_BUTTONS'    => [
-        'SUBMIT'    => 'Reenviar',
-        'RESET'     => 'Limpar',
+    'RESEND'    => [
+        'TITLE'     => 'Minhca Conta &raquo; Código de Ativação',
+        'ERROR'     => [
+            'DISABLED'  => 'O código de ativação de contas está desativado.',
+            'NOACC'     => 'Dados para reenvio do código de confirmação é inválido.',
+            'USED'      => 'O Código de confirmação já foi utilizado ou é inválido.',
+        ],
+        'MAIL'      => [
+            'TITLE_CONFIRM'     => 'Confirme seu Registro',
+            'TITLE_CONFIRMED'   => 'Conta Confirmada',
+        ],
+        'SUCCESS'   => 'Código de confirmação enviado com sucesso para o e-mail cadastrado.',
+        'CONFIRMED' => 'Você confirmou com sucesso sua conta. Você já pode realizar login.',
+        'MESSAGE'   => [
+            'HEADER'    => 'Para reenviar o código de ativação de sua conta, você deve digitar seu nome de usuário e endereço de e-mail cadastrados para que sejam reenviados com sucesso.',
+        ],
+        'HOLDER'    => [
+            'USERID' => 'Nome de usuário',
+            'EMAIL'  => 'E-mail cadastradado',
+        ],
+        'BUTTONS'   => [
+            'SUBMIT'    => 'Reenviar',
+            'RESET'     => 'Limpar',
+        ],
     ],
 
     /**
      * @refer templates/rankings.chars.ajax.tpl
      * @author carloshenrq
      */
-    'RANKINGS_MSG'                  => [
-        // Mensagens padrão.
-        'NO_CHARS'      => 'Não existem personagens para este ranking.',
+    'RANKINGS'      => [
+        'NO_CHARS'  => 'Não existem personagens para este ranking.',
 
-        // Ranking de personagens.
-        'CHARS_TITLE'       => 'Rankings &raquo; Personagens &raquo; Geral',
-        'CHARS_TBL_TITLE'   => 'Top 100 jogadores do servidor',
+        'CHARS' => [
+            'TITLE'     => 'Rankings &raquo; Personagens &raquo; Geral',
+            'CAPTION'   => 'Top 100 jogadores do servidor',
+        ],
 
-        // Ranking de economia
-        'ECONOMY_TITLE'     => 'Rankings &raquo; Personagens &raquo; Economia',
-        'ECONOMY_TBL_TITLE' => 'Top 100 jogadores mais ricos',
+        'ECONOMY'   => [
+            'TITLE'     => 'Rankings &raquo; Personagens &raquo; Economia',
+            'CAPTION'   => 'Top 100 jogadores mais ricos',
+        ],
 
-        // Tradução de informações de tabela.
-        'TBL_POS'       => 'Pos.',
-        'TBL_NAME'      => 'Nome',
-        'TBL_LEVEL'     => 'Nível',
-        'TBL_CLASS'     => 'Classe',
-        'TBL_STATUS'    => 'Status',
-        'TBL_ZENY'      => 'Zeny',
+        'TABLE' => [
+            'POSIT'     => 'Pos.',
+            'NAME'      => 'Nome',
+            'LEVEL'     => 'Nível',
+            'CLASS'     => 'Classe',
+            'STATUS'    => 'Status',
+            'ZENY'      => 'Zeny',
+        ],
     ],
 
     /**
