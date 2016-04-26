@@ -454,6 +454,13 @@ span.ajax-url, label.lbl-link {
   padding: 4px;
   border-color: lightgray;
 }
+.table tbody tr .item-display .item-image, .table tbody tr .item-display .item-text {
+  display: inline-block;
+  vertical-align: middle;
+}
+.table tbody tr .item-display .item-image + .item-text {
+  padding-left: 4px;
+}
 .table tbody tr:nth-child(even) {
   background-color: rgba(0, 0, 0, 0.1);
 }

@@ -620,6 +620,20 @@ span.ajax-url, label.lbl-link
     {
         tr
         {
+            .item-display
+            {
+                .item-image, .item-text
+                {
+                    display: inline-block;
+                    vertical-align: middle;
+                }
+
+                .item-image + .item-text
+                {
+                    padding-left: 4px;
+                }
+            }
+
             &:nth-child(even)
             {
                 background-color: rgba(0, 0, 0, .1);

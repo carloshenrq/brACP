@@ -68,6 +68,9 @@
             <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/chars" data-target=".bracp-body"><label>
                 @@MENU,MYACC,AUTHENTICATED(CHARS)
             </label></li>
+            <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/storage" data-target=".bracp-body"><label>
+                @@MENU,MYACC,AUTHENTICATED(STORAGE)
+            </label></li>
             {if $smarty.const.PAG_INSTALL eq true}
                 <li class="ajax-url no-mobile" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/pagseguro" data-target=".bracp-body"><label>
                     @@MENU,MYACC,AUTHENTICATED(DONATION, PagSeguro)

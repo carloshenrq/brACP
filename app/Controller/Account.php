@@ -59,6 +59,40 @@ class Account
      * @param ResponseInterface $response
      * @param array $args
      */
+    public static function storage(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        // Realiza a query para obter os personagens da conta logada.
+        $storage = self::getApp()->getEm()
+                        ->createQuery('
+                            SELECT
+                                storage, account, item
+                            FROM
+                                Model\Storage storage
+                            INNER JOIN
+                                storage.account account
+                            INNER JOIN
+                                storage.item item
+                            WHERE
+                                account.account_id = :account_id
+                            ORDER BY
+                                item.type ASC,
+                                item.name_japanese ASC
+                        ')
+                        ->setParameter('account_id', self::loggedUser()->getAccount_id())
+                        ->getResult();
+
+        self::getApp()->display('account.storage', [
+            'storage' => $storage
+        ]);
+    }
+
+    /**
+     * Método para realizar login
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param array $args
+     */
     public static function login(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
         self::getApp()->display('account.login', self::loginAccount($request->getParsedBody()));

@@ -36,6 +36,19 @@ class Format
         return sprintf('%.2f %s (%d bytes)', $bytes, $format[$pow], $totalBytes);
     }
 
+    public static function storage($item)
+    {
+        $img = '<img src="'.BRACP_DIR_INSTALL_URL.'data/items/icons/'.(($item->getIdentify() > 0) ? $item->getItem()->getId():'512').'.png"/>';
+        $str = (($item->getIdentify() > 0) ? (($item->getRefine() > 0) ? '+' . $item->getRefine().' ':'') . self::item($item->getItem()) : '@@ITEM(NOT_IDENTIFY) (ID: ????)');
+
+        return '<div class="item-display"><div class="item-image">'.$img.'</div><div class="item-text">'.$str.'</div></div>';
+    }
+
+    public static function item(Model\Item $item)
+    {
+        return utf8_encode($item->getName_japanese()) . (($item->getSlots() > 0) ? ' ['.$item->getSlots().']':'') . ' (ID: '.$item->getId().')';
+    }
+
     /**
      * Formata informações de data do formato indicado até o destino.
      *

@@ -47,6 +47,7 @@ return
                     'PASS'  => 'Alterar Senha',
                     'MAIL'  => 'Mudar E-mail',
                 ],
+                'STORAGE'   => 'Armazém',
                 'CHARS'     => 'Personagens',
                 'DONATION'  => 'Doações (%s)',
                 'LOGOUT'    => 'Sair (%s)',
@@ -219,6 +220,22 @@ return
             'CLASS'     => 'Classe',
             'STATUS'    => 'Status',
             'ZENY'      => 'Zeny',
+        ],
+    ],
+
+    /**
+     * @refer templates/account.storage.ajax.tpl
+     * @author carloshenrq
+     */
+    'STORAGE'       => [
+        'TITLE'     => 'Minha Conta &raquo; Armazém',
+
+        'ERROR'     => [
+            'NO_ITEMS'  => 'Você não possui itens no armazém para serem exibidos.',
+        ],
+
+        'MESSAGE'   => [
+            'HEADER'    => 'Segue abaixo a lista de todos os itens que estão no seu armazém.',
         ],
     ],
 
@@ -463,6 +480,24 @@ return
     'STATUS' => [
         0 => 'Desconectado',
         1 => 'Conectado',
+    ],
+
+    'ITEM'  =>  [
+        'NOT_IDENTIFY'  => 'Não identificado',
+        'TYPE'  => [
+            0 => 'Consumivel (Cura)',
+            2 => 'Consumivel',
+            3 => 'Não usavél',
+            4 => 'Equipamento',
+            5 => 'Armamento',
+            6 => 'Carta',
+            7 => 'Ovo de Bichinho',
+            8 => 'Equipamento de Bichinho',
+            10 => 'Munição',
+            11 => 'Consumivel',
+            12 => 'Shadow Equipment',
+            18 => 'Consumivel',
+        ],
     ],
 
     /**

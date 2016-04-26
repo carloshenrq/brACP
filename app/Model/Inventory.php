@@ -41,9 +41,10 @@ class Inventory
     protected $character;
 
     /**
-     * @Column(name="nameid", type="integer")
+     * @ManyToOne(targetEntity="Item")
+     * @JoinColumn(name="nameid", referencedColumnName="nameid", nullable=false)
      */
-    protected $nameid;
+    protected $item;
 
     /**
      * @Column(name="amount", type="integer")
@@ -130,14 +131,14 @@ class Inventory
         return $this->char = $char;
     }
 
-    public function getNameid()
+    public function getItem()
     {
-        return $this->nameid;
+        return $this->item;
     }
     
-    public function setNameid($nameid)
+    public function setItem($item)
     {
-        return $this->nameid = $nameid;
+        return $this->item = $item;
     }
 
     public function getAmount()
