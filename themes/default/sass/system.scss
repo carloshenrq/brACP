@@ -47,43 +47,6 @@ input[type="text"], input[type="password"], select
     @include border-radius(3px);
 }
 
-.item-radio
-{
-    display: none;
-}
-
-.item-radio-0:not(:checked) ~ .table tr.item-type-0,
-.item-radio-2:not(:checked) ~ .table tr.item-type-2,
-.item-radio-3:not(:checked) ~ .table tr.item-type-3,
-.item-radio-4:not(:checked) ~ .table tr.item-type-4,
-.item-radio-5:not(:checked) ~ .table tr.item-type-5,
-.item-radio-6:not(:checked) ~ .table tr.item-type-6,
-.item-radio-7:not(:checked) ~ .table tr.item-type-7,
-.item-radio-8:not(:checked) ~ .table tr.item-type-8,
-.item-radio-10:not(:checked) ~ .table tr.item-type-10,
-.item-radio-11:not(:checked) ~ .table tr.item-type-11,
-.item-radio-12:not(:checked) ~ .table tr.item-type-12,
-.item-radio-18:not(:checked) ~ .table tr.item-type-18
-{
-    display: none;
-}
-
-.item-radio-0:checked ~ .table caption .btn-item-radio-0,
-.item-radio-2:checked ~ .table caption .btn-item-radio-2,
-.item-radio-3:checked ~ .table caption .btn-item-radio-3,
-.item-radio-4:checked ~ .table caption .btn-item-radio-4,
-.item-radio-5:checked ~ .table caption .btn-item-radio-5,
-.item-radio-6:checked ~ .table caption .btn-item-radio-6,
-.item-radio-7:checked ~ .table caption .btn-item-radio-7,
-.item-radio-8:checked ~ .table caption .btn-item-radio-8,
-.item-radio-10:checked ~ .table caption .btn-item-radio-10,
-.item-radio-11:checked ~ .table caption .btn-item-radio-11,
-.item-radio-12:checked ~ .table caption .btn-item-radio-12,
-.item-radio-18:checked ~ .table caption .btn-item-radio-18
-{
-    font-weight: bold !important;
-}
-
 .modal-container
 {
     position: absolute;
@@ -657,20 +620,6 @@ span.ajax-url, label.lbl-link
     {
         tr
         {
-            .item-display
-            {
-                .item-image, .item-text
-                {
-                    display: inline-block;
-                    vertical-align: middle;
-                }
-
-                .item-image + .item-text
-                {
-                    padding-left: 4px;
-                }
-            }
-
             &:nth-child(even)
             {
                 background-color: rgba(0, 0, 0, .1);
@@ -862,5 +811,58 @@ span.ajax-url, label.lbl-link
     .mobile-only
     {
         display: block !important;
+    }
+}
+
+.ragnarok-window
+{
+    @include box-shadow('0px 0px 1px black');
+
+    .ragnarok-window-title
+    {
+        color: white;
+        font-size: 11px;
+        padding: 3px;
+        @include background-gradient(#80aaff, #b3ccff);
+    }
+
+    .item-display
+    {
+        cursor: default;
+        position: relative;
+        padding: 3px;
+
+        .item-image
+        {
+            width: 32px;
+            height: 32px;
+        }
+
+        .item-amount
+        {
+            position: absolute;
+            top: 14px;
+            text-align: right;
+            width: 100%;
+            text-shadow: 2px 0 0 #fff, -2px 0 0 #fff, 0 2px 0 #fff, 0 -2px 0 #fff, 1px 1px #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
+        }
+    }
+
+    .ragnarok-window-body-storage
+    {
+        .item-display
+        {
+            .item-image, .item-text
+            {
+                position: relative;
+                display: inline-block;
+                vertical-align: middle;
+            }
+
+            .item-image + .item-text
+            {
+                margin-left: 6px;
+            }
+        }
     }
 }

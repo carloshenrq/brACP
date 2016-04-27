@@ -53,7 +53,7 @@ class Format
         $img = '<img src="'.BRACP_DIR_INSTALL_URL.'data/items/icons/'.(($item->getIdentify() > 0) ? $item->getItem()->getId():'512').'.png"/>';
         $str = (($item->getIdentify() > 0) ? (($item->getRefine() > 0) ? '+' . $item->getRefine().' ':'') . self::item($item->getItem()) : '@@ITEM(NOT_IDENTIFY) (ID: ????)');
 
-        return '<div class="item-display"><div class="item-image">'.$img.'</div><div class="item-text">'.$str.'</div></div>';
+        return '<div class="item-display"><div class="item-image"><div class="item-amount">'.$item->getAmount().'</div>'.$img.'</div><div class="item-text">'.$str.'</div></div>';
     }
 
     /**

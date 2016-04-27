@@ -229,6 +229,7 @@ return
      */
     'STORAGE'       => [
         'TITLE'     => 'Minha Conta &raquo; Armazém',
+        'SUBTITLE'  => 'Armazém',
 
         'ERROR'     => [
             'NO_ITEMS'  => 'Você não possui itens no armazém para serem exibidos.',
