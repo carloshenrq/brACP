@@ -262,6 +262,7 @@ input[type="text"], input[type="password"], select
             position: absolute;
             left: 0%;
             top: 100%;
+            z-index: 2;
 
             @include box-shadow(0px 0px 2px black);
             @include transition(left .3s);
@@ -354,7 +355,6 @@ input[type="text"], input[type="password"], select
     {
         padding: 8px;
         @include background-gradient(#636363, #424242);
-        position: relative;
         clear: both;
         color: white;
         text-align: center;
@@ -829,11 +829,11 @@ span.ajax-url, label.lbl-link
     .item-display
     {
         cursor: default;
-        position: relative;
         padding: 3px;
 
         .item-image
         {
+            z-index: 1;
             width: 32px;
             height: 32px;
         }

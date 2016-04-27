@@ -196,6 +196,7 @@ input[type="text"], input[type="password"], select {
   position: absolute;
   left: 0%;
   top: 100%;
+  z-index: 2;
   box-shadow: 0px 0px 2px black;
   -moz-box-shadow: 0px 0px 2px black;
   -webkit-box-shadow: 0px 0px 2px black;
@@ -276,7 +277,6 @@ input[type="text"], input[type="password"], select {
   background: linear-gradient(to bottom, #636363 0%, #424242 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#636363', endColorstr='#424242',GradientType=0 );
   background-repeat: repeat-x;
-  position: relative;
   clear: both;
   color: white;
   text-align: center;
@@ -566,10 +566,10 @@ span.ajax-url, label.lbl-link {
 }
 .ragnarok-window .item-display {
   cursor: default;
-  position: relative;
   padding: 3px;
 }
 .ragnarok-window .item-display .item-image {
+  z-index: 1;
   width: 32px;
   height: 32px;
 }
