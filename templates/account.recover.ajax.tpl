@@ -17,13 +17,13 @@
  *}
 <div class="modal">
     <div class="modal-header">
-        ##RECOVER_TITLE##
+        @@RECOVER(TITLE)
         <label for="bracp-modal-recover" class="modal-close">&times;</label>
     </div>
     <div class="modal-body">
         {if $smarty.const.BRACP_ALLOW_RECOVER eq false}
             <div class="bracp-message error">
-                ##RECOVER_ERR,DISABLED##
+                @@RECOVER,ERROR(DISABLED)
             </div>
         {else}
             {if isset($recover_message)}
@@ -34,19 +34,19 @@
                 {/if}
             {/if}
 
-            ##RECOVER_MSG,0##
+            @@RECOVER,MESSAGE(HEADER)
 
             <form class="ajax-form" action="{$smarty.const.BRACP_DIR_INSTALL_URL}account/recover" autocomplete="off" method="post" target=".modal-recover-body" data-block="1">
                 <div class="input-forms">
-                    <input type="text" id="userid" name="userid" placeholder="##RECOVER_PLACEHOLDER,USERID##" size="24" maxlength="24" pattern="{$smarty.const.BRACP_REGEXP_USERNAME}" required/>
-                    <input type="text" id="email" name="email" placeholder="##RECOVER_PLACEHOLDER,EMAIL##" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
+                    <input type="text" id="userid" name="userid" placeholder="@@RECOVER,HOLDER(USERID)" size="24" maxlength="24" pattern="{$smarty.const.BRACP_REGEXP_USERNAME}" required/>
+                    <input type="text" id="email" name="email" placeholder="@@RECOVER,HOLDER(EMAIL)" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
             
                     {if $smarty.const.BRACP_RECAPTCHA_ENABLED eq true}
                         <div class="bracp-g-recaptcha" data-sitekey="{$smarty.const.BRACP_RECAPTCHA_PUBLIC_KEY}"></div>
                     {/if}
 
-                    <input class="btn btn-success" type="submit" value="##RECOVER_BUTTONS,SUBMIT##"/>
-                    <input class="btn" type="reset" value="##RECOVER_BUTTONS,RESET##"/>
+                    <input class="btn btn-success" type="submit" value="@@RECOVER,BUTTONS(SUBMIT)"/>
+                    <input class="btn" type="reset" value="@@RECOVER,BUTTONS(RESET)"/>
                 </div>
             </form>
         {/if}

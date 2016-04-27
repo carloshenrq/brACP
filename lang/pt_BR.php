@@ -244,34 +244,33 @@ return
      * @refer templates/account.recover.ajax.tpl
      * @author carloshenrq
      */
-    'RECOVER_TITLE'             => 'Minha Conta &raquo; Recuperar',
-    'RECOVER_ERR'               => [
-        'DISABLED'      => 'Recuperação de contas está desativada.',
-        'MISMATCH'      => 'Combinação de usuário e e-mail não encontrados.',
-
-        'CODE_INVALID'  => 'O Código de recuperação já foi utilizado ou é inválido.',
-        'CODE_OTHER'    => 'Não foi possível recuperar a senha de usuário.',
-    ],
-    'RECOVER_MAIL'              => [
-        'TITLE_CODE'    => 'Redefinição de Senha',
-        'TITLE_SEND'    => 'Recuperação de Usuário',
-    ],
-    'RECOVER_SUCCESS'           => [
-        'Foi enviado um e-mail contendo os dados de recuperação. Verifique seu e-mail.',
-        'Os dados de sua conta foram enviados ao seu e-mail.',
-        'CODE_SEND' => 'A Nova senha foi enviada para seu endereço de e-mail.',
-    ],
-    'RECOVER_MSG'               => [
-        'Para recuperar seu nome de usuário, você deve preencher abaixo as informações corretas para que seja possível realizar esta recuperação.',
-
-    ],
-    'RECOVER_PLACEHOLDER'       => [
-        'USERID'    => 'Nome de usuário',
-        'EMAIL'     => 'Endereço de e-mail',
-    ],
-    'RECOVER_BUTTONS'            => [
-        'SUBMIT'    => 'Recuperar',
-        'RESET'     => 'Limpar',
+    'RECOVER'       => [
+        'TITLE'     => 'Minha Conta &raquo; Recuperar',
+        'ERROR'     => [
+            'DISABLED'  => 'Recuperação de contas está desativada.',
+            'MISMATCH'  => 'Combinação de usuário e e-mail não encontrados.',
+            'INVALID'   => 'Código de recuperação inválido ou já utilizado.',
+            'OTHER'     => 'Não foi possível recuperar a senha de usuário.',
+        ],
+        'MAIL'      => [
+            'TITLE_CODE'     => 'Código de Recuperação',
+            'TITLE_SEND'     => 'Recuperação de Usuário',
+        ],
+        'SUCCESS'   => [
+            'CODE'  => 'Foi enviado um e-mail contendo os dados de recuperação. Verifique seu e-mail.',
+            'SEND'  => 'Os dados de sua conta foram enviados ao seu endereço de e-mail.',
+        ],
+        'MESSAGE'   => [
+            'HEADER'    => 'Para recuperar seu nome de usuário, você deve preencher abaixo as informações corretas para que seja possível realizar esta recuperação.',
+        ],
+        'HOLDER'    => [
+            'USERID'    => 'Nome de usuário',
+            'EMAIL'     => 'Endereço de e-mail',
+        ],
+        'BUTTONS'   => [
+            'SUBMIT'    => 'Recuperar',
+            'RESET'     => 'Limpar',
+        ],
     ],
 
     /**
