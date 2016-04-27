@@ -16,9 +16,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *}
 
-<h1>##ERR_TITLE##</h1>
+<h1>@@ERRORS,ACCESS(TITLE)</h1>
 
 <p class="bracp-message error">
-    ##ERR_NEED_SIGNIN,0##<br>
-    ##ERR_NEED_SIGNIN,1##
+    @@ERRORS,ACCESS(NEED_SIGNIN)
 </p>

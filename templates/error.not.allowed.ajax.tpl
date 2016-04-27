@@ -16,13 +16,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *}
 
-<h1>##ERR_TITLE##</h1>
+<h1>@@ERRORS,ACCESS(TITLE)</h1>
 
 <p class="bracp-message error">
     {if $smarty.const.BRACP_MAINTENCE eq true}
-        ##ERR_MAINTENCE##
+        @@ERRORS(MAINTENCE)
     {else}
-        ##ERR_ACCESS_DENIED##
+        @@ERRORS,ACCESS(DENIED)
         {if $smarty.const.BRACP_DEVELOP_MODE eq true and isset($exception) eq true}
             <br><br>
             <strong>{$exception->getMessage()}</strong>

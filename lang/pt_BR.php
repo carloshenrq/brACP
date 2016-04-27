@@ -413,17 +413,17 @@ return
         'RECAPTCHA' => 'Código de verificação inválido. Verifique por favor.',
         'NO_MOBILE' => 'Indisponivel para acesso mobile.',
         'MAINTENCE' => 'Em manutenção.',
-    ],
 
-    'ERR_TITLE'                 => 'Acesso negado',
-    'ERR_ACCESS_DENIED'         => 'Você não possui direito de acesso a este local!',
-    'ERR_NEED_SIGNIN'           => [
-        'Você precisa estar logado para realizar esta ação.',
-        'Para entrar, <label class="lbl-link" for="bracp-modal-login">clique aqui</label>.',
-    ],
-    'ERR_NEED_SIGNOUT'          => [
-        'Você não pode estar logado para realizar esta ação.',
-        'Para sair, <span class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/logout" data-target=".bracp-body">clique aqui</span>.',
+        'ACCESS'    => [
+            'TITLE'         => 'Acesso negado',
+            'DENIED'        => 'Você não possui direito de acesso a este local!',
+            'NEED_LOGOUT'   => 'Você não pode estar logado para realizar esta ação.<br>'.
+                                'Para sair, <span class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/logout" data-target=".bracp-body">clique aqui</span>.',
+            'NEED_SIGNIN'   => 'Você precisa estar logado para realizar esta ação.<br>'.
+                                'Para entrar, <label class="lbl-link" for="bracp-modal-login">clique aqui</label>.',
+
+        ],
+
     ],
 
     /**

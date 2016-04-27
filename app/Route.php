@@ -100,7 +100,8 @@ class Route
                 $this->map(['GET', 'POST'], '/chars', ['Controller\Account', 'chars'])
                         ->add(['Controller\Account', 'needLogin']);
 
-                $this->get('/storage', ['Controller\Account', 'storage']);
+                $this->get('/storage', ['Controller\Account', 'storage'])
+                        ->add(['Controller\Account', 'needLogin']);
 
                 // Como é que eu fui esquecer de testar a configuração de doações e deixar a rota aberta?
                 // 2016-04-20, CHLFZ
