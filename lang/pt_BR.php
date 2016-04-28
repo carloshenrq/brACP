@@ -339,76 +339,44 @@ return
         'RESET'     => 'Limpar',
     ],
 
-    /**
-     * @refer templates/account.chars.ajax.tpl
-     * @author carloshenrq
-     */
-    'CHARS_TITLE'               => 'Minha Conta &raquo; Personagens',
-    'CHARS_MSG'                 => [
-        'Segue abaixo a lista dos personagens gerenciaveis para sua conta.',
-    ],
-    'CHARS_ERR'                 => [
-        'NO_CHARS'  => 'Você não possui personagens criados para gerênciar.',
-        'OTHER'     => 'Impossível realizar ação solicitada.',
-    ],
-    'CHARS_SUCCESS'             => [
-        'APPEAR'        => 'Visual resetado com sucesso.',
-        'POSIT'         => 'Posição resetado com sucesso.',
-        'EQUIP'         => 'Equipamento resetado com sucesso.',
-        'NO_CHANGES'    => 'Comando(s) executado(s) com sucesso. Nenhum personagem foi alterado.',
-    ],
-    'CHARS_BUTTONS'             => [
-        'SUBMIT'    => 'Enviar',
-        'RESET'     => 'Limpar'
-    ],
-    'CHARS_TABLE' => [
-        'CHARID'        => 'Cód.',
-        'NAME'          => 'Nome',
-        'CLASS'         => 'Classe',
-        'ZENY'          => 'Zeny',
-        'LEVEL'         => 'Nível',
-        'STATUS'        => 'Status',
-        'MAP'           => 'Mapa',
-        'MAP_RETURN'    => 'Retorno',
-        'RESET'         => 'Resetar',
-        'RESET_APPEAR'  => 'Visual',
-        'RESET_POSIT'   => 'Local',
-        'RESET_EQUIP'   => 'Equip',
-    ],
-
-    /**
-     * @refer templates/admin.backup.ajax.tpl
-     * @author carloshenrq
-     */
-    'ADMIN_BACKUP_TITLE'        => 'Administração &raquo; Backup',
-    'ADMIN_BACKUP_MSG'          => [
-        'O Arquivo de backup foi criado com sucesso! Nome:',
-        'arquivos no tamanho de',
-        'CHECKSUM'  => 'Soma de verificação',
-        'MD5'       => 'md5',
-        'SHA1'      => 'sha1',
-        'SHA512'    => 'sha512',
-    ],
-
-    /**
-     * @refer templates/admin.players.ajax.tpl
-     * @author carloshenrq
-     */
-    'ADMIN_PLAYER_TITLE'        => 'Administração &raquo; Jogadores',
-
-    /**
-     * @refer templates/admin.players.ajax.tpl
-     * @author carloshenrq
-     */
-    'ADMIN_DONATION_TITLE'        => 'Administração &raquo; Doações',
-
+    // Tradução dos arquivos administrativos.
     'ADMIN'     => [
+        /**
+         * @refer templates/admin.players.ajax.tpl
+         * @author carloshenrq
+         */
+        'PLAYER'   => [
+            'TITLE' => 'Administração &raquo; Jogadores',
+        ],
+
+        /**
+         * @refer templates/admin.donation.ajax.tpl
+         * @author carloshenrq
+         */
+        'DONATION'   => [
+            'TITLE' => 'Administração &raquo; Doações',
+        ],
+
+        /**
+         * @refer templates/admin.backup.ajax.tpl
+         * @author carloshenrq
+         */
+        'BACKUP'    => [
+            'TITLE' => 'Administração &raquo; Backup',
+            'MESSAGE'   => [
+                'SUCCESS'   => 'O Arquivo de backup foi criado com sucesso! '.
+                               'Nome: <strong>%s</strong> com <strong>%d</strong> arquivos no tamanho de <strong>%s</strong>',
+                'CHEKCSUM'  => 'Soma de verificação:',
+                'MD5'       => 'md5',
+                'SHA1'      => 'sha1',
+                'SHA512'    => 'sha512',
+            ],
+        ],
     ],
 
     /**
      * Mensagens de erro padrão.
      */
-
     'ERRORS'    => [
         'RECAPTCHA' => 'Código de verificação inválido. Verifique por favor.',
         'NO_MOBILE' => 'Indisponivel para acesso mobile.',

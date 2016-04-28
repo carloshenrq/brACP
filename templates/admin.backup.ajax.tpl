@@ -16,17 +16,15 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *}
 
-<h1>##ADMIN_BACKUP_TITLE##</h1>
+<h1>@@ADMIN,BACKUP(TITLE)</h1>
 
 <div class="bracp-message success">
-    ##ADMIN_BACKUP_MSG,0## <strong>{$bkp_response.fileName}</strong><br>
-    <strong>{$bkp_response.fileCount}</strong> ##ADMIN_BACKUP_MSG,1## <strong>{Format::bytes($bkp_response.fileSize)}</strong>.
-    <br>
+    @@ADMIN,BACKUP,MESSAGE(SUCCESS, {$bkp_response.fileName}, {$bkp_response.fileCount}, {Format::bytes($bkp_response.fileSize)})
     <br>
     <div class="bracp-message info">
-        <h1>##ADMIN_BACKUP_MSG,CHECKSUM##</h1>
-        <strong>##ADMIN_BACKUP_MSG,MD5##:</strong> {$bkp_response.fileHashMD5} <br>
-        <strong>##ADMIN_BACKUP_MSG,SHA1##:</strong> {$bkp_response.fileHashSHA1} <br>
-        <strong>##ADMIN_BACKUP_MSG,SHA512##:</strong> {$bkp_response.fileHashSHA512}
+        <h1>@@ADMIN,BACKUP,MESSAGE(CHEKCSUM)</h1>
+        <strong>@@ADMIN,BACKUP,MESSAGE(MD5):</strong> {$bkp_response.fileHashMD5} <br>
+        <strong>@@ADMIN,BACKUP,MESSAGE(SHA1):</strong> {$bkp_response.fileHashSHA1} <br>
+        <strong>@@ADMIN,BACKUP,MESSAGE(SHA512):</strong> {$bkp_response.fileHashSHA512}
     </div>
 </div>
