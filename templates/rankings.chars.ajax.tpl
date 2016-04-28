@@ -20,7 +20,7 @@
 
 {if count($chars) eq 0}
     <p class="bracp-message warning">
-        @@RANKINGS,CHARS(NO_CHARS)
+        @@RANKINGS(NO_CHARS)
     </p>
 {else}
     <table border="1" align="center" class="table ranking">

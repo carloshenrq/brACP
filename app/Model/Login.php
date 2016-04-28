@@ -109,16 +109,6 @@ class Login
      */
     protected $pincode_change = 0;
 
-    /**
-     * @Column(name="vip_time", type="integer", options={"default":0})
-     */
-    protected $vip_time = 0;
-
-    /**
-     * @Column(name="old_group", type="integer", options={"default":0})
-     */
-    protected $old_group = 0;
-
     public function getAccount_id()
     {
         return $this->account_id;
@@ -277,26 +267,6 @@ class Login
     public function setPincode_change($pincode_change)
     {
         return $this->pincode_change = $pincode_change;
-    }
-
-    public function getVip_time()
-    {
-        return $this->vip_time;
-    }
-    
-    public function setVip_time($vip_time)
-    {
-        return $this->vip_time = $vip_time;
-    }
-
-    public function getOld_group()
-    {
-        return $this->old_group;
-    }
-    
-    public function setOld_group($old_group)
-    {
-        return $this->old_group = $old_group;
     }
 }
 

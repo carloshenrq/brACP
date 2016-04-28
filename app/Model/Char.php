@@ -291,11 +291,6 @@ class Char
     protected $delete_date;
 
     /**
-     * @Column(name="moves", type="integer")
-     */
-    protected $moves;
-
-    /**
      * @Column(name="unban_time", type="integer")
      */
     protected $unban_time;
@@ -853,16 +848,6 @@ class Char
     public function setDelete_date($delete_date)
     {
         return $this->delete_date = $delete_date;
-    }
-
-    public function getMoves()
-    {
-        return $this->moves;
-    }
-    
-    public function setMoves($moves)
-    {
-        return $this->moves = $moves;
     }
 
     public function getUnban_time()
