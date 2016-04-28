@@ -22,6 +22,7 @@ namespace Controller;
 use \Psr\Http\Message\ServerRequestInterface;
 use \Psr\Http\Message\ResponseInterface;
 use \Themes;
+use \Cache;
 
 /**
  * Controlador para dados de conta.
@@ -31,6 +32,22 @@ use \Themes;
 class Admin
 {
     use \TApplication;
+
+    /**
+     * Método inicial para exibição dos templates na tela.
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param array $args
+     */
+    public static function cacheFlush(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        // Limpa o cache de memória para todo o painel de controle.
+        Cache::flush();
+
+        // Exibe o display para home.
+        self::getApp()->display('home');
+    }
 
     /**
      * Método inicial para exibição dos templates na tela.

@@ -147,6 +147,7 @@ class Route
                     $this->get('/theme', ['Controller\Admin', 'theme']);
                     $this->get('/players', ['Controller\Admin', 'players']);
                     $this->get('/donation', ['Controller\Admin', 'donation']);
+                    $this->get('/cache/flush', ['Controller\Admin', 'cacheFlush']);
 
                     if(BRACP_ALLOW_MODS)
                     {

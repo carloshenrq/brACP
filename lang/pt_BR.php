@@ -30,6 +30,7 @@ return
             'TITLE'     => 'Administração',
             'BACKUP'    => 'Criar Backup',
             'THEMES'    => 'Atualizar Temas',
+            'CACHE'     => 'Limpar Cache',
             'MODS'      => 'Customizações',
             'PLAYERS'   => 'Jogadores',
             'DONATION'  => 'Doações',

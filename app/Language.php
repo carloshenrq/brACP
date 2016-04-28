@@ -60,7 +60,7 @@ class Language
     public static function parse($textToTranslate)
     {
         // Retorna de acordo com o cache do sistema.
-        // return Cache::get('BRACP_LANG_' . self::$lang . '_' . hash('md5', $textToTranslate), function() use ($textToTranslate) {
+        return Cache::get('BRACP_LANG_' . self::$lang . '_' . hash('md5', $textToTranslate), function() use ($textToTranslate) {
             // Marca os locais que a expressão regular de tradução ocorreram.
             if(preg_match_all('/\@\@([^\(]+)\(([^\)]+)*\)/', $textToTranslate, $matches))
             {
@@ -113,7 +113,7 @@ class Language
             unset($maches);
 
             return $textToTranslate;
-        // });
+        });
     }
 
     /**
