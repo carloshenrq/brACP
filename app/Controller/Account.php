@@ -1260,6 +1260,15 @@ class Account
         if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['g-recaptcha-response']))
             return ['email_message' => ['error' => '@@ERRORS(RECAPTCHA)']];
 
+        // Realiza a verificação de expressão regular dos campos indicados, usuário pode
+        //  editar o HTML e remover a restrição pattern, então, só verificando no caso de acontecer.
+        if(!preg_match('/^'.BRACP_REGEXP_EMAIL.'$/', $data['email'])
+            || !preg_match('/^'.BRACP_REGEXP_EMAIL.'$/', $data['email_new'])
+            || !preg_match('/^'.BRACP_REGEXP_EMAIL.'$/', $data['email_conf']))
+        {
+            return ['email_message' => ['error' => '@@ERRORS(REGEXP)']];
+        }
+
         // Verifica se o email atual digitado é igual ao email atual.
         if(hash('md5', self::loggedUser()->getEmail()) !== hash('md5', $data['email']))
             return ['email_message' => ['error' => '@@CHANGEMAIL,ERROR(MISMATCH1)']];
@@ -1298,6 +1307,15 @@ class Account
         //  é verdadeira e pode continuar.
         if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['g-recaptcha-response']))
             return ['password_message' => ['error' => '@@ERRORS(RECAPTCHA)']];
+
+        // Realiza a verificação de expressão regular dos campos indicados, usuário pode
+        //  editar o HTML e remover a restrição pattern, então, só verificando no caso de acontecer.
+        if(!preg_match('/^'.BRACP_REGEXP_PASSWORD.'$/', $data['user_pass'])
+            || !preg_match('/^'.BRACP_REGEXP_PASSWORD.'$/', $data['user_pass_new'])
+            || !preg_match('/^'.BRACP_REGEXP_PASSWORD.'$/', $data['user_pass_conf']))
+        {
+            return ['password_message' => ['error' => '@@ERRORS(REGEXP)']];
+        }
 
         // Obtém a senha atual do jogador para aplicação do md5 na comparação da senha.
         $user_pass = self::loggedUser()->getUser_pass();
@@ -1395,6 +1413,14 @@ class Account
             if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['g-recaptcha-response']))
                 return ['recover_message' => ['error' => '@@ERRORS(RECAPTCHA)']];
 
+            // Realiza a verificação de expressão regular dos campos indicados, usuário pode
+            //  editar o HTML e remover a restrição pattern, então, só verificando no caso de acontecer.
+            if(!preg_match('/^'.BRACP_REGEXP_USERNAME.'$/', $data['userid'])
+                || !preg_match('/^'.BRACP_REGEXP_EMAIL.'$/', $data['email']))
+            {
+                return ['recover_message' => ['error' => '@@ERRORS(REGEXP)']];
+            }
+
             // Obtém a conta que está sendo solicitada a requisição para 
             //  recuperação de senha.
             $account = self::getApp()->getEm()
@@ -1485,6 +1511,14 @@ class Account
         //  é verdadeira e pode continuar.
         if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['g-recaptcha-response']))
             return ['login_message' => ['error' => '@@ERRORS(RECAPTCHA)']];
+
+        // Realiza a verificação de expressão regular dos campos indicados, usuário pode
+        //  editar o HTML e remover a restrição pattern, então, só verificando no caso de acontecer.
+        if(!preg_match('/^'.BRACP_REGEXP_USERNAME.'$/', $data['userid'])
+            || !preg_match('/^'.BRACP_REGEXP_PASSWORD.'$/', $data['user_pass']))
+        {
+            return ['login_message' => ['error' => '@@ERRORS(REGEXP)']];
+        }
 
         // Obtém a senha que será utilizada para realizar login.
         $user_pass = ((BRACP_MD5_PASSWORD_HASH) ? hash('md5', $data['user_pass']) : $data['user_pass']);
@@ -1669,6 +1703,18 @@ class Account
             //  é verdadeira e pode continuar.
             if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['g-recaptcha-response']))
                 return ['register_message' => ['error' => '@@ERRORS(RECAPTCHA)']];
+
+            // Realiza a verificação de expressão regular dos campos indicados, usuário pode
+            //  editar o HTML e remover a restrição pattern, então, só verificando no caso de acontecer.
+            if(!preg_match('/^'.BRACP_REGEXP_USERNAME.'$/', $data['userid'])
+                || !preg_match('/^'.BRACP_REGEXP_PASSWORD.'$/', $data['user_pass'])
+                || !preg_match('/^'.BRACP_REGEXP_PASSWORD.'$/', $data['user_pass_conf'])
+                || !preg_match('/^'.BRACP_REGEXP_EMAIL.'$/', $data['email'])
+                || !preg_match('/^'.BRACP_REGEXP_EMAIL.'$/', $data['email_conf'])
+                || !preg_match('/^(M|F)$/', $data['sex']))
+            {
+                return ['register_message' => ['error' => '@@ERRORS(REGEXP)']];
+            }
 
             if(hash('md5', $data['user_pass']) !== hash('md5', $data['user_pass_conf']))
                 return ['register_message' => ['error' => '@@CREATE,ERROR,MISMATCH(PASSWORD)']];

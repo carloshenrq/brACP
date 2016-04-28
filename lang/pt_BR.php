@@ -404,6 +404,8 @@ return
         'NO_MOBILE' => 'Indisponivel para acesso mobile.',
         'MAINTENCE' => 'Em manutenção.',
 
+        'REGEXP'    => 'Falha na restrição de pattern de alguns campos. Tente novamente.',
+
         'ACCESS'    => [
             'TITLE'         => 'Acesso negado',
             'DENIED'        => 'Você não possui direito de acesso a este local!',
@@ -411,7 +413,6 @@ return
                                 'Para sair, <span class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/logout" data-target=".bracp-body">clique aqui</span>.',
             'NEED_SIGNIN'   => 'Você precisa estar logado para realizar esta ação.<br>'.
                                 'Para entrar, <label class="lbl-link" for="bracp-modal-login">clique aqui</label>.',
-
         ],
 
     ],
