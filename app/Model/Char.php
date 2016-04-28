@@ -155,7 +155,7 @@ class Char
     protected $party_id;
 
     /**
-     * @OneToOne(targetEntity="Guild")
+     * @ManyToOne(targetEntity="Guild")
      * @JoinColumn(name="guild_id", referencedColumnName="guild_id")
      */
     protected $guild;
