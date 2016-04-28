@@ -274,38 +274,51 @@ return
     ],
 
     /**
+     * @refer templates/account.chars.ajax.tpl
+     * @author carloshenrq
+     */
+    'CHARS'     => [
+        'TITLE' => 'Minha Conta &raquo; Personagens',
+    ],
+
+    /**
      * @refer templates/account.change.password.ajax.tpl
      * @author carloshenrq
      */
-    'CHANGEPASS_TITLE'          => 'Minha Conta &raquo; Mudar Senha',
-    'CHANGEPASS_NOADMIN'        => 'Nenhum administrador está permitido a alterar sua senha aqui.',
-    'CHANGEPASS_NOADMIN_MSG'    => [
-        '<strong>Nota.:</strong> Por motivos de segurança é recomendado que a alteração de senha para adminsitradores seja desabilitada!',
-        '',
-        'Para alterar, edite o arquivo <strong>config.php</strong> e mude a configuração <strong>BRACP_ALLOW_ADMIN_CHANGE_PASSWORD</strong> para <strong>false</strong>',
-    ],
-    'CHANGEPASS_ERR'            => [
-        'ADMIN'                 => 'Usuários do tipo administrador não podem realizar alteração de senha.',
-        'MISMATCH1'             => 'Senha atual digitada não confere.',
-        'MISMATCH2'             => 'Novas senhas digitadas não conferem.',
-        'EQUALS'                => 'Sua nova senha não pode ser igual a senha anterior.',
-        'OTHER'                 => 'Ocorreu um erro durante a alteração de sua senha.',
-    ],
-    'CHANGEPASS_SUCCESS'        => 'Sua senha foi alterada com sucesso!',
-    'CHANGEPASS_MSG'            => [
-        'Para realizar a alteração de sua senha é necessário que você digite sua senha atual, sua nova senha e confirme.',
-    ],
-    'CHANGEPASS_MAIL'           => [
-        'NOTIFY_CHANGED'    => 'Notificação: Alteração de Senha',
-    ],
-    'CHANGEPASS_PLACEHOLDER'    => [
-        'ACTUAL_PASSWORD'       => 'Senha atual',
-        'NEW_PASSWORD'          => 'Digite sua nova senha',
-        'CONFIRM_PASSWORD'      => 'Confirme sua nova senha',
-    ],
-    'CHANGEPASS_BUTTONS'        => [
-        'SUBMIT'                => 'Alterar',
-        'RESET'                 => 'Limpar',
+    'CHANGEPASS'    =>  [
+        'TITLE' => 'Minha Conta &raquo; Alterar Senha',
+
+        'ERROR'    =>  [
+            'NOADMIN'       => 'Nenhum administrador está permitido para alterar senha.',
+
+            'MISMATCH1'     => 'Senha atual digitada não confere.',
+            'MISMATCH2'     => 'Novas senhas digitadas não conferem.',
+            'EQUALS'        => 'Sua nova senha não pode ser igual a senha anterior.',
+            'OTHER'         => 'Ocorreu um erro durante a alteração de sua senha.',
+        ],
+
+        'MESSAGE'   =>  [
+            'ADMIN' => '<strong>Nota.:</strong> Por motivos de segurança é recomendado que a alteração de senha para adminsitradores seja desabilitada!',
+
+            'HEADER'    => 'Para realizar a alteração de sua senha é necessário que você digite sua senha atual, sua nova senha e confirme.',
+        ],
+
+        'SUCCESS'   =>  'Sua senha foi alterada com sucesso!',
+
+        'HOLDER'    =>  [
+            'ACTUAL_PASSWORD'   => 'Senha atual',
+            'NEW_PASSWORD'      => 'Digite sua nova senha',
+            'CONFIRM_PASSWORD'  => 'Confirme sua nova senha',
+        ],
+
+        'BUTTONS'   => [
+            'SUBMIT'    => 'Alterar',
+            'RESET'     => 'Limpar',
+        ],
+
+        'MAIL'      => [
+            'TITLE' => 'Notificação: Alteração de Senha',
+        ],
     ],
 
     /**

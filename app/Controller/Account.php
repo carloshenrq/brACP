@@ -217,37 +217,37 @@ class Account
 
         $data = [];
 
-        // Se é uma requisição tipo post, então
-        //  tenta realizar a alteração dos personagens realizando o envio dos dados
-        //  para o método.
-        if($request->isPost())
-            $data = array_merge($data, self::charsAccount($request->getParsedBody()));
+        // // Se é uma requisição tipo post, então
+        // //  tenta realizar a alteração dos personagens realizando o envio dos dados
+        // //  para o método.
+        // if($request->isPost())
+        //     $data = array_merge($data, self::charsAccount($request->getParsedBody()));
 
-        // Realiza a query para obter os personagens da conta logada.
-        $chars = self::getApp()->getEm()
-                        ->createQuery('
-                            SELECT
-                                chars
-                            FROM
-                                Model\Char chars
-                            WHERE
-                                chars.account_id = :account_id
-                            ORDER BY
-                                chars.char_num ASC
-                        ')
-                        ->setParameter('account_id', self::loggedUser()->getAccount_id())
-                        ->getResult();
+        // // Realiza a query para obter os personagens da conta logada.
+        // $chars = self::getApp()->getEm()
+        //                 ->createQuery('
+        //                     SELECT
+        //                         chars
+        //                     FROM
+        //                         Model\Char chars
+        //                     WHERE
+        //                         chars.account_id = :account_id
+        //                     ORDER BY
+        //                         chars.char_num ASC
+        //                 ')
+        //                 ->setParameter('account_id', self::loggedUser()->getAccount_id())
+        //                 ->getResult();
 
-        $actions = 0;
+        // $actions = 0;
 
-        if(BRACP_ALLOW_RESET_APPEAR) $actions |= 1;
-        if(BRACP_ALLOW_RESET_POSIT) $actions |= 2;
-        if(BRACP_ALLOW_RESET_EQUIP) $actions |= 4;
+        // if(BRACP_ALLOW_RESET_APPEAR) $actions |= 1;
+        // if(BRACP_ALLOW_RESET_POSIT) $actions |= 2;
+        // if(BRACP_ALLOW_RESET_EQUIP) $actions |= 4;
 
         // Envia para tela os dados da conta logada.
         self::getApp()->display('account.chars', array_merge([
-            'chars' => $chars,
-            'actions' => $actions
+            // 'chars' => $chars,
+            // 'actions' => $actions
         ], $data));
     }
 
@@ -776,7 +776,7 @@ class Account
                                         ->findOneBy(['account_id' => $account_id]);
 
             // Envia o e-mail com os dados de recuperação do usuário.
-            self::getApp()->sendMail('##CHANGEPASS_MAIL,NOTIFY_CHANGED##', [$account->getEmail()],
+            self::getApp()->sendMail('@@CHANGEPASS,MAIL(TITLE)', [$account->getEmail()],
                 'mail.change.password', [
                     'userid' => $account->getUserid()
                 ]);
@@ -1291,12 +1291,12 @@ class Account
         // Se administradores não podem atualizar senha, verifica nivel do usuário logado e
         //  retorna erro caso nivel administrador.
         if(!BRACP_ALLOW_ADMIN_CHANGE_PASSWORD && self::loggedUser()->getGroup_id() >= BRACP_ALLOW_ADMIN_GMLEVEL)
-            return ['password_message' => ['error' => '##CHANGEPASS_ERR,ADMIN##']];
+            return ['password_message' => ['error' => '@@CHANGEPASS,ERROR(ADMIN)']];
 
         // Verificação recaptcha para saber se a requisição realizada
         //  é verdadeira e pode continuar.
         if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['g-recaptcha-response']))
-            return ['password_message' => ['error' => '##ERR_RECAPTCHA##']];
+            return ['password_message' => ['error' => '@@ERRORS(RECAPTCHA)']];
 
         // Obtém a senha atual do jogador para aplicação do md5 na comparação da senha.
         $user_pass = self::loggedUser()->getUser_pass();
@@ -1305,21 +1305,21 @@ class Account
 
         // Verifica senha atual digitada.
         if(hash('md5', $data['user_pass']) !== $user_pass)
-            return ['password_message' => ['error' => '##CHANGEPASS_ERR,MISMATCH1##']];
+            return ['password_message' => ['error' => '@@CHANGEPASS,ERROR(MISMATCH1)']];
 
         // Verifica novas senhas digitadas.
         if(hash('md5', $data['user_pass_new']) !== hash('md5', $data['user_pass_conf']))
-            return ['password_message' => ['error' => '##CHANGEPASS_ERR,MISMATCH2##']];
+            return ['password_message' => ['error' => '@@CHANGEPASS,ERROR(MISMATCH2)']];
 
         // Verifica se a senha nova é igual a anterior.
         if(hash('md5', $data['user_pass_new']) === $user_pass)
-            return ['password_message' => ['error' => '##CHANGEPASS_ERR,EQUALS##']];
+            return ['password_message' => ['error' => '@@CHANGEPASS,ERROR(EQUALS)']];
 
         // Senha alterada com sucesso.
         if(self::changePass(self::loggedUser()->getAccount_id(), $data['user_pass_new']))
-            return ['password_message' => ['success' => '##CHANGEPASS_SUCCESS##']];
+            return ['password_message' => ['success' => '@@CHANGEPASS(SUCCESS)']];
         else
-            return ['password_message' => ['error' => '##CHANGEPASS_ERR,OTHER##']];
+            return ['password_message' => ['error' => '@@CHANGEPASS,ERROR(SUCCESS)']];
     }
 
     /**
