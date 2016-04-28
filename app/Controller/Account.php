@@ -719,7 +719,7 @@ class Account
         if(BRACP_NOTIFY_CHANGE_MAIL)
         {
             // Envia um email para o endereço antigo informando a alteração.
-            self::getApp()->sendMail('##CHANGEMAIL_MAIL,NOTIFY_CHANGED##',
+            self::getApp()->sendMail('@@CHANGEPASS,MAIL(TITLE)',
                                         [$log->getFrom()],
                                         'mail.change.mail',
                                         [
@@ -729,7 +729,7 @@ class Account
                                         ]);
 
             // Envia o e-mail para o novo endereço.
-            self::getApp()->sendMail('##CHANGEMAIL_MAIL,NOTIFY_CHANGED##',
+            self::getApp()->sendMail('@@CHANGEPASS,MAIL(TITLE)',
                                         [$log->getTo()],
                                         'mail.change.mail',
                                         [
@@ -902,85 +902,86 @@ class Account
      */
     public static function charsAccount($data)
     {
-        // Escreve acesso de log aos dados de personagem:
-        LogWriter::write("Atualizando informações de personagem com os dados recebidos...\n" .
-            print_r($data, true));
+        return ['char_message' => ['error' => '@@ERRORS(MAINTENCE)']];
+        // // Escreve acesso de log aos dados de personagem:
+        // LogWriter::write("Atualizando informações de personagem com os dados recebidos...\n" .
+        //     print_r($data, true));
 
-        // Verifica se alguma opção do painel de controle está habilitada.
-        // Se não estiver, envia mensagem de erro no retorno.
-        if(BRACP_ALLOW_RESET_APPEAR || BRACP_ALLOW_RESET_POSIT || BRACP_ALLOW_RESET_EQUIP)
-        {
-            // Obtém a conta logada para realizar as alterações no personagem.
-            $account_id = self::loggedUser()->getAccount_id();
+        // // Verifica se alguma opção do painel de controle está habilitada.
+        // // Se não estiver, envia mensagem de erro no retorno.
+        // if(BRACP_ALLOW_RESET_APPEAR || BRACP_ALLOW_RESET_POSIT || BRACP_ALLOW_RESET_EQUIP)
+        // {
+        //     // Obtém a conta logada para realizar as alterações no personagem.
+        //     $account_id = self::loggedUser()->getAccount_id();
 
-            // Variavel temporaria para armazenar as informações dos personagens resetados.
-            $appear = $posit = $equip = [];
+        //     // Variavel temporaria para armazenar as informações dos personagens resetados.
+        //     $appear = $posit = $equip = [];
 
-            // Verifica se a configuração de alteração de aparência pode
-            //  ser realizada.
-            if(BRACP_ALLOW_RESET_APPEAR && isset($data['appear']) && count($data['appear']) > 0)
-            {
-                foreach($data['appear'] as $char_id)
-                {
-                    if(self::charResetAppear($account_id, $char_id))
-                    {
-                        $appear[] = $char_id;
-                    }
-                }
-            }
+        //     // Verifica se a configuração de alteração de aparência pode
+        //     //  ser realizada.
+        //     if(BRACP_ALLOW_RESET_APPEAR && isset($data['appear']) && count($data['appear']) > 0)
+        //     {
+        //         foreach($data['appear'] as $char_id)
+        //         {
+        //             if(self::charResetAppear($account_id, $char_id))
+        //             {
+        //                 $appear[] = $char_id;
+        //             }
+        //         }
+        //     }
 
-            // Verifica se a posição pode ser alterada e se dados para
-            //  resetar foram realizados com sucesso.
-            if(BRACP_ALLOW_RESET_POSIT && isset($data['posit']) && count($data['posit']) > 0)
-            {
-                foreach($data['posit'] as $char_id)
-                {
-                    if(self::charResetPosit($account_id, $char_id))
-                    {
-                        $posit[] = $char_id;
-                    }
-                }
-            }
+        //     // Verifica se a posição pode ser alterada e se dados para
+        //     //  resetar foram realizados com sucesso.
+        //     if(BRACP_ALLOW_RESET_POSIT && isset($data['posit']) && count($data['posit']) > 0)
+        //     {
+        //         foreach($data['posit'] as $char_id)
+        //         {
+        //             if(self::charResetPosit($account_id, $char_id))
+        //             {
+        //                 $posit[] = $char_id;
+        //             }
+        //         }
+        //     }
 
-            // Verifica as configuração para poder restar os dados de equipamentos
-            //  e se foi realizado com sucesso.
-            if(BRACP_ALLOW_RESET_EQUIP && isset($data['equip']) && count($data['equip']) > 0)
-            {
-                foreach($data['equip'] as $char_id)
-                {
-                    if(self::charResetEquip($account_id, $char_id))
-                    {
-                        $equip[] = $char_id;
-                    }
-                }
-            }
+        //     // Verifica as configuração para poder restar os dados de equipamentos
+        //     //  e se foi realizado com sucesso.
+        //     if(BRACP_ALLOW_RESET_EQUIP && isset($data['equip']) && count($data['equip']) > 0)
+        //     {
+        //         foreach($data['equip'] as $char_id)
+        //         {
+        //             if(self::charResetEquip($account_id, $char_id))
+        //             {
+        //                 $equip[] = $char_id;
+        //             }
+        //         }
+        //     }
 
-            // Mensagens de retorno.
-            $message = [];
+        //     // Mensagens de retorno.
+        //     $message = [];
 
-            // Verifica se algum das informações foi resetado com sucesso para dar de informação
-            //  na tela a mensagem.
-            if(count($appear) > 0)
-                $message[] = '##CHARS_SUCCESS,APPEAR##';
-            if(count($posit) > 0)
-                $message[] = '##CHARS_SUCCESS,POSIT##';
-            if(count($equip) > 0)
-                $message[] = '##CHARS_SUCCESS,EQUIP##';
+        //     // Verifica se algum das informações foi resetado com sucesso para dar de informação
+        //     //  na tela a mensagem.
+        //     if(count($appear) > 0)
+        //         $message[] = '##CHARS_SUCCESS,APPEAR##';
+        //     if(count($posit) > 0)
+        //         $message[] = '##CHARS_SUCCESS,POSIT##';
+        //     if(count($equip) > 0)
+        //         $message[] = '##CHARS_SUCCESS,EQUIP##';
 
-            // Retorna mensagem de sucesso para as alterações.
-            return ['char_message' => ['success' => ((count($message) > 0) ?
-                                                            implode('<br>', $message) :
-                                                            '##CHARS_SUCCESS,NO_CHANGES##')]];
-        }
-        else
-        {
-            // Escreve acesso de log aos dados de personagem:
-            LogWriter::write("Configurações para alteração de personagem estão desabilitadas.\n" .
-                print_r($data, true), 1);
+        //     // Retorna mensagem de sucesso para as alterações.
+        //     return ['char_message' => ['success' => ((count($message) > 0) ?
+        //                                                     implode('<br>', $message) :
+        //                                                     '##CHARS_SUCCESS,NO_CHANGES##')]];
+        // }
+        // else
+        // {
+        //     // Escreve acesso de log aos dados de personagem:
+        //     LogWriter::write("Configurações para alteração de personagem estão desabilitadas.\n" .
+        //         print_r($data, true), 1);
 
-            // Caso nenhuma configuração esteja habilitada.
-            return ['char_message' => ['error' => '##CHARS_ERR,OTHER##']];
-        }
+        //     // Caso nenhuma configuração esteja habilitada.
+        //     return ['char_message' => ['error' => '##CHARS_ERR,OTHER##']];
+        // }
     }
 
     /**
@@ -1252,31 +1253,31 @@ class Account
     {
         // Verifica se a conta é do tipo administrador e não deixa realizar a alteração de e-mail
         if(self::loggedUser()->getGroup_id() >= BRACP_ALLOW_ADMIN_GMLEVEL)
-            return ['email_message' => ['error' => '##CHANGEMAIL_ERR,NO_ADMIN##']];
+            return ['email_message' => ['error' => '@@CHANGEMAIL,ERROR(NOADMIN)']];
 
         // Verificação recaptcha para saber se a requisição realizada
         //  é verdadeira e pode continuar.
         if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['g-recaptcha-response']))
-            return ['email_message' => ['error' => '##ERR_RECAPTCHA##']];
+            return ['email_message' => ['error' => '@@ERRORS(RECAPTCHA)']];
 
         // Verifica se o email atual digitado é igual ao email atual.
         if(hash('md5', self::loggedUser()->getEmail()) !== hash('md5', $data['email']))
-            return ['email_message' => ['error' => '##CHANGEMAIL_ERR,MISMATCH1##']];
+            return ['email_message' => ['error' => '@@CHANGEMAIL,ERROR(MISMATCH1)']];
 
         // Verifica se o email novo digitado é igual ao email de confirmação.
         if(hash('md5', $data['email_new']) !== hash('md5', $data['email_conf']))
-            return ['email_message' => ['error' => '##CHANGEMAIL_ERR,MISMATCH2##']];
+            return ['email_message' => ['error' => '@@CHANGEMAIL,ERROR(MISMATCH1)']];
 
         // Verifica se o email atual é igual ao email novo digitado.
         if(hash('md5', self::loggedUser()->getEmail()) === hash('md5', $data['email_new']))
-            return ['email_message' => ['error' => '##CHANGEMAIL_ERR,EQUALS##']];
+            return ['email_message' => ['error' => '@@CHANGEMAIL,ERROR(EQUALS)']];
 
         // Verifica se foi possivel alterar o endereço de e-mail do usuário.
         if(self::changeMail(self::loggedUser()->getAccount_id(), $data['email_new']))
-            return ['email_message' => ['success' => '##CHANGEMAIL_SUCCESS##']];
+            return ['email_message' => ['success' => '@@CHANGEMAIL(SUCCESS)']];
         else
             // Ocorre quando o endereço de e-mail já está em uso.
-            return ['email_message' => ['error' => '##CHANGEMAIL_ERR,OTHER##']];
+            return ['email_message' => ['error' => '@@CHANGEMAIL,ERROR(OTHER)']];
     }
 
     /**

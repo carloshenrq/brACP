@@ -325,31 +325,39 @@ return
      * @refer templates/account.change.mail.ajax.tpl
      * @author carloshenrq
      */
-    'CHANGEMAIL_TITLE'          => 'Minha Conta &raquo; Mudar Email',
-    'CHANGEMAIL_ERR'            => [
-        'DISABLED'      => 'Alteração de e-mail está desativada.',
-        'NO_ADMIN'      => 'Nenhum administrador está permitido a alterar seu endereço de email.',
+    'CHANGEMAIL'    => [
+        'TITLE' => 'Minha Conta &raquo; Mudar Email',
 
-        'MISMATCH1'     => 'E-mail atual não confere com o digitado.',
-        'MISMATCH2'     => 'Os e-mails digitados não conferem.',
-        'EQUALS'        => 'O Novo endereço de e-mail não pode ser igual ao atual.',
-        'OTHER'         => 'Ocorreu um erro durante a alteração do seu endereço.',
-    ],
-    'CHANGEMAIL_SUCCESS'        => 'Seu endereço de e-mail foi alterado com sucesso.',
-    'CHANGEMAIL_MSG'            => [
-        'Para realizar a alteração de seu endereço de e-mail é necessário que você digite seu e-mail atual, seu novo endereço de email e confirme!',
-    ],
-    'CHANGEMAIL_MAIL'           => [
-        'NOTIFY_CHANGED' => 'Notificação: Alteração de E-mail'
-    ],
-    'CHANGEMAIL_PLACEHOLDER'    => [
-        'EMAIL'     => 'Email atual',
-        'NEW_EMAIL' => 'Novo email',
-        'CONFIRM'   => 'Confirme seu novo email',
-    ],
-    'CHANGEMAIL_BUTTONS'        => [
-        'SUBMIT'    => 'Mudar',
-        'RESET'     => 'Limpar',
+        'ERROR' => [
+            'DISABLED'  => 'Alteração de e-mail está desativada.',
+            'NOADMIN'   => 'Nenhum administrador está permitido a alterar seu endereço de email.',
+
+            'MISMATCH1' => 'E-mail atual não confere com o digitado.',
+            'MISMATCH2' => 'Os e-mails digitados não conferem.',
+            'EQUALS'    => 'O Novo endereço de e-mail não pode ser igual ao atual.',
+            'OTHER'     => 'Ocorreu um erro durante a alteração do seu endereço.',
+        ],
+
+        'SUCCESS'   => 'Seu endereço de e-mail foi alterado com sucesso.',
+
+        'MESSAGE'   => [
+            'HEADER'    => 'Para realizar a alteração de seu endereço de e-mail é necessário que você digite seu e-mail atual, seu novo endereço de email e confirme!',
+        ],
+
+        'HOLDER'    => [
+            'EMAIL'     => 'Email atual',
+            'NEW_EMAIL' => 'Novo email',
+            'CONFIRM'   => 'Confirme seu novo email',
+        ],
+
+        'BUTTONS'   => [
+            'SUBMIT'    => 'Mudar',
+            'RESET'     => 'Limpar',
+        ],
+
+        'MAIL'  => [
+            'TITLE' => 'Notificação: Alteração de E-mail',
+        ],
     ],
 
     // Tradução dos arquivos administrativos.
@@ -414,45 +422,87 @@ return
      *
      *
      */
-    'MAIL_TITLE'                => 'Olá, ',
-    'MAIL_MSG'                  => [
-        'Este e-mail foi enviado por',
-        'através da solicitação feita pelo endereço ip',
-        'às',
-        'Se não foi você que fez essa solicitação, por favor, desconsidere esta mensagem.'
-    ],
+    'MAIL'  => [
 
-    'MAIL_RECOVER_MSG'          => [
-        'Sua senha foi recuperada com sucesso. Segue abaixo sua senha para login no jogo:',
-        'Sua senha:',
-        'Para realizar login utilize esta senha apartir de agora.',
-    ],
+        /**
+         * @refer templates/mail.default.tpl
+         * @author carloshenrq
+         */
+        'TITLE' => 'Olá, <strong>%s</strong>.<br>',
 
-    'MAIL_RECOVERCODE_MSG'      => [
-        'Uma tentativa de recuperação de senha foi realizada na sua conta.',
-        'Para confirmar essa tentativa de recuperação, por favor, clique no link abaixo ou copie e cole o endereço em seu navegador.',
-        'Link válido até',
-        'Após acessar o link, você receberá um segundo e-mail com a nova senha gerada aleatóriamente pelo sistema.',
-    ],
+        'MESSAGE'   => [
+            'FOOTER'    => '<i>Este e-mail foi enviado por <strong>%s</strong> '.
+                            'através da solicitação feita pelo endereço ip <strong>%s</strong> '.
+                            'às <strong>%s</strong>.<br>'.
+                            'Se não foi você que fez essa solicitação, por favor, desconsidere esta mensagem.</i>',
+        ],
 
-    'MAIL_CREATE_MSG'           => [
-        'Agradecemos seu registro e esperamos que você tenha muitas horas de diversão em nosso servidor.',
-    ],
+        /**
+         * @refer templates/mail.recover{.code}.tpl
+         * @author carloshenrq
+         */
+        'RECOVER'   => [
+            /**
+             * @refer templates/mail.recover.tpl
+             * @author carloshenrq
+             */
+            'MESSAGE'   => 'Sua senha foi recuperada com sucesso. Segue abaixo sua senha para login no jogo:<br>'.
+                            '<br>'.
+                            'Sua senha: <strong>%s</strong><br>',
+                            '<br>'.
+                            'Para realizar login utilize esta senha apartir de agora.',
+            /**
+             * @refer templates/mail.recover.code.tpl
+             * @author carloshenrq
+             */
+            'CODE'      => 'Uma tentativa de recuperação de senha foi realizada na sua conta.<br>'.
+                            'Para confirmar essa tentativa de recuperação, por favor, clique no link abaixo ou copie e cole o endereço em seu navegador.<br>'.
+                            '<br>'.
+                            '<a href="%1$s/%2$s" target="_blank">%1$s/%2$s</a><br>'.
+                            '<i>Link válido até <strong>%3$s</strong>.</i><br>'.
+                            '<br>'.
+                            'Após acessar o link, você receberá um segundo e-mail com a nova senha gerada aleatóriamente pelo sistema.',
+        ],
+        /**
+         * @refer templates/mail.create{.code}.tpl
+         * @author carloshenrq
+         */
+        'CREATE'    => [
+            /**
+             * @refer templates/mail.create.tpl
+             * @author carloshenrq
+             */
+            'MESSAGE'   => 'Agradecemos seu registro e esperamos que você tenha muitas horas de diversão em nosso servidor.',
 
-    'MAIL_CREATECODE_MSG'       => [
-        'Para confirmar a criação da sua conta, é necessário que você confirme sua identidade de e-mail clicando no link abaixo.',
-        'Link válido até',
-        'Após acessar o link, você receberá um segundo e-mail informando que sua conta foi confirmada com sucesso.',
-    ],
+            /**
+             * @refer templates/mail.create.code.tpl
+             * @author carloshenrq
+             */
+            'CODE'      => 'Para confirmar a criação da sua conta, é necessário que você confirme sua identidade de e-mail clicando no link abaixo.<br>'.
+                            '<br>'.
+                            '<a href="%1$s/%2$s" target="_blank">%1$s/%2$s</a><br>'.
+                            '<i>Link válido até <strong>%3$s</strong>.</i><br>'.
+                            '<br>'.
+                            'Após acessar o link, você receberá um segundo e-mail informando que sua conta foi confirmada com sucesso.'
+        ],
 
-    'MAIL_CHANGEPASS_MSG'       => [
-        'Este e-mail é apenas uma notificação para informar que sua senha foi alterada.',
-    ],
+        /**
+         * @refer templates/mail.change.password.tpl
+         * @author carloshenrq
+         */
+        'CHANGEPASS'    => [
+            'MESSAGE'   => 'Este e-mail é apenas uma notificação para informar que sua senha foi alterada.',
+        ],
 
-    'MAIL_CHANGEMAIL_MSG'       => [
-        'Este e-mail é apenas uma notificação para informar que seu endereço de email foi alterado.',
-        'Antigo:',
-        'Novo:',
+        /**
+         * @refer templates/mail.change.mail.tpl
+         * @author carloshenrq
+         */
+        'CHANGEMAIL'    => [
+            'MESSAGE'   => 'Este e-mail é apenas uma notificação para informar que seu endereço de email foi alterado.<br>'.
+                            'Antigo: <strong>%s</strong><br>'.
+                            'Novo: <strong>%s</strong><br>',
+        ],
     ],
 
     /**

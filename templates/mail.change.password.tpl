@@ -19,5 +19,5 @@
 {extends file="mail.default.tpl"}
 
 {block name="mail_body"}
-	##MAIL_CHANGEPASS_MSG,0##
+	@@MAIL,CHANGEPASS(MESSAGE)
 {/block}

@@ -20,11 +20,6 @@
 
 {block name="mail_body"}
 
-    ##MAIL_CREATECODE_MSG,0##<br>
-    <br>
-    <a href="{$href}/{$code}" target="_blank">{$href}/{$code}</a><br>
-    <i>##MAIL_CREATECODE_MSG,1## <strong>{Format::date($expire)}</strong>.</i><br>
-    <br>
-    ##MAIL_CREATECODE_MSG,2##
+    @@MAIL,CREATE(CODE, {$href}, {$code}, {Format::date($expire)})
 
 {/block}

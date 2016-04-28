@@ -20,10 +20,6 @@
 
 {block name="mail_body"}
 
-    ##MAIL_RECOVER_MSG,0##<br>
-    <br>
-    ##MAIL_RECOVER_MSG,1## <strong>{$password}</strong><br>
-    <br>
-    ##MAIL_RECOVER_MSG,2##
+    @@MAIL,RECOVER(MESSAGE, {$password})
 
 {/block}

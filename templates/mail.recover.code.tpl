@@ -20,12 +20,6 @@
 
 {block name="mail_body"}
 
-    ##MAIL_RECOVERCODE_MSG,0##<br>
-    ##MAIL_RECOVERCODE_MSG,1##<br>
-    <br>
-    <a href="{$href}/{$code}" target="_blank">{$href}/{$code}</a><br>
-    <i>##MAIL_RECOVERCODE_MSG,2## <strong>{Format::date($expire)}</strong>.</i><br>
-    <br>
-    ##MAIL_RECOVERCODE_MSG,3##
+    @@MAIL,RECOVER(CODE, {$href}, {$code}, {Format::date($expire)})
 
 {/block}

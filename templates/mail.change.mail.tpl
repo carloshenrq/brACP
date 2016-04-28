@@ -19,7 +19,7 @@
 {extends file="mail.default.tpl"}
 
 {block name="mail_body"}
-	##MAIL_CHANGEMAIL_MSG,0##<br>
-	##MAIL_CHANGEMAIL_MSG,1## <strong>{$mailOld}</strong>.<br>
-	##MAIL_CHANGEMAIL_MSG,2## <strong>{$mailNew}</strong>.
+
+    @@MAIL,CHANGEMAIL(MESSAGE, {$mailOld}, {$mailNew})
+
 {/block}

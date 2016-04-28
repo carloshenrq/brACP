@@ -30,7 +30,7 @@
 	</head>
 
 	<body>
-		##MAIL_TITLE## <strong>{$userid}</strong>.<br>
+		@@MAIL(TITLE, {$userid})
 		--------------------------------------------------------------------------------<br>
 		<br>
         {block name="mail_body"}
@@ -38,8 +38,7 @@
 		<br>
 		<br>
 		--------------------------------------------------------------------------------<br>
-		<i>##MAIL_MSG,0## <strong>{$smarty.const.BRACP_MAIL_FROM}</strong> ##MAIL_MSG,1## <strong>{$ipAddress}</strong> ##MAIL_MSG,2## <strong>{date('Y-m-d H:i:s')}</strong>.<br>
-		##MAIL_MSG,3##</i>
+		@@MAIL,MESSAGE(FOOTER, {$smarty.const.BRACP_MAIL_FROM}, {$ipAddress}, {date('Y-m-d H:i:s')})
 	</body>
 
 </html>

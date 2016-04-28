@@ -17,17 +17,17 @@
  *}
 <div class="modal">
     <div class="modal-header">
-        ##CHANGEMAIL_TITLE##
+        @@CHANGEMAIL(TITLE)
         <label for="bracp-modal-changemail" class="modal-close">&times;</label>
     </div>
     <div class="modal-body">
         {if $smarty.const.BRACP_ALLOW_CHANGE_MAIL eq false}
             <div class="bracp-message error">
-                ##CHANGEMAIL_ERR,DISABLED##
+                @@CHANGEMAIL,ERROR(DISABLED)
             </div>
         {else if $account->getGroup_id() >= $smarty.const.BRACP_ALLOW_ADMIN_GMLEVEL}
             <div class="bracp-message error">
-                ##CHANGEMAIL_ERR,NO_ADMIN##
+                @@CHANGEMAIL,ERROR(NOADMIN)
             </div>
         {else}
             {if isset($email_message) eq true}
@@ -40,22 +40,22 @@
                 </p>
             {/if}
 
-            ##CHANGEMAIL_MSG,0##
+            @@CHANGEMAIL,MESSAGE(HEADER)
 
             <form class="ajax-form" action="{$smarty.const.BRACP_DIR_INSTALL_URL}account/change/mail" autocomplete="off" method="post" target=".modal-changemail-body" data-block="1">
                 <div class="input-forms">
-                    <input type="text" id="email" name="email" placeholder="##CHANGEMAIL_PLACEHOLDER,EMAIL##" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
+                    <input type="text" id="email" name="email" placeholder="@@CHANGEMAIL,HOLDER(EMAIL)" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
 
-                    <input type="text" id="email_new" name="email_new" placeholder="##CHANGEMAIL_PLACEHOLDER,NEW_EMAIL##" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
+                    <input type="text" id="email_new" name="email_new" placeholder="@@CHANGEMAIL,HOLDER(NEW_EMAIL)" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
                     
-                    <input type="text" id="email_conf" name="email_conf" placeholder="##CHANGEMAIL_PLACEHOLDER,CONFIRM##" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
+                    <input type="text" id="email_conf" name="email_conf" placeholder="@@CHANGEMAIL,HOLDER(CONFIRM)" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
 
                     {if $smarty.const.BRACP_RECAPTCHA_ENABLED eq true}
                         <div class="bracp-g-recaptcha" data-sitekey="{$smarty.const.BRACP_RECAPTCHA_PUBLIC_KEY}"></div>
                     {/if}
 
-                    <input class="btn btn-success" type="submit" value="##CHANGEMAIL_BUTTONS,SUBMIT##"/>
-                    <input class="btn" type="reset" value="##CHANGEMAIL_BUTTONS,RESET##"/>
+                    <input class="btn btn-success" type="submit" value="@@CHANGEMAIL,BUTTONS(SUBMIT)"/>
+                    <input class="btn" type="reset" value="@@CHANGEMAIL,BUTTONS(RESET)"/>
                 </div>
             </form>
         {/if}

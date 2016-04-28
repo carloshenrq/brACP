@@ -19,5 +19,5 @@
 {extends file="mail.default.tpl"}
 
 {block name="mail_body"}
-    ##MAIL_CREATE_MSG,0##
+    @@MAIL,CREATE(MESSAGE)
 {/block}
