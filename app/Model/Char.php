@@ -155,9 +155,10 @@ class Char
     protected $party_id;
 
     /**
-     * @Column(name="guild_id", type="integer")
+     * @OneToOne(targetEntity="Guild")
+     * @JoinColumn(name="guild_id", referencedColumnName="guild_id")
      */
-    protected $guild_id;
+    protected $guild;
 
     /**
      * @Column(name="pet_id", type="integer")
@@ -584,14 +585,14 @@ class Char
         return $this->party_id = $party_id;
     }
 
-    public function getGuild_id()
+    public function getGuild()
     {
-        return $this->guild_id;
+        return $this->guild;
     }
     
-    public function setGuild_id($guild_id)
+    public function setGuild($guild)
     {
-        return $this->guild_id = $guild_id;
+        return $this->guild = $guild;
     }
 
     public function getPet_id()
