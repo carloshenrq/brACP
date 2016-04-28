@@ -250,7 +250,8 @@ class brACPApp extends Slim\App
     private function getIpAddress()
     {
         // Possiveis variaveis para se obter o endereço ip do cliente.
-        $_vars = ['HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED',
+        // issue #10: HTTP_CF_CONNECTING_IP-> Usuário usando proteção do cloudfire.
+        $_vars = ['HTTP_CF_CONNECTING_IP', 'HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED',
                   'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR'];
 
         // Varre as opções para retornar os dados ao painel de controle.
