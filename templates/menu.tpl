@@ -45,6 +45,9 @@
                 <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}admin/cache/flush" data-target=".bracp-body"><label>
                     @@MENU,ADMIN(CACHE)
                 </label></li>
+                <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}admin/update" data-target=".bracp-body"><label>
+                    @@MENU,ADMIN(UPDATE)
+                </label></li>
             </ul>
         </li>
     {/if}

@@ -34,6 +34,7 @@ return
             'MODS'      => 'Customizações',
             'PLAYERS'   => 'Jogadores',
             'DONATION'  => 'Doações',
+            'UPDATE'    => 'Atualização de Sistema',
         ],
         'MYACC'     => [
             'TITLE'         => 'Minha Conta',
@@ -377,6 +378,36 @@ return
          */
         'DONATION'   => [
             'TITLE' => 'Administração &raquo; Doações',
+        ],
+
+        /**
+         * @refer templates/admin.update.ajax.tpl
+         * @author carloshenrq
+         */
+        'UPDATE'   => [
+            'TITLE' => 'Administração &raquo; Atualização de Sistema',
+
+            'WARNING'   => [
+                'TITLE'     => 'Atenção!',
+                'MESSAGE'   => 'Após feita a atualização, será necessário refazer a instalação do painel de controle.<br>'.
+                                'São muitas alterações para serem aplicadas, é mais interessante fazer uma instalação limpa em alguns casos.<br>'.
+                                '<br>'.
+                                'Somente inicie o processo de atualização se você tem certeza que deseja continuar.',
+            ],
+            'VERSION'   => '<strong>Versão instalada:</strong> %s',
+            'TABLE'     => [
+                'CAPTION'       => 'Versões estaveis',
+                'COLUMNS'       => [
+                    'DESCRIPTION'   => 'Descrição',
+                    'VERSION'       => 'Versão',
+                    'DATE'          => 'Data',
+                    'FILE'          => 'Arquivo',
+                    'ACTION'        => 'Ação',
+                ],
+
+                'PRE_RELEASE'   => 'pré-lançamento',
+                'INSTALL'       => 'Instalar',
+            ],
         ],
 
         /**

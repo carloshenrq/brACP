@@ -143,6 +143,7 @@ class Route
             if(BRACP_ALLOW_ADMIN)
             {
                 self::getApp()->group('/admin', function() {
+                    $this->get('/update', ['Controller\Admin', 'update']);
                     $this->get('/backup', ['Controller\Admin', 'backup']);
                     $this->get('/theme', ['Controller\Admin', 'theme']);
                     $this->get('/players', ['Controller\Admin', 'players']);
