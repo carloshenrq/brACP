@@ -43,10 +43,15 @@ class Admin
      */
     public static function update(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
-        // Obtém os dados de versão a serem atualziados.
-        $req = json_decode(Request::create('https://api.github.com/repos/carloshenrq/brACP/')
-                ->get('releases')->getBody()->getContents());
+        // Obtém os dados de versão a serem atualizados.
+        // Cria o cache para evitar que a requisição fique sendo realizada
+        //  varias vezes pelo administrador.
+        $req = Cache::get('BRACP_GIT_UPDATE', function() {
+            return json_decode(Request::create('https://api.github.com/repos/carloshenrq/brACP/')
+                                ->get('releases')->getBody()->getContents());
+        });
 
+        // Array de atualizações para o painel de controle.
         $updates = [];
 
         // Varre todos os dados retornados para exibição das versões que podem ser
