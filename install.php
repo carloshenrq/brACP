@@ -95,13 +95,11 @@ $config = [
     'BRACP_RECAPTCHA_PRIVATE_KEY'           => '',
     'BRACP_RECAPTCHA_PRIVATE_URL'           => 'https://www.google.com/recaptcha/api/siteverify',
 
-    // PagSeguro
-    'PAG_INSTALL'                           => 1,
-    'PAG_EMAIL'                             => '',
-    'PAG_TOKEN'                             => '',
+    // Doações - PayPal
+    'PAYPAL_INSTALL'                        => 1,
+    'PAYPAL_ACCOUNT'                        => '',
+    'PAYPAL_CURRENCY'                       => 'BRL',
     'DONATION_AMOUNT_MULTIPLY'              => 100,
-    'DONATION_AMOUNT_USE_RATE'              => 1,
-    'DONATION_AMOUT_SHOW_RATE_CALC'         => 1,
     'DONATION_SHOW_NEXT_PROMO'              => 1,
     'DONATION_INTERVAL_DAYS'                => 3,
 
@@ -125,6 +123,13 @@ $config = [
     // Mods a serem aplicados no painel de controle. (Recomenda-se uso do xdiff, sem isso, tera de ser aplicado manualmente o diff)
     'BRACP_ALLOW_MODS'                      => ((extension_loaded('xdiff')) ? 1:0),
 ]; 
+
+// Moedas padrões aceitas pelo PayPal.
+// @link https://developer.paypal.com/docs/classic/api/currency_codes/
+$PPCurrency =  ['AUD', 'BRL', 'CAD', 'CZK', 'DKK', 'EUR', 'HKD',
+                'HUF', 'ILS', 'JPY', 'MYR', 'MXN', 'NOK', 'NZD',
+                'PHP', 'PLN', 'GBP', 'RUB', 'SGD', 'SEK', 'CHF',
+                'TWD', 'THB', 'TRY', 'USD'];
 
 
 // Verifica se dados de instalação foram recebidos e pode escrever o arquivo
@@ -156,20 +161,6 @@ if($writeable && isset($_POST) && !empty($_POST))
             $configFile .= "DEFINE('{$k}', '{$v}', false);\n";
     }
 
-    // Configurações finais para o painel de controle.
-    $configFile .= "\n";
-    $configFile .= "if(BRACP_DEVELOP_MODE)\n";
-    $configFile .= "{\n";
-    $configFile .= "    DEFINE('PAG_URL', 'https://sandbox.pagseguro.uol.com.br', false);\n";
-    $configFile .= "    DEFINE('PAG_WS_URL', 'https://ws.sandbox.pagseguro.uol.com.br', false);\n";
-    $configFile .= "    DEFINE('PAG_STC_URL', 'https://stc.sandbox.pagseguro.uol.com.br', false);\n";
-    $configFile .= "}\n";
-    $configFile .= "else\n";
-    $configFile .= "{\n";
-    $configFile .= "    DEFINE('PAG_URL', 'https://pagseguro.uol.com.br', false);\n";
-    $configFile .= "    DEFINE('PAG_WS_URL', 'https://ws.pagseguro.uol.com.br', false);\n";
-    $configFile .= "    DEFINE('PAG_STC_URL', 'https://stc.pagseguro.uol.com.br', false);\n";
-    $configFile .= "}\n";
     $configFile .= "\n";
 
     // Finaliza o arquivo e escreve os dados no arquivo de configuração.
@@ -287,7 +278,7 @@ if($writeable && isset($_POST) && !empty($_POST))
                     <li><label for="conf-mysql" class="btn">MySQL</label></li>
                     <li><label for="conf-mail" class="btn">SMTP (E-mails)</label></li>
                     <li><label for="conf-captcha" class="btn">reCAPTCHA</label></li>
-                    <li><label for="conf-donation" class="btn">PagSeguro</label></li>
+                    <li><label for="conf-donation" class="btn">PayPal</label></li>
                     <li><label for="conf-memcache" class="btn">Memcache</label></li>
                     <li><label for="conf-others" class="btn">Outros</label></li>
                 </ul>
@@ -651,22 +642,19 @@ if($writeable && isset($_POST) && !empty($_POST))
 
                     <input name="_conf-tab" id="conf-donation" class="bracp-install-tab-radio" type="radio"/>
                     <div class="bracp-install-tab-div">
-                        <h1>PagSeguro</h1>
+                        <h1>PayPal</h1>
                         <div class="bracp-install-success">
-                            <strong>Viva!</strong> O Painel de controle possui suporte nativo ao PagSeguro!
+                            <strong>Viva!</strong> O Painel de controle possui suporte nativo ao PayPal!
                         </div>
                         <div class="bracp-install-info">
-                            <strong>Verifique seu token!</strong> Você deve estar atento a suas configurações do PagSeguro!<br>
-                            Você deverá informar o seu endereço de e-mail e código do token para configurar corretamente o PagSeguro!<br>
+                            <strong>Verifique seu token!</strong> Você deve estar atento a suas configurações do PayPal!<br>
+                            Você deverá informar o seu endereço de e-mail e a moeda que deseja utilizar com o PayPal.<br>
                             Não se esqueça de configurar também o retorno das notificações!<br>
-                            <br>
-                            <a href="https://pagseguro.uol.com.br/preferencias/integracoes.jhtml" target="_blank">Criar token de segurança</a><br>
-                            <a href="https://pagseguro.uol.com.br/v2/guia-de-integracao/como-comecar.html" target="_blank">Como começar</a>
                         </div>
                         <div class="bracp-install-label-data">
                             <label>
-                                Permitir uso do PagSeguro:<br>
-                                <select id="PAG_INSTALL" name="PAG_INSTALL">
+                                Permitir uso do PayPal:<br>
+                                <select id="PAYPAL_INSTALL" name="PAYPAL_INSTALL">
                                     <option value="0">Não</option>
                                     <option value="1">Sim</option>
                                 </select>
@@ -675,31 +663,21 @@ if($writeable && isset($_POST) && !empty($_POST))
                         <div class="bracp-install-label-data">
                             <label>
                                 E-mail:<br>
-                                <input id="PAG_EMAIL" name="PAG_EMAIL" type="text" value="" size="60"/>
+                                <input id="PAYPAL_ACCOUNT" name="PAYPAL_ACCOUNT" type="text" value="" size="60"/>
                             </label>
                             <label>
-                                Token:<br>
-                                <input id="PAG_TOKEN" name="PAG_TOKEN" type="text" value="" size="40"/>
+                                Moeda:<br>
+                                <select id="PAYPAL_CURRENCY" name="PAYPAL_CURRENCY">
+                                <?php foreach($PPCurrency as $currency) { ?>
+                                    <option value="<?php echo $currency; ?>"><?php echo $currency; ?></option>
+                                <?php } ?>
+                                </select>
                             </label>
                         </div>
                         <div class="bracp-install-label-data">
                             <label>
                                 Quantidade de bônus a cada R$ 1,00:<br>
                                 <input id="DONATION_AMOUNT_MULTIPLY" name="DONATION_AMOUNT_MULTIPLY" type="text" value="" size="6"/>
-                            </label>
-                            <label>
-                                Permitir cliente assumir taxa:<br>
-                                <select id="DONATION_AMOUNT_USE_RATE" name="DONATION_AMOUNT_USE_RATE">
-                                    <option value="0">Não</option>
-                                    <option value="1">Sim</option>
-                                </select>
-                            </label>
-                            <label>
-                                Exibir cálculo da taxa:<br>
-                                <select id="DONATION_AMOUT_SHOW_RATE_CALC" name="DONATION_AMOUT_SHOW_RATE_CALC">
-                                    <option value="0">Não</option>
-                                    <option value="1">Sim</option>
-                                </select>
                             </label>
                         </div>
                         <div class="bracp-install-label-data">

@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS `bracp_donations` (
     `PromotionID` INTEGER NULL DEFAULT NULL,
     `DonationDate` DATE NOT NULL DEFAULT '0000-00-00',
     `DonationRefer` CHAR(32) NOT NULL,
-    `DonationDrive` ENUM('PAGSEGURO') NOT NULL DEFAULT 'PAGSEGURO',
+    `DonationDrive` ENUM('PAYPAL') NOT NULL DEFAULT 'PAYPAL',
     `AccountID` INTEGER NOT NULL,
     `DonationValue` DECIMAL(12, 2) NOT NULL DEFAULT 0.00,
     `DonationBonus` INTEGER NOT NULL DEFAULT 0,
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `bracp_donations` (
     `TransactionCode` VARCHAR(50) NULL DEFAULT NULL,
     `DonationReceiveBonus` BOOLEAN NOT NULL DEFAULT TRUE,
     `DonationCompensate` BOOLEAN NOT NULL DEFAULT FALSE,
-    `DonationStatus` ENUM('INICIADA', 'PAGO', 'CANCELADO', 'ESTORNADO') NOT NULL DEFAULT 'INICIADA',
+    `DonationStatus` ENUM('STARTED', 'PAYD', 'CANCELED', 'ROLLBACK') NOT NULL DEFAULT 'STARTED',
     `DonationPaymentDate` DATETIME NULL DEFAULT NULL,
     `DonationCancelDate` DATETIME NULL DEFAULT NULL,
 

@@ -53,7 +53,7 @@ class Donation
     /**
      * @Column(name="DonationDrive", type="string", length=50)
      */
-    protected $drive = 'PAGSEGURO';
+    protected $drive = 'PAYPAL';
 
     /**
      * @ManyToOne(targetEntity="Login")

@@ -79,8 +79,6 @@ class Route
                 $this->post('/login', ['Controller\Account', 'login'])
                             ->add(['Controller\Account', 'needLoggout']);
 
-                $this->post('/donations/notification', ['Controller\Account', 'donationsNotify']);
-
                 // Verifica configuração se permite recuperar uma conta.
                 if(BRACP_ALLOW_MAIL_SEND && BRACP_ALLOW_RECOVER)
                 {
@@ -102,20 +100,6 @@ class Route
 
                 $this->get('/storage', ['Controller\Account', 'storage'])
                         ->add(['Controller\Account', 'needLogin']);
-
-                // Como é que eu fui esquecer de testar a configuração de doações e deixar a rota aberta?
-                // 2016-04-20, CHLFZ
-                if(PAG_INSTALL)
-                {
-                    $this->map(['GET', 'POST'], '/pagseguro', ['Controller\Account', 'pagseguro'])
-                            ->add(['Controller\Account', 'needLogin']);
-
-                    $this->post('/pagseguro/transaction', ['Controller\Account', 'pagseguroTransaction'])
-                            ->add(['Controller\Account', 'needLogin']);
-
-                    $this->post('/pagseguro/check', ['Controller\Account', 'pagseguroCheck'])
-                            ->add(['Controller\Account', 'needLogin']);
-                }
 
                 $this->get('/logout', ['Controller\Account', 'logout'])
                         ->add(['Controller\Account', 'needLogin']);
