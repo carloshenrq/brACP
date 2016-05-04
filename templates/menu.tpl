@@ -51,6 +51,17 @@
             </ul>
         </li>
     {/if}
+	{if $smarty.const.PAYPAL_INSTALL eq true}
+		<li>
+			<input id="menu-donations" type="checkbox" class="bracp-menu-item-check"/>
+			<label for="menu-donations">@@MENU,DONATIONS(TITLE)</label>
+			<ul>
+				<li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}donations/paypal" data-target=".bracp-body"><label>
+					@@MENU,DONATIONS(PAYPAL)
+				</label></li>
+			</ul>
+		</li>
+	{/if}
     <li>
         <input id="menu-myaccount" type="checkbox" class="bracp-menu-item-check"/>
         <label for="menu-myaccount">@@MENU,MYACC(TITLE)</label>
@@ -77,11 +88,6 @@
             <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/storage" data-target=".bracp-body"><label>
                 @@MENU,MYACC,AUTHENTICATED(STORAGE)
             </label></li>
-            {if $smarty.const.PAG_INSTALL eq true}
-                <li class="ajax-url no-mobile" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/pagseguro" data-target=".bracp-body"><label>
-                    @@MENU,MYACC,AUTHENTICATED(DONATION, PagSeguro)
-                </label></li>
-            {/if}
             <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/logout" data-target=".bracp-body"><label>
                 @@MENU,MYACC,AUTHENTICATED(LOGOUT, {$account->getUserid()})
             </label></li>

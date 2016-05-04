@@ -47,10 +47,6 @@
         <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/jquery.ajax.js"></script>
         <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/jquery.bracp.js"></script>
 
-        {if $smarty.const.PAG_INSTALL eq true}
-            <script src="{$smarty.const.PAG_STC_URL}/pagseguro/api/v2/checkout/pagseguro.lightbox.js"></script>
-        {/if}
-
         {if $smarty.const.BRACP_RECAPTCHA_ENABLED eq true}
             <script src="https://www.google.com/recaptcha/api.js"></script>
         {/if}

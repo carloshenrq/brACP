@@ -36,6 +36,10 @@ return
             'DONATION'  => 'Doações',
             'UPDATE'    => 'Atualização de Sistema',
         ],
+        'DONATIONS' =>  [
+            'TITLE'     => 'Doações',
+            'PAYPAL'    => 'Doar pelo PayPal',
+        ],
         'MYACC'     => [
             'TITLE'         => 'Minha Conta',
             'UNAUTHENTICATED'   => [
@@ -51,7 +55,6 @@ return
                 ],
                 'STORAGE'   => 'Armazém',
                 'CHARS'     => 'Personagens',
-                'DONATION'  => 'Doações (%s)',
                 'LOGOUT'    => 'Sair (%s)',
             ],
         ],
