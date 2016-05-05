@@ -52,6 +52,18 @@ class Route
             // Adiciona a rota para alteração de temas.
             self::getApp()->post('/language', ['Controller\Home', 'language']);
 
+            // Adiciona a rota para doações.
+            self::getApp()->group('/donations', function() {
+
+                // Verifica se o paypal está instalado se estiver permite as rotas para o paypal.
+                if(PAYPAL_INSTALL)
+                {
+                    $this->get('/paypal', ['Controller\Donation', 'paypal']);
+                    $this->post('/paypal/notify', ['Controller\Donation', 'paypalNotify']);
+                }
+
+            });
+
             // Mapeia o grupo account.
             self::getApp()->group('/account', function() {
                 // Rotas que não necessitam de login para entrar.

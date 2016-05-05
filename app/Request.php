@@ -40,7 +40,6 @@ class Request
             'verify' => false
         ], $options));
 
-        // $client->setDefaultOption('verify', false);
         return $client;
     }
 }

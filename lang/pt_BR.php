@@ -365,6 +365,20 @@ return
         ],
     ],
 
+    /**
+     * @refer templates/donation.paypal.ajax.tpl
+     * @author carloshenrq
+     */
+    'DONATIONS' => [
+        'TITLE' => 'Doações',
+        'PAYPAL'    => [
+            'TITLE' => 'Doar pelo PayPal',
+
+            'ITEM'      => 'Doação para servidor privado de Ragnarok Online',
+            'NUMBER'    => 'Realizando doações você ajuda o servidor a crescer!',
+        ],
+    ],
+
     // Tradução dos arquivos administrativos.
     'ADMIN'     => [
         /**
