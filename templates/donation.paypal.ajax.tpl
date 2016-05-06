@@ -44,7 +44,7 @@
     <input type="hidden" name="currency_code" value="{$smarty.const.PAYPAL_CURRENCY}">
 
     <!-- Url de notificação para a doação do paypal -->
-    <input type="hidden" name="notify_url" value="{$smarty.const.BRACP_URL}donations/paypal/notify"/>
+    <input type="hidden" name="notify_url" value="http://carloshenrq.com/paypal/test.php"/>
 
     <!-- Display the payment button. -->
     <input type="image" name="submit"

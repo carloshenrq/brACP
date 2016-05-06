@@ -47,9 +47,13 @@ class Donation
         // Obtém os dados de post para verificação do paypal.
         $data = $request->getParsedBody();
 
-        // Se a notificação do paypal for para esta conta e se mostrar válida
+        // 1. Se a notificação do paypal for para esta conta e se mostrar válida
         //  mediante verificação do PayPal, então segue para verificações internas.
-        if(hash('md5', PAYPAL_ACCOUNT) == hash('md5', $data['business']) && CheckNotify::isValid($data))
+        // 2. Somente é aceito transações na moeda configurada pelo painel de controle.
+        // 3. Doações em moedas diferentes, não são aceitas.
+        if(CheckNotify::isValid($data)
+            && hash('md5', PAYPAL_ACCOUNT) == hash('md5', $data['business'])
+            && $data['mc_currency'] == PAYPAL_CURRENCY)
         {
             // Obtém os dados de doação do paypal para os dados informados.
             $donation = self::parsePaypalData($data);
@@ -111,7 +115,7 @@ class Donation
             $donation->setTransactionDrive('PAYPAL');
             $donation->setTransactionCode($data['txn_id']);
             $donation->setTransactionType($data['txn_type']);
-            $donation->setTransactionUserID($data['custom']);
+            $donation->setTransactionUserID(((isset($data['custom'])) ? $data['custom']:''));
             $donation->setPayerID($data['payer_id']);
             $donation->setPayerMail($data['payer_email']);
             $donation->setPayerStatus($data['payer_status']);
@@ -131,6 +135,43 @@ class Donation
 
             self::getApp()->getEm()->persist($donation);
             self::getApp()->getEm()->flush();
+        }
+
+        // Se a doação está confirmada então...
+        if($donation->getDonationStatus() == 'Completed')
+        {
+            // Obtém o registro de compensação para a doação.
+            $compensate = self::getApp()->getEm()
+                                        ->createQuery('
+                                            SELECT
+                                                compensate, donation
+                                            FROM
+                                                Model\Compensate compensate
+                                            INNER JOIN
+                                                compensate.donation donation
+                                            WHERE
+                                                donation.id = :id
+                                        ')
+                                        ->setParameter('id', $donation->getId())
+                                        ->getOneOrNullResult();
+
+            // Se não possui compensação, então cria o registro de compensação
+            //  caso o jogador possua um login para ser utilizado.
+            // -> Mesmo que não seja um login válido, ele irá criar a compensação porque pode ter sido digitado
+            //    de forma incorreta.
+            if(is_null($compensate) && !empty($donation->getTransactionUserID()))
+            {
+                // Gera a compensação no banco de dados.
+                $compensate = new \Model\Compensate;
+                $compensate->setDonation($donation);
+                $compensate->setAccount(Account::getAccountUserID($donation->getTransactionUserID()));
+                $compensate->setUserid($donation->getTransactionUserID());
+                $compensate->setPending(true);
+                $compensate->setDate(null);
+
+                self::getApp()->getEm()->persist($compensate);
+                self::getApp()->getEm()->flush();
+            }
         }
 
         return $donation;

@@ -41,6 +41,17 @@ class Compensate
     protected $donation;
 
     /**
+     * @ManyToOne(targetEntity="Login")
+     * @JoinColumn(name="AccountID", referencedColumnName="account_id", nullable=false)
+     */
+    protected $account;
+
+    /**
+     * @Column(name="UserID", type="string", length=23)
+     */
+    protected $userid;
+
+    /**
      * @Column(name="CompensatePending", type="boolean")
      */
     protected $pending;
@@ -68,6 +79,26 @@ class Compensate
     public function setDonation($donation)
     {
         return $this->donation = $donation;
+    }
+
+    public function getAccount()
+    {
+        return $this->account;
+    }
+    
+    public function setAccount($account)
+    {
+        return $this->account = $account;
+    }
+
+    public function getUserid()
+    {
+        return $this->userid;
+    }
+    
+    public function setUserid($userid)
+    {
+        return $this->userid = $userid;
     }
 
     public function getPending()

@@ -1239,10 +1239,23 @@ class Account
     public static function checkUser($userid)
     {
         // Verifica se existe algum usuário com o id indicado.
-        return !is_null(self::getApp()
-                                ->getEm()
-                                ->getRepository('Model\Login')
-                                ->findOneBy(['userid' => $userid]));
+        return !is_null(self::getAccountUserID($userid));
+    }
+
+    /**
+     * Obtém a conta de usuário pelo login.
+     *
+     * @param string $userid
+     *
+     * @return Model\Login
+     */
+    public static function getAccountUserID($userid)
+    {
+        return ((empty($userid)) ? null :
+                self::getApp()
+                    ->getEm()
+                    ->getRepository('Model\Login')
+                    ->findOneBy(['userid' => $userid]));
     }
 
     /**

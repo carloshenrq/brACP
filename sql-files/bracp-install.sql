@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS `bracp_donations` (
     `TransactionDrive` VARCHAR(20) NOT NULL DEFAULT 'PAYPAL',
     `TransactionCode` VARCHAR(100) NOT NULL DEFAULT '',
     `TransactionType` VARCHAR(50) NULL DEFAULT NULL,
-    `TransactionUserID` VARCHAR(24) NULL DEFAULT NULL,
+    `TransactionUserID` VARCHAR(23) NULL DEFAULT NULL,
     `PayerID` VARCHAR(50) NULL DEFAULT NULL,
     `PayerMail` VARCHAR(100) NULL DEFAULT NULL,
     `PayerStatus` VARCHAR(30) NULL DEFAULT NULL,
@@ -50,6 +50,8 @@ DROP TABLE IF EXISTS `bracp_compensations`;
 CREATE TABLE IF NOT EXISTS `bracp_compensations` (
     `CompensateID` INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `DonationID` INTEGER NOT NULL,
+    `AccountID` INTEGER NULL DEFAULT NULL,
+    `UserID` VARCHAR(23) NULL DEFAULT NULL,
     `CompensatePending` BOOLEAN NOT NULL DEFAULT TRUE,
     `CompensateDate` DATETIME NULL DEFAULT NULL,
 

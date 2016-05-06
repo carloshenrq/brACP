@@ -71,7 +71,7 @@ class Donation
     protected $transactionType;
 
     /**
-     * @Column(name="TransactionUserID", type="string", length=24)
+     * @Column(name="TransactionUserID", type="string", length=23)
      */
     protected $transactionUserID;
 
