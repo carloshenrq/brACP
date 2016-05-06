@@ -41,75 +41,114 @@ class Donation
     protected $promotion;
 
     /**
-     * @Column(name="DonationDate", type="string", length=10)
+     * @Column(name="ReceiverID", type="string", length=50)
      */
-    protected $date;
+    protected $receiverId;
 
     /**
-     * @Column(name="DonationRefer", type="string", length=32)
+     * @Column(name="ReceiverMail", type="string", length=100)
      */
-    protected $reference;
+    protected $receiverMail;
 
     /**
-     * @Column(name="DonationDrive", type="string", length=50)
+     * @Column(name="SandboxMode", type="boolean")
      */
-    protected $drive = 'PAYPAL';
+    protected $sandboxMode;
 
     /**
-     * @ManyToOne(targetEntity="Login")
-     * @JoinColumn(name="AccountID", referencedColumnName="account_id", nullable=true)
+     * @Column(name="TransactionDrive", type="string", length=20)
      */
-    protected $account;
+    protected $transactionDrive;
 
     /**
-     * @Column(name="DonationValue", type="decimal", precision=12, scale=2)
-     */
-    protected $value;
-
-    /**
-     * @Column(name="DonationBonus", type="integer")
-     */
-    protected $bonus;
-
-    /**
-     * @Column(name="DonationTotalValue", type="decimal", precision=12, scale=2)
-     */
-    protected $totalValue;
-
-    /**
-     * @Column(name="CheckoutCode", type="string", length=50, nullable=true)
-     */
-    protected $checkoutCode;
-
-    /**
-     * @Column(name="TransactionCode", type="string", length=50, nullable=true)
+     * @Column(name="TransactionCode", type="string", length=100)
      */
     protected $transactionCode;
 
     /**
-     * @Column(name="DonationReceiveBonus", type="boolean")
+     * @Column(name="TransactionType", type="string", length=50)
      */
-    protected $receiveBonus = true;
+    protected $transactionType;
 
     /**
-     * @Column(name="DonationCompensate", type="boolean")
+     * @Column(name="TransactionUserID", type="string", length=24)
      */
-    protected $compensate = false;
+    protected $transactionUserID;
 
     /**
-     * @Column(name="DonationStatus", type="string", length=50)
+     * @Column(name="PayerID", type="string", length=50)
      */
-    protected $status = 'INICIADA';
+    protected $payerID;
 
     /**
-     * @Column(name="DonationPaymentDate", type="string", length=19, nullable=true)
+     * @Column(name="PayerMail", type="string", length=100)
      */
-    protected $paymentDate = null;
+    protected $payerMail;
 
     /**
-     * @Column(name="DonationCancelDate", type="string", length=19, nullable=true)
+     * @Column(name="PayerStatus", type="string", length=30)
      */
-    protected $cancelDate = null;
+    protected $payerStatus;
+
+    /**
+     * @Column(name="PayerName", type="string", length=100)
+     */
+    protected $payerName;
+
+    /**
+     * @Column(name="PayerCountry", type="string", length=50)
+     */
+    protected $payerCountry;
+
+    /**
+     * @Column(name="PayerState", type="string", length=50)
+     */
+    protected $payerState;
+
+    /**
+     * @Column(name="PayerCity", type="string", length=50)
+     */
+    protected $payerCity;
+
+    /**
+     * @Column(name="PayerAddress", type="string", length=200)
+     */
+    protected $payerAddress;
+
+    /**
+     * @Column(name="PayerZipCode", type="string", length=30)
+     */
+    protected $payerZipCode;
+
+    /**
+     * @Column(name="PayerAddressConfirmed", type="boolean")
+     */
+    protected $payerAddressConfirmed;
+
+    /**
+     * @Column(name="DonationValue", type="decimal", precision=12, scale=2)
+     */
+    protected $donationValue;
+
+    /**
+     * @Column(name="DonationPayment", type="string", length=20)
+     */
+    protected $donationPayment;
+
+    /**
+     * @Column(name="DonationStatus", type="string", length=30)
+     */
+    protected $donationStatus;
+
+    /**
+     * @Column(name="DonationType", type="string", length=30)
+     */
+    protected $donationType;
+
+    /**
+     * @Column(name="VerifySign", type="text")
+     */
+    protected $verifySign;
 
     public function getId()
     {
@@ -131,84 +170,44 @@ class Donation
         return $this->promotion = $promotion;
     }
 
-    public function getDate()
+    public function getReceiverId()
     {
-        return $this->date;
+        return $this->receiverId;
     }
     
-    public function setDate($date)
+    public function setReceiverId($receiverId)
     {
-        return $this->date = $date;
+        return $this->receiverId = $receiverId;
     }
 
-    public function getReference()
+    public function getReceiverMail()
     {
-        return $this->reference;
+        return $this->receiverMail;
     }
     
-    public function setReference($reference)
+    public function setReceiverMail($receiverMail)
     {
-        return $this->reference = $reference;
+        return $this->receiverMail = $receiverMail;
     }
 
-    public function getDrive()
+    public function getSandboxMode()
     {
-        return $this->drive;
+        return $this->sandboxMode;
     }
     
-    public function setDrive($drive)
+    public function setSandboxMode($sandboxMode)
     {
-        return $this->drive = $drive;
+        return $this->sandboxMode = $sandboxMode;
     }
 
-    public function getAccount()
+    public function getTransactionDrive()
     {
-        return $this->account;
+        return $this->transactionDrive;
     }
     
-    public function setAccount($account)
+    public function setTransactionDrive($transactionDrive)
     {
-        return $this->account = $account;
-    }
-
-    public function getValue()
-    {
-        return $this->value;
-    }
-    
-    public function setValue($value)
-    {
-        return $this->value = $value;
-    }
-
-    public function getBonus()
-    {
-        return $this->bonus;
-    }
-    
-    public function setBonus($bonus)
-    {
-        return $this->bonus = $bonus;
-    }
-
-    public function getTotalValue()
-    {
-        return $this->totalValue;
-    }
-    
-    public function setTotalValue($totalValue)
-    {
-        return $this->totalValue = $totalValue;
-    }
-
-    public function getCheckoutCode()
-    {
-        return $this->checkoutCode;
-    }
-    
-    public function setCheckoutCode($checkoutCode)
-    {
-        return $this->checkoutCode = $checkoutCode;
+        return $this->transactionDrive = $transactionDrive;
     }
 
     public function getTransactionCode()
@@ -221,54 +220,173 @@ class Donation
         return $this->transactionCode = $transactionCode;
     }
 
-    public function getReceiveBonus()
+    public function getTransactionType()
     {
-        return $this->receiveBonus;
+        return $this->transactionType;
     }
     
-    public function setReceiveBonus($receiveBonus)
+    public function setTransactionType($transactionType)
     {
-        return $this->receiveBonus = $receiveBonus;
+        return $this->transactionType = $transactionType;
     }
 
-    public function getCompensate()
+    public function getTransactionUserID()
     {
-        return $this->compensate;
+        return $this->transactionUserID;
     }
     
-    public function setCompensate($compensate)
+    public function setTransactionUserID($transactionUserID)
     {
-        return $this->compensate = $compensate;
+        return $this->transactionUserID = $transactionUserID;
     }
 
-    public function getStatus()
+    public function getPayerID()
     {
-        return $this->status;
+        return $this->payerID;
     }
     
-    public function setStatus($status)
+    public function setPayerID($payerID)
     {
-        return $this->status = $status;
+        return $this->payerID = $payerID;
     }
 
-    public function getPaymentDate()
+    public function getPayerMail()
     {
-        return $this->paymentDate;
+        return $this->payerMail;
     }
     
-    public function setPaymentDate($paymentDate)
+    public function setPayerMail($payerMail)
     {
-        return $this->paymentDate = $paymentDate;
+        return $this->payerMail = $payerMail;
     }
 
-    public function getCancelDate()
+    public function getPayerStatus()
     {
-        return $this->cancelDate;
+        return $this->payerStatus;
     }
     
-    public function setCancelDate($cancelDate)
+    public function setPayerStatus($payerStatus)
     {
-        return $this->cancelDate = $cancelDate;
+        return $this->payerStatus = $payerStatus;
+    }
+
+    public function getPayerName()
+    {
+        return $this->payerName;
+    }
+    
+    public function setPayerName($payerName)
+    {
+        return $this->payerName = $payerName;
+    }
+
+    public function getPayerCountry()
+    {
+        return $this->payerCountry;
+    }
+    
+    public function setPayerCountry($payerCountry)
+    {
+        return $this->payerCountry = $payerCountry;
+    }
+
+    public function getPayerState()
+    {
+        return $this->payerState;
+    }
+    
+    public function setPayerState($payerState)
+    {
+        return $this->payerState = $payerState;
+    }
+
+    public function getPayerCity()
+    {
+        return $this->payerCity;
+    }
+    
+    public function setPayerCity($payerCity)
+    {
+        return $this->payerCity = $payerCity;
+    }
+
+    public function getPayerAddress()
+    {
+        return $this->payerAddress;
+    }
+    
+    public function setPayerAddress($payerAddress)
+    {
+        return $this->payerAddress = $payerAddress;
+    }
+
+    public function getPayerZipCode()
+    {
+        return $this->payerZipCode;
+    }
+    
+    public function setPayerZipCode($payerZipCode)
+    {
+        return $this->payerZipCode = $payerZipCode;
+    }
+
+    public function getPayerAddressConfirmed()
+    {
+        return $this->payerAddressConfirmed;
+    }
+    
+    public function setPayerAddressConfirmed($payerAddressConfirmed)
+    {
+        return $this->payerAddressConfirmed = $payerAddressConfirmed;
+    }
+
+    public function getDonationValue()
+    {
+        return $this->donationValue;
+    }
+    
+    public function setDonationValue($donationValue)
+    {
+        return $this->donationValue = $donationValue;
+    }
+
+    public function getDonationPayment()
+    {
+        return $this->donationPayment;
+    }
+    
+    public function setDonationPayment($donationPayment)
+    {
+        return $this->donationPayment = $donationPayment;
+    }
+
+    public function getDonationStatus()
+    {
+        return $this->donationStatus;
+    }
+    
+    public function setDonationStatus($donationStatus)
+    {
+        return $this->donationStatus = $donationStatus;
+    }
+
+    public function getDonationType()
+    {
+        return $this->donationType;
+    }
+    
+    public function setDonationType($donationType)
+    {
+        return $this->donationType = $donationType;
+    }
+
+    public function getVerifySign()
+    {
+        return $this->verifySign;
+    }
+    
+    public function setVerifySign($verifySign)
+    {
+        return $this->verifySign = $verifySign;
     }
 }
-
