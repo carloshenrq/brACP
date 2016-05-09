@@ -194,9 +194,5 @@
                 {/if}
             {/if}
         </div>
-
-        <div class="bracp-ajax-loading">
-            <div class="bracp-ajax-loading-div"></div>
-        </div>
     </body>
 </html>

@@ -583,14 +583,6 @@ span.ajax-url, label.lbl-link
     cursor: pointer;
 }
 
-.bracp-ajax-loading
-{
-    position: fixed;
-    top: 0px; left: 0px;
-    background-color: rgba(0, 0, 0, .3);
-    z-index: 3;
-}
-
 .table
 {
     border-color: lightgray;
@@ -795,6 +787,14 @@ span.ajax-url, label.lbl-link
             }
         }
     }
+}
+
+.ajax-loader
+{
+    @include size(220px, 19px);
+    background-image: url(../img/ajax-loader.gif);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
 }
 
 .mobile-only

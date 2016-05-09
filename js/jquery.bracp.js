@@ -126,15 +126,20 @@ var grecaptcha_timer = false;
 
     $.ajaxSetup({
         'beforeSend' : function(jqXHR, settings) {
-            // Ajusta a tela de acordo com a largura.
-            $('.bracp-ajax-loading').css({
-                'width' : $(window).width(),
-                'height' : $(window).height(),
-            }).stop(true, true).fadeIn('fast');
+
+            // Identifica o elemento que irá receber a requisição ajax,
+            //  Se houver, modal-body é um modal, se não é o corpo.
+            // -> Ajuda previnir o re-envio dos campos na tela.
+            var element = $(this).find('.modal-body').length > 0 ? $(this).find('.modal-body') : $(this);                    
+
+            // Adiciona o loader no elemento destino ao carregamento.
+            element
+                .html( '<center>'+
+                            '<div class="ajax-loader"/>'+
+                       '</center>' );
+
         },
         'complete' : function (jqXHR, textStatus) {
-            $('.bracp-ajax-loading').stop(true, true).fadeOut('fast');
-
             // Adicionado renderização para o código re-captcha na página atual.
             // Verificações serão adicionadas via servidor.
             if($('.bracp-g-recaptcha').length > 0)
