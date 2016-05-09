@@ -49,6 +49,8 @@
 
         {if $smarty.const.BRACP_RECAPTCHA_ENABLED eq true}
             <script src="https://www.google.com/recaptcha/api.js"></script>
+        {else}
+            <script>var grecaptcha = false;</script>
         {/if}
 
         <script>

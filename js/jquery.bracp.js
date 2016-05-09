@@ -99,29 +99,34 @@ var grecaptcha_timer = false;
     });
 
     $(document).ready(function() {
-        grecaptcha_timer = setInterval(function() {
-            // Se a biblioteca do google ainda não estiver pronta,
-            //  mantém o timer rodando.
-            if(grecaptcha == undefined)
-                return;
+        // Se grecaptcha === false, a biblioteca não foi instalada, então, não é necessário
+        //  ficar executando o comando de verificação para a biblioteca toda-vida. [09/05/2016, CHLFZ]
+        if(grecaptcha === false)
+        {
+            grecaptcha_timer = setInterval(function() {
+                // Se a biblioteca do google ainda não estiver pronta,
+                //  mantém o timer rodando.
+                if(grecaptcha == undefined)
+                    return;
 
-            // Limpa o intervalo caso seja carregado.
-            clearInterval(grecaptcha_timer);
+                // Limpa o intervalo caso seja carregado.
+                clearInterval(grecaptcha_timer);
 
-            // Adicionado renderização para o código re-captcha na página atual.
-            // Verificações serão adicionadas via servidor.
-            if($('.bracp-g-recaptcha').length > 0)
-            {
-                $('.bracp-g-recaptcha').each(function(){
-                    if($(this).html().length == 0)
-                    {
-                        grecaptcha.render(this, {
-                            'sitekey' : $(this).data('sitekey')
-                        });
-                    }
-                });
-            }
-        }, 100);
+                // Adicionado renderização para o código re-captcha na página atual.
+                // Verificações serão adicionadas via servidor.
+                if($('.bracp-g-recaptcha').length > 0)
+                {
+                    $('.bracp-g-recaptcha').each(function(){
+                        if($(this).html().length == 0)
+                        {
+                            grecaptcha.render(this, {
+                                'sitekey' : $(this).data('sitekey')
+                            });
+                        }
+                    });
+                }
+            }, 100);
+        } // end - if(grecaptcha === false)
     });
 
     $.ajaxSetup({
