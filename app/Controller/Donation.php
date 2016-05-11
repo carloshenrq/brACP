@@ -105,6 +105,16 @@ class Donation
 
         // Verifica se a doação para a transação informada é existente no banco
         //  de dados.
+        // ------------------
+        // Somente para esclarecer o motivo de guardar todas essas informações.
+        // Na dúvida, se é necessário ou não, é melhor guardar essas informações.
+        // 
+        // LINK: http://www.planalto.gov.br/ccivil_03/_ato2011-2014/2014/lei/l12965.htm
+        //
+        // Lei Nº 12965/2014 - Marco Civil da Internet no Brasil
+        // Art. 16.  Na provisão de aplicações de internet, onerosa ou gratuita, é vedada a guarda:
+        //      I - dos registros de acesso a outras aplicações de internet sem que o titular dos dados tenha consentido previamente, respeitado o disposto no art. 7o; ou
+        //      II - de dados pessoais que sejam excessivos em relação à finalidade para a qual foi dado consentimento pelo seu titular.
         if(is_null($donation))
         {
             // Cria a doação no banco de dados.
