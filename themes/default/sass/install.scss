@@ -70,12 +70,23 @@ html, body
         @include box-shadow('0px 0px 0px 1px rgba(0, 102, 0, .65) inset');
         @include border-radius(0px 0px 6px 6px);
 
-        div
+        div.install-content
         {
             padding: 16px;
-            height: 400px;
+            min-height: 300px;
         }
     }
+
+    .install-cfg-allow
+    {
+        display: none;
+
+        &:not(:checked) + .bracp-install-menu
+        {
+            display: none;
+        }
+    }
+
     .bracp-install-menu
     {
         width: 100%;
@@ -121,4 +132,60 @@ html, body
             }
         }
     }
+}
+
+.bracp-message
+{
+    padding: 16px;
+    font-size: 12px;
+    border: 1px solid;
+
+    @include border-radius(4px);
+
+    .header, h1, h2, h3, h4
+    {
+        margin: 0px !important; padding: 0px !important;
+        font-size: 12px;
+        margin-bottom: 8px !important;
+        border-bottom: 1px dotted;
+        text-transform: capitalize;
+        font-weight: bold;
+        min-height: 0 !important;
+
+        .sub-title
+        {
+            font-size: 10px;
+            font-style: italic;
+            font-weight: none;
+            text-transform: none;
+        }
+    }
+}
+
+.info
+{
+    background-color: rgba(0, 183, 255, 0.1);
+    border-color: rgba(0, 183, 255, 0.7);
+    color: #138EBF;
+}
+
+.error
+{
+    border-color: rgba(255, 0, 0, 0.7);
+    background-color: rgba(255, 0, 0, 0.1);
+    color: #BD0029;
+}
+
+.success
+{
+    border-color: rgba(120, 209, 90, 0.7);
+    background-color: rgba(120, 209, 90, 0.1);
+    color: #53913F;
+}
+
+.warning
+{
+    border-color: rgba(255, 153, 0, 0.7);
+    background-color: rgba(255, 153, 0, 0.1);
+    color: #ff9900;
 }

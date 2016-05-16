@@ -179,6 +179,15 @@ if($writeable && isset($_POST) && !empty($_POST))
     exit;
 }
 
+// Definição das mensagens de erro.
+$BRACP_ERROR_CODE = 0;
+if(version_compare(PHP_VERSION, '5.4.0', '<'))
+    $BRACP_ERROR_CODE = 1;
+else if (!file_exists('vendor') || !is_dir('vendor') || file_exists('vendor') && !file_exists('composer.lock'))
+    $BRACP_ERROR_CODE = 2;
+else if(!$writeable)
+    $BRACP_ERROR_CODE = 3;
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -199,7 +208,18 @@ if($writeable && isset($_POST) && !empty($_POST))
             var install = angular.module('brACP', []);
 
             install.controller('install', ['$scope', function($scope) {
-                $scope.BRACP_SWITCH = 'home';
+
+                $scope.BRACP_ERROR_CODE = <?php echo $BRACP_ERROR_CODE; ?>;
+                $scope.BRACP_ALLOW_INSTALL = $scope.BRACP_ERROR_CODE == 0;
+
+                if($scope.BRACP_ALLOW_INSTALL == false)
+                {
+                    $scope.BRACP_SWITCH = 'error';
+                }
+                else
+                {
+                    $scope.BRACP_SWITCH = 'home';
+                }
                 $scope.config = <?php echo json_encode($config); ?>;
             }]);
 
@@ -215,6 +235,7 @@ if($writeable && isset($_POST) && !empty($_POST))
                 brACP - Programa de Instalação e Configuração
             </div>
 
+            <input type="checkbox" ng-model="BRACP_ALLOW_INSTALL" class="install-cfg-allow"/>
             <!-- Menu de exibição das opções de seleção para a configuração -->
             <div class="bracp-install-menu">
                 <ul>
@@ -253,43 +274,78 @@ if($writeable && isset($_POST) && !empty($_POST))
             <div ng-switch on="BRACP_SWITCH" class="install-body">
 
                 <!-- Bem vindo a instalação do painel de controle. -->
-                <div ng-switch-when="home">
+                <div ng-switch-when="home" class="install-content">
                     Bem vindo.<br>
                 </div>
 
                <!-- Configurações para o banco de dados -->
-                <div ng-switch-when="mysql">
+                <div ng-switch-when="mysql" class="install-content">
                     Configurar MySQL.
                 </div>
 
                 <!-- Configurações do servidor de e-mail. -->
-                <div ng-switch-when="mail">
+                <div ng-switch-when="mail" class="install-content">
                     Configurar EMAIL.
                 </div>
 
                 <!-- Configurações do RECAPTCHA. -->
-                <div ng-switch-when="recaptcha">
+                <div ng-switch-when="recaptcha" class="install-content">
                     Configurar RECAPTCHA.
                 </div>
 
                 <!-- Configurações do DONATION. -->
-                <div ng-switch-when="donation">
+                <div ng-switch-when="donation" class="install-content">
                     Configurar DONATION.
                 </div>
 
                 <!-- Configurações do cache. -->
-                <div ng-switch-when="cache">
+                <div ng-switch-when="cache" class="install-content">
                     Configurar CACHE.
                 </div>
 
                 <!-- Configurações do other. -->
-                <div ng-switch-when="other">
+                <div ng-switch-when="other" class="install-content">
                     Configurar OTHER.
                 </div>
 
                 <!-- Bem vindo a instalação do painel de controle. -->
-                <div ng-switch-default>
-                    ERROR
+                <div ng-switch-default class="install-content">
+                    <div class="bracp-message error">
+                        <div class="header">
+                            Falha de verificação <span class="sub-title">(Código: {{BRACP_ERROR_CODE}})</span>
+                        </div>
+                        
+                        <div ng-switch on="BRACP_ERROR_CODE">
+                            <div ng-switch-when="1">
+                                Sua versão de instalação do PHP é inferior a requerida para execução do painel de controle.<br>
+                                A Versão minima para execução é a 5.4.0 ou superior.<br>
+                                <br>
+                                <strong><i>Hey, psiu! Talvez isso te ajude:
+                                <a href="http://php.net/" target="_blank">PHP.net</a></i></strong> 
+                            </div>
+
+                            <div ng-switch-when="2">
+                                Os arquivos do composer não foram baixados!<br>
+                                Verifique sua instalação e tente novamente.<br>
+                                <br>
+                                <strong><i>Hey, psiu! Talvez isso te ajude:
+                                <a href="http://getcomposer.org/" target="_blank">Composer</a>.</i></strong>
+                             </div>
+
+                            <div ng-switch-when="3">
+                                O Programa de instalação não será capaz criar o arquivo de instalação se você enviar os dados.<br>
+                                Verifique as permissões do diretório e tente novamente.<br>
+                                <br>
+                                Talvez isso ajude!<br>
+                                <strong>chmod -R 0777</strong> 
+                             </div>
+
+                             <div ng-switch-default>
+                                -- UNKNOW ERROR --
+                             </div>
+                        </div>
+
+                    </div>
                 </div>
 
             </div>
