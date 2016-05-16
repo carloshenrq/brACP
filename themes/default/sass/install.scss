@@ -21,127 +21,104 @@
 html, body
 {
     margin: 0px; padding: 0px;
-    font-family: Verdana, Tahoma, Arial;
+    font-family: Tahoma, Verdana, Arial;
     font-size: 12px;
+
+    background-color: rgba(204, 255, 204, .3);
+}
+
+.install-cfg-radio
+{
+    display: none;
 }
 
 .bracp-install-body
 {
-    width: 800px;
+    width: 680px;
+    @include border-radius(6px);
+    color: rgb(0, 102, 0);
+
     margin: auto;
+    position: relative;
+    top: 40px;
 
-    h1
+    @include box-shadow('0px 0px 6px rgba(0, 102, 0, .65)');
+
+    .install-title
     {
-        margin: 4px; padding: 0px;
-        border-bottom: 1px dotted black;
-        text-align: center;
-    }
-
-    .bracp-install-error, .bracp-install-info, .bracp-install-warning, .bracp-install-success
-    {
-        margin: 3px;
-        padding: 16px;
-        border: 1px solid;
-        border-radius: 4px;
-    }
-
-    .bracp-install-error
-    {
-        border-color: rgba(255, 0, 0, .7);
-        background-color: rgba(255, 0, 0, .1);
-        color: #BD0029;
-    }
-
-    .bracp-install-info
-    {
-        border-color: rgba(0, 183, 255, .7);
-        background-color: rgba(0, 183, 255, .1);
-        color: #138EBF;
-    }
-
-    .bracp-install-warning
-    {
-        border-color: rgba(255, 153, 0, .7);
-        background-color: rgba(255, 153, 0, .1);
-        color: #ff9900;
-    }
-
-    .bracp-install-success
-    {
-        border-color: rgba(120, 209, 90, .7);
-        background-color: rgba(120, 209, 90, .1);
-        color: #53913F;
-    }
-
-    .bracp-install-tab-radio
-    {
-        display: none;
-
-        &:not(:checked) + .bracp-install-tab-div
-        {
-            display: none;
-        }
-    }
-
-    .bracp-install-tab-div
-    {
-        padding: 12px;
-        border-radius: 4px;
-        border: 1px solid rgba(0, 0, 0, .25);
-        height: 400px;
-        overflow: auto;
-
-        .bracp-install-label-data
-        {
-            &+ .bracp-install-label-data
-            {
-                margin-top: 10px;
-            }
-        }
-
-        h1
-        {
-            border-bottom: 1px dotted rgba(0, 0, 0, .6);
-            font-size: 15px;
-            text-align: left;
-        }
-
-        label
-        {
-            display: inline-block;
-            
-            &+ label
-            {
-                margin-left: 15px;
-            }
-        }
-    }
-
-    .bracp-install-tabs
-    {
-        padding: 8px; margin: 0px;
-        list-style: none;
+        padding: 20px;
         text-align: center;
 
-        li
-        {
-            display: inline-block;
+        color: white;
+        font-size: 15px;
+        font-weight: bold;
+        background-color: #006600;
 
-            &+ li
-            {
-                margin-left: 5px;
-            }
-        }
+        border: 1px solid rgba(255, 255, 255, .6);
+
+        @include border-radius(6px 6px 0px 0px);
     }
 
-    .bracp-install-submit
+    .install-body
     {
-        margin-top: 16px;
-        text-align: center;
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+        margin: 0px; padding: 0px;
+        background-color: white;
 
-        input + input
+        @include box-shadow('0px 0px 0px 1px rgba(0, 102, 0, .65) inset');
+        @include border-radius(0px 0px 6px 6px);
+
+        div
         {
-            margin-left: 24px;
+            padding: 16px;
+            height: 400px;
+        }
+    }
+    .bracp-install-menu
+    {
+        width: 100%;
+        ul
+        {
+            width: 100%;
+            list-style: none;
+            margin: 0; padding: 0;
+            display: table;
+            table-layout: fixed;
+
+            li
+            {
+                display: table-cell;
+                text-align: center;
+
+                border: 1px solid rgba(0, 102, 0, .65);
+
+                label
+                {
+                    display: block;
+                    padding: 8px;
+                    cursor: pointer;
+                    color: white;
+                    font-weight: bold;
+                }
+
+                input.install-cfg-radio:not(:checked) + label
+                {
+                    @include background-gradient(#009900, #006600);
+                }
+
+                input.install-cfg-radio:checked + label
+                {
+                    color: #006600;
+                    @include background-gradient(#ffffff, #e6e6e6);
+                }
+
+                &+ li
+                {
+                    border-left: 0px;
+                }
+            }
         }
     }
 }

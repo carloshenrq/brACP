@@ -23,7 +23,7 @@
 @mixin position-fixed($position, $top, $left)
 {
     @include position-left($position, $top, $left);
-    @include transform('translate(#{(-100% + $top)}, #{(-100% + $left)})');
+    @include transform('translate(#{(-100%+$top)}, #{-100%+$left})');
 }
 
 @mixin position-left($position, $top, $left)

@@ -18,89 +18,98 @@
 html, body {
   margin: 0px;
   padding: 0px;
-  font-family: Verdana, Tahoma, Arial;
+  font-family: Tahoma, Verdana, Arial;
   font-size: 12px;
+  background-color: rgba(204, 255, 204, 0.3);
+}
+
+.install-cfg-radio {
+  display: none;
 }
 
 .bracp-install-body {
-  width: 800px;
+  width: 680px;
+  border-radius: 6px;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  color: #006600;
   margin: auto;
+  position: relative;
+  top: 40px;
+  box-shadow: 0px 0px 6px rgba(0, 102, 0, .65);
+  -moz-box-shadow: 0px 0px 6px rgba(0, 102, 0, .65);
+  -webkit-box-shadow: 0px 0px 6px rgba(0, 102, 0, .65);
 }
-.bracp-install-body h1 {
-  margin: 4px;
-  padding: 0px;
-  border-bottom: 1px dotted black;
+.bracp-install-body .install-title {
+  padding: 20px;
   text-align: center;
-}
-.bracp-install-body .bracp-install-error, .bracp-install-body .bracp-install-info, .bracp-install-body .bracp-install-warning, .bracp-install-body .bracp-install-success {
-  margin: 3px;
-  padding: 16px;
-  border: 1px solid;
-  border-radius: 4px;
-}
-.bracp-install-body .bracp-install-error {
-  border-color: rgba(255, 0, 0, 0.7);
-  background-color: rgba(255, 0, 0, 0.1);
-  color: #BD0029;
-}
-.bracp-install-body .bracp-install-info {
-  border-color: rgba(0, 183, 255, 0.7);
-  background-color: rgba(0, 183, 255, 0.1);
-  color: #138EBF;
-}
-.bracp-install-body .bracp-install-warning {
-  border-color: rgba(255, 153, 0, 0.7);
-  background-color: rgba(255, 153, 0, 0.1);
-  color: #ff9900;
-}
-.bracp-install-body .bracp-install-success {
-  border-color: rgba(120, 209, 90, 0.7);
-  background-color: rgba(120, 209, 90, 0.1);
-  color: #53913F;
-}
-.bracp-install-body .bracp-install-tab-radio {
-  display: none;
-}
-.bracp-install-body .bracp-install-tab-radio:not(:checked) + .bracp-install-tab-div {
-  display: none;
-}
-.bracp-install-body .bracp-install-tab-div {
-  padding: 12px;
-  border-radius: 4px;
-  border: 1px solid rgba(0, 0, 0, 0.25);
-  height: 400px;
-  overflow: auto;
-}
-.bracp-install-body .bracp-install-tab-div .bracp-install-label-data + .bracp-install-label-data {
-  margin-top: 10px;
-}
-.bracp-install-body .bracp-install-tab-div h1 {
-  border-bottom: 1px dotted rgba(0, 0, 0, 0.6);
+  color: white;
   font-size: 15px;
-  text-align: left;
+  font-weight: bold;
+  background-color: #006600;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 6px 6px 0px 0px;
+  -moz-border-radius: 6px 6px 0px 0px;
+  -webkit-border-radius: 6px 6px 0px 0px;
 }
-.bracp-install-body .bracp-install-tab-div label {
+.bracp-install-body .install-body {
   display: inline-block;
-}
-.bracp-install-body .bracp-install-tab-div label + label {
-  margin-left: 15px;
-}
-.bracp-install-body .bracp-install-tabs {
-  padding: 8px;
+  width: 100%;
+  height: 100%;
   margin: 0px;
+  padding: 0px;
+  background-color: white;
+  box-shadow: 0px 0px 0px 1px rgba(0, 102, 0, .65) inset;
+  -moz-box-shadow: 0px 0px 0px 1px rgba(0, 102, 0, .65) inset;
+  -webkit-box-shadow: 0px 0px 0px 1px rgba(0, 102, 0, .65) inset;
+  border-radius: 0px 0px 6px 6px;
+  -moz-border-radius: 0px 0px 6px 6px;
+  -webkit-border-radius: 0px 0px 6px 6px;
+}
+.bracp-install-body .install-body div {
+  padding: 16px;
+  height: 400px;
+}
+.bracp-install-body .bracp-install-menu {
+  width: 100%;
+}
+.bracp-install-body .bracp-install-menu ul {
+  width: 100%;
   list-style: none;
+  margin: 0;
+  padding: 0;
+  display: table;
+  table-layout: fixed;
+}
+.bracp-install-body .bracp-install-menu ul li {
+  display: table-cell;
   text-align: center;
+  border: 1px solid rgba(0, 102, 0, 0.65);
 }
-.bracp-install-body .bracp-install-tabs li {
-  display: inline-block;
+.bracp-install-body .bracp-install-menu ul li label {
+  display: block;
+  padding: 8px;
+  cursor: pointer;
+  color: white;
+  font-weight: bold;
 }
-.bracp-install-body .bracp-install-tabs li + li {
-  margin-left: 5px;
+.bracp-install-body .bracp-install-menu ul li input.install-cfg-radio:not(:checked) + label {
+  background: #009900;
+  background: -moz-linear-gradient(top, #009900 0%, #006600 100%);
+  background: -webkit-linear-gradient(top, #009900 0%, #006600 100%);
+  background: linear-gradient(to bottom, #009900 0%, #006600 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#009900', endColorstr='#006600',GradientType=0 );
+  background-repeat: repeat-x;
 }
-.bracp-install-body .bracp-install-submit {
-  margin-top: 16px;
-  text-align: center;
+.bracp-install-body .bracp-install-menu ul li input.install-cfg-radio:checked + label {
+  color: #006600;
+  background: #ffffff;
+  background: -moz-linear-gradient(top, #ffffff 0%, #e6e6e6 100%);
+  background: -webkit-linear-gradient(top, #ffffff 0%, #e6e6e6 100%);
+  background: linear-gradient(to bottom, #ffffff 0%, #e6e6e6 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e6e6e6',GradientType=0 );
+  background-repeat: repeat-x;
 }
-.bracp-install-body .bracp-install-submit input + input {
-  margin-left: 24px;
+.bracp-install-body .bracp-install-menu ul li + li {
+  border-left: 0px;
 }
