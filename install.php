@@ -211,6 +211,9 @@ else if(!$writeable)
 
                 $scope.BRACP_ERROR_CODE = <?php echo $BRACP_ERROR_CODE; ?>;
                 $scope.BRACP_ALLOW_INSTALL = $scope.BRACP_ERROR_CODE == 0;
+                $scope.BRACP_ALL_TIMEZONE = <?php echo json_encode(timezone_identifiers_list()); ?>;
+                $scope.BRACP_ALL_THEMES = <?php echo json_encode($themes->getArrayCopy()); ?>;
+                $scope.BRACP_ALL_LANGS = <?php echo json_encode($langs); ?>;
 
                 if($scope.BRACP_ALLOW_INSTALL == false)
                 {
@@ -218,7 +221,7 @@ else if(!$writeable)
                 }
                 else
                 {
-                    $scope.BRACP_SWITCH = 'home';
+                    $scope.BRACP_SWITCH = 'mail';
                 }
                 $scope.config = <?php echo json_encode($config); ?>;
             }]);
@@ -275,17 +278,206 @@ else if(!$writeable)
 
                 <!-- Bem vindo a instalação do painel de controle. -->
                 <div ng-switch-when="home" class="install-content">
-                    Bem vindo.<br>
+                    <h1>Instalação do Painel de Controle</h1>
+
+                    <p>Para que o brACP seja executado de forma correta, você deve informar algumas configurações para tudo seja executado
+                    de acordo com o esperado.</p>
+
+                    <p>A Versão que você está desejando instalar é a <strong>{{config.BRACP_VERSION}}</strong> caso existam novas versões,
+                        é recomendado usa-las, pois, podem possuir correções de problemas que nesta versão ainda não existe.</p>
+
+                    <div class="install-data">
+
+                        <label class="input-align">
+                            <input type="checkbox" ng-model="config.BRACP_MAINTENCE"/>
+                            Habilitar Manutenção
+                            <span>Durante o modo de manutenção, o acesso ao painel de controle será negado.</span>
+                        </label>
+
+                        <label class="input-align">
+                            <input type="checkbox" ng-model="config.BRACP_DEVELOP_MODE"/>
+                            Modo Desenvolvedor
+                            <span>Algumas configurações irão entrar em sandbox, como o paypal e pagseguro.</span>
+                        </label>
+
+                        <label class="input-align">
+                            <input type="checkbox" ng-model="config.BRACP_MD5_PASSWORD_HASH"/>
+                            Usar hash md5 nas senhas.
+                            <span>Quando está configuração está habilitada, não é possível recuperar uma senha, apenas gerar novamente.</span>
+                            <div ng-switch on="config.BRACP_MD5_PASSWORD_HASH">
+                                <span ng-switch-when="true"><strong>É Extremamente recomendado que habilite e configure corretamente o envio de e-mails.</strong></span>
+                            </div>
+                        </label>
+
+                        <label class="input-align">
+                            Configurações de Horário:
+                            <select ng-model="config.BRACP_DEFAULT_TIMEZONE">
+                                <option ng-repeat="zone in BRACP_ALL_TIMEZONE">{{zone}}</option>
+                            </select>
+                            <span>Todas as datas e horas salvas no banco de dados serão com base neste campo, escolha com cuidado.</span>
+                        </label>
+
+                        <label class="input-align">
+                            URL Caminho de Instalação:
+                            <input type="text" ng-model="config.BRACP_DIR_INSTALL_URL"/>
+                            <span>O Caminho de instalação é como ele aparece no seu domínio. Ex. http://seuro.com<strong><u>/cp/</u></strong></span>
+                        </label>
+
+                        <label class="input-align">
+                            URL Endereço de Instalação:
+                            <input type="text" ng-model="config.BRACP_URL" size="60"/>
+                            <span>O Endereço de instalação é o endereço completo com o domínio. Ex. <strong><u>http://seuro.com/cp/</u></strong></span>
+                        </label>
+
+                        <label class="input-align">
+                            Caminho arquivos de template:
+                            <input type="text" ng-model="config.BRACP_TEMPLATE_DIR" size="60"/>
+                            <span>O Caminho de arquivos de template é onde estão localizados os arquivos <strong><u>*.tpl</u></strong></span>
+                        </label>
+
+                        <label class="input-align">
+                            Caminho arquivos de entidade:
+                            <input type="text" ng-model="config.BRACP_ENTITY_DIR" size="60"/>
+                            <span>O Caminho de arquivos de entidade é onde estão localizados os arquivos para entidades do banco de dados</span>
+                        </label>
+
+                        <label class="input-align">
+                            <input type="checkbox" ng-model="config.BRACP_ALLOW_MODS"/>
+                            Habilita aplicação de MODs
+                            <span>Habilita aplicação de modificações customizadas por arquivo ao painel de controle.</span>
+                        </label>
+
+                        <label class="input-align">
+                            <input type="checkbox" ng-model="config.BRACP_ALLOW_CHOOSE_THEME"/>
+                            Habilita usuário mudar o tema
+                            <span>Permite que o usuário mude o tema atual.</span>
+                        </label>
+
+                        <label class="input-align">
+                            Tema padrão:
+                            <select ng-model="config.BRACP_DEFAULT_THEME">
+                                <option ng-repeat="theme in BRACP_ALL_THEMES" value="{{theme.folder}}">{{theme.name}}</option>
+                            </select>
+                            <span>Tema que será carregado por padrão ao usuário.</span>
+                        </label>
+
+                        <label class="input-align">
+                            Idioma padrão:
+                            <select ng-model="config.BRACP_DEFAULT_LANGUAGE">
+                                <option ng-repeat="lang in BRACP_ALL_LANGS">{{lang}}</option>
+                            </select>
+                            <span>Tema que será carregado por padrão ao usuário.</span>
+                        </label>
+
+                    </div>
+
                 </div>
 
                <!-- Configurações para o banco de dados -->
                 <div ng-switch-when="mysql" class="install-content">
-                    Configurar MySQL.
+                    <h1>Configurações de acesso ao servidor de Banco de Dados</h1>
+
+                    <p>O brACP trabalha com tabelas em apenas um banco de dados, isso significa que o banco de dados do seu servidor,
+                        deve estar junto ao banco de dados de itens, monstros, etc... incluindo as tabelas do brACP.</p>
+
+                    <div class="install-data">
+
+                        <label class="input-align">
+                            Servidor:
+                            <input type="text" ng-model="config.BRACP_SQL_HOST" size="40"/>
+                            <span>Endereço IP ou DNS do servidor de banco de dados que será utilizado.</span>
+                        </label>
+
+                        <label class="input-align">
+                            Usuário:
+                            <input type="text" ng-model="config.BRACP_SQL_USER" size="30"/>
+                            <span>Nome de usuário para se conectar ao servidor de banco de dados.</span>
+                        </label>
+
+                        <label class="input-align">
+                            Senha:
+                            <input type="password" ng-model="config.BRACP_SQL_PASS" size="30"/>
+                            <span>Senha para o nome de usuário do banco de dados. (Valor padrão: <strong>ragnarok</strong>)</span>
+                        </label>
+
+                        <label class="input-align">
+                            Banco de Dados:
+                            <input type="text" ng-model="config.BRACP_SQL_DBNAME" size="30"/>
+                            <span>Nome do banco de dados que será conectado pelo painel de controle.</span>
+                        </label>
+
+                    </div>
                 </div>
 
                 <!-- Configurações do servidor de e-mail. -->
                 <div ng-switch-when="mail" class="install-content">
-                    Configurar EMAIL.
+
+                    <h1>Configurações de acesso ao servidor SMTP</h1>
+
+                    <div ng-switch on="config.BRACP_MD5_PASSWORD_HASH">
+                        <div ng-switch-when="true" class="bracp-message error">
+                            <h1>O Uso de md5 nas senhas está habilitado</h1>
+                            É extremamente recomendado que você configure o envio de e-mails pois você habilitou o uso de md5 nas senhas.<br>
+                            As senhas cadastradas com md5, não podem ser recuperadas, apenas resetadas.
+                        </div>
+                    </div>
+
+                    <p>Algumas configurações como criação de contas, recuperação de senha, notificação de alterações (senha, e-mail), 
+                        dependem de um servidor SMTP configurado para que os e-mails sejam enviados.</p>
+
+                    <div class="install-data">
+
+
+                        <label class="input-align">
+                            <input type="checkbox" ng-model="config.BRACP_ALLOW_MAIL_SEND"/>
+                            Habilita o envio de e-mails
+                            <span>Permite que o painel de controle use as configurações de SMTP para envio de e-mails.</span>
+                        </label>
+
+                        <div ng-switch on="config.BRACP_ALLOW_MAIL_SEND">
+                            <div ng-switch-when="true">
+                                <br>
+                                <label class="input-align">
+                                    Servidor:
+                                    <input type="text" ng-model="config.BRACP_MAIL_HOST" size="40"/>
+                                    <span>Servidor SMTP que será utilizado para envio dos e-mails</span>
+                                </label>
+
+                                <label class="input-align">
+                                    Porta:
+                                    <input type="text" ng-model="config.BRACP_MAIL_PORT" size="4"/>
+                                    <span>Porta que será utilizada para conexão com o servidor SMTP</span>
+                                </label>
+
+                                <label class="input-align">
+                                    Usuário:
+                                    <input type="text" ng-model="config.BRACP_MAIL_USER" size="40"/>
+                                    <span>Nome de usuário autorizado para uso do servidor SMTP</span>
+                                </label>
+
+                                <label class="input-align">
+                                    Senha:
+                                    <input type="password" ng-model="config.BRACP_MAIL_PASS" size="30"/>
+                                    <span>Senha do nome de usuário autorizado no servidor SMTP (Valor padrão: <strong>ragnarok</strong>)</span>
+                                </label>
+
+                                <label class="input-align">
+                                    Nome do Remetente:
+                                    <input type="text" ng-model="config.BRACP_MAIL_FROM_NAME" size="30"/>
+                                    <span>Nome do usuário que enviará o e-mail.</span>
+                                </label>
+
+                                <label class="input-align">
+                                    Endereço do Remetente:
+                                    <input type="text" ng-model="config.BRACP_MAIL_FROM" size="50"/>
+                                    <span>Endereço de e-mail do remetente.</span>
+                                </label>
+
+                            </div>
+                        </div>
+
+                    </div>
+
                 </div>
 
                 <!-- Configurações do RECAPTCHA. -->

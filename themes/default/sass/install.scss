@@ -23,7 +23,10 @@ html, body
     margin: 0px; padding: 0px;
     font-family: Tahoma, Verdana, Arial;
     font-size: 12px;
+}
 
+html
+{
     background-color: rgba(204, 255, 204, .3);
 }
 
@@ -34,7 +37,7 @@ html, body
 
 .bracp-install-body
 {
-    width: 680px;
+    width: 600px;
     @include border-radius(6px);
     color: rgb(0, 102, 0);
 
@@ -74,6 +77,63 @@ html, body
         {
             padding: 16px;
             min-height: 300px;
+            text-align: justify;
+
+            h1
+            {
+                padding: 0px;
+                margin: 0px 0px 6px 0px;
+                font-size: 14px;
+                border-bottom: 1px dotted rgb(0, 102, 0);
+            }
+
+            .install-data
+            {
+                padding: 12px;
+                background-color: rgba(0, 220, 0, .1);
+                @include border-radius(6px);
+                @include box-shadow('0px 0px 1px 1px rgba(0, 102, 0, .65)');
+
+                label.input-align
+                {
+                    display: block;
+
+                    span
+                    {
+                        font-style: italic;
+                        font-size: 10px;
+                        color: red;
+                        display: block;
+
+                        &:before
+                        {
+                            content: '*';
+                        }
+                    }
+
+                    input[type="checkbox"]
+                    {
+                        width: 13px;
+                        height: 13px;
+                        padding: 0;
+                        margin:0;
+                        vertical-align: bottom;
+                        position: relative;
+                        top: -1px;
+                        *overflow: hidden;
+                    }
+
+                    select, input[type="text"], input[type="password"]
+                    {
+                        display: block;
+                    }
+
+                    &+ label
+                    {
+                        margin-top: 12px;
+                    }
+                }
+            }
         }
     }
 

@@ -20,6 +20,9 @@ html, body {
   padding: 0px;
   font-family: Tahoma, Verdana, Arial;
   font-size: 12px;
+}
+
+html {
   background-color: rgba(204, 255, 204, 0.3);
 }
 
@@ -28,7 +31,7 @@ html, body {
 }
 
 .bracp-install-body {
-  width: 680px;
+  width: 600px;
   border-radius: 6px;
   -moz-border-radius: 6px;
   -webkit-border-radius: 6px;
@@ -69,6 +72,51 @@ html, body {
 .bracp-install-body .install-body div.install-content {
   padding: 16px;
   min-height: 300px;
+  text-align: justify;
+}
+.bracp-install-body .install-body div.install-content h1 {
+  padding: 0px;
+  margin: 0px 0px 6px 0px;
+  font-size: 14px;
+  border-bottom: 1px dotted #006600;
+}
+.bracp-install-body .install-body div.install-content .install-data {
+  padding: 12px;
+  background-color: rgba(0, 220, 0, 0.1);
+  border-radius: 6px;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  box-shadow: 0px 0px 1px 1px rgba(0, 102, 0, .65);
+  -moz-box-shadow: 0px 0px 1px 1px rgba(0, 102, 0, .65);
+  -webkit-box-shadow: 0px 0px 1px 1px rgba(0, 102, 0, .65);
+}
+.bracp-install-body .install-body div.install-content .install-data label.input-align {
+  display: block;
+}
+.bracp-install-body .install-body div.install-content .install-data label.input-align span {
+  font-style: italic;
+  font-size: 10px;
+  color: red;
+  display: block;
+}
+.bracp-install-body .install-body div.install-content .install-data label.input-align span:before {
+  content: '*';
+}
+.bracp-install-body .install-body div.install-content .install-data label.input-align input[type="checkbox"] {
+  width: 13px;
+  height: 13px;
+  padding: 0;
+  margin: 0;
+  vertical-align: bottom;
+  position: relative;
+  top: -1px;
+  *overflow: hidden;
+}
+.bracp-install-body .install-body div.install-content .install-data label.input-align select, .bracp-install-body .install-body div.install-content .install-data label.input-align input[type="text"], .bracp-install-body .install-body div.install-content .install-data label.input-align input[type="password"] {
+  display: block;
+}
+.bracp-install-body .install-body div.install-content .install-data label.input-align + label {
+  margin-top: 12px;
 }
 .bracp-install-body .install-cfg-allow {
   display: none;
