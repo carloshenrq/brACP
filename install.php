@@ -48,22 +48,22 @@ $config = [
     'BRACP_DIR_INSTALL_URL'                 => $_SERVER['REQUEST_URI'],
     'BRACP_TEMPLATE_DIR'                    => __DIR__ . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR,
     'BRACP_ENTITY_DIR'                      => __DIR__ . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'Model' . DIRECTORY_SEPARATOR . 'Entity',
-    'BRACP_MD5_PASSWORD_HASH'               => 1,
-    'BRACP_MAIL_REGISTER_ONCE'              => 1,
+    'BRACP_MD5_PASSWORD_HASH'               => true,
+    'BRACP_MAIL_REGISTER_ONCE'              => true,
     'BRACP_CHANGE_MAIL_DELAY'               => 60,
-    'BRACP_ALLOW_CHANGE_MAIL'               => 1,
-    'BRACP_ALLOW_CREATE_ACCOUNT'            => 1,
-    'BRACP_CONFIRM_ACCOUNT'                 => 0,
-    'BRACP_ALLOW_ADMIN'                     => 1,
+    'BRACP_ALLOW_CHANGE_MAIL'               => true,
+    'BRACP_ALLOW_CREATE_ACCOUNT'            => true,
+    'BRACP_CONFIRM_ACCOUNT'                 => false,
+    'BRACP_ALLOW_ADMIN'                     => true,
     'BRACP_ALLOW_ADMIN_GMLEVEL'             => 99,
-    'BRACP_ALLOW_LOGIN_GMLEVEL'             => 0,
-    'BRACP_ALLOW_ADMIN_CHANGE_PASSWORD'     => 0,
-    'BRACP_ALLOW_RANKING'                   => 1,
-    'BRACP_ALLOW_SHOW_CHAR_STATUS'          => 1,
-    'BRACP_ALLOW_RANKING_ZENY'              => 1,
-    'BRACP_ALLOW_RANKING_ZENY_SHOW_ZENY'    => 1,
-    'BRACP_DEVELOP_MODE'                    => 0,
-    'BRACP_MAINTENCE'                       => 0,
+    'BRACP_ALLOW_LOGIN_GMLEVEL'             => false,
+    'BRACP_ALLOW_ADMIN_CHANGE_PASSWORD'     => false,
+    'BRACP_ALLOW_RANKING'                   => true,
+    'BRACP_ALLOW_SHOW_CHAR_STATUS'          => true,
+    'BRACP_ALLOW_RANKING_ZENY'              => true,
+    'BRACP_ALLOW_RANKING_ZENY_SHOW_ZENY'    => true,
+    'BRACP_DEVELOP_MODE'                    => false,
+    'BRACP_MAINTENCE'                       => false,
     'BRACP_VERSION'                         =>'0.2.1-beta',
 
     // MySQL
@@ -74,43 +74,43 @@ $config = [
     'BRACP_SQL_DBNAME'                      => 'ragnarok',
 
     // Servidor de E-mail
-    'BRACP_ALLOW_MAIL_SEND'                 => 1,
+    'BRACP_ALLOW_MAIL_SEND'                 => true,
     'BRACP_MAIL_HOST'                       => '127.0.0.1',
     'BRACP_MAIL_PORT'                       => 25,
     'BRACP_MAIL_USER'                       => 'ragnarok',
     'BRACP_MAIL_PASS'                       => 'ragnarok',
     'BRACP_MAIL_FROM'                       => 'noreply@127.0.0.1',
     'BRACP_MAIL_FROM_NAME'                  => 'noreply',
-    'BRACP_NOTIFY_CHANGE_PASSWORD'          => 1,
-    'BRACP_NOTIFY_CHANGE_MAIL'              => 1,
-    'BRACP_ALLOW_RECOVER'                   => 1,
-    'BRACP_RECOVER_BY_CODE'                 => 1,
+    'BRACP_NOTIFY_CHANGE_PASSWORD'          => true,
+    'BRACP_NOTIFY_CHANGE_MAIL'              => true,
+    'BRACP_ALLOW_RECOVER'                   => true,
+    'BRACP_RECOVER_BY_CODE'                 => true,
     'BRACP_RECOVER_CODE_EXPIRE'             => 120,
     'BRACP_RECOVER_STRING_LENGTH'           => 8,
     'BRACP_RECOVER_RANDOM_STRING'           => 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
 
     // reCAPTCHA
-    'BRACP_RECAPTCHA_ENABLED'               => 1,
+    'BRACP_RECAPTCHA_ENABLED'               => true,
     'BRACP_RECAPTCHA_PUBLIC_KEY'            => '',
     'BRACP_RECAPTCHA_PRIVATE_KEY'           => '',
     'BRACP_RECAPTCHA_PRIVATE_URL'           => 'https://www.google.com/recaptcha/api/siteverify',
 
     // Doações - PayPal
-    'PAYPAL_INSTALL'                        => 1,
+    'PAYPAL_INSTALL'                        => true,
     'PAYPAL_ACCOUNT'                        => '',
     'PAYPAL_CURRENCY'                       => 'BRL',
     'DONATION_AMOUNT_MULTIPLY'              => 100,
-    'DONATION_SHOW_NEXT_PROMO'              => 1,
+    'DONATION_SHOW_NEXT_PROMO'              => true,
     'DONATION_INTERVAL_DAYS'                => 3,
 
     // Outros
-    'BRACP_ALLOW_RESET_APPEAR'              => 1,
-    'BRACP_ALLOW_RESET_POSIT'               => 1,
-    'BRACP_ALLOW_RESET_EQUIP'               => 1,
+    'BRACP_ALLOW_RESET_APPEAR'              => true,
+    'BRACP_ALLOW_RESET_POSIT'               => true,
+    'BRACP_ALLOW_RESET_EQUIP'               => true,
     'BRACP_REGEXP_USERNAME'                 => '[a-zA-Z0-9]{4,24}',
     'BRACP_REGEXP_PASSWORD'                 => '[a-zA-Z0-9]{4,20}',
     'BRACP_REGEXP_EMAIL'                    => '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}',
-    'BRACP_ALLOW_CHOOSE_THEME'              => 1,
+    'BRACP_ALLOW_CHOOSE_THEME'              => true,
     'BRACP_DEFAULT_THEME'                   => 'default',
     'BRACP_DEFAULT_LANGUAGE'                => 'pt_BR',
 
@@ -209,11 +209,14 @@ else if(!$writeable)
 
             install.controller('install', ['$scope', function($scope) {
 
+                $scope.Math = window.Math;
                 $scope.BRACP_ERROR_CODE = <?php echo $BRACP_ERROR_CODE; ?>;
                 $scope.BRACP_ALLOW_INSTALL = $scope.BRACP_ERROR_CODE == 0;
                 $scope.BRACP_ALL_TIMEZONE = <?php echo json_encode(timezone_identifiers_list()); ?>;
                 $scope.BRACP_ALL_THEMES = <?php echo json_encode($themes->getArrayCopy()); ?>;
                 $scope.BRACP_ALL_LANGS = <?php echo json_encode($langs); ?>;
+                $scope.BRACP_PAYPAL_CURRENCY = <?php echo json_encode($PPCurrency); ?>;
+                $scope.BRACP_ALLOW_MEMCACHE = <?php echo intval(extension_loaded('memcache')); ?>;
 
                 if($scope.BRACP_ALLOW_INSTALL == false)
                 {
@@ -221,7 +224,7 @@ else if(!$writeable)
                 }
                 else
                 {
-                    $scope.BRACP_SWITCH = 'mail';
+                    $scope.BRACP_SWITCH = 'cache';
                 }
                 $scope.config = <?php echo json_encode($config); ?>;
             }]);
@@ -482,17 +485,171 @@ else if(!$writeable)
 
                 <!-- Configurações do RECAPTCHA. -->
                 <div ng-switch-when="recaptcha" class="install-content">
-                    Configurar RECAPTCHA.
+                    
+                    <h1>Configurações do reCAPTCHA</h1>
+
+                    <p>O reCAPTCHA ajuda a deixar os formulários mais seguros, validando a requisição contra os bots de internet.</p>
+
+                    <div class="bracp-message info">
+                        Para usar o reCAPTCHA você precisa obter uma chave para o dominio que fará uso desta chave.<br>
+                        Você pode obte-la <a href="https://www.google.com/recaptcha/intro/index.html" target="_blank">clicando aqui</a>.
+                    </div>
+                    <br>
+                    <div class="install-data">
+
+                        <label class="input-align">
+                            <input type="checkbox" ng-model="config.BRACP_RECAPTCHA_ENABLED"/>
+                            Habilita reCAPTCHA
+                            <span>Permite que o brACP faça validações dos formulários com o uso do reCAPTCHA.</span>
+                        </label>
+
+                        <div ng-switch on="config.BRACP_RECAPTCHA_ENABLED">
+                            <div ng-switch-when="true">
+                                <br>
+                                <label class="input-align">
+                                    Chave Pública:
+                                    <input type="text" ng-model="config.BRACP_RECAPTCHA_PUBLIC_KEY" size="70"/>
+                                    <span>Chave pública informada pelo serviço da google.</span>
+                                </label>
+
+                                <label class="input-align">
+                                    Chave Privada:
+                                    <input type="text" ng-model="config.BRACP_RECAPTCHA_PRIVATE_KEY" size="70"/>
+                                    <span>Chave privada informada pelo serviço da google.</span>
+                                </label>
+
+                                <label class="input-align">
+                                    Endereço de Validação:
+                                    <input type="text" ng-model="config.BRACP_RECAPTCHA_PRIVATE_URL" size="70"/>
+                                    <span>Endereço para validação dos dados, não altere se não tiver certeza do que está fazendo.</span>
+                                </label>
+
+                            </div>
+                        </div>
+
+                    </div>
+
                 </div>
 
                 <!-- Configurações do DONATION. -->
                 <div ng-switch-when="donation" class="install-content">
-                    Configurar DONATION.
+                    
+                    <h1>Configurações de Doação</h1>
+
+                    <p>Algumas configurações padrões para qualquer serviço de doação implementado.</p>
+
+                    <div class="install-data">
+                        <label class="input-align">
+                            Multiplicador proporcional:
+                            <input type="text" ng-model="config.DONATION_AMOUNT_MULTIPLY" size="10"/>
+                            <span>Ao doar <strong>{{config.PAYPAL_CURRENCY}} 1.00</strong> recebe <strong>{{(config.DONATION_AMOUNT_MULTIPLY * 1)}} Bônus</strong></span>
+                        </label>
+
+                        <label class="input-align">
+                            <input type="checkbox" ng-model="config.DONATION_SHOW_NEXT_PROMO"/>
+                            Habilitar exibição de próximas promoções
+                            <span>Permite que o brACP informe ao jogador quando serão as próximas promoções de bônus</span>
+                        </label>
+
+                        <div ng-switch on="config.DONATION_SHOW_NEXT_PROMO">
+                            <div ng-switch-when="true">
+                                <br>
+                                <label class="input-align">
+                                    Dias para próximas promoções:
+                                    <input type="text" ng-model="config.DONATION_INTERVAL_DAYS" size="10"/>
+                                    <span>Exibe todas as promoções para daqui <strong>{{config.DONATION_INTERVAL_DAYS}}</strong> dias.</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class="bracp-message info">Por enquanto, somente o <strong>PayPal</strong> está habilitado para formas de doações.</p>
+
+                    <div class="install-data">
+                        <label class="input-align">
+                            <input type="checkbox" ng-model="config.PAYPAL_INSTALL"/>
+                            Habilitar doações por PayPal
+                            <span>Permite que o servidor receba doações pelo PayPal.</span>
+                        </label>
+
+                        <div ng-switch on="config.PAYPAL_INSTALL">
+                            <div ng-switch-when="true">
+                                <br>
+                                <label class="input-align">
+                                    E-mail:
+                                    <input type="text" ng-model="config.PAYPAL_ACCOUNT" size="40"/>
+                                    <span>Endereço de e-mail que receberá as doações por PayPal</span>
+                                </label>
+                                <label class="input-align">
+                                    Moeda de doação:
+                                    <select ng-model="config.PAYPAL_CURRENCY">
+                                        <option ng-repeat="currency in BRACP_PAYPAL_CURRENCY">{{currency}}</option>
+                                    </select>
+                                    <span>Endereço de e-mail que receberá as doações por PayPal</span>
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>
+
                 </div>
 
                 <!-- Configurações do cache. -->
                 <div ng-switch-when="cache" class="install-content">
-                    Configurar CACHE.
+                    
+                    <h1>Configurações de Cache</h1>
+
+                    <div ng-switch on="BRACP_ALLOW_MEMCACHE">
+
+                        <div ng-switch-when="1">
+                            
+                            <p>O Uso do servidor de cache permite que algumas páginas que tenham intenso acesso ao banco de dados
+                                sejam "protegidas" por fazer o uso do cache.</p>
+
+                            <div class="install-data">
+                                <label class="input-align">
+                                    <input type="checkbox" ng-model="config.BRACP_MEMCACHE"/>
+                                    Habilitar uso de servidor de Cache
+                                    <span>Permite que o brACP faça uso de servidor de cache para algumas informações.</span>
+                                </label>
+
+                                <div ng-switch on="config.BRACP_MEMCACHE">
+                                    <div ng-switch-when="true">
+                                        <br>
+                                        <label class="input-align">
+                                            Servidor:
+                                            <input type="text" ng-model="config.BRACP_MEMCACHE_SERVER" size="30"/>
+                                            <span>Endereço do servidor de cache.</span>
+                                        </label>
+
+                                        <label class="input-align">
+                                            Porta:
+                                            <input type="text" ng-model="config.BRACP_MEMCACHE_PORT" size="5"/>
+                                            <span>Número da porta para conexão com o servidor de cache.</span>
+                                        </label>
+
+                                        <label class="input-align">
+                                            Tempo de Validade:
+                                            <input type="text" ng-model="config.BRACP_MEMCACHE_EXPIRE" size="8"/>
+                                            <span>Tempo (em segundos) que o valor do cache será salvo no servidor.<br><strong>{{Math.floor(config.BRACP_MEMCACHE_EXPIRE/60)}} minuto(s) e {{(config.BRACP_MEMCACHE_EXPIRE%60)}} segundo(s)</strong></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div ng-switch-when="0">
+                            <div class="bracp-message error">
+                                A Configuração de cache não pode ser realizada, o seu PHP não possui a biblioteca <strong>memcache</strong>
+                                carregada.<br>
+                                <br>
+                                <a href="http://php.net/manual/pt_BR/book.memcache.php" target="_blank">Clicando aqui</a>, talvez te ajude um pouco.
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
                 <!-- Configurações do other. -->
