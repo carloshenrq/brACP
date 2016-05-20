@@ -217,10 +217,19 @@ class brACPApp extends Slim\App
                 $data['exception'] = $ex;
         }
 
-        // Obtém todos os temas que estão em cache no banco de dados.
-        $themes = Cache::get('BRACP_THEMES', function() {
-            return brACPApp::getInstance()->getEm()->getRepository('Model\Theme')->findAll();
-        });
+        // Correção: Quando não há conexão com o banco de dados, é impossível
+        //  fazer a leitura dos temas. [CHLFZ, 2016-05-20]
+        try
+        {
+            // Obtém todos os temas que estão em cache no banco de dados.
+            $themes = Cache::get('BRACP_THEMES', function() {
+                return brACPApp::getInstance()->getEm()->getRepository('Model\Theme')->findAll();
+            });
+        }
+        catch(\Exception $ex)
+        {
+            $themes = [];
+        }
 
         // Adiciona o navegador aos dados para o template.
         $data = array_merge($data, [

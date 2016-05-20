@@ -68,7 +68,7 @@ $config = [
 
     // MySQL
     'BRACP_SQL_DRIVER'                      => 'pdo_mysql',
-    'BRACP_SQL_HOST'                        => '127.0.0.1:3306',
+    'BRACP_SQL_HOST'                        => '127.0.0.1',
     'BRACP_SQL_USER'                        => 'ragnarok',
     'BRACP_SQL_PASS'                        => 'ragnarok',
     'BRACP_SQL_DBNAME'                      => 'ragnarok',
