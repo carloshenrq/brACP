@@ -56,7 +56,7 @@ $config = [
     'BRACP_CONFIRM_ACCOUNT'                 => false,
     'BRACP_ALLOW_ADMIN'                     => true,
     'BRACP_ALLOW_ADMIN_GMLEVEL'             => 99,
-    'BRACP_ALLOW_LOGIN_GMLEVEL'             => false,
+    'BRACP_ALLOW_LOGIN_GMLEVEL'             => 0,
     'BRACP_ALLOW_ADMIN_CHANGE_PASSWORD'     => false,
     'BRACP_ALLOW_RANKING'                   => true,
     'BRACP_ALLOW_SHOW_CHAR_STATUS'          => true,
@@ -115,13 +115,13 @@ $config = [
     'BRACP_DEFAULT_LANGUAGE'                => 'pt_BR',
 
     // Memcache
-    'BRACP_MEMCACHE'                        => ((extension_loaded('memcache')) ? 1:0),
+    'BRACP_MEMCACHE'                        => extension_loaded('memcache'),
     'BRACP_MEMCACHE_SERVER'                 => '127.0.0.1',
     'BRACP_MEMCACHE_PORT'                   => 11211,
     'BRACP_MEMCACHE_EXPIRE'                 => 600,
 
     // Mods a serem aplicados no painel de controle. (Recomenda-se uso do xdiff, sem isso, tera de ser aplicado manualmente o diff)
-    'BRACP_ALLOW_MODS'                      => ((extension_loaded('xdiff')) ? 1:0),
+    'BRACP_ALLOW_MODS'                      => extension_loaded('xdiff'),
 ]; 
 
 // Moedas padrões aceitas pelo PayPal.
@@ -155,7 +155,7 @@ if($writeable && isset($_POST) && !empty($_POST))
         $v = addslashes($v);
 
         // Se for apenas valores númericos, então converte para inteiro.
-        if(preg_match('/^([0-9]+)$/', $v))
+        if(preg_match('/^([0-9]+)$/', $v) || preg_match('/^(true|false)$/', $v))
             $configFile .= "DEFINE('{$k}', {$v}, false);\n";
         else
             $configFile .= "DEFINE('{$k}', '{$v}', false);\n";
@@ -165,16 +165,6 @@ if($writeable && isset($_POST) && !empty($_POST))
 
     // Finaliza o arquivo e escreve os dados no arquivo de configuração.
     file_put_contents('config.php', $configFile);
-
-    header('Refresh: 3');
-    header('Content-Type: text/php');
-    header('Content-Disposition: attachment; filename="config.php"');
-    header('Content-Transfer-Encoding: binary');
-    header('Expires: 0');
-    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-    header('Pragma: public');
-    header('Content-Length: ' . filesize('config.php'));
-    readfile('config.php');
 
     exit;
 }
@@ -204,10 +194,11 @@ else if(!$writeable)
         <link rel="stylesheet" type="text/css" href="themes/default/css/button.css"/>
 
         <script src="js/angular.min.js"></script>
+        <script src="js/jquery-2.1.4.min.js"></script>
         <script>
             var install = angular.module('brACP', []);
 
-            install.controller('install', ['$scope', function($scope) {
+            install.controller('install', ['$scope', '$http', function($scope, $http) {
 
                 $scope.Math = window.Math;
                 $scope.BRACP_ERROR_CODE = <?php echo $BRACP_ERROR_CODE; ?>;
@@ -224,9 +215,21 @@ else if(!$writeable)
                 }
                 else
                 {
-                    $scope.BRACP_SWITCH = 'cache';
+                    $scope.BRACP_SWITCH = 'home';
                 }
                 $scope.config = <?php echo json_encode($config); ?>;
+
+                $scope.saveAndInstall = function() {
+                    $http({
+                        'url'       : 'install.php',
+                        'method'    : 'POST',
+                        'data'      : $.param($scope.config),
+                        'headers'   : { 'Content-Type' : 'application/x-www-form-urlencoded' }
+                    })
+                    .success(function(data, status) {
+                        window.location.reload();
+                    });
+                };
             }]);
 
         </script>
@@ -307,9 +310,7 @@ else if(!$writeable)
                             <input type="checkbox" ng-model="config.BRACP_MD5_PASSWORD_HASH"/>
                             Usar hash md5 nas senhas.
                             <span>Quando está configuração está habilitada, não é possível recuperar uma senha, apenas gerar novamente.</span>
-                            <div ng-switch on="config.BRACP_MD5_PASSWORD_HASH">
-                                <span ng-switch-when="true"><strong>É Extremamente recomendado que habilite e configure corretamente o envio de e-mails.</strong></span>
-                            </div>
+                            <span ng-if="config.BRACP_MD5_PASSWORD_HASH"><strong>É Extremamente recomendado que habilite e configure corretamente o envio de e-mails.</strong></span>
                         </label>
 
                         <label class="input-align">
@@ -417,12 +418,10 @@ else if(!$writeable)
 
                     <h1>Configurações de acesso ao servidor SMTP</h1>
 
-                    <div ng-switch on="config.BRACP_MD5_PASSWORD_HASH">
-                        <div ng-switch-when="true" class="bracp-message error">
-                            <h1>O Uso de md5 nas senhas está habilitado</h1>
-                            É extremamente recomendado que você configure o envio de e-mails pois você habilitou o uso de md5 nas senhas.<br>
-                            As senhas cadastradas com md5, não podem ser recuperadas, apenas resetadas.
-                        </div>
+                    <div ng-if="config.BRACP_MD5_PASSWORD_HASH" class="bracp-message error">
+                        <h1>O Uso de md5 nas senhas está habilitado</h1>
+                        É extremamente recomendado que você configure o envio de e-mails pois você habilitou o uso de md5 nas senhas.<br>
+                        As senhas cadastradas com md5, não podem ser recuperadas, apenas resetadas.
                     </div>
 
                     <p>Algumas configurações como criação de contas, recuperação de senha, notificação de alterações (senha, e-mail), 
@@ -430,54 +429,47 @@ else if(!$writeable)
 
                     <div class="install-data">
 
-
                         <label class="input-align">
                             <input type="checkbox" ng-model="config.BRACP_ALLOW_MAIL_SEND"/>
                             Habilita o envio de e-mails
                             <span>Permite que o painel de controle use as configurações de SMTP para envio de e-mails.</span>
                         </label>
 
-                        <div ng-switch on="config.BRACP_ALLOW_MAIL_SEND">
-                            <div ng-switch-when="true">
-                                <br>
-                                <label class="input-align">
-                                    Servidor:
-                                    <input type="text" ng-model="config.BRACP_MAIL_HOST" size="40"/>
-                                    <span>Servidor SMTP que será utilizado para envio dos e-mails</span>
-                                </label>
+                        <label ng-if="config.BRACP_ALLOW_MAIL_SEND" class="input-align">
+                            Servidor:
+                            <input type="text" ng-model="config.BRACP_MAIL_HOST" size="40"/>
+                            <span>Servidor SMTP que será utilizado para envio dos e-mails</span>
+                        </label>
 
-                                <label class="input-align">
-                                    Porta:
-                                    <input type="text" ng-model="config.BRACP_MAIL_PORT" size="4"/>
-                                    <span>Porta que será utilizada para conexão com o servidor SMTP</span>
-                                </label>
+                        <label ng-if="config.BRACP_ALLOW_MAIL_SEND" class="input-align">
+                            Porta:
+                            <input type="text" ng-model="config.BRACP_MAIL_PORT" size="4"/>
+                            <span>Porta que será utilizada para conexão com o servidor SMTP</span>
+                        </label>
 
-                                <label class="input-align">
-                                    Usuário:
-                                    <input type="text" ng-model="config.BRACP_MAIL_USER" size="40"/>
-                                    <span>Nome de usuário autorizado para uso do servidor SMTP</span>
-                                </label>
+                        <label ng-if="config.BRACP_ALLOW_MAIL_SEND" class="input-align">
+                            Usuário:
+                            <input type="text" ng-model="config.BRACP_MAIL_USER" size="40"/>
+                            <span>Nome de usuário autorizado para uso do servidor SMTP</span>
+                        </label>
 
-                                <label class="input-align">
-                                    Senha:
-                                    <input type="password" ng-model="config.BRACP_MAIL_PASS" size="30"/>
-                                    <span>Senha do nome de usuário autorizado no servidor SMTP (Valor padrão: <strong>ragnarok</strong>)</span>
-                                </label>
+                        <label ng-if="config.BRACP_ALLOW_MAIL_SEND" class="input-align">
+                            Senha:
+                            <input type="password" ng-model="config.BRACP_MAIL_PASS" size="30"/>
+                            <span>Senha do nome de usuário autorizado no servidor SMTP (Valor padrão: <strong>ragnarok</strong>)</span>
+                        </label>
 
-                                <label class="input-align">
-                                    Nome do Remetente:
-                                    <input type="text" ng-model="config.BRACP_MAIL_FROM_NAME" size="30"/>
-                                    <span>Nome do usuário que enviará o e-mail.</span>
-                                </label>
+                        <label ng-if="config.BRACP_ALLOW_MAIL_SEND" class="input-align">
+                            Nome do Remetente:
+                            <input type="text" ng-model="config.BRACP_MAIL_FROM_NAME" size="30"/>
+                            <span>Nome do usuário que enviará o e-mail.</span>
+                        </label>
 
-                                <label class="input-align">
-                                    Endereço do Remetente:
-                                    <input type="text" ng-model="config.BRACP_MAIL_FROM" size="50"/>
-                                    <span>Endereço de e-mail do remetente.</span>
-                                </label>
-
-                            </div>
-                        </div>
+                        <label ng-if="config.BRACP_ALLOW_MAIL_SEND" class="input-align">
+                            Endereço do Remetente:
+                            <input type="text" ng-model="config.BRACP_MAIL_FROM" size="50"/>
+                            <span>Endereço de e-mail do remetente.</span>
+                        </label>
 
                     </div>
 
@@ -503,29 +495,23 @@ else if(!$writeable)
                             <span>Permite que o brACP faça validações dos formulários com o uso do reCAPTCHA.</span>
                         </label>
 
-                        <div ng-switch on="config.BRACP_RECAPTCHA_ENABLED">
-                            <div ng-switch-when="true">
-                                <br>
-                                <label class="input-align">
-                                    Chave Pública:
-                                    <input type="text" ng-model="config.BRACP_RECAPTCHA_PUBLIC_KEY" size="70"/>
-                                    <span>Chave pública informada pelo serviço da google.</span>
-                                </label>
+                        <label ng-if="config.BRACP_RECAPTCHA_ENABLED" class="input-align">
+                            Chave Pública:
+                            <input type="text" ng-model="config.BRACP_RECAPTCHA_PUBLIC_KEY" size="70"/>
+                            <span>Chave pública informada pelo serviço da google.</span>
+                        </label>
 
-                                <label class="input-align">
-                                    Chave Privada:
-                                    <input type="text" ng-model="config.BRACP_RECAPTCHA_PRIVATE_KEY" size="70"/>
-                                    <span>Chave privada informada pelo serviço da google.</span>
-                                </label>
+                        <label ng-if="config.BRACP_RECAPTCHA_ENABLED" class="input-align">
+                            Chave Privada:
+                            <input type="text" ng-model="config.BRACP_RECAPTCHA_PRIVATE_KEY" size="70"/>
+                            <span>Chave privada informada pelo serviço da google.</span>
+                        </label>
 
-                                <label class="input-align">
-                                    Endereço de Validação:
-                                    <input type="text" ng-model="config.BRACP_RECAPTCHA_PRIVATE_URL" size="70"/>
-                                    <span>Endereço para validação dos dados, não altere se não tiver certeza do que está fazendo.</span>
-                                </label>
-
-                            </div>
-                        </div>
+                        <label ng-if="config.BRACP_RECAPTCHA_ENABLED" class="input-align">
+                            Endereço de Validação:
+                            <input type="text" ng-model="config.BRACP_RECAPTCHA_PRIVATE_URL" size="70"/>
+                            <span>Endereço para validação dos dados, não altere se não tiver certeza do que está fazendo.</span>
+                        </label>
 
                     </div>
 
@@ -551,16 +537,12 @@ else if(!$writeable)
                             <span>Permite que o brACP informe ao jogador quando serão as próximas promoções de bônus</span>
                         </label>
 
-                        <div ng-switch on="config.DONATION_SHOW_NEXT_PROMO">
-                            <div ng-switch-when="true">
-                                <br>
-                                <label class="input-align">
-                                    Dias para próximas promoções:
-                                    <input type="text" ng-model="config.DONATION_INTERVAL_DAYS" size="10"/>
-                                    <span>Exibe todas as promoções para daqui <strong>{{config.DONATION_INTERVAL_DAYS}}</strong> dias.</span>
-                                </label>
-                            </div>
-                        </div>
+                        <label ng-if="config.DONATION_SHOW_NEXT_PROMO" class="input-align">
+                            Dias para próximas promoções:
+                            <input type="text" ng-model="config.DONATION_INTERVAL_DAYS" size="10"/>
+                            <span>Exibe todas as promoções para daqui <strong>{{config.DONATION_INTERVAL_DAYS}}</strong> dias.</span>
+                        </label>
+
                     </div>
 
                     <p class="bracp-message info">Por enquanto, somente o <strong>PayPal</strong> está habilitado para formas de doações.</p>
@@ -572,23 +554,18 @@ else if(!$writeable)
                             <span>Permite que o servidor receba doações pelo PayPal.</span>
                         </label>
 
-                        <div ng-switch on="config.PAYPAL_INSTALL">
-                            <div ng-switch-when="true">
-                                <br>
-                                <label class="input-align">
-                                    E-mail:
-                                    <input type="text" ng-model="config.PAYPAL_ACCOUNT" size="40"/>
-                                    <span>Endereço de e-mail que receberá as doações por PayPal</span>
-                                </label>
-                                <label class="input-align">
-                                    Moeda de doação:
-                                    <select ng-model="config.PAYPAL_CURRENCY">
-                                        <option ng-repeat="currency in BRACP_PAYPAL_CURRENCY">{{currency}}</option>
-                                    </select>
-                                    <span>Endereço de e-mail que receberá as doações por PayPal</span>
-                                </label>
-                            </div>
-                        </div>
+                        <label ng-if="config.PAYPAL_INSTALL" class="input-align">
+                            E-mail:
+                            <input type="text" ng-model="config.PAYPAL_ACCOUNT" size="40"/>
+                            <span>Endereço de e-mail que receberá as doações por PayPal</span>
+                        </label>
+                        <label ng-if="config.PAYPAL_INSTALL" class="input-align">
+                            Moeda de doação:
+                            <select ng-model="config.PAYPAL_CURRENCY">
+                                <option ng-repeat="currency in BRACP_PAYPAL_CURRENCY">{{currency}}</option>
+                            </select>
+                            <span>Endereço de e-mail que receberá as doações por PayPal</span>
+                        </label>
 
                     </div>
 
@@ -613,29 +590,23 @@ else if(!$writeable)
                                     <span>Permite que o brACP faça uso de servidor de cache para algumas informações.</span>
                                 </label>
 
-                                <div ng-switch on="config.BRACP_MEMCACHE">
-                                    <div ng-switch-when="true">
-                                        <br>
-                                        <label class="input-align">
-                                            Servidor:
-                                            <input type="text" ng-model="config.BRACP_MEMCACHE_SERVER" size="30"/>
-                                            <span>Endereço do servidor de cache.</span>
-                                        </label>
+                                <label ng-if="config.BRACP_MEMCACHE" class="input-align">
+                                    Servidor:
+                                    <input type="text" ng-model="config.BRACP_MEMCACHE_SERVER" size="30"/>
+                                    <span>Endereço do servidor de cache.</span>
+                                </label>
 
-                                        <label class="input-align">
-                                            Porta:
-                                            <input type="text" ng-model="config.BRACP_MEMCACHE_PORT" size="5"/>
-                                            <span>Número da porta para conexão com o servidor de cache.</span>
-                                        </label>
+                                <label ng-if="config.BRACP_MEMCACHE" class="input-align">
+                                    Porta:
+                                    <input type="text" ng-model="config.BRACP_MEMCACHE_PORT" size="5"/>
+                                    <span>Número da porta para conexão com o servidor de cache.</span>
+                                </label>
 
-                                        <label class="input-align">
-                                            Tempo de Validade:
-                                            <input type="text" ng-model="config.BRACP_MEMCACHE_EXPIRE" size="8"/>
-                                            <span>Tempo (em segundos) que o valor do cache será salvo no servidor.<br><strong>{{Math.floor(config.BRACP_MEMCACHE_EXPIRE/60)}} minuto(s) e {{(config.BRACP_MEMCACHE_EXPIRE%60)}} segundo(s)</strong></span>
-                                        </label>
-                                    </div>
-                                </div>
-
+                                <label ng-if="config.BRACP_MEMCACHE" class="input-align">
+                                    Tempo de Validade:
+                                    <input type="text" ng-model="config.BRACP_MEMCACHE_EXPIRE" size="8"/>
+                                    <span>Tempo (em segundos) que o valor do cache será salvo no servidor.<br><strong>{{Math.floor(config.BRACP_MEMCACHE_EXPIRE/60)}} minuto(s) e {{(config.BRACP_MEMCACHE_EXPIRE%60)}} segundo(s)</strong></span>
+                                </label>
                             </div>
 
                         </div>
@@ -654,7 +625,186 @@ else if(!$writeable)
 
                 <!-- Configurações do other. -->
                 <div ng-switch-when="other" class="install-content">
-                    Configurar OTHER.
+                    <h1>Configurações para criação de contas e recuperação</h1>
+
+                    <div class="install-data">
+                        <label class="input-align">
+                            <input type="checkbox" ng-model="config.BRACP_ALLOW_CREATE_ACCOUNT"/>
+                            Habilitar criação de novas contas.
+                            <span>Permite que novos usuários se registrem no painel de controle.</span>
+                        </label>
+
+                        <label ng-if="config.BRACP_ALLOW_MAIL_SEND && config.BRACP_ALLOW_CREATE_ACCOUNT" class="input-align">
+                            <input type="checkbox" ng-model="config.BRACP_CONFIRM_ACCOUNT"/>
+                            Habilitar confirmação de contas.
+                            <span>Permite que quando o usuário criar uma conta, ela seja confirmada via e-mail.</span>
+                        </label>
+
+                        <label class="input-align">
+                            <input type="checkbox" ng-model="config.BRACP_MAIL_REGISTER_ONCE"/>
+                            Bloquear registro de mesmo e-mail para mais de uma conta.
+                            <span>Não permite que o mesmo e-mail seja utilizado para mais de uma conta.</span>
+                        </label>
+
+                        <label class="input-align">
+                            <input type="checkbox" ng-model="config.BRACP_ALLOW_CHANGE_MAIL"/>
+                            Habilitar alteração de e-mail
+                            <span>Permite que o jogador mude seu endereço de e-mail</span>
+                        </label>
+
+                        <label ng-if="config.BRACP_ALLOW_CHANGE_MAIL" class="input-align">
+                            Delay para alteração de e-mail:
+                            <input type="text" ng-model="config.BRACP_CHANGE_MAIL_DELAY" size="3"/>
+                            <span>Tempo (em minutos) para permitir uma nova alteração de e-mail.</span>
+                        </label>
+
+                        <label ng-if="config.BRACP_ALLOW_MAIL_SEND && config.BRACP_ALLOW_CHANGE_MAIL" class="input-align">
+                            <input type="checkbox" ng-model="config.BRACP_NOTIFY_CHANGE_MAIL"/>
+                            Habilitar notificações de alteração de e-mail
+                            <span>Sempre que um e-mail for alterado, ambos os e-mails serão notificados.</span>
+                        </label>
+
+                        <label ng-if="config.BRACP_ALLOW_MAIL_SEND" class="input-align">
+                            <input type="checkbox" ng-model="config.BRACP_NOTIFY_CHANGE_PASSWORD"/>
+                            Habilitar notificações de alteração de senha
+                            <span>Sempre que a senha for alterada, o usuário será notificado por e-mail.</span>
+                        </label>
+
+                        <label ng-if="config.BRACP_ALLOW_MAIL_SEND" class="input-align">
+                            <input type="checkbox" ng-model="config.BRACP_ALLOW_RECOVER"/>
+                            Habilitar recuperação de contas
+                            <span>Permite que os usuários que tenham perdido suas senhas as recuperem por e-mail.</span>
+                        </label>
+
+                        <label ng-if="config.BRACP_ALLOW_MAIL_SEND && config.BRACP_ALLOW_RECOVER" class="input-align">
+                            <input type="checkbox" ng-model="config.BRACP_RECOVER_BY_CODE"/>
+                            Habilitar código de recuperação
+                            <span>Permite que ao recuperar uma conta, seja gerado um código de recuperação antes de enviar a senha do usuário.</span>
+                            <span ng-if="!config.BRACP_RECOVER_BY_CODE && config.BRACP_MD5_PASSWORD_HASH">
+                                <strong>
+                                    Mesmo que a esta opção esteja desabilitada, ela será utilizada, pois o uso de senhas com md5 está ativo.
+                                </strong>
+                            </span>
+                        </label>
+
+                        <label ng-if="config.BRACP_ALLOW_MAIL_SEND && config.BRACP_ALLOW_RECOVER" class="input-align">
+                            Tempo de vida para o código de recuperação:
+                            <input type="text" ng-model="config.BRACP_RECOVER_CODE_EXPIRE" size="3"/>
+                            <span>Tempo (em minutos) para que o código de recuperação seja válido.</span>
+                        </label>
+
+                        <label ng-if="config.BRACP_ALLOW_MAIL_SEND && config.BRACP_ALLOW_RECOVER && (config.BRACP_MD5_PASSWORD_HASH || config.BRACP_RECOVER_BY_CODE)" class="input-align">
+                            Tamanho para a senha de recuperação:
+                            <input type="text" ng-model="config.BRACP_RECOVER_STRING_LENGTH" size="3"/>
+                            <span>Tamanho para a senha de recuperação.</span>
+                        </label>
+
+                        <label ng-if="config.BRACP_ALLOW_MAIL_SEND && config.BRACP_ALLOW_RECOVER && (config.BRACP_MD5_PASSWORD_HASH || config.BRACP_RECOVER_BY_CODE)" class="input-align">
+                            Caracteres de recuperação:
+                            <input type="text" ng-model="config.BRACP_RECOVER_RANDOM_STRING" size="80"/>
+                            <span>Caracteres que serão sorteados na geração da nova senha.</span>
+                        </label>
+
+                        <label class="input-align">
+                            Expressão para usuários:
+                            <input type="text" ng-model="config.BRACP_REGEXP_USERNAME" size="50"/>
+                            <span>Expressão regular para os campos de usuários.</span>
+                        </label>
+
+                        <label class="input-align">
+                            Expressão para senhas:
+                            <input type="text" ng-model="config.BRACP_REGEXP_PASSWORD" size="50"/>
+                            <span>Expressão regular para os campos de senha.</span>
+                        </label>
+
+                        <label class="input-align">
+                            Expressão para e-mails:
+                            <input type="text" ng-model="config.BRACP_REGEXP_EMAIL" size="50"/>
+                            <span>Expressão regular para os campos de e-mail.</span>
+                        </label>
+                    </div>
+                    <br>
+                    <h1>Configurações para Classificações</h1>
+                    <div class="install-data">
+                        <label class="input-align">
+                            <input type="checkbox" ng-model="config.BRACP_ALLOW_RANKING"/>
+                            Habilitar exibição de classificações
+                            <span>Permite que seja listado as classificações dos personagens do jogo.</span>
+                        </label>
+
+                        <label ng-if="config.BRACP_ALLOW_RANKING" class="input-align">
+                            <input type="checkbox" ng-model="config.BRACP_ALLOW_RANKING_ZENY"/>
+                            Habilitar classificação de Zeny
+                            <span>Permite que seja listado as classificações dos personagens mais ricos.</span>
+                        </label>
+
+                        <label ng-if="config.BRACP_ALLOW_RANKING && config.BRACP_ALLOW_RANKING_ZENY" class="input-align">
+                            <input type="checkbox" ng-model="config.BRACP_ALLOW_RANKING_ZENY_SHOW_ZENY"/>
+                            Habilitar exibição da quantidade de Zeny por personagem
+                            <span>Exibe o quanto de Zeny cada personagem carrega</span>
+                        </label>
+                    </div>
+                    <br>
+                    <h1>Configurações para Personagens</h1>
+                    <div class="install-data">
+                        <label class="input-align">
+                            <input type="checkbox" ng-model="config.BRACP_ALLOW_SHOW_CHAR_STATUS"/>
+                            Habilitar exibição de status
+                            <span>Permite exibição de Online/Offline para quando o personagem for listado.</span>
+                            <span ng-if="config.BRACP_ALLOW_RANKING"><strong>Esta configuração também será utilizada nas classificações.</strong></span>
+                        </label>
+
+                        <label class="input-align">
+                            <input type="checkbox" ng-model="config.BRACP_ALLOW_RESET_APPEAR"/>
+                            Habilitar reset de aparência
+                            <span>Permite que seja resetada aparência do personagem.</span>
+                        </label>
+
+                        <label class="input-align">
+                            <input type="checkbox" ng-model="config.BRACP_ALLOW_RESET_POSIT"/>
+                            Habilitar reset de posição
+                            <span>Permite que seja resetada posição do personagem.</span>
+                        </label>
+
+                        <label class="input-align">
+                            <input type="checkbox" ng-model="config.BRACP_ALLOW_RESET_EQUIP"/>
+                            Habilitar reset de equipamentos
+                            <span>Permite que sejam resetados equipamentos do personagem.</span>
+                        </label>
+                    </div>
+                    <br>
+                    <h1>Configurações para Administradores</h1>
+                    <div class="install-data">
+                        <label class="input-align">
+                            Nível para GM para login:
+                            <input type="text" ng-model="config.BRACP_ALLOW_LOGIN_GMLEVEL" size="3"/>
+                            <span>Nível mínimo da conta para que seja possível realizar login no painel de controle. *0= Todos.</span>
+                        </label>
+
+                        <label class="input-align">
+                            Nível para GM para administrador:
+                            <input type="text" ng-model="config.BRACP_ALLOW_ADMIN_GMLEVEL" size="3"/>
+                            <span>Nível mínimo da conta para que seja considerada administrador.</span>
+                        </label>
+
+                        <label class="input-align">
+                            <input type="checkbox" ng-model="config.BRACP_ALLOW_ADMIN"/>
+                            Habilitar administração
+                            <span>Habilita acesso administrativo ao painel de controle para contas com nivel <strong>{{config.BRACP_ALLOW_ADMIN_GMLEVEL}}</strong> ou superior</span>
+                        </label>
+
+                        <label class="input-align">
+                            <input type="checkbox" ng-model="config.BRACP_ALLOW_ADMIN_CHANGE_PASSWORD"/>
+                            Habilitar administradores alterar senha
+                            <span>Permite que os administradores realizem alterações de senha pelo brACP.</span>
+                        </label>
+                    </div>
+
+                    <br>
+                    <center>
+                        <button class="btn btn-success" ng-click="saveAndInstall()">Salvar e Configurar</button>
+                    </center>
+
                 </div>
 
                 <!-- Bem vindo a instalação do painel de controle. -->

@@ -27,7 +27,7 @@ html, body
 
 html
 {
-    background-color: rgba(204, 255, 204, .3);
+    background-color: #fff;
 }
 
 .install-cfg-radio
@@ -39,7 +39,7 @@ html
 {
     width: 600px;
     @include border-radius(6px);
-    color: rgb(0, 102, 0);
+    color: rgb(39, 174, 96);
 
     position: relative;
     top: 40px;
@@ -47,7 +47,7 @@ html
     margin: auto;
     margin-bottom: 120px;
 
-    @include box-shadow('0px 0px 6px rgba(0, 102, 0, .65)');
+    @include box-shadow('0px 0px 6px rgba(39, 174, 96, .65)');
 
     .install-title
     {
@@ -57,7 +57,7 @@ html
         color: white;
         font-size: 15px;
         font-weight: bold;
-        background-color: #006600;
+        background-color: rgb(46, 204, 113);
 
         border: 1px solid rgba(255, 255, 255, .6);
 
@@ -72,7 +72,7 @@ html
         margin: 0px; padding: 0px;
         background-color: white;
 
-        @include box-shadow('0px 0px 0px 1px rgba(0, 102, 0, .65) inset');
+        @include box-shadow('0px 0px 0px 1px rgba(39, 174, 96, .65) inset');
         @include border-radius(0px 0px 6px 6px);
 
         div.install-content
@@ -86,15 +86,15 @@ html
                 padding: 0px;
                 margin: 0px 0px 6px 0px;
                 font-size: 14px;
-                border-bottom: 1px dotted rgb(0, 102, 0);
+                border-bottom: 1px dotted rgb(39, 174, 96);
             }
 
             .install-data
             {
                 padding: 12px;
-                background-color: rgba(0, 220, 0, .1);
+                background-color: rgba(39, 174, 96, .1);
                 @include border-radius(6px);
-                @include box-shadow('0px 0px 1px 1px rgba(0, 102, 0, .65)');
+                @include box-shadow('0px 0px 1px 1px rgba(39, 174, 96, .65)');
 
                 label.input-align
                 {
@@ -104,7 +104,7 @@ html
                     {
                         font-style: italic;
                         font-size: 10px;
-                        color: red;
+                        color: rgb(230, 126, 34);
                         display: block;
 
                         &:before
@@ -165,7 +165,7 @@ html
                 display: table-cell;
                 text-align: center;
 
-                border: 1px solid rgba(0, 102, 0, .65);
+                border: 1px solid rgba(39, 174, 96, .65);
 
                 label
                 {
@@ -178,13 +178,13 @@ html
 
                 input.install-cfg-radio:not(:checked) + label
                 {
-                    @include background-gradient(#009900, #006600);
+                    background-color: rgb(39, 174, 96);
                 }
 
                 input.install-cfg-radio:checked + label
                 {
-                    color: #006600;
-                    @include background-gradient(#ffffff, #e6e6e6);
+                    color: rgb(39, 174, 96);
+                    background-color: white;
                 }
 
                 &+ li
@@ -226,28 +226,28 @@ html
 
 .info
 {
-    background-color: rgba(0, 183, 255, 0.1);
-    border-color: rgba(0, 183, 255, 0.7);
-    color: #138EBF;
+    color: rgb(41, 128, 185);
+    background-color: rgba(52, 152, 219, 0.1);
+    border-color: rgba(52, 152, 219, 0.7);
 }
 
 .error
 {
-    border-color: rgba(255, 0, 0, 0.7);
-    background-color: rgba(255, 0, 0, 0.1);
-    color: #BD0029;
+    color: rgb(192, 57, 43);
+    border-color: rgba(231, 76, 60, 0.7);
+    background-color: rgba(231, 76, 60, 0.1);
 }
 
 .success
 {
-    border-color: rgba(120, 209, 90, 0.7);
-    background-color: rgba(120, 209, 90, 0.1);
-    color: #53913F;
+    border-color: rgba(46, 204, 113, 0.7);
+    background-color: rgba(46, 204, 113, 0.1);
+    color: rgb(46, 204, 113);
 }
 
 .warning
 {
-    border-color: rgba(255, 153, 0, 0.7);
-    background-color: rgba(255, 153, 0, 0.1);
-    color: #ff9900;
+    border-color: rgba(230, 126, 34, 0.7);
+    background-color: rgba(230, 126, 34, 0.1);
+    color: rgb(230, 126, 34);
 }
