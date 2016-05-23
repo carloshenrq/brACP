@@ -1,0 +1,118 @@
+@import '_mixin';
+@import '_options';
+
+
+.button
+{
+    position: relative;
+    padding: 6px 12px 6px 12px; margin: 0;
+    border: 1px solid;
+
+    font-weight: bold;
+
+    background-color: rgb(236, 240, 241);
+    color: rgb(127, 140, 141);
+    border-color: rgb(127, 140, 141);
+
+    cursor: pointer;
+
+    @include transition('box-shadow .2s ease-in-out, text-shadow .2s ease-in-out');
+
+    &:hover
+    {
+        text-shadow: 0px 0px 3px rgba(127, 140, 141, .3);
+        @include box-shadow('0px 0px 3px rgba(127, 140, 141, .3)');
+    }
+
+    &+ .button
+    {
+        margin-left: 2px;
+    }
+
+    &.icon
+    {
+        padding-left: 24px;
+
+        &:before
+        {
+            position: absolute;
+            top: 50%; left: 15px;
+            margin-left: auto;
+            font-size: 16px;
+
+            font-weight: bold;
+
+            text-align: center;
+            @include size(16px, 16px);
+            @include transform('translate(-50%, -70%)');
+        }
+    }
+
+    &.link
+    {
+        border-color: transparent;
+        background-color: transparent;
+        color: rgb(0, 0, 0);
+
+        text-decoration: underline;
+
+        &:hover
+        {
+            text-shadow: 0px 0px 3px rgba(0, 0, 0, .3);
+            @include box-shadow('none !important');
+        }
+    }
+
+    &.error
+    {
+        border-color: rgb(192, 57, 43);
+        background-color: rgb(231, 76, 60);
+        color: white !important;
+
+        &:hover
+        {
+            text-shadow: 0px 0px 3px rgb(192, 57, 43);
+            @include box-shadow('0px 0px 3px rgb(192, 57, 43)');
+        }
+    }
+
+    &.info
+    {
+        border-color: rgb(41, 128, 185);
+        background-color: rgb(52, 152, 219);
+        color: white !important;
+
+        &:hover
+        {
+            text-shadow: 0px 0px 3px rgb(41, 128, 185);
+            @include box-shadow('0px 0px 3px rgb(41, 128, 185)');
+        }
+    }
+
+    &.success
+    {
+        border-color: rgb(39, 174, 96);
+        background-color: rgb(46, 204, 113);
+        color: white !important;
+
+        &:hover
+        {
+            text-shadow: 0px 0px 3px rgb(39, 174, 96);
+            @include box-shadow('0px 0px 3px rgb(39, 174, 96)');
+        }
+    }
+
+    &.warning
+    {
+        border-color: rgb(230, 126, 34);
+        background-color: rgb(243, 156, 18);
+        color: white !important;
+
+        &:hover
+        {
+            text-shadow: 0px 0px 3px rgb(230, 126, 34);
+            @include box-shadow('0px 0px 3px rgb(230, 126, 34)');
+        }
+    }
+}
+

@@ -1,7 +1,7 @@
 {
-    "name" : "Padrao",
+    "name" : "Classico",
     "version" : "0.2.1-beta",
-    "folder" : "default",
+    "folder" : "classic",
     "authors" : [{
         "name" : "CarlosHenrq",
         "link" : "http://forum.brathena.org/index.php/user/60-carloshenrq/"

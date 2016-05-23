@@ -1,0 +1,70 @@
+.message {
+  position: relative;
+  padding: 16px;
+  border: 1px solid;
+  color: #7f8c8d;
+  border-color: #7f8c8d;
+  background-color: #e6e6e6; }
+  .message h1, .message .title {
+    padding: 0px;
+    margin: 0px 0px 6px 0px;
+    font-size: 14px; }
+  .message.icon {
+    padding-left: 64px; }
+    .message.icon:before {
+      position: absolute;
+      top: 50%;
+      left: 32px;
+      margin-left: auto;
+      font-size: 24px;
+      border-radius: 50%;
+      -moz-border-radius: 50%;
+      -webkit-border-radius: 50%;
+      box-shadow: 0px 0px 4px black;
+      -moz-box-shadow: 0px 0px 4px black;
+      -webkit-box-shadow: 0px 0px 4px black;
+      text-align: center;
+      width: 32px;
+      height: 32px;
+      transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+      -webkit-transform: translate(-50%, -50%); }
+  .message + .message {
+    margin-top: 4px; }
+  .message.error {
+    border-color: #e74c3c;
+    background-color: #ffe6e6; }
+    .message.error.icon:before {
+      background-color: #e74c3c;
+      box-shadow: 0px 0px 4px rgb(231, 76, 60);
+      -moz-box-shadow: 0px 0px 4px rgb(231, 76, 60);
+      -webkit-box-shadow: 0px 0px 4px rgb(231, 76, 60);
+      color: white; }
+  .message.success {
+    border-color: #2ecc71;
+    background-color: #eafaf1; }
+    .message.success.icon:before {
+      background-color: #2ecc71;
+      box-shadow: 0px 0px 4px rgb(46, 204, 113);
+      -moz-box-shadow: 0px 0px 4px rgb(46, 204, 113);
+      -webkit-box-shadow: 0px 0px 4px rgb(46, 204, 113);
+      color: white;
+      font-size: 22px; }
+  .message.info {
+    border-color: #3498db;
+    background-color: #e9f4fb; }
+    .message.info.icon:before {
+      background-color: #3498db;
+      box-shadow: 0px 0px 4px rgb(52, 152, 219);
+      -moz-box-shadow: 0px 0px 4px rgb(52, 152, 219);
+      -webkit-box-shadow: 0px 0px 4px rgb(52, 152, 219);
+      color: white; }
+  .message.warning {
+    border-color: #f39c12;
+    background-color: #fef5e7; }
+    .message.warning.icon:before {
+      background-color: #f39c12;
+      box-shadow: 0px 0px 4px rgb(243, 156, 18);
+      -moz-box-shadow: 0px 0px 4px rgb(243, 156, 18);
+      -webkit-box-shadow: 0px 0px 4px rgb(243, 156, 18);
+      color: white; }

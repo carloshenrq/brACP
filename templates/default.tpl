@@ -29,9 +29,10 @@
 
         <link rel="shortcut icon" href="{$smarty.const.BRACP_DIR_INSTALL_URL}fav.ico">
         <!-- Here loads all CSS files. -->
-        <link rel="stylesheet" type="text/css" href="{$smarty.const.BRACP_DIR_INSTALL_URL}themes/{$session->BRACP_THEME}/css/system.css"/>
-        <link rel="stylesheet" type="text/css" href="{$smarty.const.BRACP_DIR_INSTALL_URL}themes/{$session->BRACP_THEME}/css/modal.css"/>
-        <link rel="stylesheet" type="text/css" href="{$smarty.const.BRACP_DIR_INSTALL_URL}themes/{$session->BRACP_THEME}/css/button.css"/>
+        <link rel="stylesheet" type="text/css" href="{$smarty.const.BRACP_DIR_INSTALL_URL}themes/classic/css/default.css"/>
+        <link rel="stylesheet" type="text/css" href="{$smarty.const.BRACP_DIR_INSTALL_URL}themes/classic/css/message.css"/>
+        <link rel="stylesheet" type="text/css" href="{$smarty.const.BRACP_DIR_INSTALL_URL}themes/classic/css/button.css"/>
+        <link rel="stylesheet" type="text/css" href="{$smarty.const.BRACP_DIR_INSTALL_URL}themes/classic/css/modal.css"/>
         <style>
         {block name="brACP_StyleCss"}
         {/block}
@@ -45,9 +46,6 @@
             <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/jquery-2.1.4.min.js"></script>
             <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/angular.min.js"></script>
         {/if}
-        <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/bracp.prototype.js"></script>
-        <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/jquery.ajax.js"></script>
-        <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/jquery.bracp.js"></script>
 
         {if $smarty.const.BRACP_RECAPTCHA_ENABLED eq true}
             <script src="https://www.google.com/recaptcha/api.js"></script>
@@ -100,103 +98,12 @@
     </head>
     <body>
     {block name="brACP_HtmlBody"}
-        <div class="bracp-content">
-            <div class="bracp-header">
-                <input type="checkbox" id="_bracp-menu-check-0" class="bracp-menu-check"/>
-                <label class="btn" for="_bracp-menu-check-0">
-                    @@MENU(TITLE)
-                </label>
-                <div class="bracp-menu">
-                    {include 'menu.tpl'}
-                </div>
-                <div class="bracp-header-menu">
-                    {if isset($session->BRACP_ISLOGGEDIN) eq false or $session->BRACP_ISLOGGEDIN eq false}
-                        <label for="bracp-modal-login" class="btn btn-success">@@MENU,MYACC,UNAUTHENTICATED(LOGIN)</label>
-                        {if $smarty.const.BRACP_ALLOW_CREATE_ACCOUNT eq true}
-                            <label for="bracp-modal-create" class="btn btn-info">@@MENU,MYACC,UNAUTHENTICATED(CREATE)</label>
-                        {/if}
-                    {else}
-                        <button data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/logout" data-target=".bracp-body" class="btn btn-error ajax-url">@@MENU,MYACC,AUTHENTICATED(LOGOUT, {$account->getUserid()})</button>
-                    {/if}
-                </div>
-            </div>
-            <div class="bracp-body-container">
-                {if $smarty.const.BRACP_DEVELOP_MODE eq true}
-                    <div class="bracp-message warning">
-                        <h3>@@DEFAULT,DEVELOP(TITLE)</h3>
-                        @@DEFAULT,DEVELOP(MESSAGE)
-                    </div>
-                {/if}
-                {if preg_match('/beta$/i', $smarty.const.BRACP_VERSION) eq 1}
-                    <div class="bracp-message info">
-                        <h3>@@DEFAULT,BETA(TITLE, {$smarty.const.BRACP_VERSION})</h3>
-                        @@DEFAULT,BETA(MESSAGE)
-                    </div>
-                {/if}
-                {if isset($account) eq true && $account->getGroup_id() >= BRACP_ALLOW_ADMIN_GMLEVEL}
-                    <div class="bracp-message error">
-                        <h3>@@DEFAULT,ADMIN(TITLE)</h3>
-                        @@DEFAULT,ADMIN(MESSAGE)
-                    </div>
-                {/if}
-                <div class="bracp-body">
-                    {block name="brACP_Body"}
-                    {/block}
-                </div>
-            </div>
-            <div class="bracp-footer">
-                {if is_null($navigator) eq false}
-                    <div class="bracp-navigator {$navigator->getClass()}">
-                        <div class="nav-name">{$navigator->getName()}</div>
-                        <div class="nav-version">{$navigator->getVersion()}</div>
-                    </div>
-                {/if}
-                <div class="nav-ipaddress no-mobile">{$ipAddress}</div>
-                <div class="nav-theme">
-                    <select class="theme-select">
-                    {foreach from=$themes item=theme}
-                        <option value="{$theme->getFolder()}">{$theme->getName()} ({$theme->getVersion()})</option>
-                    {/foreach}
-                    </select>
-                </div>
-                <div class="nav-lang">
-                    <select class="lang-select">
-                    {foreach from=$langs item=lang}
-                        <option value="{$lang}">{$lang}</option>
-                    {/foreach}
-                    </select>
-                </div>
+        <div class="content">
+            <div class="message error icon">
+                <h1>brACP - Em construção</h1>
+                Por favor, aguarde, o layout original está em manutenção.
             </div>
         </div>
     {/block}
-        <div class="modal-container">
-            {if isset($session->BRACP_ISLOGGEDIN) eq false or $session->BRACP_ISLOGGEDIN eq false}
-                <input id="bracp-modal-login" class="modal-check" type="checkbox"/>
-                <div class="modal-login-body">{include 'account.login.ajax.tpl'}</div>
-
-                {if $smarty.const.BRACP_ALLOW_CREATE_ACCOUNT eq true}
-                    <input id="bracp-modal-create" class="modal-check" type="checkbox"/>
-                    <div class="modal-create-body">{include 'account.register.ajax.tpl'}</div>
-                {/if}
-
-                {if $smarty.const.BRACP_ALLOW_RECOVER eq true}
-                    <input id="bracp-modal-recover" class="modal-check" type="checkbox"/>
-                    <div class="modal-recover-body">{include 'account.recover.ajax.tpl'}</div>
-                {/if}
-
-                {if $smarty.const.BRACP_CONFIRM_ACCOUNT eq true}
-                    <input id="bracp-modal-create-resend" class="modal-check" type="checkbox"/>
-                    <div class="modal-create-resend-body">{include 'account.register.resend.ajax.tpl'}</div>
-                {/if}
-            {else}
-                <input id="bracp-modal-changepass" class="modal-check" type="checkbox"/>
-                <div class="modal-changepass-body">{include 'account.change.password.ajax.tpl'}</div>
-
-                {if $smarty.const.BRACP_ALLOW_CHANGE_MAIL eq true}
-                    <input id="bracp-modal-changemail" class="modal-check" type="checkbox"/>
-                    <div class="modal-changemail-body">{include 'account.change.mail.ajax.tpl'}</div>
-                {/if}
-            {/if}
-        </div>
     </body>
 </html>

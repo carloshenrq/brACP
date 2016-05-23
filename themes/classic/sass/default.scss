@@ -1,0 +1,59 @@
+@import '_mixin';
+@import '_options';
+
+
+html, body
+{
+    padding: 0px; margin: 0px;
+    font-family: Calibri, Tahoma, Verdana, Arial;
+    font-size: 13px;
+}
+
+.error
+{
+    color: rgb(231, 76, 60) !important;
+
+    &.icon:before
+    {
+        content: '\00d7';
+    }
+}
+
+.success
+{
+    color: rgb(46, 204, 113) !important;
+
+    &.icon:before
+    {
+        content: '\2713';
+    }
+}
+
+.info
+{
+    color: rgb(52, 152, 219) !important;
+
+    &.icon
+    {
+        &:before
+        {
+            content: '!';
+        }
+
+        &.icon.icon-question:before
+        {
+            content: '?';
+        }
+    }
+}
+
+.warning
+{
+    color: rgb(243, 156, 18) !important;
+
+    &.icon:before
+    {
+        content: '!';
+    }
+}
+

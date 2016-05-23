@@ -1,0 +1,27 @@
+html, body {
+  padding: 0px;
+  margin: 0px;
+  font-family: Calibri, Tahoma, Verdana, Arial;
+  font-size: 13px; }
+
+.error {
+  color: #e74c3c !important; }
+  .error.icon:before {
+    content: '\00d7'; }
+
+.success {
+  color: #2ecc71 !important; }
+  .success.icon:before {
+    content: '\2713'; }
+
+.info {
+  color: #3498db !important; }
+  .info.icon:before {
+    content: '!'; }
+  .info.icon.icon.icon-question:before {
+    content: '?'; }
+
+.warning {
+  color: #f39c12 !important; }
+  .warning.icon:before {
+    content: '!'; }
