@@ -99,10 +99,25 @@
     <body>
     {block name="brACP_HtmlBody"}
         <div class="content">
-            <div class="message error icon">
-                <h1>brACP - Em construção</h1>
-                Por favor, aguarde, o layout original está em manutenção.
+            <div class="header">
+                <div class="menu-top access">
+
+                    <button class="button small link">@@MENU,MYACC,UNAUTHENTICATED(LOGIN)</button>
+                    <button class="button small success">@@MENU,MYACC,UNAUTHENTICATED(CREATE)</button>
+
+                </div>
+
+                <div class="menu-top link">
+                </div>
+
+                <div class="menu-top logo">
+                </div>
             </div>
+
+            <div class="message error icon">
+                Layout em construção.
+            </div>
+
         </div>
     {/block}
     </body>

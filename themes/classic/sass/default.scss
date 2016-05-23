@@ -9,6 +9,32 @@ html, body
     font-size: 13px;
 }
 
+.content
+{
+    .header
+    {
+        .menu-top
+        {
+            &.access, &.link, &.logo
+            {
+                padding: 8px;
+            }
+
+            &.access
+            {
+                text-align: right;
+
+                @include background-gradient(#006600, #004d00);
+            }
+
+            &.link, &.logo
+            {
+                background-color: #004d00;
+            }
+        }
+    }
+}
+
 .error
 {
     color: rgb(231, 76, 60) !important;
