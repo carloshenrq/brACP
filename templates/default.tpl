@@ -40,8 +40,10 @@
         <!-- Here loads all JAVASCRIPTS files -->
         {if $smarty.const.BRACP_DEVELOP_MODE eq true}
             <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/jquery-2.1.4.js"></script>
+            <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/angular.js"></script>
         {else}
             <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/jquery-2.1.4.min.js"></script>
+            <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/angular.min.js"></script>
         {/if}
         <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/bracp.prototype.js"></script>
         <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/jquery.ajax.js"></script>
