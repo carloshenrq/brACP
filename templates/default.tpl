@@ -82,14 +82,14 @@
                     {/if}
 
                 </div>
-                
+
                 <div class="menu-top logo">
                 </div>
 
                 <div class="menu-top link">
                     <ul>
                         <li>@@MENU(HOME)</li>
-                        <li>@@MENU,MYACC(TITLE)
+                        <li class="sub-menu">@@MENU,MYACC(TITLE)
                             <ul>
                                 {if isset($account) eq false}
                                     <li>@@MENU,MYACC,UNAUTHENTICATED(LOGIN)</li>
@@ -109,7 +109,7 @@
                             </ul>
                         </li>
                         {if $smarty.const.BRACP_ALLOW_RANKING}
-                            <li>@@MENU,RANKINGS(TITLE)
+                            <li class="sub-menu">@@MENU,RANKINGS(TITLE)
                                 <ul>
                                     <li>@@MENU,RANKINGS(CHARS)</li>
                                     <li>@@MENU,RANKINGS(GUILDS)</li>

@@ -72,7 +72,7 @@ class Ranking
                                 chars.base_exp DESC,
                                 chars.job_exp DESC
                         ')
-                        ->setMaxResults(100)
+                        ->setMaxResults(20)
                         ->getResult();
 
             foreach($data as $i => $char)

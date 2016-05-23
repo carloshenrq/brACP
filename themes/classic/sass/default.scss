@@ -62,9 +62,22 @@ html, body
                         cursor: pointer;
                         @include transition('text-shadow .2s ease-in-out');
 
+                        &.sub-menu:after
+                        {
+                            display: inline-block;
+                            float: right;
+                            margin-left: 8px;
+                            content: '\203A';
+                            @include transition('transform .2s ease-in-out');
+                        }
+
+                        &.sub-menu:hover:after
+                        {
+                            @include transform('rotate(90deg)');
+                        }
+
                         &:hover
                         {
-
                             text-shadow: 0px 0px 4px white;
 
                             &> ul
@@ -77,7 +90,7 @@ html, body
 
                         &+ li
                         {
-                            margin-left: 1em;
+                            margin-left: 0.3em;
                         }
                     }
 
@@ -107,6 +120,20 @@ html, body
                             {
                                 margin-left: 0;
                                 border-top: 1px dashed rgba(255, 255, 255, .35);
+                            }
+
+                            &.sub-menu:after
+                            {
+                                display: inline-block;
+                                margin-left: 6px;
+                                content: '\203A';
+                                @include transform('rotate(90deg)');
+                                @include transition('transform .2s ease-in-out');
+                            }
+
+                            &.sub-menu:hover:after
+                            {
+                                @include transform('rotate(0deg)');
                             }
 
                             &:hover ul

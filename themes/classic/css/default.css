@@ -43,6 +43,19 @@ html, body {
         -o-transition: text-shadow .2s ease-in-out;
         -moz-transition: text-shadow .2s ease-in-out;
         -webkit-transition: text-shadow .2s ease-in-out; }
+        .content .header .menu-top.link ul li.sub-menu:after {
+          display: inline-block;
+          float: right;
+          margin-left: 8px;
+          content: '\203A';
+          transition: transform .2s ease-in-out;
+          -o-transition: transform .2s ease-in-out;
+          -moz-transition: transform .2s ease-in-out;
+          -webkit-transition: transform .2s ease-in-out; }
+        .content .header .menu-top.link ul li.sub-menu:hover:after {
+          transform: rotate(90deg);
+          -ms-transform: rotate(90deg);
+          -webkit-transform: rotate(90deg); }
         .content .header .menu-top.link ul li:hover {
           text-shadow: 0px 0px 4px white; }
           .content .header .menu-top.link ul li:hover > ul {
@@ -50,7 +63,7 @@ html, body {
             opacity: 1;
             top: 100%; }
         .content .header .menu-top.link ul li + li {
-          margin-left: 1em; }
+          margin-left: 0.3em; }
       .content .header .menu-top.link ul ul {
         position: absolute;
         top: 70%;
@@ -73,6 +86,21 @@ html, body {
           .content .header .menu-top.link ul ul li + li {
             margin-left: 0;
             border-top: 1px dashed rgba(255, 255, 255, 0.35); }
+          .content .header .menu-top.link ul ul li.sub-menu:after {
+            display: inline-block;
+            margin-left: 6px;
+            content: '\203A';
+            transform: rotate(90deg);
+            -ms-transform: rotate(90deg);
+            -webkit-transform: rotate(90deg);
+            transition: transform .2s ease-in-out;
+            -o-transition: transform .2s ease-in-out;
+            -moz-transition: transform .2s ease-in-out;
+            -webkit-transition: transform .2s ease-in-out; }
+          .content .header .menu-top.link ul ul li.sub-menu:hover:after {
+            transform: rotate(0deg);
+            -ms-transform: rotate(0deg);
+            -webkit-transform: rotate(0deg); }
           .content .header .menu-top.link ul ul li:hover ul {
             top: 0%;
             left: 100%; }

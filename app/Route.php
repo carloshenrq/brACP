@@ -129,7 +129,7 @@ class Route
                     // Verifica se o ranking de zeny está habilitado a ser exibido.
                     if(BRACP_ALLOW_RANKING_ZENY)
                     {
-                        // $this->get('/chars/economy', ['Controller\Ranking', 'economy']);
+                        $this->get('/chars/economy', ['Controller\Ranking', 'economy']);
                     }
                 });
             }
