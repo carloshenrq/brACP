@@ -42,11 +42,25 @@ class Ranking
      */
     public static function chars(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
+        // Exibe o display para home.
+        self::getApp()->display('rankings.chars');
+    }
+
+    /**
+     * Método inicial para exibição dos templates na tela.
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param array $args
+     */
+    public static function charJson(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
         // Define que irá carregar o cache de personagens a serem exibidos
         //  ou criar o cache.
         $app = self::getApp();
         $chars = Cache::get('BRACP_RANKING_CHARS', function() use ($app) {
-            return $app->getEm()
+            $_cacheData = [];
+            $data = $app->getEm()
                         ->createQuery('
                             SELECT
                                 chars
@@ -58,12 +72,26 @@ class Ranking
                                 chars.base_exp DESC,
                                 chars.job_exp DESC
                         ')
-                        ->setMaxResults(100)
+                        ->setMaxResults(200)
                         ->getResult();
+
+            foreach($data as $i => $char)
+            {
+                $_cacheData[] = [
+                    'pos' => 1 + $i,
+                    'name' => $char->getName(),
+                    'class' => '@@JOBS('.$char->getClass().')',
+                    'baseLevel' => $char->getBase_Level(),
+                    'jobLevel' => $char->getJob_Level(),
+                    'online' => $char->getOnline(),
+                    'status' => '@@STATUS('.$char->getOnline().')',
+                ];
+            }
+
+            return json_decode(\Language::parse(json_encode($_cacheData)));
         });
 
-        // Exibe o display para home.
-        self::getApp()->display('rankings.chars', ['chars' => $chars]);
+        $response->withJson($chars);
     }
 
     /**

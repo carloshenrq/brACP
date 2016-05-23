@@ -7,15 +7,21 @@ html, body
     padding: 0px; margin: 0px;
     font-family: Calibri, Tahoma, Verdana, Arial;
     font-size: 13px;
+    background-color: #0d1e03;
+    height: 100%;
 }
 
 .content
 {
     .header
     {
+        background-image: url(../img/background-header.png);
+        background-repeat: no-repeat;
+        background-position: center;
+
         .menu-top
         {
-            &.access, &.link, &.logo
+            &.access, &.link
             {
                 padding: 8px;
             }
@@ -23,15 +29,158 @@ html, body
             &.access
             {
                 text-align: right;
-
-                @include background-gradient(#006600, #004d00);
             }
 
-            &.link, &.logo
+            &.logo
+            {
+                @include size(420px, 200px);
+                background-image: url(../img/logo.png);
+                background-repeat: no-repeat;
+                background-color: transparent;
+                margin: auto;
+            }
+
+            &.link
             {
                 background-color: #004d00;
+                color: white;
+                text-align: center;
+                font-size: 1.2em;
+                background-color: rgba(0, 0, 0, .55);
+                @include box-shadow(0px 0px 3px #000);
+
+                ul
+                {
+                    padding: 0; margin: 0;
+                    list-style: none;
+
+                    li
+                    {
+                        position: relative;
+                        display: inline-block;
+                        text-align: left;
+                        padding: 6px;
+                        cursor: pointer;
+                        @include transition('text-shadow .2s ease-in-out');
+
+                        &:hover
+                        {
+
+                            text-shadow: 0px 0px 4px white;
+
+                            &> ul
+                            {
+                                visibility: visible;
+                                opacity: 1;
+                                top: 100%;
+                            }
+                        }
+
+                        &+ li
+                        {
+                            margin-left: 1em;
+                        }
+                    }
+
+                    ul
+                    {
+                        position: absolute;
+                        top: 70%;
+
+                        background-color: rgba(0, 0, 0, .55);
+
+                        visibility: hidden;
+                        opacity: 0;
+                        @include box-shadow(0px 0px 3px #000);
+
+                        padding: 4px;
+
+                        @include transition('top .2s ease-in-out, left .2s ease-in-out, visibility .2s ease-in-out, opacity .2s ease-in-out');
+
+                        li
+                        {
+                            display: block;
+                            min-width: 160px;
+                            text-shadow: none;
+                            padding: 8px;
+
+                            &+ li
+                            {
+                                margin-left: 0;
+                                border-top: 1px dashed rgba(255, 255, 255, .35);
+                            }
+
+                            &:hover ul
+                            {
+                                top: 0%;
+                                left: 100%;
+                            }
+                        }
+
+                        ul
+                        {
+                            top: 0%;
+                            left: 70%;
+                        }
+                    }
+                }
             }
         }
+    }
+
+    .body
+    {
+        width: 96%;
+        margin: 0 auto;
+        background-color: white;
+        padding: 8px;
+        @include box-shadow(0 0 3px white);
+
+        color: #0d1e03;
+
+        h1
+        {
+            padding: 0px; margin: 0px 0px 8px 0px;
+            font-size: 1.1em;
+            border-bottom: 1px dotted rgba(0, 0, 0, .6);
+        }
+
+        .table
+        {
+            caption
+            {
+                margin: 3px;
+                padding: 4px;
+                font-weight: bold;
+                font-size: 1.1em;
+            }
+
+            width: 100%;
+            border-collapse: collapse;
+            border-color: black;
+
+            thead tr
+            {
+                background-color: #0d1e03;
+                color: white;
+            }
+
+            tbody
+            {
+                tr:nth-child(even)
+                {
+                    background-color: rgba(13, 30, 3, .15);
+                }
+            }
+
+            tbody tr td,
+            thead tr th
+            {
+                padding: 3px;
+                border-color: #0d1e03;
+            }
+        }
+
     }
 }
 

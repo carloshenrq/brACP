@@ -46,76 +46,76 @@ class Route
             // Define a rota para a tela principal.
             self::getApp()->get('/', ['Controller\Home', 'index']);
 
-            // Adiciona a rota para alteração de temas.
-            self::getApp()->post('/theme', ['Controller\Home', 'theme']);
+            // // Adiciona a rota para alteração de temas.
+            // self::getApp()->post('/theme', ['Controller\Home', 'theme']);
 
-            // Adiciona a rota para alteração de temas.
-            self::getApp()->post('/language', ['Controller\Home', 'language']);
+            // // Adiciona a rota para alteração de temas.
+            // self::getApp()->post('/language', ['Controller\Home', 'language']);
 
-            // Adiciona a rota para doações.
-            self::getApp()->group('/donations', function() {
+            // // Adiciona a rota para doações.
+            // self::getApp()->group('/donations', function() {
 
-                // Verifica se o paypal está instalado se estiver permite as rotas para o paypal.
-                if(PAYPAL_INSTALL)
-                {
-                    $this->get('/paypal', ['Controller\Donation', 'paypal']);
-                    $this->post('/paypal/notify', ['Controller\Donation', 'paypalNotify']);
-                }
+            //     // Verifica se o paypal está instalado se estiver permite as rotas para o paypal.
+            //     if(PAYPAL_INSTALL)
+            //     {
+            //         $this->get('/paypal', ['Controller\Donation', 'paypal']);
+            //         $this->post('/paypal/notify', ['Controller\Donation', 'paypalNotify']);
+            //     }
 
-            });
+            // });
 
-            // Mapeia o grupo account.
-            self::getApp()->group('/account', function() {
-                // Rotas que não necessitam de login para entrar.
+            // // Mapeia o grupo account.
+            // self::getApp()->group('/account', function() {
+            //     // Rotas que não necessitam de login para entrar.
 
-                // Verifica configuração se permite criação de nova conta.
-                if(BRACP_ALLOW_CREATE_ACCOUNT)
-                {
-                    $this->post('/register', ['Controller\Account', 'register'])
-                            ->add(['Controller\Account', 'needLoggout']);
+            //     // Verifica configuração se permite criação de nova conta.
+            //     if(BRACP_ALLOW_CREATE_ACCOUNT)
+            //     {
+            //         $this->post('/register', ['Controller\Account', 'register'])
+            //                 ->add(['Controller\Account', 'needLoggout']);
 
-                    // Caso esteja configurado para confirmar a conta criada no painel de controle
-                    // Que já exibe os dados de confirmação caso, esteja tudo ok.
-                    if(BRACP_ALLOW_MAIL_SEND && BRACP_CONFIRM_ACCOUNT)
-                    {
-                        // Registra os dados do jogador.
-                        $this->get('/register/{code}', ['Controller\Account', 'registerByCode'])
-                                ->add(['Controller\Account', 'needLoggout']);
+            //         // Caso esteja configurado para confirmar a conta criada no painel de controle
+            //         // Que já exibe os dados de confirmação caso, esteja tudo ok.
+            //         if(BRACP_ALLOW_MAIL_SEND && BRACP_CONFIRM_ACCOUNT)
+            //         {
+            //             // Registra os dados do jogador.
+            //             $this->get('/register/{code}', ['Controller\Account', 'registerByCode'])
+            //                     ->add(['Controller\Account', 'needLoggout']);
 
-                        // Re-envia o código de ativação do jogador.
-                        $this->post('/register/resend', ['Controller\Account', 'registerResendCode'])
-                                ->add(['Controller\Account', 'needLoggout']);
-                    }
-                }
+            //             // Re-envia o código de ativação do jogador.
+            //             $this->post('/register/resend', ['Controller\Account', 'registerResendCode'])
+            //                     ->add(['Controller\Account', 'needLoggout']);
+            //         }
+            //     }
 
-                $this->post('/login', ['Controller\Account', 'login'])
-                            ->add(['Controller\Account', 'needLoggout']);
+            //     $this->post('/login', ['Controller\Account', 'login'])
+            //                 ->add(['Controller\Account', 'needLoggout']);
 
-                // Verifica configuração se permite recuperar uma conta.
-                if(BRACP_ALLOW_MAIL_SEND && BRACP_ALLOW_RECOVER)
-                {
-                    $this->post('/recover', ['Controller\Account', 'recover'])
-                            ->add(['Controller\Account', 'needLoggout']);
-                    $this->get('/recover/{code}', ['Controller\Account', 'recoverByCode'])
-                            ->add(['Controller\Account', 'needLoggout']);
-                }
+            //     // Verifica configuração se permite recuperar uma conta.
+            //     if(BRACP_ALLOW_MAIL_SEND && BRACP_ALLOW_RECOVER)
+            //     {
+            //         $this->post('/recover', ['Controller\Account', 'recover'])
+            //                 ->add(['Controller\Account', 'needLoggout']);
+            //         $this->get('/recover/{code}', ['Controller\Account', 'recoverByCode'])
+            //                 ->add(['Controller\Account', 'needLoggout']);
+            //     }
 
-                // Rotas que necessitam de login para entrar.
-                $this->map(['GET', 'POST'], '/change/password', ['Controller\Account', 'password'])
-                        ->add(['Controller\Account', 'needLogin']);
+            //     // Rotas que necessitam de login para entrar.
+            //     $this->map(['GET', 'POST'], '/change/password', ['Controller\Account', 'password'])
+            //             ->add(['Controller\Account', 'needLogin']);
 
-                $this->map(['GET', 'POST'], '/change/mail', ['Controller\Account', 'email'])
-                        ->add(['Controller\Account', 'needLogin']);
+            //     $this->map(['GET', 'POST'], '/change/mail', ['Controller\Account', 'email'])
+            //             ->add(['Controller\Account', 'needLogin']);
 
-                $this->map(['GET', 'POST'], '/chars', ['Controller\Account', 'chars'])
-                        ->add(['Controller\Account', 'needLogin']);
+            //     $this->map(['GET', 'POST'], '/chars', ['Controller\Account', 'chars'])
+            //             ->add(['Controller\Account', 'needLogin']);
 
-                $this->get('/storage', ['Controller\Account', 'storage'])
-                        ->add(['Controller\Account', 'needLogin']);
+            //     $this->get('/storage', ['Controller\Account', 'storage'])
+            //             ->add(['Controller\Account', 'needLogin']);
 
-                $this->get('/logout', ['Controller\Account', 'logout'])
-                        ->add(['Controller\Account', 'needLogin']);
-            });
+            //     $this->get('/logout', ['Controller\Account', 'logout'])
+            //             ->add(['Controller\Account', 'needLogin']);
+            // });
 
             // Verifica se os rankings estão habilitados para serem exibidos.
             if(BRACP_ALLOW_RANKING)
@@ -124,36 +124,37 @@ class Route
                 self::getApp()->group('/rankings', function() {
                     // Rankings para personagens.
                     $this->get('/chars', ['Controller\Ranking', 'chars']);
+                    $this->get('/chars/json', ['Controller\Ranking', 'charJson']);
 
                     // Verifica se o ranking de zeny está habilitado a ser exibido.
                     if(BRACP_ALLOW_RANKING_ZENY)
                     {
-                        $this->get('/chars/economy', ['Controller\Ranking', 'economy']);
+                        // $this->get('/chars/economy', ['Controller\Ranking', 'economy']);
                     }
                 });
             }
 
-            /**
-             * ROTAS ADMINISTRATIVAS, AQUI, SOMENTE ADMINISTRADORES PODEM ENTRAR.
-             */
-            if(BRACP_ALLOW_ADMIN)
-            {
-                self::getApp()->group('/admin', function() {
-                    $this->get('/update', ['Controller\Admin', 'update']);
-                    $this->get('/backup', ['Controller\Admin', 'backup']);
-                    $this->get('/theme', ['Controller\Admin', 'theme']);
-                    $this->get('/players', ['Controller\Admin', 'players']);
-                    $this->get('/donation', ['Controller\Admin', 'donation']);
-                    $this->get('/cache/flush', ['Controller\Admin', 'cacheFlush']);
+            // /**
+            //  * ROTAS ADMINISTRATIVAS, AQUI, SOMENTE ADMINISTRADORES PODEM ENTRAR.
+            //  */
+            // if(BRACP_ALLOW_ADMIN)
+            // {
+            //     self::getApp()->group('/admin', function() {
+            //         $this->get('/update', ['Controller\Admin', 'update']);
+            //         $this->get('/backup', ['Controller\Admin', 'backup']);
+            //         $this->get('/theme', ['Controller\Admin', 'theme']);
+            //         $this->get('/players', ['Controller\Admin', 'players']);
+            //         $this->get('/donation', ['Controller\Admin', 'donation']);
+            //         $this->get('/cache/flush', ['Controller\Admin', 'cacheFlush']);
 
-                    if(BRACP_ALLOW_MODS)
-                    {
-                        $this->get('/mods', ['Controller\Admin', 'mods']);
-                    }
-                })
-                ->add(['Controller\Account', 'needAdmin'])
-                ->add(['Controller\Account', 'needLogin']);
-            }
+            //         if(BRACP_ALLOW_MODS)
+            //         {
+            //             $this->get('/mods', ['Controller\Admin', 'mods']);
+            //         }
+            //     })
+            //     ->add(['Controller\Account', 'needAdmin'])
+            //     ->add(['Controller\Account', 'needLogin']);
+            // }
 
         }
 

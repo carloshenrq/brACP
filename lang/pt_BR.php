@@ -62,6 +62,8 @@ return
             'TITLE'     => 'Classificações',
             'CHARS'     => 'Jogadores',
             'ECONOMY'   => 'Economia',
+            'CASTLES'   => 'Castelos',
+            'GUILDS'    => 'Clãs',
         ],
     ],
 
@@ -206,15 +208,15 @@ return
      * @author carloshenrq
      */
     'RANKINGS'      => [
-        'NO_CHARS'  => 'Não existem personagens para este ranking.',
+        'NO_CHARS'  => 'Nenhum personagem classificado.',
 
         'CHARS' => [
-            'TITLE'     => 'Rankings &raquo; Personagens &raquo; Geral',
-            'CAPTION'   => 'Top 100 jogadores do servidor',
+            'TITLE'     => 'Classificações &raquo; Personagens &raquo; Geral',
+            'CAPTION'   => 'Top %s jogadores do servidor',
         ],
 
         'ECONOMY'   => [
-            'TITLE'     => 'Rankings &raquo; Personagens &raquo; Economia',
+            'TITLE'     => 'Classificações &raquo; Personagens &raquo; Economia',
             'CAPTION'   => 'Top 100 jogadores mais ricos',
         ],
 

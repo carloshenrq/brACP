@@ -18,5 +18,44 @@
 
 {extends file="default.tpl"}
 {block name="brACP_Body"}
-    {include 'rankings.chars.ajax.tpl'}
+
+<script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/bracp.ranking.js"></script>
+
+<div ng-app="ranking" ng-controller="chars" ng-init="_init()">
+
+    <h1>@@RANKINGS,CHARS(TITLE)</h1>
+
+    <div ng-if="chars.length == 0" class="message warning">
+        @@RANKINGS(NO_CHARS)
+    </div>
+
+    {literal}
+
+    <table ng-if="chars.length > 0" border="1" class="table">
+        <caption>
+            @@RANKINGS,CHARS(CAPTION, {{chars.length}})
+        </caption>
+        <thead>
+            <tr>
+                <th align="right">@@RANKINGS,TABLE(POSIT)</th>
+                <th align="left">@@RANKINGS,TABLE(NAME)</th>
+                <th align="right">@@RANKINGS,TABLE(LEVEL)</th>
+                <th align="left">@@RANKINGS,TABLE(CLASS)</th>
+                <th align="left">@@RANKINGS,TABLE(STATUS)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="char in chars">
+                <td align="right">{{char.pos}}.º</td>
+                <td align="left">{{char.name}}</td>
+                <td align="right">{{char.baseLevel}}/{{char.jobLevel}}</td>
+                <td align="left">{{char.class}}</td>
+                <td align="left" ng-style="{color: (char.online == 0 ? 'red' : 'green')}">{{char.status}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    {/literal}
+<div>
+
 {/block}

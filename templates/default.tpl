@@ -62,36 +62,6 @@
                             "BRACP_DEFAULT_TIMEZONE: {$smarty.const.BRACP_DEFAULT_TIMEZONE} \n");
         {/if}
 
-        +function($)
-        {
-
-            $(document).ready(function() {
-                {if isset($recover_message) eq true or isset($register_message) eq true}
-                    {if isset($recover_message) eq true}
-                        $('#bracp-modal-recover').prop('checked', true);
-                    {else if isset($register_message) eq true}
-                        $('#bracp-modal-create').prop('checked', true);
-                    {/if}
-                    window.history.replaceState("", "", "{$smarty.const.BRACP_DIR_INSTALL_URL}");
-                {/if}
-
-                $('.theme-select')
-                    .val("{$session->BRACP_THEME}")
-                    .on('change', function() {
-                        // Altera o tema padrão do painel de controle.
-                        changeTheme($(this).val(), '{$smarty.const.BRACP_DIR_INSTALL_URL}theme');
-                    });
-
-                $('.lang-select')
-                    .val("{$session->BRACP_LANGUAGE}")
-                    .on('change', function() {
-                        // Altera o tema padrão do painel de controle.
-                        changeLanguage($(this).val(), '{$smarty.const.BRACP_DIR_INSTALL_URL}language');
-                    });
-            });
-
-        } (window.jQuery);
-
         {block name="brACP_JavaScript"}
         {/block}
         </script>
@@ -102,23 +72,66 @@
             <div class="header">
                 <div class="menu-top access">
 
-                    <button class="button small link">@@MENU,MYACC,UNAUTHENTICATED(LOGIN)</button>
-                    <button class="button small success">@@MENU,MYACC,UNAUTHENTICATED(CREATE)</button>
+                    {if isset($account) eq false}
+                        <button class="button small link">@@MENU,MYACC,UNAUTHENTICATED(LOGIN)</button>
+                        {if $smarty.const.BRACP_ALLOW_CREATE_ACCOUNT eq true}
+                            <button class="button small success">@@MENU,MYACC,UNAUTHENTICATED(CREATE)</button>
+                        {/if}
+                    {else}
+                        <button class="button small error">@@MENU,MYACC,AUTHENTICATED(LOGOUT, {$userid})</button>
+                    {/if}
 
                 </div>
 
                 <div class="menu-top link">
+                    <ul>
+                        <li>@@MENU(HOME)</li>
+                        <li>@@MENU,MYACC(TITLE)
+                            <ul>
+                                {if isset($account) eq false}
+                                    <li>@@MENU,MYACC,UNAUTHENTICATED(LOGIN)</li>
+                                    {if $smarty.const.BRACP_ALLOW_CREATE_ACCOUNT eq true}
+                                        <li>@@MENU,MYACC,UNAUTHENTICATED(CREATE)</li>
+                                    {/if}
+                                    {if $smarty.const.BRACP_ALLOW_MAIL_SEND}
+                                        {if $smarty.const.BRACP_CONFIRM_ACCOUNT}
+                                            <li>@@MENU,MYACC,UNAUTHENTICATED(CREATE_SEND)</li>
+                                        {/if}
+                                        {if $smarty.const.BRACP_ALLOW_RECOVER}
+                                            <li>@@MENU,MYACC,UNAUTHENTICATED(RECOVER)</li>
+                                        {/if}
+                                    {/if}
+                                {else}
+                                {/if}
+                            </ul>
+                        </li>
+                        {if $smarty.const.BRACP_ALLOW_RANKING}
+                            <li>@@MENU,RANKINGS(TITLE)
+                                <ul>
+                                    <li>@@MENU,RANKINGS(CHARS)</li>
+                                    <li>@@MENU,RANKINGS(GUILDS)</li>
+                                    <li>@@MENU,RANKINGS(CASTLES)</li>
+                                    {if $smarty.const.BRACP_ALLOW_RANKING_ZENY}
+                                        <li>@@MENU,RANKINGS(ECONOMY)</li>
+                                    {/if}
+                                </ul>
+                            </li>
+                        {/if}
+                    </ul>
                 </div>
 
                 <div class="menu-top logo">
                 </div>
             </div>
 
-            <div class="message error icon">
-                Layout em construção.
+            <div class="body">
+                {block name="brACP_Body"}
+                    Layout em construção.
+                {/block}
             </div>
 
         </div>
     {/block}
+        <input type="hidden" id="_BRACP_URL" value="{$smarty.const.BRACP_DIR_INSTALL_URL}"/>
     </body>
 </html>
