@@ -37,7 +37,6 @@ html, body
                 background-image: url(../img/logo.png);
                 background-repeat: no-repeat;
                 background-color: transparent;
-                margin: auto;
             }
 
             &.link
@@ -46,8 +45,8 @@ html, body
                 color: white;
                 text-align: center;
                 font-size: 1.2em;
-                background-color: rgba(0, 0, 0, .55);
-                @include box-shadow(0px 0px 3px #000);
+                background-color: rgba(13, 30, 3, .7);
+                @include box-shadow('0px 0px 6px rgb(13, 30, 3)');
 
                 ul
                 {
@@ -87,11 +86,11 @@ html, body
                         position: absolute;
                         top: 70%;
 
-                        background-color: rgba(0, 0, 0, .55);
+                        background-color: rgba(13, 30, 3, .90);
 
                         visibility: hidden;
                         opacity: 0;
-                        @include box-shadow(0px 0px 3px #000);
+                        @include box-shadow('0px 0px 3px rgb(13, 30, 3)');
 
                         padding: 4px;
 

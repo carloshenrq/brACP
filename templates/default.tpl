@@ -82,6 +82,9 @@
                     {/if}
 
                 </div>
+                
+                <div class="menu-top logo">
+                </div>
 
                 <div class="menu-top link">
                     <ul>
@@ -120,8 +123,6 @@
                     </ul>
                 </div>
 
-                <div class="menu-top logo">
-                </div>
             </div>
 
             <div class="body">
