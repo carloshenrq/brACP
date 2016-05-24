@@ -62,6 +62,63 @@ html, body
                         cursor: pointer;
                         @include transition('text-shadow .2s ease-in-out');
 
+                        &.icon
+                        {
+                            &:before
+                            {
+                                display: inline-block;
+                                content: '\00a0';
+                                width: 28px;
+                                background-repeat: no-repeat;
+                                background-position: center left;
+                            }
+
+                            &.icon-home:before
+                            {
+                                background-image: url(../../../data/items/icons/501.png);
+                            }
+
+                            &.icon-myacc:before
+                            {
+                                background-image: url(../../../data/items/icons/5372.png);
+                            }
+
+                            &.icon-rankings:before
+                            {
+                                background-image: url(../../../data/items/icons/7228.png);
+                            }
+
+                            &.icon-players:before
+                            {
+                                background-image: url(../../../data/items/icons/2735.png);
+                            }
+
+                            &.icon-chars:before
+                            {
+                                background-image: url(../../../data/items/icons/2734.png);
+                            }
+
+                            &.icon-zeny:before
+                            {
+                                background-image: url(../../../data/items/icons/670.png);
+                            }
+
+                            &.icon-woe:before
+                            {
+                                background-image: url(../../../data/items/icons/714.png);
+                            }
+
+                            &.icon-guild:before
+                            {
+                                background-image: url(../../../data/items/icons/2105.png);
+                            }
+
+                            &.icon-castle:before
+                            {
+                                background-image: url(../../../data/items/icons/2383.png);
+                            }
+                        }
+
                         &.sub-menu:after
                         {
                             display: inline-block;
@@ -90,7 +147,7 @@ html, body
 
                         &+ li
                         {
-                            margin-left: 0.3em;
+                            margin-left: 0.8em;
                         }
                     }
 
@@ -112,7 +169,7 @@ html, body
                         li
                         {
                             display: block;
-                            min-width: 160px;
+                            min-width: 180px;
                             text-shadow: none;
                             padding: 8px;
 

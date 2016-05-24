@@ -43,6 +43,30 @@ html, body {
         -o-transition: text-shadow .2s ease-in-out;
         -moz-transition: text-shadow .2s ease-in-out;
         -webkit-transition: text-shadow .2s ease-in-out; }
+        .content .header .menu-top.link ul li.icon:before {
+          display: inline-block;
+          content: '\00a0';
+          width: 28px;
+          background-repeat: no-repeat;
+          background-position: center left; }
+        .content .header .menu-top.link ul li.icon.icon-home:before {
+          background-image: url(../../../data/items/icons/501.png); }
+        .content .header .menu-top.link ul li.icon.icon-myacc:before {
+          background-image: url(../../../data/items/icons/5372.png); }
+        .content .header .menu-top.link ul li.icon.icon-rankings:before {
+          background-image: url(../../../data/items/icons/7228.png); }
+        .content .header .menu-top.link ul li.icon.icon-players:before {
+          background-image: url(../../../data/items/icons/2735.png); }
+        .content .header .menu-top.link ul li.icon.icon-chars:before {
+          background-image: url(../../../data/items/icons/2734.png); }
+        .content .header .menu-top.link ul li.icon.icon-zeny:before {
+          background-image: url(../../../data/items/icons/670.png); }
+        .content .header .menu-top.link ul li.icon.icon-woe:before {
+          background-image: url(../../../data/items/icons/714.png); }
+        .content .header .menu-top.link ul li.icon.icon-guild:before {
+          background-image: url(../../../data/items/icons/2105.png); }
+        .content .header .menu-top.link ul li.icon.icon-castle:before {
+          background-image: url(../../../data/items/icons/2383.png); }
         .content .header .menu-top.link ul li.sub-menu:after {
           display: inline-block;
           float: right;
@@ -63,7 +87,7 @@ html, body {
             opacity: 1;
             top: 100%; }
         .content .header .menu-top.link ul li + li {
-          margin-left: 0.3em; }
+          margin-left: 0.8em; }
       .content .header .menu-top.link ul ul {
         position: absolute;
         top: 70%;
@@ -80,7 +104,7 @@ html, body {
         -webkit-transition: top .2s ease-in-out, left .2s ease-in-out, visibility .2s ease-in-out, opacity .2s ease-in-out; }
         .content .header .menu-top.link ul ul li {
           display: block;
-          min-width: 160px;
+          min-width: 180px;
           text-shadow: none;
           padding: 8px; }
           .content .header .menu-top.link ul ul li + li {

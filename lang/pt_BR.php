@@ -60,8 +60,10 @@ return
         ],
         'RANKINGS'  =>  [
             'TITLE'     => 'Classificações',
-            'CHARS'     => 'Jogadores',
+            'PLAYERS'   => 'Jogadores',
+            'CHARS'     => 'Personagens',
             'ECONOMY'   => 'Economia',
+            'WOE'       => 'Guerra do Emperium',
             'CASTLES'   => 'Castelos',
             'GUILDS'    => 'Clãs',
         ],

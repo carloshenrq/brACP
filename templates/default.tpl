@@ -88,8 +88,8 @@
 
                 <div class="menu-top link">
                     <ul>
-                        <li>@@MENU(HOME)</li>
-                        <li class="sub-menu">@@MENU,MYACC(TITLE)
+                        <li class="icon icon-home">@@MENU(HOME)</li>
+                        <li class="icon icon-myacc sub-menu">@@MENU,MYACC(TITLE)
                             <ul>
                                 {if isset($account) eq false}
                                     <li>@@MENU,MYACC,UNAUTHENTICATED(LOGIN)</li>
@@ -109,14 +109,22 @@
                             </ul>
                         </li>
                         {if $smarty.const.BRACP_ALLOW_RANKING}
-                            <li class="sub-menu">@@MENU,RANKINGS(TITLE)
+                            <li class="icon icon-rankings sub-menu">@@MENU,RANKINGS(TITLE)
                                 <ul>
-                                    <li>@@MENU,RANKINGS(CHARS)</li>
-                                    <li>@@MENU,RANKINGS(GUILDS)</li>
-                                    <li>@@MENU,RANKINGS(CASTLES)</li>
-                                    {if $smarty.const.BRACP_ALLOW_RANKING_ZENY}
-                                        <li>@@MENU,RANKINGS(ECONOMY)</li>
-                                    {/if}
+                                    <li class="icon icon-players sub-menu">@@MENU,RANKINGS(PLAYERS)
+                                        <ul>
+                                            <li class="icon icon-chars">@@MENU,RANKINGS(CHARS)</li>
+                                            {if $smarty.const.BRACP_ALLOW_RANKING_ZENY}
+                                                <li class="icon icon-zeny">@@MENU,RANKINGS(ECONOMY)</li>
+                                            {/if}
+                                        </ul>
+                                    </li>
+                                    <li class="icon icon-woe sub-menu">@@MENU,RANKINGS(WOE)
+                                        <ul>
+                                            <li class="icon icon-guild">@@MENU,RANKINGS(GUILDS)</li>
+                                            <li class="icon icon-castle">@@MENU,RANKINGS(CASTLES)</li>
+                                        </ul>
+                                    </li>
                                 </ul>
                             </li>
                         {/if}
