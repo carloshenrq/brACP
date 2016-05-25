@@ -458,6 +458,12 @@ return
 
         'REGEXP'    => 'Falha na restrição de pattern de alguns campos. Tente novamente.',
 
+        'NOT_FOUND' => [
+            'TITLE'         => 'Ops! Parece que a página que você estava procurando não foi encontrada!',
+            'MESSAGE'       => 'x____x\' nos desculpe mas a página que você estava procurando, não foi encontrada...<br>'.
+                                'Você pode voltar a página principal clicando <span class="url-link" data-href="'.BRACP_DIR_INSTALL_URL.'">aqui</span>.',
+        ],
+
         'ACCESS'    => [
             'TITLE'         => 'Acesso negado',
             'DENIED'        => 'Você não possui direito de acesso a este local ou a página solicitada não existe!',

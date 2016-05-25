@@ -188,3 +188,8 @@ html, body {
   color: #f39c12 !important; }
   .warning.icon:before {
     content: '!'; }
+
+span.url-link {
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: underline; }
