@@ -34,9 +34,11 @@ html, body
             &.logo
             {
                 @include size(420px, 200px);
+                margin: auto;
                 background-image: url(../img/logo.png);
                 background-repeat: no-repeat;
                 background-color: transparent;
+                cursor: pointer;
             }
 
             &.link

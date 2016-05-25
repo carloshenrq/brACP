@@ -85,7 +85,7 @@
 
                 </div>
 
-                <div class="menu-top logo">
+                <div class="menu-top logo url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}">
                 </div>
 
                 <div class="menu-top link">

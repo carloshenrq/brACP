@@ -17,9 +17,11 @@ html, body {
   .content .header .menu-top.logo {
     width: 420px;
     height: 200px;
+    margin: auto;
     background-image: url(../img/logo.png);
     background-repeat: no-repeat;
-    background-color: transparent; }
+    background-color: transparent;
+    cursor: pointer; }
   .content .header .menu-top.link {
     background-color: #004d00;
     color: white;
