@@ -63,6 +63,7 @@ html, body
                         padding: 6px;
                         cursor: pointer;
                         @include transition('text-shadow .2s ease-in-out');
+                        z-index: 1;
 
                         &.icon
                         {

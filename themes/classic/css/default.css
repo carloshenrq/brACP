@@ -44,7 +44,8 @@ html, body {
         transition: text-shadow .2s ease-in-out;
         -o-transition: text-shadow .2s ease-in-out;
         -moz-transition: text-shadow .2s ease-in-out;
-        -webkit-transition: text-shadow .2s ease-in-out; }
+        -webkit-transition: text-shadow .2s ease-in-out;
+        z-index: 1; }
         .content .header .menu-top.link ul li.icon:before {
           display: inline-block;
           content: '\00a0';

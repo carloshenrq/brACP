@@ -71,7 +71,15 @@ class brACPApp extends Slim\App
         $configs = [
             'settings' => [
                 'displayErrorDetails' => BRACP_DEVELOP_MODE
-            ]
+            ],
+            'notFoundHandler' => function($c) {
+                return function($request, $response) {
+
+                    brACPApp::getInstance()->display('error.not.allowed');
+
+                    return $response;
+                };
+            }
         ];
 
         // Inicializa o sistema de cache.

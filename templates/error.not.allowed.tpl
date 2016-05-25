@@ -18,5 +18,18 @@
 
 {extends file="default.tpl"}
 {block name="brACP_Body"}
-    {include 'error.not.allowed.ajax.tpl'}
+
+    <div class="message error icon">
+        <h1>@@ERRORS,ACCESS(TITLE)</h1>
+
+        {if $smarty.const.BRACP_MAINTENCE eq true}
+            @@ERRORS(MAINTENCE)
+        {else}
+            @@ERRORS,ACCESS(DENIED)
+            {if $smarty.const.BRACP_DEVELOP_MODE eq true and isset($exception) eq true}
+                <br><br>
+                <strong>{$exception->getMessage()}</strong>
+            {/if}
+        {/if}
+    </div>
 {/block}

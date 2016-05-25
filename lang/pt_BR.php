@@ -460,7 +460,7 @@ return
 
         'ACCESS'    => [
             'TITLE'         => 'Acesso negado',
-            'DENIED'        => 'Você não possui direito de acesso a este local!',
+            'DENIED'        => 'Você não possui direito de acesso a este local ou a página solicitada não existe!',
             'NEED_LOGOUT'   => 'Você não pode estar logado para realizar esta ação.<br>'.
                                 'Para sair, <span class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/logout" data-target=".bracp-body">clique aqui</span>.',
             'NEED_SIGNIN'   => 'Você precisa estar logado para realizar esta ação.<br>'.
