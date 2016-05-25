@@ -219,7 +219,7 @@ return
 
         'ECONOMY'   => [
             'TITLE'     => 'Classificações &raquo; Personagens &raquo; Economia',
-            'CAPTION'   => 'Top 100 jogadores mais ricos',
+            'CAPTION'   => 'Top %s jogadores mais ricos',
         ],
 
         'TABLE' => [

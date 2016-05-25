@@ -19,6 +19,28 @@
 
 var rankings = angular.module('ranking', []);
 
+rankings.controller('economy', ['$scope', '$http', function($scope, $http) {
+
+    $scope.chars = [];
+
+
+    $scope._init    = function() {
+
+        $scope.reload();
+
+    };
+
+    $scope.reload   = function() {
+
+        $http
+            .get(document.querySelector('#_BRACP_URL').value + 'rankings/chars/economy/json')
+            .then(function(response) {
+                $scope.chars = response.data;
+            });
+
+    };
+}]);
+
 rankings.controller('chars', ['$scope', '$http', function($scope, $http) {
 
     $scope.chars = [];

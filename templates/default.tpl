@@ -47,6 +47,8 @@
             <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/angular.min.js"></script>
         {/if}
 
+        <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/jquery.bracp.js"></script>
+
         {if $smarty.const.BRACP_RECAPTCHA_ENABLED eq true}
             <script src="https://www.google.com/recaptcha/api.js"></script>
         {else}
@@ -88,7 +90,7 @@
 
                 <div class="menu-top link">
                     <ul>
-                        <li class="icon icon-home">@@MENU(HOME)</li>
+                        <li class="icon icon-home url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}">@@MENU(HOME)</li>
                         <li class="icon icon-myacc sub-menu">@@MENU,MYACC(TITLE)
                             <ul>
                                 {if isset($account) eq false}
@@ -113,16 +115,16 @@
                                 <ul>
                                     <li class="icon icon-players sub-menu">@@MENU,RANKINGS(PLAYERS)
                                         <ul>
-                                            <li class="icon icon-chars">@@MENU,RANKINGS(CHARS)</li>
+                                            <li class="icon icon-chars url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}rankings/chars">@@MENU,RANKINGS(CHARS)</li>
                                             {if $smarty.const.BRACP_ALLOW_RANKING_ZENY}
-                                                <li class="icon icon-zeny">@@MENU,RANKINGS(ECONOMY)</li>
+                                                <li class="icon icon-zeny url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}rankings/chars/economy">@@MENU,RANKINGS(ECONOMY)</li>
                                             {/if}
                                         </ul>
                                     </li>
                                     <li class="icon icon-woe sub-menu">@@MENU,RANKINGS(WOE)
                                         <ul>
-                                            <li class="icon icon-guild">@@MENU,RANKINGS(GUILDS)</li>
-                                            <li class="icon icon-castle">@@MENU,RANKINGS(CASTLES)</li>
+                                            <li class="icon icon-guild url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}rankings/woe/guilds">@@MENU,RANKINGS(GUILDS)</li>
+                                            <li class="icon icon-castle url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}rankings/woe/castles">@@MENU,RANKINGS(CASTLES)</li>
                                         </ul>
                                     </li>
                                 </ul>

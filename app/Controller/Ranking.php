@@ -103,11 +103,25 @@ class Ranking
      */
     public static function economy(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
+        // Exibe o display para home.
+        self::getApp()->display('rankings.chars.economy');
+    }
+
+    /**
+     * Método inicial para exibição dos templates na tela.
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param array $args
+     */
+    public static function economyJson(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
         // Define que irá carregar o cache de personagens a serem exibidos
         //  ou criar o cache.
         $app = self::getApp();
         $chars = Cache::get('BRACP_RANKING_ECONOMY', function() use ($app) {
-            return $app->getEm()
+            $_cacheData = [];
+            $data = $app->getEm()
                         ->createQuery('
                             SELECT
                                 chars
@@ -116,12 +130,27 @@ class Ranking
                             ORDER BY
                                 chars.zeny DESC
                         ')
-                        ->setMaxResults(100)
+                        ->setMaxResults(20)
                         ->getResult();
+
+            foreach($data as $i => $char)
+            {
+                $_cacheData[] = [
+                    'pos' => 1 + $i,
+                    'name' => $char->getName(),
+                    'class' => '@@JOBS('.$char->getClass().')',
+                    'baseLevel' => $char->getBase_Level(),
+                    'jobLevel' => $char->getJob_Level(),
+                    'zeny'  => \Format::zeny($char->getZeny()),
+                    'online' => $char->getOnline(),
+                    'status' => '@@STATUS('.$char->getOnline().')',
+                ];
+            }
+
+            return json_decode(\Language::parse(json_encode($_cacheData)));
         });
 
-        // Exibe o display para home.
-        self::getApp()->display('rankings.chars.economy', ['chars' => $chars]);
+        $response->withJson($chars);
     }
 }
 

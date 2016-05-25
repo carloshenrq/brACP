@@ -130,6 +130,7 @@ class Route
                     if(BRACP_ALLOW_RANKING_ZENY)
                     {
                         $this->get('/chars/economy', ['Controller\Ranking', 'economy']);
+                        $this->get('/chars/economy/json', ['Controller\Ranking', 'economyJson']);
                     }
                 });
             }
