@@ -21,6 +21,15 @@ var account = angular.module('account', []);
 
 account.controller('login', ['$scope', '$http', function($scope, $http) {
 
-    $scope.test = "ok";
+
+    $scope.stage = 0;
+    $scope.loginSuccess = false;
+    $scope.loginError = '';
+
+    $scope.login = function() {
+
+        // @Todo: Realizar a requisição ajax para verificar se o login pode ou não ser realizado.
+
+    };
 
 }]);
