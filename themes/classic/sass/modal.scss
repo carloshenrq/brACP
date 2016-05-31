@@ -8,7 +8,9 @@
     {
         &+ .modal
         {
-            display: none;
+            visibility: hidden;
+            opacity: 0;
+            top: 40%;
         }
     }
 }
@@ -17,8 +19,11 @@
 {
     @include position-center(fixed);
     @include box-shadow(0px 0px 8px rgb(127, 140, 141));
+    z-index: 1;
 
     background-color: white;
+
+    @include transition('top .4s ease-in-out, visibility .4s ease-in-out, opacity .4s ease-in-out');
 
     .modal-title,
     .modal-footer
@@ -34,12 +39,49 @@
 
         background-color: rgb(127, 140, 141);
         color: white;
+
+        .modal-close
+        {
+            position: absolute;
+            top: 0.5em;
+            right: 1em;
+
+            font-size: 1.3em;
+            cursor: pointer;
+        }
     }
 
     .modal-body
     {
         text-align: justify;
         padding: 24px;
+
+        form.modal-form
+        {
+            margin: 16px 0px 16px 0px;
+
+            input[type="text"], input[type="password"]
+            {
+                display: block;
+                width: 80%;
+                margin: auto;
+                box-sizing: border-box;
+                -webkit-box-sizing:border-box;
+                -moz-box-sizing: border-box;
+
+                &+ input[type="text"], &+ input[type="password"]
+                {
+                    margin-top: .4em;
+                }
+            }
+        }
+
+        p.link
+        {
+            text-align: right;
+            margin: 0;
+            font-style: italic;
+        }
     }
 
     .modal-footer

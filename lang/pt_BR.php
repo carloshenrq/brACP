@@ -110,9 +110,10 @@ return
         ],
         'SUCCESS'   => 'Login realizado com sucesso. Aguarde...',
         'MESSAGE'   => [
-            'HEADER'     => 'Para acessar os dados de sua conta, você deve realizar o acesso utilizando seu nome de usuário e senha.',
-            'LOST_ACC'      => 'Perdeu sua conta? <label class="lbl-link" for="bracp-modal-recover">clique aqui</label>',
-            'CREATE_ACC'    => 'Não possui uma conta? <label class="lbl-link" for="bracp-modal-create">clique aqui</label>',
+            'HEADER'        => 'Para ter acesso ao gerênciamento de sua conta, é necessário<br>'.
+                                'que você realize login antes de continuar.',
+            'CREATE'        =>  'Não possui uma conta? clique aqui para criar.',
+            'RECOVER'       =>  'Perdeu sua conta? clique aqui para recuperar.',
         ],
         'HOLDER'    => [
             'USERID'    => 'Nome de usuário',
@@ -121,6 +122,7 @@ return
         'BUTTONS'   => [
             'SUBMIT'    => 'Entrar',
             'RESET'     => 'Limpar',
+            'CLOSE'     => 'Fechar',
         ],
     ],
 

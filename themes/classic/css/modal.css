@@ -1,7 +1,9 @@
 .modal-trigger-check {
   display: none; }
   .modal-trigger-check:not(:checked) + .modal {
-    display: none; }
+    visibility: hidden;
+    opacity: 0;
+    top: 40%; }
 
 .modal {
   position: fixed;
@@ -13,7 +15,12 @@
   box-shadow: 0px 0px 8px #7f8c8d;
   -moz-box-shadow: 0px 0px 8px #7f8c8d;
   -webkit-box-shadow: 0px 0px 8px #7f8c8d;
-  background-color: white; }
+  z-index: 1;
+  background-color: white;
+  transition: top .4s ease-in-out, visibility .4s ease-in-out, opacity .4s ease-in-out;
+  -o-transition: top .4s ease-in-out, visibility .4s ease-in-out, opacity .4s ease-in-out;
+  -moz-transition: top .4s ease-in-out, visibility .4s ease-in-out, opacity .4s ease-in-out;
+  -webkit-transition: top .4s ease-in-out, visibility .4s ease-in-out, opacity .4s ease-in-out; }
   .modal .modal-title,
   .modal .modal-footer {
     padding: 12px; }
@@ -23,9 +30,30 @@
     font-size: 15px;
     background-color: #7f8c8d;
     color: white; }
+    .modal h1 .modal-close, .modal .modal-title .modal-close {
+      position: absolute;
+      top: 0.5em;
+      right: 1em;
+      font-size: 1.3em;
+      cursor: pointer; }
   .modal .modal-body {
     text-align: justify;
     padding: 24px; }
+    .modal .modal-body form.modal-form {
+      margin: 16px 0px 16px 0px; }
+      .modal .modal-body form.modal-form input[type="text"], .modal .modal-body form.modal-form input[type="password"] {
+        display: block;
+        width: 80%;
+        margin: auto;
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box; }
+        .modal .modal-body form.modal-form input[type="text"] + input[type="text"], .modal .modal-body form.modal-form input[type="text"] + input[type="password"], .modal .modal-body form.modal-form input[type="password"] + input[type="text"], .modal .modal-body form.modal-form input[type="password"] + input[type="password"] {
+          margin-top: .4em; }
+    .modal .modal-body p.link {
+      text-align: right;
+      margin: 0;
+      font-style: italic; }
   .modal .modal-footer {
     text-align: right;
     background-color: #bdc3c7; }

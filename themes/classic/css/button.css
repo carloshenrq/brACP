@@ -3,6 +3,7 @@
   padding: 6px 12px 6px 12px;
   margin: 0;
   border: 1px solid;
+  display: inline-block;
   font-weight: bold;
   background-color: #ecf0f1;
   color: #7f8c8d;

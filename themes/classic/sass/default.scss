@@ -60,10 +60,15 @@ html, body
                         position: relative;
                         display: inline-block;
                         text-align: left;
-                        padding: 6px;
                         cursor: pointer;
                         @include transition('text-shadow .2s ease-in-out');
                         z-index: 1;
+
+                        label
+                        {
+                            display: block;
+                            cursor: pointer;
+                        }
 
                         &.icon
                         {
@@ -174,7 +179,11 @@ html, body
                             display: block;
                             min-width: 180px;
                             text-shadow: none;
-                            padding: 8px;
+
+                            label
+                            {
+                                padding: 8px;
+                            }
 
                             &+ li
                             {
@@ -323,5 +332,12 @@ span.url-link
     cursor: pointer;
     font-weight: bold;
     text-decoration: underline;
+}
+
+input[type="text"], input[type="password"]
+{
+    border: 1px solid;
+    padding: 8px;
+    border-color: lightgray;
 }
 

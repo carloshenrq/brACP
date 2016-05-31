@@ -39,13 +39,15 @@ html, body {
         position: relative;
         display: inline-block;
         text-align: left;
-        padding: 6px;
         cursor: pointer;
         transition: text-shadow .2s ease-in-out;
         -o-transition: text-shadow .2s ease-in-out;
         -moz-transition: text-shadow .2s ease-in-out;
         -webkit-transition: text-shadow .2s ease-in-out;
         z-index: 1; }
+        .content .header .menu-top.link ul li label {
+          display: block;
+          cursor: pointer; }
         .content .header .menu-top.link ul li.icon:before {
           display: inline-block;
           content: '\00a0';
@@ -108,8 +110,9 @@ html, body {
         .content .header .menu-top.link ul ul li {
           display: block;
           min-width: 180px;
-          text-shadow: none;
-          padding: 8px; }
+          text-shadow: none; }
+          .content .header .menu-top.link ul ul li label {
+            padding: 8px; }
           .content .header .menu-top.link ul ul li + li {
             margin-left: 0;
             border-top: 1px dashed rgba(255, 255, 255, 0.35); }
@@ -193,3 +196,8 @@ span.url-link {
   cursor: pointer;
   font-weight: bold;
   text-decoration: underline; }
+
+input[type="text"], input[type="password"] {
+  border: 1px solid;
+  padding: 8px;
+  border-color: lightgray; }

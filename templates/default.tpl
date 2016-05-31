@@ -48,6 +48,7 @@
         {/if}
 
         <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/jquery.bracp.js"></script>
+        <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/bracp.account.js"></script>
 
         {if $smarty.const.BRACP_RECAPTCHA_ENABLED eq true}
             <script src="https://www.google.com/recaptcha/api.js"></script>
@@ -75,7 +76,7 @@
                 <div class="menu-top access">
 
                     {if isset($account) eq false}
-                        <button class="button small link">@@MENU,MYACC,UNAUTHENTICATED(LOGIN)</button>
+                        <label for="modal-login" class="button small link">@@MENU,MYACC,UNAUTHENTICATED(LOGIN)</label>
                         {if $smarty.const.BRACP_ALLOW_CREATE_ACCOUNT eq true}
                             <button class="button small success">@@MENU,MYACC,UNAUTHENTICATED(CREATE)</button>
                         {/if}
@@ -94,16 +95,16 @@
                         <li class="icon icon-myacc sub-menu">@@MENU,MYACC(TITLE)
                             <ul>
                                 {if isset($account) eq false}
-                                    <li>@@MENU,MYACC,UNAUTHENTICATED(LOGIN)</li>
+                                    <li><label for="modal-login">@@MENU,MYACC,UNAUTHENTICATED(LOGIN)</label></li>
                                     {if $smarty.const.BRACP_ALLOW_CREATE_ACCOUNT eq true}
-                                        <li>@@MENU,MYACC,UNAUTHENTICATED(CREATE)</li>
+                                        <li><label>@@MENU,MYACC,UNAUTHENTICATED(CREATE)</label></li>
                                     {/if}
                                     {if $smarty.const.BRACP_ALLOW_MAIL_SEND}
                                         {if $smarty.const.BRACP_CONFIRM_ACCOUNT}
-                                            <li>@@MENU,MYACC,UNAUTHENTICATED(CREATE_SEND)</li>
+                                            <li><label>@@MENU,MYACC,UNAUTHENTICATED(CREATE_SEND)</label></li>
                                         {/if}
                                         {if $smarty.const.BRACP_ALLOW_RECOVER}
-                                            <li>@@MENU,MYACC,UNAUTHENTICATED(RECOVER)</li>
+                                            <li><label>@@MENU,MYACC,UNAUTHENTICATED(RECOVER)</label></li>
                                         {/if}
                                     {/if}
                                 {else}
@@ -111,24 +112,7 @@
                             </ul>
                         </li>
                         {if $smarty.const.BRACP_ALLOW_RANKING}
-                            <li class="icon icon-rankings sub-menu">@@MENU,RANKINGS(TITLE)
-                                <ul>
-                                    <li class="icon icon-players sub-menu">@@MENU,RANKINGS(PLAYERS)
-                                        <ul>
-                                            <li class="icon icon-chars url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}rankings/chars">@@MENU,RANKINGS(CHARS)</li>
-                                            {if $smarty.const.BRACP_ALLOW_RANKING_ZENY}
-                                                <li class="icon icon-zeny url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}rankings/chars/economy">@@MENU,RANKINGS(ECONOMY)</li>
-                                            {/if}
-                                        </ul>
-                                    </li>
-                                    <li class="icon icon-woe sub-menu">@@MENU,RANKINGS(WOE)
-                                        <ul>
-                                            <li class="icon icon-guild url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}rankings/woe/guilds">@@MENU,RANKINGS(GUILDS)</li>
-                                            <li class="icon icon-castle url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}rankings/woe/castles">@@MENU,RANKINGS(CASTLES)</li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
+                            {* @TODO *}
                         {/if}
                     </ul>
                 </div>
@@ -139,6 +123,12 @@
                 {block name="brACP_Body"}
                     Layout em construção.
                 {/block}
+            </div>
+
+            <div class="modal-container">
+
+                {include 'account.login.tpl'}
+
             </div>
 
         </div>
