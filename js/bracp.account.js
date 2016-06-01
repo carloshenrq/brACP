@@ -21,15 +21,38 @@ var account = angular.module('account', []);
 
 account.controller('login', ['$scope', '$http', function($scope, $http) {
 
+	$scope.userid = '';
+	$scope.user_pass = '';
 
     $scope.stage = 0;
     $scope.loginSuccess = false;
-    $scope.loginError = '';
+    $scope.loginError = false;
 
-    $scope.login = function() {
+    $scope.submitLogin = function() {
 
-        // @Todo: Realizar a requisição ajax para verificar se o login pode ou não ser realizado.
+    	var urlLogin = document.querySelector('#_BRACP_URL').value + 'account/login';
+    	var params = $.param({
+    		'userid' : this.userid,
+    		'user_pass' : this.user_pass
+    	});
 
+    	$scope.stage = 1;
+
+    	$http({
+    		'method'	: 'post',
+    		'url'		: urlLogin,
+    		'data'		: params,
+    		'headers'	: {
+    			'Content-Type': 'application/x-www-form-urlencoded'
+    		}
+    	}).then(function(response) {
+			$scope.stage = response.data.stage;
+			$scope.loginSuccess = response.data.loginSuccess;
+			$scope.loginError = response.data.loginError;
+
+			if(response.data.loginSuccess)
+				window.location.reload();
+    	});
     };
 
 }]);

@@ -20,22 +20,25 @@
 <div class="modal" ng-app="account" ng-controller="login">
     <div class="modal-title">
         @@LOGIN(TITLE)
-        <label for="modal-login" class="modal-close">&times;</label>
+        <label for="modal-login" class="modal-close" ng-if="stage == 0">&times;</label>
     </div>
 
     <div class="modal-body" ng-if="stage == 0">
         
         {literal}
-            <div ng-if="loginError.length > 0" class="message error icon">
-                {{loginError}}
+            <div ng-if="loginError" class="message error">
+                @@LOGIN,ERROR(MISMATCH)
             </div>
         {/literal}
 
         @@LOGIN,MESSAGE(HEADER)
 
-        <form class="modal-form">
-            <input type="text" ng-modal="userid" placeholder="@@LOGIN,HOLDER(USERID)" size="32" pattern="{$smarty.const.BRACP_REGEXP_USERNAME}" required/>
-            <input type="password" ng-modal="password" placeholder="@@LOGIN,HOLDER(PASSWD)" size="32" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>
+        <form class="modal-form" ng-submit="submitLogin()">
+
+            <input type="text" ng-model="userid" placeholder="@@LOGIN,HOLDER(USERID)" size="32" pattern="{$smarty.const.BRACP_REGEXP_USERNAME}" required/>
+            <input type="password" ng-model="user_pass" placeholder="@@LOGIN,HOLDER(PASSWD)" size="32" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>
+
+            <input id="_formSubmit" type="submit"/>
         </form>
 
         <p class="link">@@LOGIN,MESSAGE(CREATE)</p>
@@ -49,8 +52,8 @@
         </div>
     </div>
 
-    <div class="modal-footer">
-        <div class="button success icon" ng-click="login()">@@LOGIN,BUTTONS(SUBMIT)</div>
+    <div class="modal-footer" ng-if="stage == 0">
+        <label class="button success icon" for="_formSubmit">@@LOGIN,BUTTONS(SUBMIT)</label>
         <label class="button error icon" for="modal-login">@@LOGIN,BUTTONS(CLOSE)</label>
     </div>
 </div>

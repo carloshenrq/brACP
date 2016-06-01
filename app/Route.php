@@ -64,9 +64,9 @@ class Route
 
             // });
 
-            // // Mapeia o grupo account.
-            // self::getApp()->group('/account', function() {
-            //     // Rotas que não necessitam de login para entrar.
+            // Mapeia o grupo account.
+            self::getApp()->group('/account', function() {
+                // Rotas que não necessitam de login para entrar.
 
             //     // Verifica configuração se permite criação de nova conta.
             //     if(BRACP_ALLOW_CREATE_ACCOUNT)
@@ -88,8 +88,7 @@ class Route
             //         }
             //     }
 
-            //     $this->post('/login', ['Controller\Account', 'login'])
-            //                 ->add(['Controller\Account', 'needLoggout']);
+                $this->post('/login', ['Controller\Account', 'login']);
 
             //     // Verifica configuração se permite recuperar uma conta.
             //     if(BRACP_ALLOW_MAIL_SEND && BRACP_ALLOW_RECOVER)
@@ -115,7 +114,7 @@ class Route
 
             //     $this->get('/logout', ['Controller\Account', 'logout'])
             //             ->add(['Controller\Account', 'needLogin']);
-            // });
+            });
 
             // Verifica se os rankings estão habilitados para serem exibidos.
             if(BRACP_ALLOW_RANKING)
