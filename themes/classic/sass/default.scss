@@ -341,3 +341,58 @@ input[type="text"], input[type="password"]
     border-color: lightgray;
 }
 
+
+.loading-ajax
+{
+    display: block;
+    margin: auto;
+    @include size(48px, 32px);
+    background-color: transparent;
+    text-align: center;
+
+    .loading-bar
+    {
+        height: 100%;
+        width: 6px;
+        margin: auto;
+        display: inline-block;
+        background-color: #004400;
+
+        @include border-radius(2px);
+        @include box-shadow('0px 0px 3px #004400');
+        @include transform('scale(1, .6)');
+
+        &+ .loading-bar
+        {
+            margin-left: 2px;
+        }
+
+        &.loading-bar-1
+        {
+            @include animation(loading-body-bar-1, .8s, infinite, 0s);
+        }
+
+        &.loading-bar-2
+        {
+            @include animation(loading-body-bar-1, .8s, infinite, .2s);
+        }
+
+        &.loading-bar-3
+        {
+            @include animation(loading-body-bar-1, .8s, infinite, .4s);
+        }
+
+        &.loading-bar-4
+        {
+            @include animation(loading-body-bar-1, .8s, infinite, .6s);
+        }
+    }
+}
+
+@keyframes loading-body-bar-1
+{
+    #{'0%'}   { @include transform('scale(1, .6)'); }
+    #{'50%'}  { @include transform('scale(1, 1)'); }
+    #{'100%'} { @include transform('scale(1, .6)');  }
+}
+

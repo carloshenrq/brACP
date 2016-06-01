@@ -93,3 +93,23 @@
     -moz-transition: #{$transition};
     -webkit-transition: #{$transition};
 }
+
+@mixin animation($animation, $timing, $iteration, $delay)
+{
+    animation-name: #{$animation};
+    animation-delay: #{$delay};
+    animation-duration: #{$timing};
+    animation-iteration-count: #{$iteration};
+    -o-animation-name: #{$animation};
+    -o-animation-delay: #{$delay};
+    -o-animation-duration: #{$timing};
+    -o-animation-iteration-count: #{$iteration};
+    -moz-animation-name: #{$animation};
+    -moz-animation-delay: #{$delay};
+    -moz-animation-duration: #{$timing};
+    -moz-animation-iteration-count: #{$iteration};
+    -webkit-animation-name: #{$animation};
+    -webkit-animation-delay: #{$delay};
+    -webkit-animation-duration: #{$timing};
+    -webkit-animation-iteration-count: #{$iteration};
+}

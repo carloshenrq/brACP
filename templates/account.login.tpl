@@ -47,6 +47,14 @@
     </div>
 
     <div class="modal-body" ng-if="stage == 1">
+
+        <div class="loading-ajax" ng-if="!loginSuccess">
+            <div class="loading-bar loading-bar-1"></div>
+            <div class="loading-bar loading-bar-2"></div>
+            <div class="loading-bar loading-bar-3"></div>
+            <div class="loading-bar loading-bar-4"></div>
+        </div>
+
         <div class="message success" ng-if="loginSuccess">
             @@LOGIN(SUCCESS)
         </div>

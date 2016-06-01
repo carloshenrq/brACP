@@ -201,3 +201,110 @@ input[type="text"], input[type="password"] {
   border: 1px solid;
   padding: 8px;
   border-color: lightgray; }
+
+.loading-ajax {
+  display: block;
+  margin: auto;
+  width: 48px;
+  height: 32px;
+  background-color: transparent;
+  text-align: center; }
+  .loading-ajax .loading-bar {
+    height: 100%;
+    width: 6px;
+    margin: auto;
+    display: inline-block;
+    background-color: #004400;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    box-shadow: 0px 0px 3px #004400;
+    -moz-box-shadow: 0px 0px 3px #004400;
+    -webkit-box-shadow: 0px 0px 3px #004400;
+    transform: scale(1, .6);
+    -ms-transform: scale(1, .6);
+    -webkit-transform: scale(1, .6); }
+    .loading-ajax .loading-bar + .loading-bar {
+      margin-left: 2px; }
+    .loading-ajax .loading-bar.loading-bar-1 {
+      animation-name: loading-body-bar-1;
+      animation-delay: 0s;
+      animation-duration: 0.8s;
+      animation-iteration-count: infinite;
+      -o-animation-name: loading-body-bar-1;
+      -o-animation-delay: 0s;
+      -o-animation-duration: 0.8s;
+      -o-animation-iteration-count: infinite;
+      -moz-animation-name: loading-body-bar-1;
+      -moz-animation-delay: 0s;
+      -moz-animation-duration: 0.8s;
+      -moz-animation-iteration-count: infinite;
+      -webkit-animation-name: loading-body-bar-1;
+      -webkit-animation-delay: 0s;
+      -webkit-animation-duration: 0.8s;
+      -webkit-animation-iteration-count: infinite; }
+    .loading-ajax .loading-bar.loading-bar-2 {
+      animation-name: loading-body-bar-1;
+      animation-delay: 0.2s;
+      animation-duration: 0.8s;
+      animation-iteration-count: infinite;
+      -o-animation-name: loading-body-bar-1;
+      -o-animation-delay: 0.2s;
+      -o-animation-duration: 0.8s;
+      -o-animation-iteration-count: infinite;
+      -moz-animation-name: loading-body-bar-1;
+      -moz-animation-delay: 0.2s;
+      -moz-animation-duration: 0.8s;
+      -moz-animation-iteration-count: infinite;
+      -webkit-animation-name: loading-body-bar-1;
+      -webkit-animation-delay: 0.2s;
+      -webkit-animation-duration: 0.8s;
+      -webkit-animation-iteration-count: infinite; }
+    .loading-ajax .loading-bar.loading-bar-3 {
+      animation-name: loading-body-bar-1;
+      animation-delay: 0.4s;
+      animation-duration: 0.8s;
+      animation-iteration-count: infinite;
+      -o-animation-name: loading-body-bar-1;
+      -o-animation-delay: 0.4s;
+      -o-animation-duration: 0.8s;
+      -o-animation-iteration-count: infinite;
+      -moz-animation-name: loading-body-bar-1;
+      -moz-animation-delay: 0.4s;
+      -moz-animation-duration: 0.8s;
+      -moz-animation-iteration-count: infinite;
+      -webkit-animation-name: loading-body-bar-1;
+      -webkit-animation-delay: 0.4s;
+      -webkit-animation-duration: 0.8s;
+      -webkit-animation-iteration-count: infinite; }
+    .loading-ajax .loading-bar.loading-bar-4 {
+      animation-name: loading-body-bar-1;
+      animation-delay: 0.6s;
+      animation-duration: 0.8s;
+      animation-iteration-count: infinite;
+      -o-animation-name: loading-body-bar-1;
+      -o-animation-delay: 0.6s;
+      -o-animation-duration: 0.8s;
+      -o-animation-iteration-count: infinite;
+      -moz-animation-name: loading-body-bar-1;
+      -moz-animation-delay: 0.6s;
+      -moz-animation-duration: 0.8s;
+      -moz-animation-iteration-count: infinite;
+      -webkit-animation-name: loading-body-bar-1;
+      -webkit-animation-delay: 0.6s;
+      -webkit-animation-duration: 0.8s;
+      -webkit-animation-iteration-count: infinite; }
+
+@keyframes loading-body-bar-1 {
+  0% {
+    transform: scale(1, .6);
+    -ms-transform: scale(1, .6);
+    -webkit-transform: scale(1, .6); }
+  50% {
+    transform: scale(1, 1);
+    -ms-transform: scale(1, 1);
+    -webkit-transform: scale(1, 1); }
+  100% {
+    transform: scale(1, .6);
+    -ms-transform: scale(1, .6);
+    -webkit-transform: scale(1, .6); } }
