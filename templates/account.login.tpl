@@ -41,8 +41,13 @@
             <input id="_formSubmit" type="submit"/>
         </form>
 
-        <p class="link">@@LOGIN,MESSAGE(CREATE)</p>
-        <p class="link">@@LOGIN,MESSAGE(RECOVER)</p>
+        {if $smarty.const.BRACP_ALLOW_CREATE_ACCOUNT eq true}
+            <p class="link">@@LOGIN,MESSAGE(CREATE)</p>
+        {/if}
+
+        {if $smarty.const.BRACP_ALLOW_RECOVER}
+            <p class="link">@@LOGIN,MESSAGE(RECOVER)</p>
+        {/if}
 
     </div>
 

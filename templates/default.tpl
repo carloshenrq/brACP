@@ -127,7 +127,11 @@
 
             <div class="modal-container">
 
-                {include 'account.login.tpl'}
+                {if !isset($session->BRACP_ISLOGGEDIN) or !$session->BRACP_ISLOGGEDIN}
+
+                    {include 'account.login.tpl'}
+
+                {/if}
 
             </div>
 
