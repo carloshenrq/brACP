@@ -25,4 +25,14 @@ var grecaptcha_timer = false;
         window.location.href = $(this).data('href');
     });
 
+    $(document).on('click', '.modal-trigger-check', function() {
+        var checked = $(this).prop('checked');
+
+        $('.modal-trigger-check').each(function() {
+            $(this).prop('checked', false);
+        })
+
+        $(this).prop('checked', checked);
+    });
+
 } (window.jQuery);
