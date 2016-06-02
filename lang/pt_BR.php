@@ -472,7 +472,7 @@ return
             'NEED_LOGOUT'   => 'Você não pode estar logado para realizar esta ação.<br>'.
                                 'Para sair, <span class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/logout" data-target=".bracp-body">clique aqui</span>.',
             'NEED_SIGNIN'   => 'Você precisa estar logado para realizar esta ação.<br>'.
-                                'Para entrar, <label class="lbl-link" for="bracp-modal-login">clique aqui</label>.',
+                                'Para entrar, <label class="fake-link" for="modal-login">clique aqui</label>.',
         ],
 
     ],

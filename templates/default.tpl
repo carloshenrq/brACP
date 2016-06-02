@@ -81,7 +81,7 @@
                             <button class="button small success">@@MENU,MYACC,UNAUTHENTICATED(CREATE)</button>
                         {/if}
                     {else}
-                        <button class="button small error">@@MENU,MYACC,AUTHENTICATED(LOGOUT, {$userid})</button>
+                        <button class="url-link button small error" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}account/logout">@@MENU,MYACC,AUTHENTICATED(LOGOUT, {$userid})</button>
                     {/if}
 
                 </div>

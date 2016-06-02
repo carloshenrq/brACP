@@ -86,6 +86,73 @@ class Account
 
 
         $response->withJson($return);
+    
+    }
+
+    /**
+     * Método para realizar logout
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param array $args
+     */
+    public static function logout(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        // Apaga a sessão do usuário para ser deslogado.
+        unset(self::getApp()->getSession()->BRACP_ISLOGGEDIN,
+            self::getApp()->getSession()->BRACP_ACCOUNTID);
+
+        self::getApp()->display('account.logout');
+    }
+
+    /**
+     * Método middleware para testar se o usuário está logado na conta.
+     * Quando este middleware é chamado, ele apenas permite que a rota seja executada até
+     *  o final, quando o usuário estiver logado.
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $request
+     * @param object $next
+     *
+     * @return ResponseInterface
+     */
+    public static function _login(ServerRequestInterface $request, ResponseInterface $response, $next)
+    {
+        // Se o usuário estiver logado, então envia diretamente para continuar
+        //  a execução da rota.
+        if(self::isLoggedIn())
+            return $next($request, $response);
+
+        // Se o usuário não estiver logado, então o envia diretamente para
+        //  a tela de mensagem de erro de necessário realizar o logout do sistema
+        //  para continuar.
+        self::getApp()->display('account.error.login');
+        return $response;
+    }
+
+    /**
+     * Método middleware para testar se o usuário não está logado na conta.
+     * Quando este middleware é chamado, ele apenas permite que a rota seja executada até
+     *  o final, quando o usuário não estiver logado.
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $request
+     * @param object $next
+     *
+     * @return ResponseInterface
+     */
+    public static function _logout(ServerRequestInterface $request, ResponseInterface $response, $next)
+    {
+        // Se o usuário não estiver logado, então envia diretamente para continuar
+        //  a execução da rota.
+        if(!self::isLoggedIn())
+            return $next($request, $response);
+
+        // Se o usuário estiver logado, então o envia diretamente para
+        //  a tela de mensagem de erro de necessário realizar o logout do sistema
+        //  para continuar.
+        self::getApp()->display('account.error.logout');
+        return $response;
     }
 
     /**

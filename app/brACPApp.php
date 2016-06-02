@@ -196,7 +196,7 @@ class brACPApp extends Slim\App
      * @param string $template Nome do arquivo a ser chamado.
      * @param array $data Dados a serem enviados ao template.
      */
-    public function display($template, $data = [], $ajax = true)
+    public function display($template, $data = [], $ajax = false)
     {
         echo $this->render($template, $data, $ajax);
     }
@@ -209,7 +209,7 @@ class brACPApp extends Slim\App
      *
      * @return string
      */
-    public function render($template, $data = [], $ajax = true)
+    public function render($template, $data = [], $ajax = false)
     {
         try
         {

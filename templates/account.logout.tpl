@@ -18,5 +18,18 @@
 
 {extends file="default.tpl"}
 {block name="brACP_Body"}
-    {include 'account.logout.ajax.tpl'}
+
+<script>
+
+	setTimeout(function() {
+		window.location.href = '{$smarty.const.BRACP_DIR_INSTALL_URL}';
+	}, 1000);
+
+</script>
+
+<div class="message success icon">
+	<h1>@@LOGOUT(TITLE)</h1>
+    @@LOGOUT(SUCCESS)
+</div>
+
 {/block}

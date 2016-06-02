@@ -28,7 +28,7 @@
     position: relative;
     margin: 0px;
     font-size: 15px;
-    background-color: #7f8c8d;
+    background-color: #004400;
     color: white; }
     .modal h1 .modal-close, .modal .modal-title .modal-close {
       position: absolute;
@@ -58,7 +58,7 @@
       font-style: italic; }
   .modal .modal-footer {
     text-align: right;
-    background-color: #bdc3c7; }
+    background-color: rgba(0, 68, 0, 0.3); }
   .modal.icon:before {
     content: '' !important; }
   .modal.icon .modal-body {

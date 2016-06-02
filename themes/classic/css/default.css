@@ -192,7 +192,7 @@ html, body {
   .warning.icon:before {
     content: '!'; }
 
-span.url-link {
+span.url-link, .fake-link {
   cursor: pointer;
   font-weight: bold;
   text-decoration: underline; }

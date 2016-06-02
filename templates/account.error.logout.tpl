@@ -16,8 +16,13 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *}
 
-<h1>@@ERRORS,ACCESS(TITLE)</h1>
+{extends file="default.tpl"}
 
-<p class="bracp-message error">
-    @@ERRORS,ACCESS(NEED_LOGOUT)
-</p>
+{block name="brACP_Body"}
+
+	<div class="message error icon">
+		<h1>asdasd</h1>
+		asduhashuduash
+	</div>
+
+{/block}

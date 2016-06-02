@@ -66,7 +66,14 @@ class Route
 
             // Mapeia o grupo account.
             self::getApp()->group('/account', function() {
-                // Rotas que não necessitam de login para entrar.
+
+                $this->get('/logout', ['Controller\Account', 'logout'])
+                        ->add(['Controller\Account', '_login']);
+
+                // Adiciona a rota de login para o usuário poder realizar login na conta.
+                // -> É necessário não estar logado para realizar a ação de login.
+                $this->post('/login', ['Controller\Account', 'login'])
+                        ->add(['Controller\Account', '_logout']);
 
             //     // Verifica configuração se permite criação de nova conta.
             //     if(BRACP_ALLOW_CREATE_ACCOUNT)
@@ -88,7 +95,6 @@ class Route
             //         }
             //     }
 
-                $this->post('/login', ['Controller\Account', 'login']);
 
             //     // Verifica configuração se permite recuperar uma conta.
             //     if(BRACP_ALLOW_MAIL_SEND && BRACP_ALLOW_RECOVER)

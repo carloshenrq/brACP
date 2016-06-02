@@ -17,6 +17,14 @@
  *}
 
 {extends file="default.tpl"}
+
+
 {block name="brACP_Body"}
-    {include 'account.error.login.ajax.tpl'}
+
+	<div class="message error icon">
+		<h1>@@ERRORS,ACCESS(TITLE)</h1>
+
+		@@ERRORS,ACCESS(NEED_SIGNIN)
+	</div>
+
 {/block}
