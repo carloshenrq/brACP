@@ -60,7 +60,7 @@
         {
             margin: 16px 0px 16px 0px;
 
-            input[type="text"], input[type="password"]
+            input[type="text"], input[type="password"], select
             {
                 display: block;
                 width: 80%;
@@ -69,7 +69,8 @@
                 -webkit-box-sizing:border-box;
                 -moz-box-sizing: border-box;
 
-                &+ input[type="text"], &+ input[type="password"]
+                &+ input[type="text"], &+ input[type="password"], &+ select,
+                &+ input[type="checkbox"], &+ input[type="radio"], &+ label
                 {
                     margin-top: .4em;
                 }
@@ -79,6 +80,12 @@
             {
                 display: none;
             }
+        }
+
+        .message
+        {
+            max-height: 15em;
+            overflow: auto;
         }
 
         p.link

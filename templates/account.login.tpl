@@ -17,7 +17,7 @@
  *}
 
 <input type="checkbox" class="modal-trigger-check" id="modal-login"/>
-<div class="modal" ng-app="account" ng-controller="login">
+<div class="modal" ng-controller="account.login">
     <div class="modal-title">
         @@LOGIN(TITLE)
         <label for="modal-login" class="modal-close" ng-if="stage == 0">&times;</label>

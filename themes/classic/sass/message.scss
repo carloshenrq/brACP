@@ -95,5 +95,10 @@
             color: white;
         }
     }
+
+    &+ label
+    {
+        margin-top: .4em;
+    }
 }
 

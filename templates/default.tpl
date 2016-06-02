@@ -48,7 +48,7 @@
         {/if}
 
         <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/jquery.bracp.js"></script>
-        <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/bracp.account.js"></script>
+        <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/bracp.angular.js"></script>
 
         {if $smarty.const.BRACP_RECAPTCHA_ENABLED eq true}
             <script src="https://www.google.com/recaptcha/api.js"></script>
@@ -69,7 +69,7 @@
         {/block}
         </script>
     </head>
-    <body>
+    <body ng-app="brACP">
     {block name="brACP_HtmlBody"}
         <div class="content">
             <div class="header">

@@ -41,17 +41,20 @@
     padding: 24px; }
     .modal .modal-body form.modal-form {
       margin: 16px 0px 16px 0px; }
-      .modal .modal-body form.modal-form input[type="text"], .modal .modal-body form.modal-form input[type="password"] {
+      .modal .modal-body form.modal-form input[type="text"], .modal .modal-body form.modal-form input[type="password"], .modal .modal-body form.modal-form select {
         display: block;
         width: 80%;
         margin: auto;
         box-sizing: border-box;
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box; }
-        .modal .modal-body form.modal-form input[type="text"] + input[type="text"], .modal .modal-body form.modal-form input[type="text"] + input[type="password"], .modal .modal-body form.modal-form input[type="password"] + input[type="text"], .modal .modal-body form.modal-form input[type="password"] + input[type="password"] {
+        .modal .modal-body form.modal-form input[type="text"] + input[type="text"], .modal .modal-body form.modal-form input[type="text"] + input[type="password"], .modal .modal-body form.modal-form input[type="text"] + select, .modal .modal-body form.modal-form input[type="text"] + input[type="checkbox"], .modal .modal-body form.modal-form input[type="text"] + input[type="radio"], .modal .modal-body form.modal-form input[type="text"] + label, .modal .modal-body form.modal-form input[type="password"] + input[type="text"], .modal .modal-body form.modal-form input[type="password"] + input[type="password"], .modal .modal-body form.modal-form input[type="password"] + select, .modal .modal-body form.modal-form input[type="password"] + input[type="checkbox"], .modal .modal-body form.modal-form input[type="password"] + input[type="radio"], .modal .modal-body form.modal-form input[type="password"] + label, .modal .modal-body form.modal-form select + input[type="text"], .modal .modal-body form.modal-form select + input[type="password"], .modal .modal-body form.modal-form select + select, .modal .modal-body form.modal-form select + input[type="checkbox"], .modal .modal-body form.modal-form select + input[type="radio"], .modal .modal-body form.modal-form select + label {
           margin-top: .4em; }
       .modal .modal-body form.modal-form input[type="submit"] {
         display: none; }
+    .modal .modal-body .message {
+      max-height: 15em;
+      overflow: auto; }
     .modal .modal-body p.link {
       text-align: right;
       margin: 0;

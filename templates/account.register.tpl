@@ -17,24 +17,39 @@
  *}
 
 <input type="checkbox" class="modal-trigger-check" id="modal-register"/>
-<div class="modal" ng-app="account" ng-controller="register">
+<div class="modal" ng-controller="account.register">
     <div class="modal-title">
         @@CREATE(TITLE)
         <label for="modal-register" class="modal-close" ng-if="stage == 0">&times;</label>
     </div>
     <div class="modal-body" ng-if="stage == 0">
 
-        <div style='max-width: 380px'>@@CREATE,MESSAGE(HEADER)</div>
+        <div ng-if="accept_terms">
+            <div style='max-width: 380px'>@@CREATE,MESSAGE(HEADER)</div>
 
-        <form class="modal-form" ng-submit="submitRegister()">
+            <form class="modal-form" ng-submit="submitRegister()">
+                <input type="text" ng-model="userid" placeholder="@@CREATE,HOLDER(USERID)" maxlength="32" pattern="{$smarty.const.BRACP_REGEXP_USERNAME}" required/>
+                <input type="password" ng-model="user_pass" placeholder="@@CREATE,HOLDER(PASSWORD)" maxlength="32" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>
+                <input type="password" ng-model="user_pass_conf" placeholder="@@CREATE,HOLDER(PASSWORD_CONFIRM)" maxlength="32" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>
+                <select ng-model="sex">
+                    <option value="M">@@CREATE,HOLDER(MALE)</option>
+                    <option value="F">@@CREATE,HOLDER(FEMALE)</option>
+                </select>
+                <input type="text" ng-model="email" placeholder="@@CREATE,HOLDER(EMAIL)" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
+                <input type="text" ng-model="email_conf" placeholder="@@CREATE,HOLDER(EMAIL_CONFIRM)" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
 
-            <input type="text" ng-model="userid" placeholder="@@CREATE,HOLDER(USERID)" size="32" pattern="{$smarty.const.BRACP_REGEXP_USERNAME}" required/>
-            <input type="password" ng-model="user_pass" placeholder="@@CREATE,HOLDER(PASSWORD)" size="32" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>
-            <input type="password" ng-model="user_pass_conf" placeholder="@@CREATE,HOLDER(PASSWORD_CONFIRM)" size="32" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>
+                <input id="_submitRegister" type="submit"/>
+            </form>
+        </div>
 
-            <input id="_submitRegister" type="submit"/>
-        </form>
+        <div ng-if="!accept_terms" class="message info">
+            {include '../license.txt'}
+        </div>
 
+        <label class="input-checkbox">
+            <input type="checkbox" ng-model="accept_terms" required/>
+            @@CREATE,HOLDER(ACCEPT_TERMS)
+        </label>
     </div>
     <div class="modal-footer" ng-if="stage == 0">
         <label class="button success icon" for="_submitRegister">@@CREATE,BUTTONS(SUBMIT)</label>

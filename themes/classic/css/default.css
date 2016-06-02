@@ -197,10 +197,25 @@ span.url-link, .fake-link {
   font-weight: bold;
   text-decoration: underline; }
 
-input[type="text"], input[type="password"] {
+input[type="text"], input[type="password"], select {
   border: 1px solid;
   padding: 8px;
   border-color: lightgray; }
+
+label.input-checkbox {
+  display: block;
+  padding-left: 15px;
+  text-indent: -13px;
+  text-align: center; }
+  label.input-checkbox input[type="checkbox"], label.input-checkbox input[type="radio"] {
+    width: 13px;
+    height: 13px;
+    padding: 0;
+    margin: 0;
+    vertical-align: bottom;
+    position: relative;
+    top: -2px;
+    *overflow: hidden; }
 
 .loading-ajax {
   display: block;
