@@ -25,11 +25,9 @@
 
     <div class="modal-body" ng-if="stage == 0">
         
-        {literal}
-            <div ng-if="loginError" class="message error">
-                @@LOGIN,ERROR(MISMATCH)
-            </div>
-        {/literal}
+        <div ng-if="loginError" class="message error">
+            @@LOGIN,ERROR(MISMATCH)
+        </div>
 
         @@LOGIN,MESSAGE(HEADER)
 
@@ -38,7 +36,7 @@
             <input type="text" ng-model="userid" placeholder="@@LOGIN,HOLDER(USERID)" size="32" pattern="{$smarty.const.BRACP_REGEXP_USERNAME}" required/>
             <input type="password" ng-model="user_pass" placeholder="@@LOGIN,HOLDER(PASSWD)" size="32" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>
 
-            <input id="_formSubmit" type="submit"/>
+            <input id="_submitLogin" type="submit"/>
         </form>
 
         {if $smarty.const.BRACP_ALLOW_CREATE_ACCOUNT eq true}
@@ -66,7 +64,7 @@
     </div>
 
     <div class="modal-footer" ng-if="stage == 0">
-        <label class="button success icon" for="_formSubmit">@@LOGIN,BUTTONS(SUBMIT)</label>
+        <label class="button success icon" for="_submitLogin">@@LOGIN,BUTTONS(SUBMIT)</label>
         <label class="button error icon" for="modal-login">@@LOGIN,BUTTONS(CLOSE)</label>
     </div>
 </div>

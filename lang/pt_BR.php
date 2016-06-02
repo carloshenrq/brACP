@@ -173,7 +173,7 @@ return
         ],
         'BUTTONS'   => [
             'SUBMIT'    => 'Registrar',
-            'RESET'     => 'Limpar'
+            'CLOSE'     => 'Fechar'
         ],
     ],
 

@@ -78,10 +78,10 @@
                     {if isset($account) eq false}
                         <label for="modal-login" class="button small link">@@MENU,MYACC,UNAUTHENTICATED(LOGIN)</label>
                         {if $smarty.const.BRACP_ALLOW_CREATE_ACCOUNT eq true}
-                            <button class="button small success">@@MENU,MYACC,UNAUTHENTICATED(CREATE)</button>
+                            <label for="modal-register" class="button small success">@@MENU,MYACC,UNAUTHENTICATED(CREATE)</label>
                         {/if}
                     {else}
-                        <button class="url-link button small error" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}account/logout">@@MENU,MYACC,AUTHENTICATED(LOGOUT, {$userid})</button>
+                        <div class="url-link button small error" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}account/logout">@@MENU,MYACC,AUTHENTICATED(LOGOUT, {$userid})</div>
                     {/if}
 
                 </div>
@@ -97,7 +97,7 @@
                                 {if isset($account) eq false}
                                     <li><label for="modal-login">@@MENU,MYACC,UNAUTHENTICATED(LOGIN)</label></li>
                                     {if $smarty.const.BRACP_ALLOW_CREATE_ACCOUNT eq true}
-                                        <li><label>@@MENU,MYACC,UNAUTHENTICATED(CREATE)</label></li>
+                                        <li><label for="modal-register">@@MENU,MYACC,UNAUTHENTICATED(CREATE)</label></li>
                                     {/if}
                                     {if $smarty.const.BRACP_ALLOW_MAIL_SEND}
                                         {if $smarty.const.BRACP_CONFIRM_ACCOUNT}
@@ -108,6 +108,7 @@
                                         {/if}
                                     {/if}
                                 {else}
+                                    <li class="url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}account/logout"><label>@@MENU,MYACC,AUTHENTICATED(LOGOUT, {$userid})</label></li>
                                 {/if}
                             </ul>
                         </li>
@@ -130,6 +131,10 @@
                 {if !isset($session->BRACP_ISLOGGEDIN) or !$session->BRACP_ISLOGGEDIN}
 
                     {include 'account.login.tpl'}
+
+                    {if $smarty.const.BRACP_ALLOW_CREATE_ACCOUNT}
+                        {include 'account.register.tpl'}
+                    {/if}
 
                 {/if}
 

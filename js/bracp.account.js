@@ -19,6 +19,18 @@
 
 var account = angular.module('account', []);
 
+
+account.controller('register', ['$scope', '$http', function($scope, $http) {
+
+    $scope.userid = '';
+    $scope.user_pass = '';
+    $scope.user_pass_conf = '';
+
+    $scope.stage = 0;
+
+
+}])
+
 account.controller('login', ['$scope', '$http', function($scope, $http) {
 
 	$scope.userid = '';
