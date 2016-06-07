@@ -21,6 +21,18 @@ var grecaptcha_timer = false;
 +function($)
 {
 
+    $(window).on('keydown', function(e) {
+        // Tratamento para os modais que quando houver tecla esc pressionada,
+        //  irá fechar os modais com checked.
+        if(e.which == 27)
+        {
+            e.preventDefault();
+            $(document).find('.modal-trigger-check:checked').each(function() {
+                $(this).prop('checked', false);
+            });
+        }
+    });
+
     $(document).on('click', '.url-link', function() {
         window.location.href = $(this).data('href');
     });
