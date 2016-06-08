@@ -173,6 +173,43 @@ class Account
     }
 
     /**
+     * Reenvia o código de ativação para o usuário pelas informações
+     *  de usuário e email indicado.
+     *
+     * @param string $userid
+     * @param string $email
+     *
+     * @return int
+     * -1: Configuração não permite confirmação de contas.
+     *  0: Código gerado/re-enviado
+     *  1: Conta informada não espera confirmação.
+     */
+    public static function registerConfirmResend($userid, $email)
+    {
+        if(!BRACP_ALLOW_MAIL_SEND || !BRACP_CONFIRM_ACCOUNT)
+            return -1;
+
+        // Realiza validação servidor dos patterns de usuário e senha
+        //  digitados.
+        if(!preg_match('/^'.BRACP_REGEXP_USERNAME.'$/', $userid) ||
+            !preg_match('/^'.BRACP_REGEXP_EMAIL.'$/', $email))
+            return 1;
+
+        // Obtém a conta informada.
+        $account = self::getApp()->getEm()
+                                ->getRepository('Model\Login')
+                                ->findOneBy(['userid' => $userid, 'email' => $email, 'state' => 11]);
+
+        // Dados não encontrados para confirmação de usuário.
+        // state == 11, é uma conta aguardando confirmação.
+        if(is_null($account))
+            return 1;
+
+        // Realiza o envio padrão com o código da conta informada.
+        return self::registerConfirmSend($account->getAccount_id());
+    }
+
+    /**
      * Método para enviar o código de confirmação para a conta.
      * Se já existir um código de confirmação, ele será reenviado.
      * Se não existir, será riado um novo código e enviado ao jogador.
