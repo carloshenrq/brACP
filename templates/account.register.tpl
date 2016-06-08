@@ -67,7 +67,7 @@
         </div>
 
         <label class="input-checkbox">
-            <input type="checkbox" ng-model="accept_terms" required/>
+            <input type="checkbox" ng-model="$parent.accept_terms" required/>
             @@CREATE,HOLDER(ACCEPT_TERMS)
         </label>
     </div>
@@ -80,7 +80,7 @@
         </div>
     </div>
     <div class="modal-footer" ng-if="stage == 0">
-        <label class="button success icon" for="_submitRegister">@@CREATE,BUTTONS(SUBMIT)</label>
+        <label class="button success icon" for="_submitRegister" ng-if="accept_terms">@@CREATE,BUTTONS(SUBMIT)</label>
         <label class="button error icon" for="modal-register">@@CREATE,BUTTONS(CLOSE)</label>
     </div>
 </div>

@@ -101,7 +101,7 @@
                                     {/if}
                                     {if $smarty.const.BRACP_ALLOW_MAIL_SEND}
                                         {if $smarty.const.BRACP_CONFIRM_ACCOUNT}
-                                            <li><label>@@MENU,MYACC,UNAUTHENTICATED(CREATE_SEND)</label></li>
+                                            <li><label for="modal-create-resend">@@MENU,MYACC,UNAUTHENTICATED(CREATE_SEND)</label></li>
                                         {/if}
                                         {if $smarty.const.BRACP_ALLOW_RECOVER}
                                             <li><label>@@MENU,MYACC,UNAUTHENTICATED(RECOVER)</label></li>
@@ -134,6 +134,12 @@
 
                     {if $smarty.const.BRACP_ALLOW_CREATE_ACCOUNT}
                         {include 'account.register.tpl'}
+                    {/if}
+
+                    {if $smarty.const.BRACP_ALLOW_MAIL_SEND}
+                        {if $smarty.const.BRACP_CONFIRM_ACCOUNT}
+                            {include 'account.register.resend.tpl'}
+                        {/if}
                     {/if}
 
                 {/if}

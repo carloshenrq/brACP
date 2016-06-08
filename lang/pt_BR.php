@@ -196,15 +196,20 @@ return
         'SUCCESS'   => 'Código de confirmação enviado com sucesso para o e-mail cadastrado.',
         'CONFIRMED' => 'Você confirmou com sucesso sua conta. Você já pode realizar login.',
         'MESSAGE'   => [
-            'HEADER'    => 'Para reenviar o código de ativação de sua conta, você deve digitar seu nome de usuário e endereço de e-mail cadastrados para que sejam reenviados com sucesso.',
+            'HEADER_NO_CODE'    => 'Para reenviar o código de ativação de sua conta, você deve digitar seu nome de usuário e endereço de e-mail cadastrados para que sejam reenviados com sucesso.',
+            'HEADER_HAS_CODE'   => 'Já que você possui o código de ativação, você deve digita-lo abaixo para confirmar sua conta.',
         ],
         'HOLDER'    => [
-            'USERID' => 'Nome de usuário',
-            'EMAIL'  => 'E-mail cadastradado',
+            'USERID'    => 'Nome de usuário',
+            'EMAIL'     => 'E-mail cadastradado',
+            'CODE'      => 'Código de ativação',
+            'HAS_CODE'  => 'Eu já possuo o código de ativação!',
         ],
         'BUTTONS'   => [
             'SUBMIT'    => 'Reenviar',
+            'CONFIRM'   => 'Confirmar',
             'RESET'     => 'Limpar',
+            'CLOSE'     => 'Fechar',
         ],
     ],
 
@@ -542,7 +547,9 @@ return
              * @author carloshenrq
              */
             'CODE'      => 'Para confirmar a criação da sua conta, é necessário que você confirme sua identidade de e-mail clicando no link abaixo.<br>'.
-                            '<br>'.
+                            '<br>' .
+                            '<strong>Código de Ativação:</strong> <u>%2$s</u><br>'.
+                            '<br>' .
                             '<a href="%1$s/%2$s" target="_blank">%1$s/%2$s</a><br>'.
                             '<i>Link válido até <strong>%3$s</strong>.</i><br>'.
                             '<br>'.

@@ -107,3 +107,21 @@ brACPApp.controller('account.register', ['$scope', '$http', function($scope, $ht
         });
     };
 }]);
+
+/**
+ * Controlador para código de ativações de novas contas.
+ * - Deverão passar por aqui as ativações de conta.
+ */
+brACPApp.controller('account.register.resend', ['$scope', '$http', function($scope, $http) {
+
+    $scope.stage = 0;
+    $scope.has_code = false;
+
+    $scope.submitResend = function() {
+
+    };
+
+    $scope.submitConfirm = function() {
+    }
+
+}]);
