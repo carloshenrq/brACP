@@ -139,7 +139,7 @@ class Account
         {
             // Envia notificação de criação de contas.
             self::getApp()->sendMail('@@CREATE,MAIL(TITLE)', [
-                $account->getUserid() => $account->getEmail()
+                $account->getEmail() => $account->getUserid()
             ], 'mail.create', [
                 'userid' => $account->getUserid()
             ]);
