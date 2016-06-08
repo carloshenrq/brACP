@@ -37,6 +37,14 @@
                 </div>
             </div>
 
+            <div ng-if="success_state" class="message success">
+                @@CREATE(SUCCESS)
+                {if $smarty.const.BRACP_ALLOW_MAIL_SEND && $smarty.const.BRACP_CONFIRM_ACCOUNT}
+                    <br>
+                    <i>@@RESEND(SUCCESS)</i>
+                {/if}
+            </div>
+
             <div style='max-width: 380px'>@@CREATE,MESSAGE(HEADER)</div>
 
             <form class="modal-form" ng-submit="submitRegister()">
@@ -62,6 +70,14 @@
             <input type="checkbox" ng-model="accept_terms" required/>
             @@CREATE,HOLDER(ACCEPT_TERMS)
         </label>
+    </div>
+    <div class="modal-body" ng-if="stage == 1">
+        <div class="loading-ajax">
+            <div class="loading-bar loading-bar-1"></div>
+            <div class="loading-bar loading-bar-2"></div>
+            <div class="loading-bar loading-bar-3"></div>
+            <div class="loading-bar loading-bar-4"></div>
+        </div>
     </div>
     <div class="modal-footer" ng-if="stage == 0">
         <label class="button success icon" for="_submitRegister">@@CREATE,BUTTONS(SUBMIT)</label>

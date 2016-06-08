@@ -57,7 +57,27 @@ class Account
      */
     public static function register(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
+        // Dados recebidos pelo post para criação de contas.
+        $data = $request->getParsedBody();
 
+        // Inicializa vetor de retorno.
+        $return = ['error_state' => 0, 'success_state' => false];
+
+        // Executa a tentativa de criar a conta do usuário no banco de dados.
+        $i_create = self::registerAccount(
+            $data['userid'], $data['user_pass'] , $data['user_pass_conf'],
+            $data['email'] , $data['email_conf'], $data['sex'],
+            false, 0
+        );
+
+        // Realiza os testes para saber o retorno do registro.
+        if($i_create != 0)
+            $return['error_state']      = $i_create;
+        else
+            $return['success_state']    = true;
+
+        // Responde com um objeto json informando o estado do cadastro.
+        $response->withJson($return);
     }
 
     /**
@@ -80,7 +100,7 @@ class Account
      *   ->  4: A Criação deste tipo de conta somente é possivel em modo administrador.
      *   ->  5: Falha na restrição de pattern
      */
-    public static function createAccount($userid, $user_pass, $user_pass_conf, $email,
+    public static function registerAccount($userid, $user_pass, $user_pass_conf, $email,
                                             $email_conf, $sex, $admin = false, $group_id = 0)
     {
         if(!$admin && !BRACP_ALLOW_CREATE_ACCOUNT)
@@ -95,7 +115,7 @@ class Account
         if(hash('md5', $user_pass) !== hash('md5', $user_pass_conf))
             return 2;
 
-        if(hash('md5', $email) !== hash('md5', $email_conf)
+        if(hash('md5', $email) !== hash('md5', $email_conf))
             return 3;
 
         if(!$admin && $group_id >= BRACP_ALLOW_ADMIN_GMLEVEL)
@@ -105,12 +125,12 @@ class Account
         if(BRACP_MAIL_REGISTER_ONCE)
             $account = self::getApp()->getEm()
                                     ->getRepository('Model\Login')
-                                    ->findOneBy(['email' => $email);
+                                    ->findOneBy(['email' => $email]);
 
         if(is_null($account))
             $account = self::getApp()->getEm()
                                     ->getRepository('Model\Login')
-                                    ->findOneBy(['userid' => $userid);
+                                    ->findOneBy(['userid' => $userid]);
 
         // Se a conta foi encontrada nos registros de email ou login
         //  então, retorna usuário em uso.
@@ -138,15 +158,15 @@ class Account
         if(BRACP_ALLOW_MAIL_SEND)
         {
             // Envia notificação de criação de contas.
-            self::getApp()->sendMail('@@CREATE,MAIL(TITLE)', [
-                $account->getEmail() => $account->getUserid()
-            ], 'mail.create', [
+            self::getApp()->sendMail('@@CREATE,MAIL(TITLE)',
+                [$account->getEmail()],
+                'mail.create', [
                 'userid' => $account->getUserid()
             ]);
 
             // Cria e envia o código de ativação do usuário, caso a configuração esteja habilitada.
             if(!$admin && BRACP_CONFIRM_ACCOUNT)
-                self::createConfirmSend($account->getAccount_id());
+                self::registerConfirmSend($account->getAccount_id());
         }
 
         return 0;
@@ -166,22 +186,66 @@ class Account
      *  0: Código gerado/re-enviado
      *  1: Conta informada não espera confirmação.
      */
-    public static function createConfirmSend($account_id)
+    public static function registerConfirmSend($account_id)
     {
         if(!BRACP_ALLOW_MAIL_SEND || !BRACP_CONFIRM_ACCOUNT)
             return -1;
 
         $account = self::getApp()->getEm()
                                 ->getRepository('Model\Login')
-                                ->findOneBy(['account_id' => $account_id, 'state' => 11);
+                                ->findOneBy(['account_id' => $account_id, 'state' => 11]);
 
         // Dados não encontrados para confirmação de usuário.
         // state == 11, é uma conta aguardando confirmação.
         if(is_null($account))
             return 1;
 
-        // @Todo.: Enviar confirmação da conta para o usuário.
+        // Verifica se existe o código de confirmação para a conta informada
+        $confirmation = self::getApp()->getEm()
+                        ->createQuery('
+                            SELECT
+                                confirmation, login
+                            FROM
+                                Model\Confirmation confirmation
+                            INNER JOIN
+                                confirmation.account login
+                            WHERE
+                                login.account_id = :account_id AND
+                                confirmation.used = false AND
+                                :CURDATETIME BETWEEN confirmation.date AND confirmation.expire
+                        ')
+                        ->setParameter('account_id', $account->getAccount_id())
+                        ->setParameter('CURDATETIME', date('Y-m-d H:i:s'))
+                        ->getOneOrNullResult();
 
+        // Se não houver código de confirmação com os dados informados,
+        //  então cria o registro no banco de dados.
+        if(is_null($confirmation))
+        {
+            $confirmation = new Confirmation;
+            $confirmation->setAccount($account);
+            $confirmation->setCode(hash( 'md5', uniqid(rand() . microtime(true), true)));
+            $confirmation->setDate(date('Y-m-d H:i:s'));
+            $confirmation->setExpire(date('Y-m-d H:i:s', time() + (60*BRACP_RECOVER_CODE_EXPIRE)));
+            $confirmation->setUsed(false);
+
+            self::getApp()->getEm()->persist($confirmation);
+            self::getApp()->getEm()->flush();
+        }
+
+        // Envia o e-mail de confirmação para o usuário com o código
+        //  de ativação e o link para ativação dos dados.
+        // Envia o e-mail para usuário caso o painel de controle esteja com as configurações
+        //  de envio ativas.
+        self::getApp()->sendMail('@@RESEND,MAIL(TITLE_CONFIRM)',
+                                    [$account->getEmail()],
+                                    'mail.create.code',
+                                    [
+                                        'userid' => $account->getUserid(),
+                                        'code' => $confirmation->getCode(),
+                                        'expire' => $confirmation->getExpire(),
+                                        'href' => BRACP_URL . 'account/register'
+                                    ]);
         return 0;
     }
 
