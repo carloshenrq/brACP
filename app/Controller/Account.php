@@ -129,7 +129,8 @@ class Account
         // NOTA.: NÃO USAR state=5 PARA CONTAS EM CONFIRMAÇÃO,
         //        O STATE=5 É DEFINIDO PARA O USUÁRIO
         //        QUANDO FOR UTILIZADO O COMANDO @BLOCK POR UM GM DENTRO DO JOGO.
-        $account->setState(((BRACP_ALLOW_MAIL_SEND && BRACP_CONFIRM_ACCOUNT) ? 11 : 0));
+        // NOTA².: Modo administrador deve estar definido como falso. Se for verdadeiro, a conta não precisa ser confirmada.
+        $account->setState(((!$admin && BRACP_ALLOW_MAIL_SEND && BRACP_CONFIRM_ACCOUNT) ? 11 : 0));
 
         self::getApp()->getEm()->persist($account);
         self::getApp()->getEm()->flush();
@@ -144,7 +145,7 @@ class Account
             ]);
 
             // Cria e envia o código de ativação do usuário, caso a configuração esteja habilitada.
-            if(BRACP_CONFIRM_ACCOUNT)
+            if(!$admin && BRACP_CONFIRM_ACCOUNT)
                 self::createConfirmSend($account->getAccount_id());
         }
 
