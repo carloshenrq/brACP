@@ -148,6 +148,7 @@ return
         'TITLE'     => 'Minha Conta &raquo; Registrar',
         'ERROR'     => [
             'DISABLED'  => 'Criação de contas está desativada.',
+            'ADMIN_MODE'    => 'A Criação deste tipo de conta somente é possivel em modo administrador.',
             'MISMATCH'  => [
                 'PASSWORD'  => 'As senhas digitadas não conferem!',
                 'EMAIL'     => 'Os endereços de e-mail digitados não conferem!',

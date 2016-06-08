@@ -73,7 +73,11 @@ brACPApp.controller('account.register', ['$scope', '$http', function($scope, $ht
     $scope.email_conf = '';
 
     $scope.stage = 0;
+    $scope.error_state = 0;
     $scope.accept_terms = false;
 
+    $scope.submitRegister = function() {
+        var urlRegister = document.querySelector('#_BRACP_URL').value + 'account/register';
+    };
 
 }]);

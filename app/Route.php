@@ -75,6 +75,14 @@ class Route
                 $this->post('/login', ['Controller\Account', 'login'])
                         ->add(['Controller\Account', '_logout']);
 
+                // Verifica se a criação de contas está habilitada pela configuração
+                //  do painel de controle.
+                if(BRACP_ALLOW_CREATE_ACCOUNT)
+                {
+                    $this->post('/register', ['Controller\Account', 'register'])
+                            ->add(['Controller\Account', '_logout']);
+                }
+
             //     // Verifica configuração se permite criação de nova conta.
             //     if(BRACP_ALLOW_CREATE_ACCOUNT)
             //     {
