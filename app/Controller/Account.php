@@ -78,17 +78,24 @@ class Account
      *   ->  2: Senhas digitadas não conferem.
      *   ->  3: E-mails digitados não conferem.
      *   ->  4: A Criação deste tipo de conta somente é possivel em modo administrador.
+     *   ->  5: Falha na restrição de pattern
      */
     public static function createAccount($userid, $user_pass, $user_pass_conf, $email,
-                                            $email_conf, $admin = false, $group_id = 0)
+                                            $email_conf, $sex, $admin = false, $group_id = 0)
     {
         if(!$admin && !BRACP_ALLOW_CREATE_ACCOUNT)
             return -1;
 
+        if(!preg_match('/^'.BRACP_REGEXP_USERNAME.'$/', $userid) ||
+            !preg_match('/^'.BRACP_REGEXP_PASSWORD.'$/', $user_pass) ||
+            !preg_match('/^'.BRACP_REGEXP_EMAIL.'$/', $email) ||
+            !preg_match('/^(M|F)$/', $sex))
+            return 5;
+
         if(hash('md5', $user_pass) !== hash('md5', $user_pass_conf))
             return 2;
 
-        if(hash('md5', $email) !== hash('md5', $email_conf))
+        if(hash('md5', $email) !== hash('md5', $email_conf)
             return 3;
 
         if(!$admin && $group_id >= BRACP_ALLOW_ADMIN_GMLEVEL)

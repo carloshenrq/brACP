@@ -33,6 +33,7 @@
                     <div ng-switch-when="2">@@CREATE,ERROR,MISMATCH(PASSWORD)</div>
                     <div ng-switch-when="3">@@CREATE,ERROR,MISMATCH(EMAIL)</div>
                     <div ng-switch-when="4">@@CREATE,ERROR,MISMATCH(ADMIN_MODE)</div>
+                    <div ng-switch-when="5">@@ERRORS(REGEXP)</div>
                 </div>
             </div>
 
