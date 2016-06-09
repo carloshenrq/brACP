@@ -49,6 +49,37 @@ class Account
     private static $user = null;
 
     /**
+     * Método para realizar a confirmação de contas recebido via post.
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param array $args
+     */
+    public static function confirmation(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        // Dados recebidos pelo post para confirmação de contas.
+        $data = $request->getParsedBody();
+
+        // Dados de retorno para informações de erro.
+        $return = ['error_state' => 0, 'success_state' => false];
+
+        // Se ambos estão definidos, a requisição é para re-envio dos dados de confirmação.
+        if(isset($data['userid']) && isset($data['email']))
+        {
+            $return['error_state']      = self::registerConfirmResend($data['userid'], $data['email']);
+            $return['success_state']    = $return['error_state'] == 0;
+        }
+        // Se código está definido, a requisição é para confirmação da conta.
+        else if(isset($data['code']))
+        {
+            // @Todo: Métodos para confirmação da conta.
+        }
+
+        // Responde com um objeto json informando o estado do cadastro.
+        $response->withJson($return);
+    }
+
+    /**
      * Método para cadastrar uma nova conta.
      *
      * @param ServerRequestInterface $request

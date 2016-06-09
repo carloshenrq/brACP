@@ -83,6 +83,14 @@ class Route
                             ->add(['Controller\Account', '_logout']);
                 }
 
+                // Verifica se o envio de e-mails está ativo e se a confirmação de contas
+                //  também está ativo por configuração.
+                if(BRACP_ALLOW_MAIL_SEND && BRACP_CONFIRM_ACCOUNT)
+                {
+                    $this->post('/confirmation', ['Controller\Account', 'confirmation'])
+                            ->add(['Controller\Account', '_logout']);
+                }
+
             //     // Verifica configuração se permite criação de nova conta.
             //     if(BRACP_ALLOW_CREATE_ACCOUNT)
             //     {

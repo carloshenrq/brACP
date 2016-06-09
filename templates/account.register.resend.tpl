@@ -26,18 +26,41 @@
     <div class="modal-body" ng-if="stage == 0">
         
         <div style='max-width: 380px' ng-if="!has_code">
+
+            <div ng-if="error_state != 0" class="message error">
+                <div ng-switch="error_state">
+                    <div ng-switch-when="-1">@@RESEND,ERROR(DISABLED)</div>
+                    <div ng-switch-when="1">@@RESEND,ERROR(NOACC)</div>
+                </div>
+            </div>
+
+            <div ng-if="success_state" class="message success">
+                @@RESEND(SUCCESS)
+            </div>
+
             @@RESEND,MESSAGE(HEADER_NO_CODE)
 
             <form class="modal-form" ng-submit="submitResend()">
 
                 <input type="text" ng-model="userid" placeholder="@@RESEND,HOLDER(USERID)" size="32" pattern="{$smarty.const.BRACP_REGEXP_USERNAME}" required/>
-                <input type="text" id="email" name="email" placeholder="@@RESEND,HOLDER(EMAIL)" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
+                <input type="text" ng-model="email" placeholder="@@RESEND,HOLDER(EMAIL)" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
 
                 <input id="_submitResend" type="submit"/>
             </form>
         </div>
 
         <div style='max-width: 380px' ng-if="has_code">
+            <div ng-if="error_state != 0" class="message error">
+                <div ng-switch="error_state">
+                    <div ng-switch-when="-1">@@RESEND,ERROR(DISABLED)</div>
+                    <div ng-switch-when="1">@@RESEND,ERROR(USED)</div>
+                </div>
+            </div>
+
+            <div ng-if="success_state" class="message success">
+                @@RESEND(CONFIRMED)
+            </div>
+
             @@RESEND,MESSAGE(HEADER_HAS_CODE)
 
             <form class="modal-form" ng-submit="submitConfirm()">
@@ -49,7 +72,7 @@
         </div>
 
         <label class="input-checkbox">
-            <input type="checkbox" ng-model="$parent.has_code"/>
+            <input type="checkbox" ng-model="$parent.has_code" ng-click="$parent.error_state = 0; $parent.success_state = false;"/>
             @@RESEND,HOLDER(HAS_CODE)
         </label>
 

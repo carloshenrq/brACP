@@ -114,14 +114,43 @@ brACPApp.controller('account.register', ['$scope', '$http', function($scope, $ht
  */
 brACPApp.controller('account.register.resend', ['$scope', '$http', function($scope, $http) {
 
+    $scope.userid = '';
+    $scope.email = '';
+
     $scope.stage = 0;
     $scope.has_code = false;
+    $scope.error_state = 0;
+    $scope.success_state = false;
 
     $scope.submitResend = function() {
+        var urlConfirm = document.querySelector('#_BRACP_URL').value + 'account/confirmation';
+        var params = $.param({
+            'userid'    : this.userid,
+            'email'     : this.email
+        });
 
+        $scope.stage = 1;
+
+        $http({
+            'method'    : 'post',
+            'url'       : urlConfirm,
+            'data'      : params,
+            'headers'   : {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        }).then(function(response) {
+
+            console.log(response);
+
+            $scope.stage            = 0;
+            $scope.error_state      = response.data.error_state;
+            $scope.success_state    = response.data.success_state;
+
+        });
     };
 
     $scope.submitConfirm = function() {
+        var urlConfirm = document.querySelector('#_BRACP_URL').value + 'account/confirmation';
     }
 
 }]);
