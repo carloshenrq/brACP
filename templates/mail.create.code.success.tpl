@@ -20,6 +20,6 @@
 
 {block name="mail_body"}
 
-    @@MAIL,CREATE(CODE, {$code}, {Format::date($expire)})
+    @@MAIL,CREATE(ACTIVATED)
 
 {/block}

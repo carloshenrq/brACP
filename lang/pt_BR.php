@@ -194,7 +194,7 @@ return
             'TITLE_CONFIRMED'   => 'Conta Confirmada',
         ],
         'SUCCESS'   => 'Código de confirmação enviado com sucesso para o e-mail cadastrado.',
-        'CONFIRMED' => 'Você confirmou com sucesso sua conta. Você já pode realizar login.',
+        'CONFIRMED' => 'Sua conta foi ativada. Você já pode realizar login.',
         'MESSAGE'   => [
             'HEADER_NO_CODE'    => 'Para reenviar o código de ativação de sua conta, você deve digitar seu nome de usuário e endereço de e-mail cadastrados para que sejam reenviados com sucesso.',
             'HEADER_HAS_CODE'   => 'Já que você possui o código de ativação, você deve digita-lo abaixo para confirmar sua conta.',
@@ -546,14 +546,17 @@ return
              * @refer templates/mail.create.code.tpl
              * @author carloshenrq
              */
-            'CODE'      => 'Para confirmar a criação da sua conta, é necessário que você confirme sua identidade de e-mail clicando no link abaixo.<br>'.
+            'CODE'      => 'Para confirmar a criação da sua conta, é necessário que você confirme sua identidade de e-mail inserindo o código abaixo no painel de controle.<br>'.
                             '<br>' .
-                            '<strong>Código de Ativação:</strong> <u>%2$s</u><br>'.
-                            '<br>' .
-                            '<a href="%1$s/%2$s" target="_blank">%1$s/%2$s</a><br>'.
-                            '<i>Link válido até <strong>%3$s</strong>.</i><br>'.
+                            '<strong>Código de Ativação:</strong> <u>%1$s</u><br>'.
+                            '<i>Código válido até <strong>%2$s</strong>.</i><br>'.
                             '<br>'.
-                            'Após acessar o link, você receberá um segundo e-mail informando que sua conta foi confirmada com sucesso.'
+                            'Após ativar sua conta, você receberá informando que o servidor aceitou a ativação de sua conta.',
+            /**
+             * @refer templates/mail.create.code.success.tpl
+             * @author carloshenrq
+             */
+            'ACTIVATED' => 'Sua conta foi ativada com sucesso! Você já pode realizar login.'
         ],
 
         /**

@@ -27,8 +27,8 @@
         
         <div style='max-width: 380px' ng-if="!has_code">
 
-            <div ng-if="error_state != 0" class="message error">
-                <div ng-switch="error_state">
+            <div ng-if="$parent.error_state != 0" class="message error">
+                <div ng-switch="$parent.error_state">
                     <div ng-switch-when="-1">@@RESEND,ERROR(DISABLED)</div>
                     <div ng-switch-when="1">@@RESEND,ERROR(NOACC)</div>
                 </div>
@@ -50,8 +50,8 @@
         </div>
 
         <div style='max-width: 380px' ng-if="has_code">
-            <div ng-if="error_state != 0" class="message error">
-                <div ng-switch="error_state">
+            <div ng-if="$parent.error_state != 0" class="message error">
+                <div ng-switch="$parent.error_state">
                     <div ng-switch-when="-1">@@RESEND,ERROR(DISABLED)</div>
                     <div ng-switch-when="1">@@RESEND,ERROR(USED)</div>
                 </div>

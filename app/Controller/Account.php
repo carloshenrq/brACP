@@ -65,15 +65,13 @@ class Account
 
         // Se ambos estão definidos, a requisição é para re-envio dos dados de confirmação.
         if(isset($data['userid']) && isset($data['email']))
-        {
             $return['error_state']      = self::registerConfirmResend($data['userid'], $data['email']);
-            $return['success_state']    = $return['error_state'] == 0;
-        }
         // Se código está definido, a requisição é para confirmação da conta.
         else if(isset($data['code']))
-        {
-            // @Todo: Métodos para confirmação da conta.
-        }
+            $return['error_state']      = self::registerConfirmCode($data['code']);
+
+        // Define informaçõs de erro. (Caso exista)
+        $return['success_state']    = $return['error_state'] == 0;
 
         // Responde com um objeto json informando o estado do cadastro.
         $response->withJson($return);
@@ -199,6 +197,69 @@ class Account
             if(!$admin && BRACP_CONFIRM_ACCOUNT)
                 self::registerConfirmSend($account->getAccount_id());
         }
+
+        return 0;
+    }
+
+    /**
+     * Realiza a confirmação da conta do usuário com o código que o usuário digitou.
+     *
+     * @param string $code
+     *
+     * @return int
+     * -1: Configuração não permite confirmação de contas.
+     *  0: Código gerado/re-enviado
+     *  1: Código de ativação não encontrado.
+     */
+    public static function registerConfirmCode($code)
+    {
+        if(!BRACP_ALLOW_MAIL_SEND || !BRACP_CONFIRM_ACCOUNT)
+            return -1;
+
+        // O Código de ativação não é valido pela formatação do md5,
+        //  então, ignora o código e nem verifica o banco de dados.
+        if(!preg_match('/^([0-9a-f]{32})$/', $code))
+            return 1;
+
+        // Verifica se existe o código de confirmação para a conta informada
+        $confirmation = self::getApp()->getEm()
+                        ->createQuery('
+                            SELECT
+                                confirmation, login
+                            FROM
+                                Model\Confirmation confirmation
+                            INNER JOIN
+                                confirmation.account login
+                            WHERE
+                                confirmation.code = :code AND
+                                confirmation.used = false AND
+                                :CURDATETIME BETWEEN confirmation.date AND confirmation.expire
+                        ')
+                        ->setParameter('code', $code)
+                        ->setParameter('CURDATETIME', date('Y-m-d H:i:s'))
+                        ->getOneOrNullResult();
+
+        // Código de ativação não encontrado ou é inválido porque expirou ou já foi utilizado.
+        if(is_null($confirmation))
+            return 1;
+
+        // Informa que o código de ativação foi utilizado e o estado da conta
+        //  passa a ser 0 (ok)
+        $confirmation->getAccount()->setState(0);
+        $confirmation->setUsed(true);
+
+        self::getApp()->getEm()->merge($confirmation->getAccount());
+        self::getApp()->getEm()->merge($confirmation);
+        self::getApp()->getEm()->flush();
+
+        // Envia um e-mail para o usuário informando que a conta foi ativada
+        //  com sucesso.
+        self::getApp()->sendMail('@@RESEND,MAIL(TITLE_CONFIRMED)',
+                                    [$confirmation->getAccount()->getEmail()],
+                                    'mail.create.code.success',
+                                    [
+                                        'userid' => $confirmation->getAccount()->getUserid()
+                                    ]);
 
         return 0;
     }

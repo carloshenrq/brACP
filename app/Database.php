@@ -57,7 +57,7 @@ class Database
         }
         catch(\Exception $ex)
         {
-            self::getApp()->display('error.not.allowed', [
+            self::getApp()->display('error.405', [
                 'exception' => $ex
             ]);
             return $response;
