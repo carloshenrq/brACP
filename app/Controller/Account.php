@@ -187,11 +187,12 @@ class Account
         if(BRACP_ALLOW_MAIL_SEND)
         {
             // Envia notificação de criação de contas.
-            self::getApp()->sendMail('@@CREATE,MAIL(TITLE)',
-                [$account->getEmail()],
-                'mail.create', [
-                'userid' => $account->getUserid()
-            ]);
+            if($admin || !BRACP_CONFIRM_ACCOUNT)
+                self::getApp()->sendMail('@@CREATE,MAIL(TITLE)',
+                    [$account->getEmail()],
+                    'mail.create', [
+                    'userid' => $account->getUserid()
+                ]);
 
             // Cria e envia o código de ativação do usuário, caso a configuração esteja habilitada.
             if(!$admin && BRACP_CONFIRM_ACCOUNT)

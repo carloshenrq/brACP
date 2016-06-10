@@ -183,7 +183,7 @@ return
      * @author carloshenrq
      */
     'RESEND'    => [
-        'TITLE'     => 'Minhca Conta &raquo; Código de Ativação',
+        'TITLE'     => 'Minha Conta &raquo; Código de Ativação',
         'ERROR'     => [
             'DISABLED'  => 'O código de ativação de contas está desativado.',
             'NOACC'     => 'Dados para reenvio do código de confirmação é inválido.',
