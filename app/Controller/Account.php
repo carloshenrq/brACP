@@ -110,6 +110,132 @@ class Account
     }
 
     /**
+     * 
+     */
+    public static function accountChangePass($userid, $old_pass, $new_pass, $new_pass_conf)
+    {
+        // Senhas digitadas não são iguais.
+        if(hash('md5', $new_pass) !== hash('md5', $new_pass_conf))
+            return 1;
+
+        // Se configurado para usar md5, então, aplica md5 para
+        //  realizar os testes.
+        if(BRACP_MD5_PASSWORD_HASH)
+            $old_pass = hash('md5', $old_pass);
+
+        $account = self::getApp()->getEm()
+                            ->getRepository('Model\Login')
+                            ->findOneBy(['userid' => $userid, 'user_pass' => $old_pass]);
+
+        // Normalmente é senha incorreta para dar este status.
+        // Não há problemas alterar senhas via recuperação de contas com state != 0
+        if(is_null($account))
+            return -1;
+
+        // Realiza a alteração da senha do jogador
+        //  e se configurado, notifica por e-mail.
+        $i_change = self::accountSetPass($account->getAccount_id(), $new_pass);
+
+        // Caso com erro, +1 ao erro retornado.
+        return (($i_change > 0) ? (1 + $i_change) : 0);
+    }
+
+    /**
+     * Aplica alteração de senhas na conta informada.
+     *
+     * @param int $account_id
+     * @param string $password
+     * @param boolean $admin (Padrão: false)
+     *
+     * @return int
+     *      0: Senha alterada com sucesso.
+     *      1: Conta não encontrada/Administrador não pode alterar senha
+     *      2: Falha de restrição de pattern
+     */
+    public static function accountSetPass($account_id, $password, $admin = false)
+    {
+        // Retorna 2 para restrição de pattern
+        if(!preg_match('/^'.BRACP_REGEXP_PASSWORD.'$/', $password))
+            return 2;
+
+        // Realiza a busca da conta para poder realizar a alteração de senha.
+        $account = self::getApp()->getEm()
+                            ->getRepository('Model\Account')
+                            ->findOneBy(['account_id' => $account_id]);
+
+        // Não permite que a senha de administradores sejam alteradas
+        // se o painel de controle não permitir. (Somente em modo administrador)
+        if(is_null($account) || (!$admin && $account->getGroup_id() >= BRACP_ALLOW_ADMIN_GMLEVEL
+                    && !BRACP_ALLOW_ADMIN_CHANGE_PASSWORD))
+            return 1;
+
+        if(BRACP_MD5_PASSWORD_HASH)
+            $password = hash('md5', $password);
+
+        // Salva a nova senha aplicada.
+        $account->setUser_pass($password);
+        self::getApp()->getEm()->merge($account);
+
+        // Envia e-mail de notificação se não estiver em modo administrador.
+        if(!$admin && BRACP_NOTIFY_CHANGE_PASSWORD)
+            self::getApp()->sendMail('@@CHANGEPASS,MAIL(TITLE)',
+                [$account->getEmail()],
+                'mail.change.password', [
+                'userid' => $account->getUserid()
+            ]);
+
+        // Status de sucesso.
+        return 0;
+    }
+
+    /**
+     * Método utilizado para recuperar dados das contas de usuário.
+     *
+     * @param string $userid
+     * @param string $email
+     *
+     * @return int
+     *  -1: Recuperação de contas desabilitado.
+     *   0: Recuperação de contas realizado com sucesso.
+     *   1: Dados de recuperação são inválidos.
+     *   2: Falha na restrição de pattern
+     */
+    public static function registerRecover($userid, $email)
+    {
+        // -1: Recuperação de contas desabilitado.
+        if(!BRACP_ALLOW_MAIL_SEND || !BRACP_ALLOW_RECOVER)
+            return -1;
+
+        // Faz validação de pattern dos campos.
+        if(!preg_match('/^'.BRACP_REGEXP_USERNAME.'$/', $userid) ||
+            !preg_match('/^'.BRACP_REGEXP_EMAIL.'$/', $email))
+            return 2;
+
+        // Verifica se a conta digitada existe.
+        $account = self::getApp()->getEm()
+                        ->getRepository('Model\Login')
+                        ->findOneBy(['userid' => $userid, 'email' => $email]);
+
+        // 1: Dados de recuperação são inválidos.
+        // -> Contas do tipo administrador não podem ser recuperadas!
+        if(is_null($account) || $account->getGroup_id() >= BRACP_ALLOW_ADMIN_GMLEVEL)
+            return 1;
+
+        // Verifica se a recperação de senhas está ativa por código
+        if(BRACP_MD5_PASSWORD_HASH || BRACP_RECOVER_BY_CODE)
+        {
+            // @Todo.: Geração do código de recuperação
+        }
+        else
+        {
+            // @Todo.: Sem recuperação de senha por código,
+            //         envia a senha atual direto para o usuário.
+        }
+
+        return 0;
+    }
+
+    /**
      * Método utilizado para criar uma conta com as informações dadas.
      *
      * @param string $userid
