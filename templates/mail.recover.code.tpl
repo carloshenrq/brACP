@@ -20,6 +20,6 @@
 
 {block name="mail_body"}
 
-    @@MAIL,RECOVER(CODE, {$href}, {$code}, {Format::date($expire)})
+    @@MAIL,RECOVER(CODE, {$code}, {Format::date($expire)})
 
 {/block}

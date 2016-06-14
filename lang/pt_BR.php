@@ -529,12 +529,12 @@ return
              * @author carloshenrq
              */
             'CODE'      => 'Uma tentativa de recuperação de senha foi realizada na sua conta.<br>'.
-                            'Para confirmar essa tentativa de recuperação, por favor, clique no link abaixo ou copie e cole o endereço em seu navegador.<br>'.
+                            'Para confirmar essa tentativa de recuperação, por favor, utilize o código de recuperação no painel de controle.<br>'.
                             '<br>'.
-                            '<a href="%1$s/%2$s" target="_blank">%1$s/%2$s</a><br>'.
-                            '<i>Link válido até <strong>%3$s</strong>.</i><br>'.
+                            '<strong>Código de Recuperação</strong>: <u>%1$s</u><br>'.
+                            '<i>Código válido até <strong>%2$s</strong>.</i><br>'.
                             '<br>'.
-                            'Após acessar o link, você receberá um segundo e-mail com a nova senha gerada aleatóriamente pelo sistema.',
+                            'Após inserir o código de recuperação, você receberá sua nova senha por e-mail.',
         ],
         /**
          * @refer templates/mail.create{.code}.tpl
