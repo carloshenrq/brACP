@@ -55,6 +55,35 @@ class Account
      * @param ResponseInterface $response
      * @param array $args
      */
+    public static function recover(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        // Dados recebidos pelo post para confirmação de contas.
+        $data = $request->getParsedBody();
+
+        // Dados de retorno para informações de erro.
+        $return = ['error_state' => 0, 'success_state' => false];
+
+        // Se ambos estão definidos, a requisição é para re-envio dos dados de confirmação.
+        if(isset($data['userid']) && isset($data['email']))
+            $return['error_state']      = self::registerRecover($data['userid'], $data['email']);
+        // Se código está definido, a requisição é para confirmação da conta.
+        else if(isset($data['code']))
+            $return['error_state']      = self::registerRecoverCode($data['code']);
+
+        // Define informaçõs de erro. (Caso exista)
+        $return['success_state']    = $return['error_state'] == 0;
+
+        // Responde com um objeto json informando o estado do cadastro.
+        $response->withJson($return);
+    }
+
+    /**
+     * Método para realizar a confirmação de contas recebido via post.
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param array $args
+     */
     public static function confirmation(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
         // Dados recebidos pelo post para confirmação de contas.
@@ -173,7 +202,7 @@ class Account
 
         // Realiza a busca da conta para poder realizar a alteração de senha.
         $account = self::getApp()->getEm()
-                            ->getRepository('Model\Account')
+                            ->getRepository('Model\Login')
                             ->findOneBy(['account_id' => $account_id]);
 
         // Não permite que a senha de administradores sejam alteradas
@@ -188,6 +217,7 @@ class Account
         // Salva a nova senha aplicada.
         $account->setUser_pass($password);
         self::getApp()->getEm()->merge($account);
+        self::getApp()->getEm()->flush();
 
         // Envia e-mail de notificação se não estiver em modo administrador.
         if(!$admin && BRACP_NOTIFY_CHANGE_PASSWORD)
@@ -220,7 +250,7 @@ class Account
             return -1;
 
         // Código digitado não é md5
-        if(!preg_match('/^([0-9a-f]{32})$/i'))
+        if(!preg_match('/^([0-9a-f]{32})$/i', $code))
             return 2;
 
         // Verifica se o código de ativação está não utilizado
@@ -234,7 +264,7 @@ class Account
                                 INNER JOIN
                                     recover.account login
                                 WHERE
-                                    login.account_id = :code AND
+                                    recover.code = :code AND
                                     recover.used = false AND
                                     :CURDATETIME BETWEEN recover.date AND recover.expire
                             ')
@@ -250,11 +280,12 @@ class Account
         // Define que o código de recuperação foi utilizado.
         $recover->setUsed(true);
         self::getApp()->getEm()->merge($recover);
+        self::getApp()->getEm()->flush();
 
         for($new_pass = '';
             strlen($new_pass) < BRACP_RECOVER_STRING_LENGTH;
             $new_pass .= substr(BRACP_RECOVER_RANDOM_STRING,
-                            rand(strlen(BRACP_RECOVER_RANDOM_STRING)), 1));
+                            rand(0, strlen(BRACP_RECOVER_RANDOM_STRING) - 1), 1));
 
         // Realiza a alteração da senha do usuário.
         self::accountSetPass($recover->getAccount()->getAccount_id(), $new_pass);

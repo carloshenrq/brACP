@@ -98,12 +98,10 @@ brACPApp.controller('account.register', ['$scope', '$http', function($scope, $ht
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
         }).then(function(response) {
-
             $scope.stage            = 0;
             $scope.error_state      = response.data.error_state;
             $scope.success_state    = response.data.success_state;
             $scope.accept_terms     = true;
-
         });
     };
 }]);
@@ -139,11 +137,9 @@ brACPApp.controller('account.register.resend', ['$scope', '$http', function($sco
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
         }).then(function(response) {
-
             $scope.stage            = 0;
             $scope.error_state      = response.data.error_state;
             $scope.success_state    = response.data.success_state;
-
         });
     };
 
@@ -163,8 +159,6 @@ brACPApp.controller('account.register.resend', ['$scope', '$http', function($sco
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
         }).then(function(response) {
-            console.log(response);
-
             $scope.stage            = 0;
             $scope.error_state      = response.data.error_state;
             $scope.success_state    = response.data.success_state;
@@ -202,11 +196,31 @@ brACPApp.controller('account.recover', ['$scope', '$http', function($scope, $htt
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
         }).then(function(response) {
-
             $scope.stage            = 0;
             $scope.error_state      = response.data.error_state;
             $scope.success_state    = response.data.success_state;
+        });
+    };
 
+    $scope.submitRecoverConfirm = function() {
+        var urlConfirm = document.querySelector('#_BRACP_URL').value + 'account/recover';
+        var params = $.param({
+            'code'    : this.code
+        });
+
+        $scope.stage = 1;
+
+        $http({
+            'method'    : 'post',
+            'url'       : urlConfirm,
+            'data'      : params,
+            'headers'   : {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        }).then(function(response) {
+            $scope.stage            = 0;
+            $scope.error_state      = response.data.error_state;
+            $scope.success_state    = response.data.success_state;
         });
     };
 

@@ -91,6 +91,12 @@ class Route
                             ->add(['Controller\Account', '_logout']);
                 }
 
+                if(BRACP_ALLOW_MAIL_SEND && BRACP_ALLOW_RECOVER)
+                {
+                    $this->post('/recover', ['Controller\Account', 'recover'])
+                            ->add(['Controller\Account', '_logout']);
+                }
+
             //     // Verifica configuração se permite criação de nova conta.
             //     if(BRACP_ALLOW_CREATE_ACCOUNT)
             //     {
