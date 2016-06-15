@@ -75,8 +75,8 @@
 
     </div>
 
-    <div class="modal-footer">
-        <label class="button success icon" ng-if="stage == 0" for="_submitPassword">@@CHANGEPASS,BUTTONS(SUBMIT)</label>
+    <div class="modal-footer" ng-if="stage == 0">
+        <label class="button success icon" for="_submitPassword">@@CHANGEPASS,BUTTONS(SUBMIT)</label>
         <label class="button error icon" for="modal-password">@@CHANGEPASS,BUTTONS(CLOSE)</label>
     </div>
 </div>
