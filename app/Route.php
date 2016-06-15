@@ -80,6 +80,9 @@ class Route
                             ->add(['Controller\Account', '_logout']);
                 }
 
+                $this->post('/password', ['Controller\Account', 'password'])
+                            ->add(['Controller\Account', '_login']);
+
             });
 
             // Verifica se os rankings estão habilitados para serem exibidos.

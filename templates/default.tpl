@@ -108,6 +108,11 @@
                                         {/if}
                                     {/if}
                                 {else}
+
+                                    {if $account->getGroup_id() < BRACP_ALLOW_ADMIN_GMLEVEL || BRACP_ALLOW_ADMIN_CHANGE_PASSWORD}
+                                        <li><label for="modal-password">@@MENU,MYACC,AUTHENTICATED,CHANGE(PASS)</label></li>
+                                    {/if}
+
                                     <li class="url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}account/logout"><label>@@MENU,MYACC,AUTHENTICATED(LOGOUT, {$userid})</label></li>
                                 {/if}
                             </ul>
@@ -145,6 +150,10 @@
                             {include 'account.recover.tpl'}
                         {/if}
                     {/if}
+
+                {else}
+
+                    {include 'account.password.tpl'}
 
                 {/if}
 

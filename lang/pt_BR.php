@@ -335,7 +335,7 @@ return
 
         'BUTTONS'   => [
             'SUBMIT'    => 'Alterar',
-            'RESET'     => 'Limpar',
+            'CLOSE'     => 'Fechar',
         ],
 
         'MAIL'      => [

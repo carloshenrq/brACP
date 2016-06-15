@@ -49,6 +49,36 @@ class Account
     private static $user = null;
 
     /**
+     * Método para realizar a alteração de senha de usuários.
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param array $args
+     */
+    public static function password(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        // Dados recebidos pelo post para confirmação de contas.
+        $data = $request->getParsedBody();
+
+        // Dados de retorno para informações de erro.
+        $return = ['error_state' => 0, 'success_state' => false];
+
+        // Define informaçõs de erro. (Caso exista)
+        $return['error_state']      = self::accountChangePass(
+            self::loggedUser()->getUserid(),
+            $data['user_pass'],
+            $data['user_pass_new'],
+            $data['user_pass_conf']
+        );
+
+        // // userid, $old_pass, $new_pass, $new_pass_conf
+        $return['success_state']    = $return['error_state'] == 0;
+
+        // Responde com um objeto json informando o estado do cadastro.
+        $response->withJson($return);
+    }
+
+    /**
      * Método para realizar a confirmação de contas recebido via post.
      *
      * @param ServerRequestInterface $request
@@ -148,17 +178,23 @@ class Account
      * @param string $new_pass_conf
      *
      * @return int
-     *     -1: Combinação de usuário e senha não encontrado
-     *      0: Senha alterada com sucesso.
-     *      1: Senhas digitadas não conferem
-     *      2: Administradores não podem realizar alteração de senha sem modo administrador.
-     *      3: Falha na restrição de pattern
+     *  -1: Administradores não podem alterar senha por aqui.
+     *   1: Senha atual digitada não confere.
+     *   2: Senhas digitadas não conferem.
+     *   3: Nova senha não pode ser igual a anterior.
+     *   4: Falha de restrição de pattern.
      */
     public static function accountChangePass($userid, $old_pass, $new_pass, $new_pass_conf)
     {
-        // Senhas digitadas não são iguais.
+        // 4: Falha de restrição de pattern
+        if(!preg_match('/^'.BRACP_REGEXP_PASSWORD.'$/', $old_pass) ||
+            !preg_match('/^'.BRACP_REGEXP_PASSWORD.'$/', $new_pass) ||
+            !preg_match('/^'.BRACP_REGEXP_PASSWORD.'$/', $new_pass_conf))
+            return 4;
+
+        // 2: Senhas digitadas não são iguais.
         if(hash('md5', $new_pass) !== hash('md5', $new_pass_conf))
-            return 1;
+            return 2;
 
         // Se configurado para usar md5, então, aplica md5 para
         //  realizar os testes.
@@ -171,15 +207,22 @@ class Account
 
         // Normalmente é senha incorreta para dar este status.
         // Não há problemas alterar senhas via recuperação de contas com state != 0
+        // 1: Senha atual digitada não confere.
         if(is_null($account))
+            return 1;
+
+        // -1: Administradores não podem alterar senha por aqui.
+        if($account->getGroup_id() >= BRACP_ALLOW_ADMIN_GMLEVEL && !BRACP_ALLOW_ADMIN_CHANGE_PASSWORD)
             return -1;
 
-        // Realiza a alteração da senha do jogador
-        //  e se configurado, notifica por e-mail.
-        $i_change = self::accountSetPass($account->getAccount_id(), $new_pass);
+        // 3: Nova senha não pode ser igual a anterior.
+        if(BRACP_MD5_PASSWORD_HASH && $old_pass === hash('md5', $new_pass) ||
+            hash('md5', $old_pass) === hash('md5', $new_pass))
+            return 3;
 
-        // Caso com erro, +1 ao erro retornado.
-        return (($i_change > 0) ? (1 + $i_change) : 0);
+        // Realiza a alteração da senha do jogador
+        //  e se configurado, notifica por e-mail (caso configuração ok)
+        return self::accountSetPass($account->getAccount_id(), $new_pass);
     }
 
     /**
@@ -190,15 +233,15 @@ class Account
      * @param boolean $admin (Padrão: false)
      *
      * @return int
+     *     -1: Conta não encontrada/Administrador não pode alterar senha
      *      0: Senha alterada com sucesso.
-     *      1: Conta não encontrada/Administrador não pode alterar senha
-     *      2: Falha de restrição de pattern
+     *      4: Falha de restrição de pattern
      */
     public static function accountSetPass($account_id, $password, $admin = false)
     {
         // Retorna 2 para restrição de pattern
         if(!preg_match('/^'.BRACP_REGEXP_PASSWORD.'$/', $password))
-            return 2;
+            return 4;
 
         // Realiza a busca da conta para poder realizar a alteração de senha.
         $account = self::getApp()->getEm()
@@ -209,7 +252,7 @@ class Account
         // se o painel de controle não permitir. (Somente em modo administrador)
         if(is_null($account) || (!$admin && $account->getGroup_id() >= BRACP_ALLOW_ADMIN_GMLEVEL
                     && !BRACP_ALLOW_ADMIN_CHANGE_PASSWORD))
-            return 1;
+            return -1;
 
         if(BRACP_MD5_PASSWORD_HASH)
             $password = hash('md5', $password);

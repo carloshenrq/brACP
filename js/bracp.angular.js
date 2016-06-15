@@ -225,3 +225,53 @@ brACPApp.controller('account.recover', ['$scope', '$http', function($scope, $htt
     };
 
 }]);
+
+/**
+ * Controlador para alteração de senha.
+ */
+brACPApp.controller('account.password', ['$scope', '$http', function($scope, $http) {
+
+    $scope.user_pass        = '';
+    $scope.user_pass_new    = '';
+    $scope.user_pass_conf   = '';
+
+    $scope.stage = 0;
+    $scope.error_state = 0;
+    $scope.success_state = false;
+
+    $scope.passwordInit = function(allowAdminChange, accountLv, adminLevel) {
+
+        if(!allowAdminChange && accountLv >= adminLevel)
+            $scope.stage = 2;
+
+    };
+
+    $scope.submitPassword = function() {
+        var urlConfirm = document.querySelector('#_BRACP_URL').value + 'account/password';
+        var params = $.param({
+            'user_pass'         : this.user_pass,
+            'user_pass_new'     : this.user_pass_new,
+            'user_pass_conf'    : this.user_pass_conf
+        });
+
+        $scope.stage = 1;
+
+        $http({
+            'method'    : 'post',
+            'url'       : urlConfirm,
+            'data'      : params,
+            'headers'   : {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        }).then(function(response) {
+
+            console.log(response);
+
+            $scope.stage            = 0;
+            $scope.error_state      = response.data.error_state;
+            $scope.success_state    = response.data.success_state;
+        }, function(response) {
+            console.log(response);
+        });
+    };
+}]);
