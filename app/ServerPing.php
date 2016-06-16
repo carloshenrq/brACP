@@ -60,34 +60,26 @@ class ServerPing
 
         if(is_null($last_status))
         {
+            $errno = $errstr = null;
             // Realiza o ping no servidor de login.
             $login_address  = constant('BRACP_SRV_' . $index . '_LOGIN_IP');
             $login_port     = constant('BRACP_SRV_' . $index . '_LOGIN_PORT');
-            $login_fp       = @fsockopen($login_address, $login_port);
-            $login_result   = $login_fp !== false;
-            if($login_result) fclose($login_fp);
 
             // Realiza o ping no servidor de personagens.
             $char_address   = constant('BRACP_SRV_' . $index . '_CHAR_IP');
             $char_port      = constant('BRACP_SRV_' . $index . '_CHAR_PORT');
-            $char_fp        = @fsockopen($char_address, $char_port);
-            $char_result    = $char_fp !== false;
-            if($char_result) fclose($char_fp);
 
             // Realiza o ping no servidor de mapas.
             $map_address    = constant('BRACP_SRV_' . $index . '_MAP_IP');
             $map_port       = constant('BRACP_SRV_' . $index . '_MAP_PORT');
-            $map_fp         = @fsockopen($map_address, $map_port);
-            $map_result     = $map_fp !== false;
-            if($map_result) fclose($map_fp);
 
             // Salva o status no banco de dados.
             $last_status = new ServerStatus;
             $last_status->setIndex($index);
             $last_status->setName(constant('BRACP_SRV_' . $index . '_NAME'));
-            $last_status->setLogin($map_result);
-            $last_status->setChar($char_result);
-            $last_status->setMap($map_result);
+            $last_status->setLogin(false);
+            $last_status->setChar(false);
+            $last_status->setMap(false);
             $last_status->setTime(date('Y-m-d H:i:s'));
             $last_status->setExpire(date('Y-m-d H:i:s', time() + BRACP_SRV_PING_DELAY));
 
@@ -100,5 +92,16 @@ class ServerPing
 
         // Chama o próximo middleware.
         return $next($request, $response);
+    }
+
+    private function ping($ip, $port)
+    {
+        $errno = $errstr = null;
+
+        $fp = @fsockopen($ip, $port, $errno, $errstr, 60);
+        $connect = $fp !== false;
+        if($fp) fclose($fp);
+
+        return $connect;
     }
 }
