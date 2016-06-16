@@ -44,7 +44,7 @@ class brACPApp extends Slim\App
      *
      * @var EntityManager
      */
-    private $em;
+    private $em = [];
 
     /**
      * Tratamento de sessão como objeto.
@@ -287,9 +287,9 @@ class brACPApp extends Slim\App
      *
      * @param EntityManager $em
      */
-    public function setEm(EntityManager $em)
+    public function setEm(EntityManager $em, $name = 'cp')
     {
-        $this->em = $em;
+        $this->em[$name] = $em;
         return $this;
     }
 
@@ -298,14 +298,14 @@ class brACPApp extends Slim\App
      *
      * @return EntityManager
      */
-    public function getEm()
+    public function getEm($name = 'cp')
     {
         // Se não houver EntityManager, emite uma exceção para tratamento
         //  do erro.
-        if(is_null($this->em))
+        if(!isset($this->em[$name]))
             throw new \Exception('EntityManager not defined.');
 
-        return $this->em;
+        return $this->em[$name];
     }
 
     /**

@@ -31,4 +31,12 @@ trait TApplication
     {
         return brACPApp::getInstance();
     }
+
+    /**
+     * @return \EntityManager
+     */
+    public static function getEm($name = 'cp')
+    {
+        return self::getApp()->getEm($name);
+    }
 }

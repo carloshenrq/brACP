@@ -53,7 +53,7 @@ class Database
             $em->getConnection()->connect();
 
             // Caso tudo ocorra normalmente, define o EntityManager.
-            self::getApp()->setEm($em);
+            self::getApp()->setEm($em, 'cp');
         }
         catch(\Exception $ex)
         {
