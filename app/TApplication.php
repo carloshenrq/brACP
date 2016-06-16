@@ -39,4 +39,19 @@ trait TApplication
     {
         return self::getApp()->getEm($name);
     }
+
+    public static function getCpEm()
+    {
+        return self::getApp()->getEm('cp');
+    }
+
+    public static function getSvrEm()
+    {
+        return self::getEm('SV' . self::getApp()->getSession()->BRACP_SVR_SELECTED);
+    }
+
+    public static function getSvrDftEm()
+    {
+        return self::getEm('SV' . BRACP_SRV_DEFAULT);
+    }
 }

@@ -5,6 +5,19 @@
 
 SET FOREIGN_KEY_CHECKS = 0;
 
+DROP TABLE IF EXISTS `bracp_server_status`;
+CREATE TABLE IF NOT EXISTS `bracp_server_status` (
+    `StatusID` INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `ServerIndex` INTEGER NOT NULL,
+    `ServerName` VARCHAR(100) NOT NULL,
+    `MapStatus` BOOLEAN NOT NULL DEFAULT false,
+    `CharStatus` BOOLEAN NOT NULL DEFAULT false,
+    `LoginStatus` BOOLEAN NOT NULL DEFAULT false,
+    `StatusTime` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `StatusExpire` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+    INDEX (`ServerIndex`, `StatusExpire`)
+) ENGINE=MyISAM COLLATE='utf8_swedish_ci';
+
 DROP TABLE IF EXISTS `bracp_donations_promo`;
 CREATE TABLE IF NOT EXISTS `bracp_donations_promo` (
     `PromotionID` INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,

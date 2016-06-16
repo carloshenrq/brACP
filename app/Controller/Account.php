@@ -223,7 +223,7 @@ class Account
         if(hash('md5', $email) === hash('md5', $email_new))
             return 4;
 
-        $account = self::getEm()
+        $account = self::getSvrDftEm()
                         ->getRepository('Model\Login')
                         ->findOneBy(['userid' => $userid, 'email' => $email]);
 
@@ -256,7 +256,7 @@ class Account
             return 6;
 
         // Encontra a conta do usuário via código de contas.
-        $account = self::getEm()
+        $account = self::getSvrDftEm()
                             ->getRepository('Model\Login')
                             ->findOneBy(['account_id' => $account_id]);
 
@@ -278,7 +278,7 @@ class Account
             {
                 // Obtém a ultima modificação dentro do tempo de delay
                 //  informado.
-                $lastChange = self::getEm()
+                $lastChange = self::getCpEm()
                                         ->createQuery('
                                             SELECT
                                                 log
@@ -304,7 +304,7 @@ class Account
             //  de e-mail.
             if(BRACP_MAIL_REGISTER_ONCE)
             {
-                $lstAcc = self::getEm()
+                $lstAcc = self::getSvrDftEm()
                                 ->getRepository('Model\Login')
                                 ->findOneBy(['email' => $email]);
 
@@ -335,13 +335,13 @@ class Account
         $log->setTo($email);
         $log->setDate(date('Y-m-d H:i:s'));
 
-        self::getEm()->persist($log);
-        self::getEm()->flush();
+        self::getCpEm()->persist($log);
+        self::getCpEm()->flush();
 
         // Realiza alteração do endereço de e-mail.
         $account->setEmail($email);
-        self::getEm()->merge($account);
-        self::getEm()->flush();
+        self::getSvrDftEm()->merge($account);
+        self::getSvrDftEm()->flush();
 
         return 0;
 
@@ -380,7 +380,7 @@ class Account
         if(BRACP_MD5_PASSWORD_HASH)
             $old_pass = hash('md5', $old_pass);
 
-        $account = self::getEm()
+        $account = self::getSvrDftEm()
                             ->getRepository('Model\Login')
                             ->findOneBy(['userid' => $userid, 'user_pass' => $old_pass]);
 
@@ -423,7 +423,7 @@ class Account
             return 4;
 
         // Realiza a busca da conta para poder realizar a alteração de senha.
-        $account = self::getEm()
+        $account = self::getSvrDftEm()
                             ->getRepository('Model\Login')
                             ->findOneBy(['account_id' => $account_id]);
 
@@ -438,8 +438,8 @@ class Account
 
         // Salva a nova senha aplicada.
         $account->setUser_pass($password);
-        self::getEm()->merge($account);
-        self::getEm()->flush();
+        self::getSvrDftEm()->merge($account);
+        self::getSvrDftEm()->flush();
 
         // Envia e-mail de notificação se não estiver em modo administrador.
         if(!$admin && BRACP_NOTIFY_CHANGE_PASSWORD)
@@ -477,14 +477,12 @@ class Account
 
         // Verifica se o código de ativação está não utilizado
         //  ou existe ou não expirado.
-        $recover = self::getEm()
+        $recover = self::getCpEm()
                             ->createQuery('
                                 SELECT
-                                    recover, login
+                                    recover
                                 FROM
                                     Model\Recover recover
-                                INNER JOIN
-                                    recover.account login
                                 WHERE
                                     recover.code = :code AND
                                     recover.used = false AND
@@ -498,13 +496,12 @@ class Account
         if(is_null($recover))
             return 1;
 
-
         // Define que o código de recuperação foi utilizado.
         $recover->setUsed(true);
-        self::getEm()->merge($recover);
-        self::getEm()->flush();
+        self::getCpEm()->merge($recover);
+        self::getCpEm()->flush();
 
-        $account = self::getEm()
+        $account = self::getSvrDftEm()
                     ->getRepository('Model\Login')
                     ->findOneBy(['account_id' => $recover->getAccount_id()]);
 
@@ -551,7 +548,7 @@ class Account
             return 2;
 
         // Verifica se a conta digitada existe.
-        $account = self::getEm()
+        $account = self::getSvrDftEm()
                         ->getRepository('Model\Login')
                         ->findOneBy(['userid' => $userid, 'email' => $email]);
 
@@ -564,7 +561,7 @@ class Account
         if(BRACP_MD5_PASSWORD_HASH || BRACP_RECOVER_BY_CODE)
         {
             // Verifica se existe o código de confirmação para a conta informada
-            $recover = self::getEm()
+            $recover = self::getCpEm()
                             ->createQuery('
                                 SELECT
                                     recover
@@ -589,8 +586,8 @@ class Account
                 $recover->setExpire(date('Y-m-d H:i:s', time() + (60*BRACP_RECOVER_CODE_EXPIRE)));
                 $recover->setUsed(false);
 
-                self::getEm()->persist($recover);
-                self::getEm()->flush();
+                self::getCpEm()->persist($recover);
+                self::getCpEm()->flush();
             }
 
             // Envia o e-mail com o código de recuperação do usuário.
@@ -660,12 +657,12 @@ class Account
 
         $account = null;
         if(BRACP_MAIL_REGISTER_ONCE)
-            $account = self::getEm()
+            $account = self::getSvrDftEm()
                             ->getRepository('Model\Login')
                             ->findOneBy(['email' => $email]);
 
         if(is_null($account))
-            $account = self::getEm()
+            $account = self::getSvrDftEm()
                             ->getRepository('Model\Login')
                             ->findOneBy(['userid' => $userid]);
 
@@ -689,8 +686,8 @@ class Account
         // NOTA².: Modo administrador deve estar definido como falso. Se for verdadeiro, a conta não precisa ser confirmada.
         $account->setState(((!$admin && BRACP_ALLOW_MAIL_SEND && BRACP_CONFIRM_ACCOUNT) ? 11 : 0));
 
-        self::getEm()->persist($account);
-        self::getEm()->flush();
+        self::getSvrDftEm()->persist($account);
+        self::getSvrDftEm()->flush();
 
         if(BRACP_ALLOW_MAIL_SEND)
         {
@@ -731,7 +728,7 @@ class Account
             return 1;
 
         // Verifica se existe o código de confirmação para a conta informada
-        $confirmation = self::getEm()
+        $confirmation = self::getCpEm()
                         ->createQuery('
                             SELECT
                                 confirmation
@@ -752,15 +749,17 @@ class Account
 
         // Informa que o código de ativação foi utilizado e o estado da conta
         //  passa a ser 0 (ok)
-        $account = self::getEm()
+        $account = self::getSvrDftEm()
                     ->getRepository('Model\Login')
                     ->findOneBy(['account_id' => $confirmation->getAccount_id()]);
         $account->setState(0);
         $confirmation->setUsed(true);
 
-        self::getEm()->merge($account);
-        self::getEm()->merge($confirmation);
-        self::getEm()->flush();
+        self::getSvrDftEm()->merge($account);
+        self::getSvrDftEm()->flush();
+
+        self::getCpEm()->merge($confirmation);
+        self::getCpEm()->flush();
 
         // Envia um e-mail para o usuário informando que a conta foi ativada
         //  com sucesso.
@@ -798,7 +797,7 @@ class Account
             return 1;
 
         // Obtém a conta informada.
-        $account = self::getEm()
+        $account = self::getSvrDftEm()
                         ->getRepository('Model\Login')
                         ->findOneBy(['userid' => $userid, 'email' => $email, 'state' => 11]);
 
@@ -830,7 +829,7 @@ class Account
         if(!BRACP_ALLOW_MAIL_SEND || !BRACP_CONFIRM_ACCOUNT)
             return -1;
 
-        $account = self::getEm()
+        $account = self::getSvrDftEm()
                         ->getRepository('Model\Login')
                         ->findOneBy(['account_id' => $account_id, 'state' => 11]);
 
@@ -840,7 +839,7 @@ class Account
             return 1;
 
         // Verifica se existe o código de confirmação para a conta informada
-        $confirmation = self::getEm()
+        $confirmation = self::getCpEm()
                             ->createQuery('
                                 SELECT
                                     confirmation
@@ -866,8 +865,8 @@ class Account
             $confirmation->setExpire(date('Y-m-d H:i:s', time() + (60*BRACP_RECOVER_CODE_EXPIRE)));
             $confirmation->setUsed(false);
 
-            self::getEm()->persist($confirmation);
-            self::getEm()->flush();
+            self::getCpEm()->persist($confirmation);
+            self::getCpEm()->flush();
         }
 
         // Envia o e-mail de confirmação para o usuário com o código
@@ -916,7 +915,7 @@ class Account
             $user_pass = ((BRACP_MD5_PASSWORD_HASH) ? hash('md5', $data['user_pass']) : $data['user_pass']);
 
             // Tenta obter a conta que fará login no painel de controle.
-            $account = self::getEm()
+            $account = self::getSvrDftEm()
                             ->getRepository('Model\Login')
                             ->findOneBy(['userid' => $data['userid'], 'user_pass' => $user_pass]);
 
@@ -1025,7 +1024,7 @@ class Account
         // Se não possui usuário em cache, obtém o usuário do banco
         //  e atribui ao cache.
         if(is_null(self::$user))
-            self::$user = self::getEm()
+            self::$user = self::getSvrDftEm()
                                 ->getRepository('Model\Login')
                                 ->findOneBy(['account_id' => self::getApp()->getSession()->BRACP_ACCOUNTID]);
         // Retorna o usuário logado.

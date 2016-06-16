@@ -59,13 +59,19 @@ class brACPApp extends Slim\App
     private $language;
 
     /**
+     * Estado do servidor.
+     *
+     * @var Model\ServerStatus
+     */
+    private $server_status;
+
+    /**
      * Construtor e inicializador para o painel de controle.
      */
     public function __construct()
     {
         // Initialize session for this app.
         $this->session = new Session();
-
 
         // Configurações alternativas.
         $configs = [
@@ -89,6 +95,11 @@ class brACPApp extends Slim\App
         if(!isset($this->session->BRACP_LANGUAGE))
             $this->session->BRACP_LANGUAGE = BRACP_DEFAULT_LANGUAGE;
 
+        // Servidor de banco de dados selecionado pelo usuário.
+        if(!isset($this->session->BRACP_SVR_SELECTED)
+            || $this->session->BRACP_SVR_SELECTED < 0 && $this->session->BRACP_SVR_SELECTED >= BRACP_SRV_COUNT)
+            $this->session->BRACP_SVR_SELECTED = BRACP_SRV_DEFAULT;
+
         // Inicializa a linguagem em modo PORTUGUÊS BR.
         //  @Temporario, pois será alterado para variavel de sessão.
         Language::load($this->session->BRACP_LANGUAGE);
@@ -109,6 +120,7 @@ class brACPApp extends Slim\App
         // Adiciona os middlewares na rota para serem executados.
         $this->add(new RouteCustom());
         $this->add(new Route());
+        $this->add(new ServerPing());
         $this->add(new Database());
 
         // Define a instância global como sendo o proprio.
@@ -225,13 +237,19 @@ class brACPApp extends Slim\App
                 $data['exception'] = $ex;
         }
 
+        // Adicionado estado do servidor que está selecionado para
+        //  os dados. [CHLFZ, 2016-06-16]
+        $data = array_merge([
+            'serverStatus' => $this->getServerStatus()
+        ], $data);
+
         // Correção: Quando não há conexão com o banco de dados, é impossível
         //  fazer a leitura dos temas. [CHLFZ, 2016-05-20]
         try
         {
             // Obtém todos os temas que estão em cache no banco de dados.
             $themes = Cache::get('BRACP_THEMES', function() {
-                return brACPApp::getInstance()->getEm()->getRepository('Model\Theme')->findAll();
+                return brACPApp::getInstance()->getCpEm()->getRepository('Model\Theme')->findAll();
             });
         }
         catch(\Exception $ex)
@@ -306,6 +324,23 @@ class brACPApp extends Slim\App
             throw new \Exception('EntityManager not defined.');
 
         return $this->em[$name];
+    }
+
+    /**
+     * Obtém o define do servidor para o jogador conectado.
+     */
+    public function setServerStatus($server_status)
+    {
+        $this->server_status = $server_status;
+        return $this;
+    }
+
+    /**
+     * Obtém o estado do servidor para o jogador conectado.
+     */
+    public function getServerStatus()
+    {
+        return $this->server_status;
     }
 
     /**

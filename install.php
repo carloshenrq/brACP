@@ -67,11 +67,30 @@ $config = [
     'BRACP_VERSION'                         =>'0.2.1-beta',
 
     // MySQL
-    'BRACP_SQL_DRIVER'                      => 'pdo_mysql',
-    'BRACP_SQL_HOST'                        => '127.0.0.1',
-    'BRACP_SQL_USER'                        => 'ragnarok',
-    'BRACP_SQL_PASS'                        => 'ragnarok',
-    'BRACP_SQL_DBNAME'                      => 'ragnarok',
+    'BRACP_SQL_CP_DRIVER'                   => 'pdo_mysql',
+    'BRACP_SQL_CP_HOST'                     => '127.0.0.1',
+    'BRACP_SQL_CP_USER'                     => 'ragnarok',
+    'BRACP_SQL_CP_PASS'                     => 'ragnarok',
+    'BRACP_SQL_CP_DBNAME'                   => 'ragnarok',
+
+    // Contagem de servidores que o brACP está configurado.
+    'BRACP_SRV_COUNT'                       => 1,
+    'BRACP_SRV_DEFAULT'                     => 0,
+    'BRACP_SRV_PING_DELAY'                  => 300,
+
+    // Informações de conexão dos servidores.
+    'BRACP_SRV_0_NAME'                      => 'brAthena',
+    'BRACP_SRV_0_LOGIN_IP'                  => '127.0.0.1',
+    'BRACP_SRV_0_LOGIN_PORT'                => '6900',
+    'BRACP_SRV_0_CHAR_IP'                   => '127.0.0.1',
+    'BRACP_SRV_0_CHAR_PORT'                 => '6121',
+    'BRACP_SRV_0_MAP_IP'                    => '127.0.0.1',
+    'BRACP_SRV_0_MAP_PORT'                  => '5121',
+    'BRACP_SRV_0_SQL_DRIVER'                => 'pdo_mysql',
+    'BRACP_SRV_0_SQL_HOST'                  => '127.0.0.1',
+    'BRACP_SRV_0_SQL_USER'                  => 'ragnarok',
+    'BRACP_SRV_0_SQL_PASS'                  => 'ragnarok',
+    'BRACP_SRV_0_SQL_DBNAME'                => 'ragnarok',
 
     // Servidor de E-mail
     'BRACP_ALLOW_MAIL_SEND'                 => true,
