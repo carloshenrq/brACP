@@ -281,13 +281,11 @@ class Account
                 $lastChange = self::getApp()->getEm()
                                         ->createQuery('
                                             SELECT
-                                                log, login
+                                                log
                                             FROM
                                                 Model\EmailLog log
-                                            INNER JOIN
-                                                log.account login
                                             WHERE
-                                                login.account_id = :account_id AND
+                                                log.account_id = :account_id AND
                                                 log.date >= :DELAYDATETIME
                                         ')
                                         ->setParameter('account_id', $account->getAccount_id())
@@ -332,7 +330,7 @@ class Account
 
         // Grava a mudança de e-mail na tabela de logs.
         $log = new EmailLog;
-        $log->setAccount($account);
+        $log->setAccount_id($account->getAccount_id());
         $log->setFrom($account->getEmail());
         $log->setTo($email);
         $log->setDate(date('Y-m-d H:i:s'));
@@ -506,19 +504,23 @@ class Account
         self::getApp()->getEm()->merge($recover);
         self::getApp()->getEm()->flush();
 
+        $account = self::getApp()->getEm()
+                    ->getRepository('Model\Login')
+                    ->findOneBy(['account_id' => $recover->getAccount_id()]);
+
         for($new_pass = '';
             strlen($new_pass) < BRACP_RECOVER_STRING_LENGTH;
             $new_pass .= substr(BRACP_RECOVER_RANDOM_STRING,
                             rand(0, strlen(BRACP_RECOVER_RANDOM_STRING) - 1), 1));
 
         // Realiza a alteração da senha do usuário.
-        self::accountSetPass($recover->getAccount()->getAccount_id(), $new_pass);
+        self::accountSetPass($account->getAccount_id(), $new_pass);
 
         // Envia o e-mail com a nova senha do jogador.
         self::getApp()->sendMail('@@RECOVER,MAIL(TITLE_SEND)',
-            [$recover->getAccount()->getEmail()],
+            [$account->getEmail()],
             'mail.recover', [
-            'userid' => $recover->getAccount()->getUserid(),
+            'userid' => $account->getUserid(),
             'password' => $new_pass,
         ]);
 
@@ -565,13 +567,11 @@ class Account
             $recover = self::getApp()->getEm()
                             ->createQuery('
                                 SELECT
-                                    recover, login
+                                    recover
                                 FROM
                                     Model\Recover recover
-                                INNER JOIN
-                                    recover.account login
                                 WHERE
-                                    login.account_id = :account_id AND
+                                    recover.account_id = :account_id AND
                                     recover.used = false AND
                                     :CURDATETIME BETWEEN recover.date AND recover.expire
                             ')
@@ -583,7 +583,7 @@ class Account
             if(is_null($recover))
             {
                 $recover = new Recover;
-                $recover->setAccount($account);
+                $recover->setAccount_id($account->getAccount_id());
                 $recover->setCode(hash( 'md5', uniqid(rand() . microtime(true), true)));
                 $recover->setDate(date('Y-m-d H:i:s'));
                 $recover->setExpire(date('Y-m-d H:i:s', time() + (60*BRACP_RECOVER_CODE_EXPIRE)));
@@ -734,11 +734,9 @@ class Account
         $confirmation = self::getApp()->getEm()
                         ->createQuery('
                             SELECT
-                                confirmation, login
+                                confirmation
                             FROM
                                 Model\Confirmation confirmation
-                            INNER JOIN
-                                confirmation.account login
                             WHERE
                                 confirmation.code = :code AND
                                 confirmation.used = false AND
@@ -754,20 +752,23 @@ class Account
 
         // Informa que o código de ativação foi utilizado e o estado da conta
         //  passa a ser 0 (ok)
-        $confirmation->getAccount()->setState(0);
+        $account = self::getApp()->getEm()
+                    ->getRepository('Model\Login')
+                    ->findOneBy(['account_id' => $confirmation->getAccount_id()]);
+        $account->setState(0);
         $confirmation->setUsed(true);
 
-        self::getApp()->getEm()->merge($confirmation->getAccount());
+        self::getApp()->getEm()->merge($account);
         self::getApp()->getEm()->merge($confirmation);
         self::getApp()->getEm()->flush();
 
         // Envia um e-mail para o usuário informando que a conta foi ativada
         //  com sucesso.
         self::getApp()->sendMail('@@RESEND,MAIL(TITLE_CONFIRMED)',
-                                    [$confirmation->getAccount()->getEmail()],
+                                    [$account->getEmail()],
                                     'mail.create.code.success',
                                     [
-                                        'userid' => $confirmation->getAccount()->getUserid()
+                                        'userid' => $account->getUserid()
                                     ]);
 
         return 0;
@@ -842,13 +843,11 @@ class Account
         $confirmation = self::getApp()->getEm()
                         ->createQuery('
                             SELECT
-                                confirmation, login
+                                confirmation
                             FROM
                                 Model\Confirmation confirmation
-                            INNER JOIN
-                                confirmation.account login
                             WHERE
-                                login.account_id = :account_id AND
+                                confirmation.account_id = :account_id AND
                                 confirmation.used = false AND
                                 :CURDATETIME BETWEEN confirmation.date AND confirmation.expire
                         ')
@@ -861,7 +860,7 @@ class Account
         if(is_null($confirmation))
         {
             $confirmation = new Confirmation;
-            $confirmation->setAccount($account);
+            $confirmation->setAccount_id($account->getAccount_id());
             $confirmation->setCode(hash( 'md5', uniqid(rand() . microtime(true), true)));
             $confirmation->setDate(date('Y-m-d H:i:s'));
             $confirmation->setExpire(date('Y-m-d H:i:s', time() + (60*BRACP_RECOVER_CODE_EXPIRE)));

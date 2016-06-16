@@ -35,10 +35,9 @@ class Confirmation
     protected $id;
 
     /**
-     * @ManyToOne(targetEntity="Login")
-     * @JoinColumn(name="AccountID", referencedColumnName="account_id")
+     * @Column(name="AccountID", type="integer")
      */
-    protected $account;
+    protected $account_id;
 
     /**
      * @Column(name="ConfirmationCode", type="string", length=32)
@@ -70,14 +69,14 @@ class Confirmation
         return $this->id = $id;
     }
 
-    public function getAccount()
+    public function getAccount_id()
     {
-        return $this->account;
+        return $this->account_id;
     }
     
-    public function setAccount($account)
+    public function setAccount_id($account_id)
     {
-        return $this->account = $account;
+        return $this->account_id = $account_id;
     }
 
     public function getCode()

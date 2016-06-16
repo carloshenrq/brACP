@@ -41,10 +41,9 @@ class Compensate
     protected $donation;
 
     /**
-     * @ManyToOne(targetEntity="Login")
-     * @JoinColumn(name="AccountID", referencedColumnName="account_id", nullable=false)
+     * @Column(name="AccountID", type="integer")
      */
-    protected $account;
+    protected $account_id;
 
     /**
      * @Column(name="UserID", type="string", length=23)
@@ -81,14 +80,14 @@ class Compensate
         return $this->donation = $donation;
     }
 
-    public function getAccount()
+    public function getAccount_id()
     {
-        return $this->account;
+        return $this->account_id;
     }
     
-    public function setAccount($account)
+    public function setAccount_id($account_id)
     {
-        return $this->account = $account;
+        return $this->account_id = $account_id;
     }
 
     public function getUserid()

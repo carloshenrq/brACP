@@ -35,10 +35,9 @@ class Recover
     protected $id;
 
     /**
-     * @ManyToOne(targetEntity="Login")
-     * @JoinColumn(name="AccountID", referencedColumnName="account_id")
+     * @Column(name="AccountID", type="integer")
      */
-    protected $account;
+    protected $account_id;
 
     /**
      * @Column(name="RecoverCode", type="string", length=32)
