@@ -113,6 +113,10 @@
                                         <li><label for="modal-password">@@MENU,MYACC,AUTHENTICATED,CHANGE(PASS)</label></li>
                                     {/if}
 
+                                    {if $smarty.const.BRACP_ALLOW_CHANGE_MAIL && $account->getGroup_id() < BRACP_ALLOW_ADMIN_GMLEVEL}
+                                        <li><label for="modal-mail">@@MENU,MYACC,AUTHENTICATED,CHANGE(MAIL)</label></li>
+                                    {/if}
+
                                     <li class="url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}account/logout"><label>@@MENU,MYACC,AUTHENTICATED(LOGOUT, {$userid})</label></li>
                                 {/if}
                             </ul>
@@ -154,6 +158,10 @@
                 {else}
 
                     {include 'account.password.tpl'}
+
+                    {if $smarty.const.BRACP_ALLOW_CHANGE_MAIL}
+                        {include 'account.email.tpl'}
+                    {/if}
 
                 {/if}
 

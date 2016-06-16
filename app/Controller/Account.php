@@ -55,6 +55,35 @@ class Account
      * @param ResponseInterface $response
      * @param array $args
      */
+    public static function email(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        // Dados recebidos pelo post para confirmação de contas.
+        $data = $request->getParsedBody();
+
+        // Dados de retorno para informações de erro.
+        $return = ['error_state' => 0, 'success_state' => false];
+
+        // Define informaçõs de erro. (Caso exista)
+        $return['error_state']      = self::accountChangeEmail(
+            self::loggedUser()->getUserid(),
+            $data['email'],
+            $data['email_new'],
+            $data['email_conf']
+        );
+
+        $return['success_state']    = $return['error_state'] == 0;
+
+        // Responde com um objeto json informando o estado do cadastro.
+        $response->withJson($return);
+    }
+
+    /**
+     * Método para realizar a alteração de senha de usuários.
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param array $args
+     */
     public static function password(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
         // Dados recebidos pelo post para confirmação de contas.
@@ -166,6 +195,158 @@ class Account
 
         // Responde com um objeto json informando o estado do cadastro.
         $response->withJson($return);
+    }
+
+    /**
+     * Solicitação de alteração de e-mail pelo usuário.
+     *
+     * @param string $userid
+     * @param string $email
+     * @param string $email_new
+     * @param string $email_conf
+     *
+     * @return int
+     */
+    public static function accountChangeEmail($userid, $email, $email_new, $email_conf)
+    {
+        // Falha em restrição pattern para alteração do endereço de e-mail
+        if(!preg_match('/^'.BRACP_REGEXP_EMAIL.'$/', $email) ||
+            !preg_match('/^'.BRACP_REGEXP_EMAIL.'$/', $email_new) ||
+            !preg_match('/^'.BRACP_REGEXP_EMAIL.'$/', $email_conf))
+            return 6;
+
+        // 3: Novos e-mails digitados não conferem.
+        if(hash('md5', $email_new) !== hash('md5', $email_conf))
+            return 3;
+
+        // 4: Novo e-mail não pode ser igual ao anterior.
+        if(hash('md5', $email) === hash('md5', $email_new))
+            return 4;
+
+        $account = self::getApp()->getEm()
+                        ->getRepository('Model\Login')
+                        ->findOneBy(['userid' => $userid, 'email' => $email]);
+
+        // 2: Conta não encontrada para alteração do endereço de e-mail.
+        if(is_null($account))
+            return 2;
+
+        // Tenta realizar a alteração do endereço de e-mail.
+        return self::accountSetEmail($account->getAccount_id(), $email_new);
+    }
+
+    /**
+     * Define o endereço de e-mail do jogador.
+     *
+     * @param int $account_id
+     * @param string $email
+     * @param boolean $admin
+     *
+     * @return int
+     */
+    public static function accountSetEmail($account_id, $email, $admin = false)
+    {
+        // Somente é possível forçar uma alteração de e-mail se for realizada em
+        //  modo administrador.
+        if(!$admin && !BRACP_ALLOW_CHANGE_MAIL)
+            return -1;
+
+        // Falha em restrição pattern para alteração do endereço de e-mail
+        if(!preg_match('/^'.BRACP_REGEXP_EMAIL.'$/', $email))
+            return 6;
+
+        // Encontra a conta do usuário via código de contas.
+        $account = self::getApp()->getEm()
+                            ->getRepository('Model\Login')
+                            ->findOneBy(['account_id' => $account_id]);
+
+        // Conta não encontrada.
+        if(is_null($account))
+            return 2;
+
+        // Somente modo administrador pode alterar e-mail de contas
+        //  em modo administrador.
+        if(!$admin && $account->getGroup_id() >= BRACP_ALLOW_ADMIN_GMLEVEL)
+            return 1;
+
+        // Verifica o delay de alteração de e-mail. (Somente administradores podem ignorar esse teste)
+        if(!$admin)
+        {
+            // Se houver delay para alteração de endereço de e-mail
+            //  então, realiza os testes de delay.
+            if(BRACP_CHANGE_MAIL_DELAY > 0)
+            {
+                // Obtém a ultima modificação dentro do tempo de delay
+                //  informado.
+                $lastChange = self::getApp()->getEm()
+                                        ->createQuery('
+                                            SELECT
+                                                log, login
+                                            FROM
+                                                Model\EmailLog log
+                                            INNER JOIN
+                                                log.account login
+                                            WHERE
+                                                login.account_id = :account_id AND
+                                                log.date >= :DELAYDATETIME
+                                        ')
+                                        ->setParameter('account_id', $account->getAccount_id())
+                                        ->setParameter('DELAYDATETIME',
+                                            date('Y-m-d H:i:s', time() - (BRACP_CHANGE_MAIL_DELAY*60)))
+                                        ->getResult();
+
+                // Verifica se existe alteração dentro do delay configurado
+                //  Caso exista, não permite alteração até o fim do delay.
+                if(count($lastChange) > 0)
+                    return 5;
+            }
+
+            // Verifica se o e-mail já está registrado em outra conta,
+            //  caso a configuração não permita essa configuração, será negada a alteração
+            //  de e-mail.
+            if(BRACP_MAIL_REGISTER_ONCE)
+            {
+                $lstAcc = self::getApp()->getEm()
+                                ->getRepository('Model\Login')
+                                ->findOneBy(['email' => $email]);
+
+                // Caso encontre uma conta com esse endereço de e-mail,
+                //  Retorna o status para alteração de e-mail inválida.
+                if(!is_null($lstAcc))
+                    return 7;
+            }
+
+            // Notifica alteração do endereço do e-mail para o e-mail novo
+            //  e o e-mail antigo.
+            if(BRACP_ALLOW_MAIL_SEND && BRACP_NOTIFY_CHANGE_MAIL)
+            {
+                self::getApp()->sendMail('@@CHANGEMAIL,MAIL(TITLE)',
+                    [$account->getEmail(), $email],
+                    'mail.change.mail', [
+                    'userid' => $account->getUserid(),
+                    'mailOld' => $account->getEmail(),
+                    'mailNew' => $email,
+                ]);
+            }
+        }
+
+        // Grava a mudança de e-mail na tabela de logs.
+        $log = new EmailLog;
+        $log->setAccount($account);
+        $log->setFrom($account->getEmail());
+        $log->setTo($email);
+        $log->setDate(date('Y-m-d H:i:s'));
+
+        self::getApp()->getEm()->persist($log);
+        self::getApp()->getEm()->flush();
+
+        // Realiza alteração do endereço de e-mail.
+        $account->setEmail($email);
+        self::getApp()->getEm()->merge($account);
+        self::getApp()->getEm()->flush();
+
+        return 0;
+
     }
 
     /**

@@ -357,6 +357,8 @@ return
             'MISMATCH1' => 'E-mail atual não confere com o digitado.',
             'MISMATCH2' => 'Os e-mails digitados não conferem.',
             'EQUALS'    => 'O Novo endereço de e-mail não pode ser igual ao atual.',
+            'DELAY'     => 'Você não pode alterar seu endereço de e-mail agora. Tente mais tarde.',
+            'TAKEN'     => 'Este endereço de e-mail já está em uso.',
             'OTHER'     => 'Ocorreu um erro durante a alteração do seu endereço.',
         ],
 
@@ -373,8 +375,8 @@ return
         ],
 
         'BUTTONS'   => [
-            'SUBMIT'    => 'Mudar',
-            'RESET'     => 'Limpar',
+            'SUBMIT'    => 'Alterar',
+            'CLOSE'     => 'Fechar',
         ],
 
         'MAIL'  => [
@@ -534,6 +536,8 @@ return
                             '<strong>Código de Recuperação</strong>: <u>%1$s</u><br>'.
                             '<i>Código válido até <strong>%2$s</strong>.</i><br>'.
                             '<br>'.
+                            'Para aplicar o código de recuperação, você deve acessar o menu: <i><strong>Minha Conta &raquo; Recuperar</strong></i>.<br>'.
+                            '<br>'.
                             'Após inserir o código de recuperação, você receberá sua nova senha por e-mail.',
         ],
         /**
@@ -555,6 +559,8 @@ return
                             '<br>' .
                             '<strong>Código de Ativação:</strong> <u>%1$s</u><br>'.
                             '<i>Código válido até <strong>%2$s</strong>.</i><br>'.
+                            '<br>'.
+                            'Para aplicar o código de recuperação, você deve acessar o menu: <i><strong>Minha Conta &raquo; Código de Ativação</strong></i>.<br>'.
                             '<br>'.
                             'Após ativar sua conta, você receberá informando que o servidor aceitou a ativação de sua conta.',
             /**

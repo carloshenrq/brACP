@@ -83,6 +83,13 @@ class Route
                 $this->post('/password', ['Controller\Account', 'password'])
                             ->add(['Controller\Account', '_login']);
 
+                // Alteração de email está ativo?
+                if(BRACP_ALLOW_CHANGE_MAIL)
+                {
+                    $this->post('/email', ['Controller\Account', 'email'])
+                                ->add(['Controller\Account', '_login']);
+                }
+
             });
 
             // Verifica se os rankings estão habilitados para serem exibidos.
