@@ -43,52 +43,8 @@ class ServerPing
         //  para ver se realmente está funcionando.
         $index = self::getApp()->getSession()->BRACP_SVR_SELECTED;
 
-        // Verifica se existe um status de servidor que ainda não expirou
-        //  no ping do servidor.
-        $last_status = self::getCpEm()->createQuery('
-            SELECT
-                status
-            FROM
-                Model\ServerStatus status
-            WHERE
-                status.index = :index AND
-                status.expire >= :CURDATETIME
-        ')
-        ->setParameter('index', $index)
-        ->setParameter('CURDATETIME', date('Y-m-d H:i:s'))
-        ->getOneOrNullResult();
-
-        if(is_null($last_status))
-        {
-            $errno = $errstr = null;
-            // Realiza o ping no servidor de login.
-            $login_address  = constant('BRACP_SRV_' . $index . '_LOGIN_IP');
-            $login_port     = constant('BRACP_SRV_' . $index . '_LOGIN_PORT');
-
-            // Realiza o ping no servidor de personagens.
-            $char_address   = constant('BRACP_SRV_' . $index . '_CHAR_IP');
-            $char_port      = constant('BRACP_SRV_' . $index . '_CHAR_PORT');
-
-            // Realiza o ping no servidor de mapas.
-            $map_address    = constant('BRACP_SRV_' . $index . '_MAP_IP');
-            $map_port       = constant('BRACP_SRV_' . $index . '_MAP_PORT');
-
-            // Salva o status no banco de dados.
-            $last_status = new ServerStatus;
-            $last_status->setIndex($index);
-            $last_status->setName(constant('BRACP_SRV_' . $index . '_NAME'));
-            $last_status->setLogin(false);
-            $last_status->setChar(false);
-            $last_status->setMap(false);
-            $last_status->setTime(date('Y-m-d H:i:s'));
-            $last_status->setExpire(date('Y-m-d H:i:s', time() + BRACP_SRV_PING_DELAY));
-
-            self::getCpEm()->persist($last_status);
-            self::getCpEm()->flush();
-        }
-
         // Define o status do server conectado a aplicação.
-        self::getApp()->setServerStatus($last_status);
+        self::getApp()->setServerStatus(null);
 
         // Chama o próximo middleware.
         return $next($request, $response);
