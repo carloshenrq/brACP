@@ -589,6 +589,14 @@ return
         ],
     ],
 
+    'FOOTER'    => [
+        'SERVER'    => 'Servidor',
+        'LANGUAGE'  => 'Idioma',
+        'THEME'     => 'Tema',
+        'ADDRESS'   => 'IP',
+        'NAVIGATOR' => 'Navegador',
+    ],
+
     /**
      * Define o status do jogador com o texto formatado.
      */

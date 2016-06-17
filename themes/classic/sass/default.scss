@@ -43,7 +43,6 @@ html, body
 
             &.link
             {
-                background-color: #004d00;
                 color: white;
                 text-align: center;
                 font-size: 1.2em;
@@ -276,6 +275,90 @@ html, body
             }
         }
 
+    }
+
+    .footer
+    {
+        color: white;
+        text-align: center;
+        padding: 8px;
+        margin: 3px auto;
+        width: 96%;
+
+        background-color: rgba(0, 102, 34, .7);
+        @include box-shadow('0px 0px 6px rgb(13, 30, 3)');
+
+        label
+        {
+            font-weight: bold;
+
+            select, span
+            {
+                font-weight: normal;
+                color: white;
+                border: 0;
+                font-family: Calibri, Tahoma, Verdana, Arial;
+                font-size: 12px;
+            }
+
+            select
+            {
+                background-color: transparent;
+                padding: 0px;
+                appearance: none;
+                -moz-appearance: none;
+                -webkit-appearance: none;
+                display: inline-block;
+            }
+
+            span.navigator
+            {
+                margin-left: 4px;
+                vertical-align: center;
+                &:before
+                {
+                    display: inline-block;
+                    content: '\00a0';
+
+                    background-repeat: no-repeat;
+                    background-size: 100% 100%;
+
+                    margin-right: 2px;
+
+                    @include size(16px, 16px);
+                }
+
+                &.nav-chrome:before
+                {
+                    background-image: url(../img/chrome.png);
+                }
+
+                &.nav-firefox:before
+                {
+                    background-image: url(../img/firefox.png);
+                }
+
+                &.nav-ie:before
+                {
+                    background-image: url(../img/ie.png);
+                }
+
+                &.nav-safari:before
+                {
+                    background-image: url(../img/safari.png);
+                }
+
+                &.nav-opera:before
+                {
+                    background-image: url(../img/opera.png);
+                }
+            }
+
+            &+ label
+            {
+                margin-left: 2em;
+            }
+        }
     }
 }
 

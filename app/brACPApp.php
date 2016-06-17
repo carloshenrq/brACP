@@ -249,11 +249,12 @@ class brACPApp extends Slim\App
         {
             // Obtém todos os temas que estão em cache no banco de dados.
             $themes = Cache::get('BRACP_THEMES', function() {
-                return brACPApp::getInstance()->getCpEm()->getRepository('Model\Theme')->findAll();
+                return brACPApp::getInstance()->getEm('cp')->getRepository('Model\Theme')->findAll();
             });
         }
         catch(\Exception $ex)
         {
+            echo '<span style="color: white">', $ex->getMessage(), '</span>';
             $themes = [];
         }
 

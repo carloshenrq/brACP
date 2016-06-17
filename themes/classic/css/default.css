@@ -23,7 +23,6 @@ html, body {
     background-color: transparent;
     cursor: pointer; }
   .content .header .menu-top.link {
-    background-color: #004d00;
     color: white;
     text-align: center;
     font-size: 1.2em;
@@ -169,6 +168,54 @@ html, body {
     .content .body .table thead tr th {
       padding: 3px;
       border-color: #0d1e03; }
+.content .footer {
+  color: white;
+  text-align: center;
+  padding: 8px;
+  margin: 3px auto;
+  width: 96%;
+  background-color: rgba(0, 102, 34, 0.7);
+  box-shadow: 0px 0px 6px rgb(13, 30, 3);
+  -moz-box-shadow: 0px 0px 6px rgb(13, 30, 3);
+  -webkit-box-shadow: 0px 0px 6px rgb(13, 30, 3); }
+  .content .footer label {
+    font-weight: bold; }
+    .content .footer label select, .content .footer label span {
+      font-weight: normal;
+      color: white;
+      border: 0;
+      font-family: Calibri, Tahoma, Verdana, Arial;
+      font-size: 12px; }
+    .content .footer label select {
+      background-color: transparent;
+      padding: 0px;
+      appearance: none;
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      display: inline-block; }
+    .content .footer label span.navigator {
+      margin-left: 4px;
+      vertical-align: center; }
+      .content .footer label span.navigator:before {
+        display: inline-block;
+        content: '\00a0';
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        margin-right: 2px;
+        width: 16px;
+        height: 16px; }
+      .content .footer label span.navigator.nav-chrome:before {
+        background-image: url(../img/chrome.png); }
+      .content .footer label span.navigator.nav-firefox:before {
+        background-image: url(../img/firefox.png); }
+      .content .footer label span.navigator.nav-ie:before {
+        background-image: url(../img/ie.png); }
+      .content .footer label span.navigator.nav-safari:before {
+        background-image: url(../img/safari.png); }
+      .content .footer label span.navigator.nav-opera:before {
+        background-image: url(../img/opera.png); }
+    .content .footer label + label {
+      margin-left: 2em; }
 
 .error {
   color: #e74c3c !important; }

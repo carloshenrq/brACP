@@ -135,6 +135,50 @@
                 {/block}
             </div>
 
+            <div class="footer">
+                {if $smarty.const.BRACP_SRV_COUNT > 0}
+                    <label>
+                        @@FOOTER(SERVER):
+                        <select id="BRACP_SVR_SELECTED">
+                            {for $i=0 to ($smarty.const.BRACP_SRV_COUNT - 1)}
+                                {assign var="SRV_NAME" value="BRACP_SRV_{$i}_NAME"}
+                                <option value="{$i}">{$smarty.const.$SRV_NAME}</option>
+                            {/for}
+                        </select>
+                    </label>
+                {/if}
+
+                <label>
+                    @@FOOTER(LANGUAGE):
+                    <select id="BRACP_LANG_SELECTED">
+                        {foreach from=$langs item=lang}
+                            <option>{$lang}</option>
+                        {/foreach}
+                    </select>
+                </label>
+
+                {if $smarty.const.BRACP_ALLOW_CHOOSE_THEME}
+                    <label>
+                        @@FOOTER(THEME):
+                        <select id="BRACP_THEME_SELECTED">
+                            {foreach from=$themes item=theme}
+                                <option value="{$theme->getFolder()}">{$theme->getName()} ({$theme->getVersion()})</option>
+                            {/foreach}
+                        </select>
+                    </label>
+                {/if}
+
+                <label>
+                    @@FOOTER(ADDRESS):
+                    <span>{$ipAddress}</span>
+                </label>
+
+                <label>
+                    @@FOOTER(NAVIGATOR):
+                    <span class="navigator {$navigator->getClass()}">{$navigator->getName()} ({$navigator->getVersion()})</span>
+                </label>
+            </div>
+
             <div class="modal-container">
 
                 {if !isset($session->BRACP_ISLOGGEDIN) or !$session->BRACP_ISLOGGEDIN}
