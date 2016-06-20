@@ -589,8 +589,19 @@ return
         ],
     ],
 
-    'FOOTER'    => [
+    'SERVER_STATUS' =>  [
         'SERVER'    => 'Servidor',
+        'LOGIN'     => 'Login-server',
+        'CHAR'      => 'Char-server',
+        'MAP'       => 'Map-server',
+
+        'STATE'     => [
+            0       => 'Offline',
+            1       => 'Online',
+        ],
+    ],
+
+    'FOOTER'    => [
         'LANGUAGE'  => 'Idioma',
         'THEME'     => 'Tema',
         'ADDRESS'   => 'IP',

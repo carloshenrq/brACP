@@ -57,6 +57,28 @@ class Home
      * @param ResponseInterface $response
      * @param array $args
      */
+    public static function server(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        // Atualiza informações do tema.
+        $post = $request->getParsedBody();
+
+        // Realiza a alteração de tema se for necessário.
+        if(isset($post['BRACP_SRV_SELECTED']))
+            self::getApp()->getSession()->BRACP_SVR_SELECTED = $post['BRACP_SRV_SELECTED'];
+
+        // Responde ao client que foi alterado com sucesso.
+        $response->withJson([
+            'status' => 'ok',
+        ]);
+    }
+
+    /**
+     * Método para alterar a linguagem padrão do painel de controle.
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param array $args
+     */
     public static function language(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
         // Atualiza informações do tema.

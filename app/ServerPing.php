@@ -130,7 +130,7 @@ class ServerPing
         {
             $errno = $errstr = null;
 
-            $fp = @fsockopen($ip, $port, $errno, $errstr, 3);
+            $fp = @fsockopen($ip, $port, $errno, $errstr, 2);
             $connect = is_resource($fp);
             if($fp) fclose($fp);
 

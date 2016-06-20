@@ -19,11 +19,82 @@ html, body
         background-repeat: no-repeat;
         background-position: center;
 
+        position: relative;
+
         .menu-top
         {
             &.access, &.link
             {
                 padding: 8px;
+            }
+
+            &.status
+            {
+                background-color: white;
+                position: absolute;
+                top: 6em; left: 10em;
+                padding: 1.3em;
+
+                width: 200px;
+
+                @include box-shadow(0px 0px 3px white);
+
+                .lbl-server
+                {
+                    font-weight: bold;
+                    font-size: 1.2em;
+                    display: block;
+
+                    text-align: center;
+
+                    select
+                    {
+                        border: 0;
+                        padding: 0;
+                        background-color: transparent;
+                        font-family: Calibri, Tahoma, Verdana, Arial;
+                        font-size: 1em;
+                    }
+                }
+
+                .server-info
+                {
+                    margin-top: 1em;
+                    width: 100%;
+                    display: table;
+
+                    .status-server
+                    {
+                        display: table-row;
+
+                        div
+                        {
+                            display: table-cell;
+                            width: 50%;
+
+                            &.status-title
+                            {
+                                font-weight: bold;
+                                text-align: right;
+                            }
+
+                            &.status-info
+                            {
+                                text-align: center;
+
+                                &.online
+                                {
+                                    color: green;
+                                }
+
+                                &.offline
+                                {
+                                    color: red;
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
             &.access

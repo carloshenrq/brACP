@@ -9,9 +9,49 @@ html, body {
 .content .header {
   background-image: url(../img/background-header.png);
   background-repeat: no-repeat;
-  background-position: center; }
+  background-position: center;
+  position: relative; }
   .content .header .menu-top.access, .content .header .menu-top.link {
     padding: 8px; }
+  .content .header .menu-top.status {
+    background-color: white;
+    position: absolute;
+    top: 6em;
+    left: 10em;
+    padding: 1.3em;
+    width: 200px;
+    box-shadow: 0px 0px 3px white;
+    -moz-box-shadow: 0px 0px 3px white;
+    -webkit-box-shadow: 0px 0px 3px white; }
+    .content .header .menu-top.status .lbl-server {
+      font-weight: bold;
+      font-size: 1.2em;
+      display: block;
+      text-align: center; }
+      .content .header .menu-top.status .lbl-server select {
+        border: 0;
+        padding: 0;
+        background-color: transparent;
+        font-family: Calibri, Tahoma, Verdana, Arial;
+        font-size: 1em; }
+    .content .header .menu-top.status .server-info {
+      margin-top: 1em;
+      width: 100%;
+      display: table; }
+      .content .header .menu-top.status .server-info .status-server {
+        display: table-row; }
+        .content .header .menu-top.status .server-info .status-server div {
+          display: table-cell;
+          width: 50%; }
+          .content .header .menu-top.status .server-info .status-server div.status-title {
+            font-weight: bold;
+            text-align: right; }
+          .content .header .menu-top.status .server-info .status-server div.status-info {
+            text-align: center; }
+            .content .header .menu-top.status .server-info .status-server div.status-info.online {
+              color: green; }
+            .content .header .menu-top.status .server-info .status-server div.status-info.offline {
+              color: red; }
   .content .header .menu-top.access {
     text-align: right; }
   .content .header .menu-top.logo {

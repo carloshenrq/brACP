@@ -308,3 +308,38 @@ brACPApp.controller('account.email', ['$scope', '$http', function($scope, $http)
         });
     };
 }]);
+
+/**
+ * Controlador para alteração de email.
+ */
+brACPApp.controller('serverStatus', ['$scope', '$http', function($scope, $http) {
+
+    $scope.statusInit   = function(srvSelected, loginServer, charServer, mapServer)
+    {
+        $scope.BRACP_SRV_SELECTED = srvSelected;
+
+        $scope.BRACP_SRV_LOGIN  = loginServer;
+        $scope.BRACP_SRV_CHAR   = charServer;
+        $scope.BRACP_SRV_MAP    = mapServer;
+    };
+
+    $scope.serverChange = function()
+    {
+        var urlServer = document.querySelector('#_BRACP_URL').value + 'server';
+        var params = $.param({
+            'BRACP_SRV_SELECTED'         : $scope.BRACP_SRV_SELECTED.match(/^SRV_([0-9]+)$/)[1]
+        });
+
+        $http({
+            'method'    : 'post',
+            'url'       : urlServer,
+            'data'      : params,
+            'headers'   : {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        }).then(function(response) {
+            window.location.reload();
+        });
+    };
+
+}]);

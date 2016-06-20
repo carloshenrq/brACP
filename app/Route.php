@@ -46,6 +46,9 @@ class Route
             // Define a rota para a tela principal.
             self::getApp()->get('/', ['Controller\Home', 'index']);
 
+            // Define a rota para a tela principal.
+            self::getApp()->post('/server', ['Controller\Home', 'server']);
+
             // Mapeia o grupo account.
             self::getApp()->group('/account', function() {
 
