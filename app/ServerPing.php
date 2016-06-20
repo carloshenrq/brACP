@@ -69,6 +69,9 @@ class ServerPing
             if(isset(brACPApp::getInstance()->getSession()->BRACP_SVR_SELECTED))
                 $index = brACPApp::getInstance()->getSession()->BRACP_SVR_SELECTED;
 
+            // Carrega as conexões com o banco de dados.
+            Database::loadConnection();
+
             // Obtém o status do servidor.
             $status = ServerPing::getCpEm()->createQuery('
                 SELECT
