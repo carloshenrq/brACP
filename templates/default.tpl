@@ -110,7 +110,7 @@
                             <div class="status-title">@@SERVER_STATUS(TEXT):</div>
                             {literal}
                             <div class="status-info" ng-class="{'online' : $parent.BRACP_SRV_LOGIN && $parent.BRACP_SRV_CHAR && $parent.BRACP_SRV_MAP, 'offline' : !$parent.BRACP_SRV_LOGIN || !$parent.BRACP_SRV_CHAR || !$parent.BRACP_SRV_MAP}">
-                                {{$parent.BRACP_SRV_LOGIN && $parent.BRACP_SRV_CHAR && $parent.BRACP_SRV_MAP ? 'Online' : 'Offline'}}
+                                {{$parent.BRACP_SRV_LOGIN && $parent.BRACP_SRV_CHAR && $parent.BRACP_SRV_MAP ? '@@SERVER_STATUS,STATE(1)' : '@@SERVER_STATUS,STATE(0)'}}
                             </div>
                             {/literal}
                         </div>
