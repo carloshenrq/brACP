@@ -41,23 +41,106 @@ class ServerPing
     {
         // Indice do servidor selcionado para realizar o ping nas portas
         //  para ver se realmente está funcionando.
-        $index = self::getApp()->getSession()->BRACP_SVR_SELECTED;
+        $index = BRACP_SRV_DEFAULT;
+
+        if(isset(self::getApp()->getSession()->BRACP_SVR_SELECTED))
+            $index = self::getApp()->getSession()->BRACP_SVR_SELECTED;
+
+        // Obtém o status do cache de memória.
+        $status = Cache::get('BRACP_SRV_'.$index.'_STATUS_CACHE', function() {
+            // Indice do servidor selcionado para realizar o ping nas portas
+            //  para ver se realmente está funcionando.
+            $index = BRACP_SRV_DEFAULT;
+
+            if(isset(brACPApp::getInstance()->getSession()->BRACP_SVR_SELECTED))
+                $index = brACPApp::getInstance()->getSession()->BRACP_SVR_SELECTED;
+
+            // Obtém o status do servidor.
+            $status = ServerPing::getCpEm()->createQuery('
+                SELECT
+                    status
+                FROM
+                    Model\ServerStatus status
+                WHERE
+                    status.index = :index AND
+                    status.expire > :CURDATETIME
+            ')
+            ->setParameter('index', $index)
+            ->setParameter('CURDATETIME', date('Y-m-d H:i:s'))
+            ->getOneOrNullResult();
+
+            // Indica que não possui status em cache para uso, então
+            //  executa os pings no servidor.
+            if(is_null($status))
+            {
+                // Cria o registro gerado para que não sejam realizados muitos pings no servidor
+                //  quando for pingar, isso evita que muitos pings sejam enviados enquanto um está esperando
+                //  para responder...
+                $status = new ServerStatus;
+                $status->setIndex($index);
+                $status->setName(constant('BRACP_SRV_' . $index . '_NAME'));
+                $status->setLogin(false);
+                $status->setChar(false);
+                $status->setMap(false);
+                $status->setTime(date('Y-m-d H:i:s'));
+                $status->setExpire(date('Y-m-d H:i:s', time() + BRACP_SRV_PING_DELAY));
+
+                // Grava o registro zerado no banco de dados.
+                ServerPing::getCpEm()->persist($status);
+                ServerPing::getCpEm()->flush();
+
+                // Executa os pings no servidor para obter os status.
+                $loginStatus = $this->ping(constant('BRACP_SRV_' . $index . '_LOGIN_IP'), constant('BRACP_SRV_' . $index . '_LOGIN_PORT'));
+                $charStatus = $this->ping(constant('BRACP_SRV_' . $index . '_CHAR_IP'), constant('BRACP_SRV_' . $index . '_CHAR_PORT'));
+                $mapStatus = $this->ping(constant('BRACP_SRV_' . $index . '_MAP_IP'), constant('BRACP_SRV_' . $index . '_MAP_PORT'));
+
+                // Define os status reais no servidor.
+                $status->setLogin($loginStatus);
+                $status->setChar($charStatus);
+                $status->setMap($mapStatus);
+
+                // Salva o status real no banco de dados.
+                ServerPing::getCpEm()->merge($status);
+                ServerPing::getCpEm()->flush();
+            }
+
+            // Retorna o status via cache.
+            return $status;
+        });
+
+        print_r($status);
 
         // Define o status do server conectado a aplicação.
-        self::getApp()->setServerStatus(null);
+        self::getApp()->setServerStatus($status);
 
         // Chama o próximo middleware.
         return $next($request, $response);
     }
 
+    /**
+     * Executa um ping no servidor e porta indicados e retorna
+     *  verdadeiro se executado com sucesso.
+     *
+     * @param string $ip Endereço IP para o ping.
+     * @param int $port Porta para o ping.
+     *
+     * @return boolean
+     */
     private function ping($ip, $port)
     {
-        $errno = $errstr = null;
+        try
+        {
+            $errno = $errstr = null;
 
-        $fp = @fsockopen($ip, $port, $errno, $errstr, 60);
-        $connect = $fp !== false;
-        if($fp) fclose($fp);
+            $fp = @fsockopen($ip, $port, $errno, $errstr, 3);
+            $connect = is_resource($fp);
+            if($fp) fclose($fp);
 
-        return $connect;
+            return $connect;
+        }
+        catch(Exception $ex)
+        {
+            return false;
+        }
     }
 }
