@@ -67,7 +67,7 @@ class Home
         if(isset($post['BRACP_SRV_SELECTED']))
             self::getApp()->getSession()->BRACP_SVR_SELECTED = $post['BRACP_SRV_SELECTED'];
 
-        $serverStatus = ServerPing::pingServer(self::getApp()->getSession()->BRACP_SVR_SELECTED);
+        $serverStatus = ServerPing::pingServer(self::getApp()->getSession()->BRACP_SVR_SELECTED, true);
 
         // Responde ao client que foi alterado com sucesso.
         $response->withJson([
