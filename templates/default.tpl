@@ -91,15 +91,19 @@
 
                 <div class="menu-top status" ng-controller="serverStatus" ng-init="statusInit('SRV_{$serverStatus->getIndex()}', {if $serverStatus->getLogin()}true{else}false{/if}, {if $serverStatus->getChar()}true{else}false{/if}, {if $serverStatus->getMap()}true{else}false{/if});">
                     
-                    <label class="lbl-server">
-                        @@SERVER_STATUS(SERVER):
-                        <select ng-model="BRACP_SRV_SELECTED" ng-change="serverChange()">
-                            {for $i=0 to ($smarty.const.BRACP_SRV_COUNT - 1)}
-                                {assign var="SRV_NAME" value="BRACP_SRV_{$i}_NAME"}
-                                <option value="SRV_{$i}">{$smarty.const.$SRV_NAME}</option>
-                            {/for}
-                        </select>
-                    </label>
+                        <label class="lbl-server">
+                            {if $smarty.const.BRACP_SRV_COUNT > 1}
+                                @@SERVER_STATUS(SERVER):
+                                <select ng-model="BRACP_SRV_SELECTED" ng-change="serverChange()">
+                                    {for $i=0 to ($smarty.const.BRACP_SRV_COUNT - 1)}
+                                        {assign var="SRV_NAME" value="BRACP_SRV_{$i}_NAME"}
+                                        <option value="SRV_{$i}">{$smarty.const.$SRV_NAME}</option>
+                                    {/for}
+                                </select>
+                            {else}
+                                {$serverStatus->getName()}
+                            {/if}
+                        </label>
 
                     <div class="server-info">
                         <div class="status-server">

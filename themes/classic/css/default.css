@@ -34,8 +34,9 @@ html, body {
         background-color: transparent;
         font-family: Calibri, Tahoma, Verdana, Arial;
         font-size: 1em; }
+      .content .header .menu-top.status .lbl-server + .server-info {
+        margin-top: .8em; }
     .content .header .menu-top.status .server-info {
-      margin-top: 1em;
       width: 100%;
       display: table; }
       .content .header .menu-top.status .server-info .status-server {

@@ -55,11 +55,15 @@ html, body
                         font-family: Calibri, Tahoma, Verdana, Arial;
                         font-size: 1em;
                     }
+
+                    + .server-info
+                    {
+                        margin-top: .8em;
+                    }
                 }
 
                 .server-info
                 {
-                    margin-top: 1em;
                     width: 100%;
                     display: table;
 
