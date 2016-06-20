@@ -108,8 +108,6 @@ class ServerPing
             return $status;
         });
 
-        print_r($status);
-
         // Define o status do server conectado a aplicação.
         self::getApp()->setServerStatus($status);
 
