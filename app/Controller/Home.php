@@ -74,6 +74,7 @@ class Home
             'login' => $serverStatus->getLogin(),
             'char' => $serverStatus->getChar(),
             'map' => $serverStatus->getMap(),
+            'playerCount' => $serverStatus->getPlayerCount(),
         ]);
     }
 

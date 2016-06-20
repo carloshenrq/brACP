@@ -591,9 +591,8 @@ return
 
     'SERVER_STATUS' =>  [
         'SERVER'    => 'Servidor',
-        'LOGIN'     => 'Login-server',
-        'CHAR'      => 'Char-server',
-        'MAP'       => 'Map-server',
+        'TEXT'      => 'Estado',
+        'PLAYER'    => 'Em jogo',
 
         'STATE'     => [
             0       => 'Offline',

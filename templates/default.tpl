@@ -107,19 +107,16 @@
 
                     <div class="server-info" ng-if="state == 0">
                         <div class="status-server">
-                            <div class="status-title">@@SERVER_STATUS(LOGIN):</div>
-                            <div class="status-info offline" ng-if="!$parent.BRACP_SRV_LOGIN">@@SERVER_STATUS,STATE(0)</div>
-                            <div class="status-info online" ng-if="$parent.BRACP_SRV_LOGIN">@@SERVER_STATUS,STATE(1)</div>
+                            <div class="status-title">@@SERVER_STATUS(TEXT):</div>
+                            {literal}
+                            <div class="status-info" ng-class="{'online' : $parent.BRACP_SRV_LOGIN && $parent.BRACP_SRV_CHAR && $parent.BRACP_SRV_MAP, 'offline' : !$parent.BRACP_SRV_LOGIN || !$parent.BRACP_SRV_CHAR || !$parent.BRACP_SRV_MAP}">
+                                {{$parent.BRACP_SRV_LOGIN && $parent.BRACP_SRV_CHAR && $parent.BRACP_SRV_MAP ? 'Online' : 'Offline'}}
+                            </div>
+                            {/literal}
                         </div>
                         <div class="status-server">
-                            <div class="status-title">@@SERVER_STATUS(CHAR):</div>
-                            <div class="status-info offline" ng-if="!$parent.BRACP_SRV_CHAR">@@SERVER_STATUS,STATE(0)</div>
-                            <div class="status-info online" ng-if="$parent.BRACP_SRV_CHAR">@@SERVER_STATUS,STATE(1)</div>
-                        </div>
-                        <div class="status-server">
-                            <div class="status-title">@@SERVER_STATUS(MAP):</div>
-                            <div class="status-info offline" ng-if="!$parent.BRACP_SRV_MAP">@@SERVER_STATUS,STATE(0)</div>
-                            <div class="status-info online" ng-if="$parent.BRACP_SRV_MAP">@@SERVER_STATUS,STATE(1)</div>
+                            <div class="status-title">@@SERVER_STATUS(PLAYER):</div>
+                            <div class="status-info">{literal}{{BRACP_SRV_PLAYERCOUNT}}{/literal}</div>
                         </div>
                     </div>
 

@@ -98,10 +98,18 @@ class ServerPing
                 $status->setMap(false);
                 $status->setTime(date('Y-m-d H:i:s'));
                 $status->setExpire(date('Y-m-d H:i:s', time() + BRACP_SRV_PING_DELAY));
+                $status->setExpire(date('Y-m-d H:i:s', time() + BRACP_SRV_PING_DELAY));
+                $status->setPlayerCount(0);
 
                 // Grava o registro zerado no banco de dados.
                 ServerPing::getCpEm()->persist($status);
                 ServerPing::getCpEm()->flush();
+
+                // Conta quantos jogadores estão online no servidor
+                $playerCount = ServerPing::getSvrEm()->createQuery('
+                    SELECT COUNT(c.char_id) FROM Model\Char c WHERE c.online = true
+                ')
+                ->getSingleScalarResult();
 
                 // Executa os pings no servidor para obter os status.
                 $loginStatus = ServerPing::ping(constant('BRACP_SRV_' . $index . '_LOGIN_IP'), constant('BRACP_SRV_' . $index . '_LOGIN_PORT'));
@@ -112,6 +120,7 @@ class ServerPing
                 $status->setLogin($loginStatus);
                 $status->setChar($charStatus);
                 $status->setMap($mapStatus);
+                $status->setPlayerCount($playerCount);
 
                 // Salva o status real no banco de dados.
                 ServerPing::getCpEm()->merge($status);

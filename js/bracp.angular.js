@@ -320,9 +320,11 @@ brACPApp.controller('serverStatus', ['$scope', '$http', function($scope, $http) 
     {
         $scope.BRACP_SRV_SELECTED = srvSelected;
 
-        $scope.BRACP_SRV_LOGIN  = loginServer;
-        $scope.BRACP_SRV_CHAR   = charServer;
-        $scope.BRACP_SRV_MAP    = mapServer;
+
+        $scope.BRACP_SRV_LOGIN          = loginServer;
+        $scope.BRACP_SRV_CHAR           = charServer;
+        $scope.BRACP_SRV_MAP            = mapServer;
+        $scope.BRACP_SRV_PLAYERCOUNT    = 0;
     };
 
     $scope.serverChange = function()
@@ -348,6 +350,7 @@ brACPApp.controller('serverStatus', ['$scope', '$http', function($scope, $http) 
             $scope.BRACP_SRV_LOGIN = response.data.login;
             $scope.BRACP_SRV_CHAR = response.data.char;
             $scope.BRACP_SRV_MAP = response.data.map;
+            $scope.BRACP_SRV_PLAYERCOUNT = response.data.playerCount;
 
         });
     };

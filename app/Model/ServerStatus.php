@@ -69,6 +69,11 @@ class ServerStatus
      */
     protected $expire;
 
+    /**
+     * @Column(name="PlayerCount", type="integer")
+     */
+    protected $playerCount;
+
     public function getId()
     {
         return $this->id;
@@ -147,6 +152,16 @@ class ServerStatus
     public function setExpire($expire)
     {
         return $this->expire = $expire;
+    }
+
+    public function getPlayerCount()
+    {
+        return $this->playerCount;
+    }
+    
+    public function setPlayerCount($playerCount)
+    {
+        return $this->playerCount = $playerCount;
     }
 }
 

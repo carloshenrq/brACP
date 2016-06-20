@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS `bracp_server_status` (
     `LoginStatus` BOOLEAN NOT NULL DEFAULT false,
     `StatusTime` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
     `StatusExpire` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `PlayerCount` INTEGER NOT NULL DEFAULT 0,
     INDEX (`ServerIndex`, `StatusExpire`)
 ) ENGINE=MyISAM COLLATE='utf8_swedish_ci';
 
