@@ -21,6 +21,7 @@ namespace Controller;
 
 use \Psr\Http\Message\ServerRequestInterface;
 use \Psr\Http\Message\ResponseInterface;
+use \ServerPing;
 
 /**
  * Controlador para dados de conta.
@@ -66,9 +67,13 @@ class Home
         if(isset($post['BRACP_SRV_SELECTED']))
             self::getApp()->getSession()->BRACP_SVR_SELECTED = $post['BRACP_SRV_SELECTED'];
 
+        $serverStatus = ServerPing::pingServer(self::getApp()->getSession()->BRACP_SVR_SELECTED);
+
         // Responde ao client que foi alterado com sucesso.
         $response->withJson([
-            'status' => 'ok',
+            'login' => $serverStatus->getLogin(),
+            'char' => $serverStatus->getChar(),
+            'map' => $serverStatus->getMap(),
         ]);
     }
 

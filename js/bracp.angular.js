@@ -314,6 +314,8 @@ brACPApp.controller('account.email', ['$scope', '$http', function($scope, $http)
  */
 brACPApp.controller('serverStatus', ['$scope', '$http', function($scope, $http) {
 
+    $scope.state = 0;
+
     $scope.statusInit   = function(srvSelected, loginServer, charServer, mapServer)
     {
         $scope.BRACP_SRV_SELECTED = srvSelected;
@@ -330,6 +332,8 @@ brACPApp.controller('serverStatus', ['$scope', '$http', function($scope, $http) 
             'BRACP_SRV_SELECTED'         : $scope.BRACP_SRV_SELECTED.match(/^SRV_([0-9]+)$/)[1]
         });
 
+        $scope.state = 1;
+
         $http({
             'method'    : 'post',
             'url'       : urlServer,
@@ -338,7 +342,13 @@ brACPApp.controller('serverStatus', ['$scope', '$http', function($scope, $http) 
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
         }).then(function(response) {
-            window.location.reload();
+
+            $scope.state = 0;
+
+            $scope.BRACP_SRV_LOGIN = response.data.login;
+            $scope.BRACP_SRV_CHAR = response.data.char;
+            $scope.BRACP_SRV_MAP = response.data.map;
+
         });
     };
 

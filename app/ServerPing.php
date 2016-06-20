@@ -47,7 +47,21 @@ class ServerPing
             $index = self::getApp()->getSession()->BRACP_SVR_SELECTED;
 
         // Obtém o status do cache de memória.
-        $status = Cache::get('BRACP_SRV_'.$index.'_STATUS_CACHE', function() {
+        $status = self::pingServer($index);
+
+        // Define o status do server conectado a aplicação.
+        self::getApp()->setServerStatus($status);
+
+        // Chama o próximo middleware.
+        return $next($request, $response);
+    }
+
+    /**
+     * Realiza um ping no servidor atual.
+     */
+    public static function pingServer($index)
+    {
+        return Cache::get('BRACP_SRV_'.$index.'_STATUS_CACHE', function() {
             // Indice do servidor selcionado para realizar o ping nas portas
             //  para ver se realmente está funcionando.
             $index = BRACP_SRV_DEFAULT;
@@ -90,9 +104,9 @@ class ServerPing
                 ServerPing::getCpEm()->flush();
 
                 // Executa os pings no servidor para obter os status.
-                $loginStatus = $this->ping(constant('BRACP_SRV_' . $index . '_LOGIN_IP'), constant('BRACP_SRV_' . $index . '_LOGIN_PORT'));
-                $charStatus = $this->ping(constant('BRACP_SRV_' . $index . '_CHAR_IP'), constant('BRACP_SRV_' . $index . '_CHAR_PORT'));
-                $mapStatus = $this->ping(constant('BRACP_SRV_' . $index . '_MAP_IP'), constant('BRACP_SRV_' . $index . '_MAP_PORT'));
+                $loginStatus = ServerPing::ping(constant('BRACP_SRV_' . $index . '_LOGIN_IP'), constant('BRACP_SRV_' . $index . '_LOGIN_PORT'));
+                $charStatus = ServerPing::ping(constant('BRACP_SRV_' . $index . '_CHAR_IP'), constant('BRACP_SRV_' . $index . '_CHAR_PORT'));
+                $mapStatus = ServerPing::ping(constant('BRACP_SRV_' . $index . '_MAP_IP'), constant('BRACP_SRV_' . $index . '_MAP_PORT'));
 
                 // Define os status reais no servidor.
                 $status->setLogin($loginStatus);
@@ -107,12 +121,6 @@ class ServerPing
             // Retorna o status via cache.
             return $status;
         });
-
-        // Define o status do server conectado a aplicação.
-        self::getApp()->setServerStatus($status);
-
-        // Chama o próximo middleware.
-        return $next($request, $response);
     }
 
     /**
@@ -124,7 +132,7 @@ class ServerPing
      *
      * @return boolean
      */
-    private function ping($ip, $port)
+    public static function ping($ip, $port)
     {
         try
         {

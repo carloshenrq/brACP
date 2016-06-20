@@ -91,35 +91,44 @@
 
                 <div class="menu-top status" ng-controller="serverStatus" ng-init="statusInit('SRV_{$serverStatus->getIndex()}', {if $serverStatus->getLogin()}true{else}false{/if}, {if $serverStatus->getChar()}true{else}false{/if}, {if $serverStatus->getMap()}true{else}false{/if});">
                     
-                        <label class="lbl-server">
-                            {if $smarty.const.BRACP_SRV_COUNT > 1}
-                                @@SERVER_STATUS(SERVER):
-                                <select ng-model="BRACP_SRV_SELECTED" ng-change="serverChange()">
-                                    {for $i=0 to ($smarty.const.BRACP_SRV_COUNT - 1)}
-                                        {assign var="SRV_NAME" value="BRACP_SRV_{$i}_NAME"}
-                                        <option value="SRV_{$i}">{$smarty.const.$SRV_NAME}</option>
-                                    {/for}
-                                </select>
-                            {else}
-                                {$serverStatus->getName()}
-                            {/if}
-                        </label>
+                    <label class="lbl-server" ng-if="state == 0">
+                        {if $smarty.const.BRACP_SRV_COUNT > 1}
+                            @@SERVER_STATUS(SERVER):
+                            <select ng-model="$parent.BRACP_SRV_SELECTED" ng-change="serverChange()">
+                                {for $i=0 to ($smarty.const.BRACP_SRV_COUNT - 1)}
+                                    {assign var="SRV_NAME" value="BRACP_SRV_{$i}_NAME"}
+                                    <option value="SRV_{$i}">{$smarty.const.$SRV_NAME}</option>
+                                {/for}
+                            </select>
+                        {else}
+                            {$serverStatus->getName()}
+                        {/if}
+                    </label>
 
-                    <div class="server-info">
+                    <div class="server-info" ng-if="state == 0">
                         <div class="status-server">
                             <div class="status-title">@@SERVER_STATUS(LOGIN):</div>
-                            <div class="status-info offline" ng-if="!BRACP_SRV_LOGIN">@@SERVER_STATUS,STATE(0)</div>
-                            <div class="status-info online" ng-if="BRACP_SRV_LOGIN">@@SERVER_STATUS,STATE(1)</div>
+                            <div class="status-info offline" ng-if="!$parent.BRACP_SRV_LOGIN">@@SERVER_STATUS,STATE(0)</div>
+                            <div class="status-info online" ng-if="$parent.BRACP_SRV_LOGIN">@@SERVER_STATUS,STATE(1)</div>
                         </div>
                         <div class="status-server">
                             <div class="status-title">@@SERVER_STATUS(CHAR):</div>
-                            <div class="status-info offline" ng-if="!BRACP_SRV_CHAR">@@SERVER_STATUS,STATE(0)</div>
-                            <div class="status-info online" ng-if="BRACP_SRV_CHAR">@@SERVER_STATUS,STATE(1)</div>
+                            <div class="status-info offline" ng-if="!$parent.BRACP_SRV_CHAR">@@SERVER_STATUS,STATE(0)</div>
+                            <div class="status-info online" ng-if="$parent.BRACP_SRV_CHAR">@@SERVER_STATUS,STATE(1)</div>
                         </div>
                         <div class="status-server">
                             <div class="status-title">@@SERVER_STATUS(MAP):</div>
-                            <div class="status-info offline" ng-if="!BRACP_SRV_MAP">@@SERVER_STATUS,STATE(0)</div>
-                            <div class="status-info online" ng-if="BRACP_SRV_MAP">@@SERVER_STATUS,STATE(1)</div>
+                            <div class="status-info offline" ng-if="!$parent.BRACP_SRV_MAP">@@SERVER_STATUS,STATE(0)</div>
+                            <div class="status-info online" ng-if="$parent.BRACP_SRV_MAP">@@SERVER_STATUS,STATE(1)</div>
+                        </div>
+                    </div>
+
+                    <div class="server-info" ng-if="state == 1">
+                        <div class="loading-ajax">
+                            <div class="loading-bar loading-bar-1"></div>
+                            <div class="loading-bar loading-bar-2"></div>
+                            <div class="loading-bar loading-bar-3"></div>
+                            <div class="loading-bar loading-bar-4"></div>
                         </div>
                     </div>
 
