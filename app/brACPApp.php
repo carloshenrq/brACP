@@ -317,12 +317,15 @@ class brACPApp extends Slim\App
      *
      * @return EntityManager
      */
-    public function getEm($name = 'cp')
+    public function getEm($name = 'cp', $throw = true)
     {
         // Se não houver EntityManager, emite uma exceção para tratamento
         //  do erro.
         if(!isset($this->em[$name]))
-            throw new \Exception('EntityManager not defined.');
+            if($throw === true)
+                throw new \Exception('EntityManager not defined.');
+            else
+                return null;
 
         return $this->em[$name];
     }

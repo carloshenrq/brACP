@@ -352,6 +352,10 @@ brACPApp.controller('serverStatus', ['$scope', '$http', function($scope, $http) 
             $scope.BRACP_SRV_MAP = response.data.map;
             $scope.BRACP_SRV_PLAYERCOUNT = response.data.playerCount;
 
+        }, function(response) {
+
+            window.location.reload();
+
         });
     };
 

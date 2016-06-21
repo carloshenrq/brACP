@@ -592,7 +592,9 @@ return
     'SERVER_STATUS' =>  [
         'SERVER'    => 'Servidor',
         'TEXT'      => 'Estado',
-        'PLAYER'    => 'Em jogo',
+        'PLAYER'    => 'Jogadores Online',
+
+        'LOADING'   => 'Carregando informações do servidor...',
 
         'STATE'     => [
             0       => 'Offline',

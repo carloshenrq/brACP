@@ -13,48 +13,39 @@ html, body {
   position: relative; }
   .content .header .menu-top.access, .content .header .menu-top.link {
     padding: 8px; }
-  .content .header .menu-top.status {
-    background-color: white;
-    position: absolute;
-    top: 6em;
-    left: 10em;
-    padding: 1.3em;
-    width: 200px;
-    box-shadow: 0px 0px 3px white;
-    -moz-box-shadow: 0px 0px 3px white;
-    -webkit-box-shadow: 0px 0px 3px white; }
-    .content .header .menu-top.status .lbl-server {
-      font-weight: bold;
-      font-size: 1.2em;
-      display: block;
-      text-align: center; }
-      .content .header .menu-top.status .lbl-server select {
+  .content .header .menu-top.access {
+    display: table;
+    width: 100%;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box; }
+    .content .header .menu-top.access .server-status, .content .header .menu-top.access .user-access {
+      display: table-cell;
+      width: 50%; }
+    .content .header .menu-top.access .user-access {
+      text-align: right; }
+    .content .header .menu-top.access .server-status {
+      text-align: center;
+      color: white; }
+      .content .header .menu-top.access .server-status label {
+        font-weight: bold; }
+        .content .header .menu-top.access .server-status label + label {
+          margin-left: 2em; }
+      .content .header .menu-top.access .server-status select, .content .header .menu-top.access .server-status span {
         border: 0;
         padding: 0;
+        margin-left: 2px;
         background-color: transparent;
-        font-family: Calibri, Tahoma, Verdana, Arial;
-        font-size: 1em; }
-      .content .header .menu-top.status .lbl-server + .server-info {
-        margin-top: .8em; }
-    .content .header .menu-top.status .server-info {
-      width: 100%;
-      display: table; }
-      .content .header .menu-top.status .server-info .status-server {
-        display: table-row; }
-        .content .header .menu-top.status .server-info .status-server div {
-          display: table-cell;
-          width: 50%; }
-          .content .header .menu-top.status .server-info .status-server div.status-title {
-            font-weight: bold;
-            text-align: right; }
-          .content .header .menu-top.status .server-info .status-server div.status-info {
-            text-align: center; }
-            .content .header .menu-top.status .server-info .status-server div.status-info.online {
-              color: green; }
-            .content .header .menu-top.status .server-info .status-server div.status-info.offline {
-              color: red; }
-  .content .header .menu-top.access {
-    text-align: right; }
+        color: white;
+        font-weight: normal; }
+      .content .header .menu-top.access .server-status span.info-status {
+        display: inline-block;
+        padding: 2px;
+        color: white; }
+        .content .header .menu-top.access .server-status span.info-status.online {
+          background-color: #2ecc71 !important; }
+        .content .header .menu-top.access .server-status span.info-status.offline {
+          background-color: #e74c3c !important; }
   .content .header .menu-top.logo {
     width: 420px;
     height: 200px;

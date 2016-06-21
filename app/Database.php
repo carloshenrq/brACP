@@ -58,31 +58,37 @@ class Database
      */
     public static function loadConnection()
     {
-        // Define o entitymanager para o servidor.
-        $cpEm = EntityManager::create([
-            'driver'    => BRACP_SQL_CP_DRIVER,
-            'host'      => BRACP_SQL_CP_HOST,
-            'user'      => BRACP_SQL_CP_USER,
-            'password'  => BRACP_SQL_CP_PASS,
-            'dbname'    => BRACP_SQL_CP_DBNAME,
-        ], Setup::createAnnotationMetadataConfiguration([ BRACP_ENTITY_DIR ], BRACP_DEVELOP_MODE));
+        if(is_null(self::getApp()->getEm('cp', false)))
+        {
+            // Define o entitymanager para o servidor.
+            $cpEm = EntityManager::create([
+                'driver'    => BRACP_SQL_CP_DRIVER,
+                'host'      => BRACP_SQL_CP_HOST,
+                'user'      => BRACP_SQL_CP_USER,
+                'password'  => BRACP_SQL_CP_PASS,
+                'dbname'    => BRACP_SQL_CP_DBNAME,
+            ], Setup::createAnnotationMetadataConfiguration([ BRACP_ENTITY_DIR ], BRACP_DEVELOP_MODE));
 
-        // Realiza a conexão no banco de dados para ver se está tudo funcionando
-        //  de forma correta e se não existirá surpresas de erros quanto a conexão.
-        $cpEm->getConnection()->connect();
-        self::getApp()->setEm($cpEm, 'cp');
+            // Realiza a conexão no banco de dados para ver se está tudo funcionando
+            //  de forma correta e se não existirá surpresas de erros quanto a conexão.
+            // $cpEm->getConnection()->connect();
+            self::getApp()->setEm($cpEm, 'cp');
+        }
 
-        // Define o entitymanager para o servidor.
-        $dfEm = EntityManager::create([
-            'driver'    => constant('BRACP_SRV_' . BRACP_SRV_DEFAULT . '_SQL_DRIVER'),
-            'host'      => constant('BRACP_SRV_' . BRACP_SRV_DEFAULT . '_SQL_HOST'),
-            'user'      => constant('BRACP_SRV_' . BRACP_SRV_DEFAULT . '_SQL_USER'),
-            'password'  => constant('BRACP_SRV_' . BRACP_SRV_DEFAULT . '_SQL_PASS'),
-            'dbname'    => constant('BRACP_SRV_' . BRACP_SRV_DEFAULT . '_SQL_DBNAME'),
-        ], Setup::createAnnotationMetadataConfiguration([ BRACP_ENTITY_DIR ], BRACP_DEVELOP_MODE));
+        if(is_null(self::getApp()->getEm('SV' . BRACP_SRV_DEFAULT, false)))
+        {
+            // Define o entitymanager para o servidor.
+            $dfEm = EntityManager::create([
+                'driver'    => constant('BRACP_SRV_' . BRACP_SRV_DEFAULT . '_SQL_DRIVER'),
+                'host'      => constant('BRACP_SRV_' . BRACP_SRV_DEFAULT . '_SQL_HOST'),
+                'user'      => constant('BRACP_SRV_' . BRACP_SRV_DEFAULT . '_SQL_USER'),
+                'password'  => constant('BRACP_SRV_' . BRACP_SRV_DEFAULT . '_SQL_PASS'),
+                'dbname'    => constant('BRACP_SRV_' . BRACP_SRV_DEFAULT . '_SQL_DBNAME'),
+            ], Setup::createAnnotationMetadataConfiguration([ BRACP_ENTITY_DIR ], BRACP_DEVELOP_MODE));
 
-        $dfEm->getConnection()->connect();
-        self::getApp()->setEm($dfEm, 'SV' . BRACP_SRV_DEFAULT);
+            // $dfEm->getConnection()->connect();
+            self::getApp()->setEm($dfEm, 'SV' . BRACP_SRV_DEFAULT);
+        }
 
         // Caso o usuário tenha selecionado um banco de dados para ser utilizado (que não seja o default)
         // Abre a conexão com o outro servidor para realizar os selects.
@@ -90,16 +96,20 @@ class Database
         {
             $index = self::getApp()->getSession()->BRACP_SVR_SELECTED;
 
-            // Define o entitymanager para o servidor.
-            $svEm = EntityManager::create([
-                'driver'    => constant('BRACP_SRV_' . $index . '_SQL_DRIVER'),
-                'host'      => constant('BRACP_SRV_' . $index . '_SQL_HOST'),
-                'user'      => constant('BRACP_SRV_' . $index . '_SQL_USER'),
-                'password'  => constant('BRACP_SRV_' . $index . '_SQL_PASS'),
-                'dbname'    => constant('BRACP_SRV_' . $index . '_SQL_DBNAME'),
-            ], Setup::createAnnotationMetadataConfiguration([ BRACP_ENTITY_DIR ], BRACP_DEVELOP_MODE));
+            if(is_null(self::getApp()->getEm('SV' . $index, false)))
+            {
+                // Define o entitymanager para o servidor.
+                $svEm = EntityManager::create([
+                    'driver'    => constant('BRACP_SRV_' . $index . '_SQL_DRIVER'),
+                    'host'      => constant('BRACP_SRV_' . $index . '_SQL_HOST'),
+                    'user'      => constant('BRACP_SRV_' . $index . '_SQL_USER'),
+                    'password'  => constant('BRACP_SRV_' . $index . '_SQL_PASS'),
+                    'dbname'    => constant('BRACP_SRV_' . $index . '_SQL_DBNAME'),
+                ], Setup::createAnnotationMetadataConfiguration([ BRACP_ENTITY_DIR ], BRACP_DEVELOP_MODE));
 
-            self::getApp()->setEm($svEm, 'SV' . $index);
+                // $svEm->getConnection()->connect();
+                self::getApp()->setEm($svEm, 'SV' . $index);
+            }
         }
     }
 }

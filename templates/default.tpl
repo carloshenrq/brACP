@@ -75,60 +75,58 @@
             <div class="header">
                 <div class="menu-top access">
 
-                    {if isset($account) eq false}
-                        <label for="modal-login" class="button small link">@@MENU,MYACC,UNAUTHENTICATED(LOGIN)</label>
-                        {if $smarty.const.BRACP_ALLOW_CREATE_ACCOUNT eq true}
-                            <label for="modal-register" class="button small success">@@MENU,MYACC,UNAUTHENTICATED(CREATE)</label>
+                    <div class="server-status" ng-controller="serverStatus" ng-init="statusInit('SRV_{$serverStatus->getIndex()}', {(($serverStatus->getLogin()) ? 'true':'false')}, {(($serverStatus->getChar()) ? 'true':'false')}, {(($serverStatus->getMap()) ? 'true':'false')});">
+
+                        <div ng-if="state == 0">
+                            <label>
+                                @@SERVER_STATUS(SERVER):
+                                <select ng-model="$parent.BRACP_SRV_SELECTED" ng-change="serverChange()">
+                                    {for $i=0 to {($smarty.const.BRACP_SRV_COUNT-1)}}
+                                        {assign var="CNST_SRV" value="BRACP_SRV_{$i}_NAME"}
+                                        <option value="SRV_{$i}">{$smarty.const.$CNST_SRV}</option>
+                                    {/for}
+                                </select>
+                            </label>
+
+                            <label>
+                                @@SERVER_STATUS(TEXT):
+
+                                {literal}
+                                    <span class="info-status" ng-class="{'online': $parent.BRACP_SRV_LOGIN && $parent.BRACP_SRV_CHAR && $parent.BRACP_SRV_MAP, 'offline': !$parent.BRACP_SRV_LOGIN || !$parent.BRACP_SRV_CHAR || !$parent.BRACP_SRV_MAP}">
+                                        {{BRACP_SRV_LOGIN && BRACP_SRV_CHAR && BRACP_SRV_MAP ? '@@SERVER_STATUS,STATE(1)' : '@@SERVER_STATUS,STATE(0)'}}
+                                    </span>
+                                {/literal}
+                            </label>
+
+                            <label>
+                                @@SERVER_STATUS(PLAYER):
+
+                                {literal}
+                                    <span class="info-status">{{$parent.BRACP_SRV_PLAYERCOUNT}}</span>
+                                {/literal}
+                            </label>
+                        </div>
+
+                        <div ng-if="state == 1">
+                            <i>@@SERVER_STATUS(LOADING)</i>
+                        </div>
+
+                    </div>
+
+                    <div class="user-access">
+                        {if isset($account) eq false}
+                            <label for="modal-login" class="button small link">@@MENU,MYACC,UNAUTHENTICATED(LOGIN)</label>
+                            {if $smarty.const.BRACP_ALLOW_CREATE_ACCOUNT eq true}
+                                <label for="modal-register" class="button small success">@@MENU,MYACC,UNAUTHENTICATED(CREATE)</label>
+                            {/if}
+                        {else}
+                            <div class="url-link button small error" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}account/logout">@@MENU,MYACC,AUTHENTICATED(LOGOUT, {$userid})</div>
                         {/if}
-                    {else}
-                        <div class="url-link button small error" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}account/logout">@@MENU,MYACC,AUTHENTICATED(LOGOUT, {$userid})</div>
-                    {/if}
+                    </div>
 
                 </div>
 
                 <div class="menu-top logo url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}">
-                </div>
-
-                <div class="menu-top status" ng-controller="serverStatus" ng-init="statusInit('SRV_{$serverStatus->getIndex()}', {if $serverStatus->getLogin()}true{else}false{/if}, {if $serverStatus->getChar()}true{else}false{/if}, {if $serverStatus->getMap()}true{else}false{/if});">
-                    
-                    <label class="lbl-server" ng-if="state == 0">
-                        {if $smarty.const.BRACP_SRV_COUNT > 1}
-                            @@SERVER_STATUS(SERVER):
-                            <select ng-model="$parent.BRACP_SRV_SELECTED" ng-change="serverChange()">
-                                {for $i=0 to ($smarty.const.BRACP_SRV_COUNT - 1)}
-                                    {assign var="SRV_NAME" value="BRACP_SRV_{$i}_NAME"}
-                                    <option value="SRV_{$i}">{$smarty.const.$SRV_NAME}</option>
-                                {/for}
-                            </select>
-                        {else}
-                            {$serverStatus->getName()}
-                        {/if}
-                    </label>
-
-                    <div class="server-info" ng-if="state == 0">
-                        <div class="status-server">
-                            <div class="status-title">@@SERVER_STATUS(TEXT):</div>
-                            {literal}
-                            <div class="status-info" ng-class="{'online' : $parent.BRACP_SRV_LOGIN && $parent.BRACP_SRV_CHAR && $parent.BRACP_SRV_MAP, 'offline' : !$parent.BRACP_SRV_LOGIN || !$parent.BRACP_SRV_CHAR || !$parent.BRACP_SRV_MAP}">
-                                {{$parent.BRACP_SRV_LOGIN && $parent.BRACP_SRV_CHAR && $parent.BRACP_SRV_MAP ? '@@SERVER_STATUS,STATE(1)' : '@@SERVER_STATUS,STATE(0)'}}
-                            </div>
-                            {/literal}
-                        </div>
-                        <div class="status-server">
-                            <div class="status-title">@@SERVER_STATUS(PLAYER):</div>
-                            <div class="status-info">{literal}{{BRACP_SRV_PLAYERCOUNT}}{/literal}</div>
-                        </div>
-                    </div>
-
-                    <div class="server-info" ng-if="state == 1">
-                        <div class="loading-ajax">
-                            <div class="loading-bar loading-bar-1"></div>
-                            <div class="loading-bar loading-bar-2"></div>
-                            <div class="loading-bar loading-bar-3"></div>
-                            <div class="loading-bar loading-bar-4"></div>
-                        </div>
-                    </div>
-
                 </div>
 
                 <div class="menu-top link">
