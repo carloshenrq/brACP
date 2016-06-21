@@ -170,7 +170,7 @@ html, body {
           left: 70%; }
 .content .body {
   width: 96%;
-  margin: 0 auto;
+  margin: 3px auto;
   background-color: white;
   padding: 8px;
   box-shadow: 0 0 3px white;
