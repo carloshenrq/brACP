@@ -1,0 +1,254 @@
+/**
+ *  brACP - brAthena Control Panel for Ragnarok Emulators
+ *  Copyright (C) 2015  brAthena, CHLFZ
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+@import '_mixin';
+
+html, body
+{
+    margin: 0px; padding: 0px;
+    font-family: Tahoma, Verdana, Arial;
+    font-size: 12px;
+}
+
+html
+{
+    background-color: #fff;
+}
+
+.install-cfg-radio
+{
+    display: none;
+}
+
+.bracp-install-body
+{
+    width: 600px;
+    @include border-radius(6px);
+    color: rgb(39, 174, 96);
+
+    position: relative;
+    top: 40px;
+
+    margin: auto;
+    margin-bottom: 120px;
+
+    @include box-shadow('0px 0px 6px rgba(39, 174, 96, .65)');
+
+    .install-title
+    {
+        padding: 20px;
+        text-align: center;
+
+        color: white;
+        font-size: 15px;
+        font-weight: bold;
+        background-color: rgb(46, 204, 113);
+
+        border: 1px solid rgba(255, 255, 255, .6);
+
+        @include border-radius(6px 6px 0px 0px);
+    }
+
+    .install-body
+    {
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+        margin: 0px; padding: 0px;
+        background-color: white;
+
+        @include box-shadow('0px 0px 0px 1px rgba(39, 174, 96, .65) inset');
+        @include border-radius(0px 0px 6px 6px);
+
+        div.install-content
+        {
+            padding: 16px;
+            min-height: 300px;
+            text-align: justify;
+
+            h1
+            {
+                padding: 0px;
+                margin: 0px 0px 6px 0px;
+                font-size: 14px;
+                border-bottom: 1px dotted rgb(39, 174, 96);
+            }
+
+            .install-data
+            {
+                padding: 12px;
+                background-color: rgba(39, 174, 96, .1);
+                @include border-radius(6px);
+                @include box-shadow('0px 0px 1px 1px rgba(39, 174, 96, .65)');
+
+                label.input-align
+                {
+                    display: block;
+
+                    span
+                    {
+                        font-style: italic;
+                        font-size: 10px;
+                        color: rgb(230, 126, 34);
+                        display: block;
+
+                        &:before
+                        {
+                            content: '*';
+                        }
+                    }
+
+                    input[type="checkbox"]
+                    {
+                        width: 13px;
+                        height: 13px;
+                        padding: 0;
+                        margin:0;
+                        vertical-align: bottom;
+                        position: relative;
+                        top: -1px;
+                        *overflow: hidden;
+                    }
+
+                    select, input[type="text"], input[type="password"]
+                    {
+                        display: block;
+                    }
+
+                    &+ label
+                    {
+                        margin-top: 12px;
+                    }
+                }
+            }
+        }
+    }
+
+    .install-cfg-allow
+    {
+        display: none;
+
+        &:not(:checked) + .bracp-install-menu
+        {
+            display: none;
+        }
+    }
+
+    .bracp-install-menu
+    {
+        width: 100%;
+        ul
+        {
+            width: 100%;
+            list-style: none;
+            margin: 0; padding: 0;
+            display: table;
+            table-layout: fixed;
+
+            li
+            {
+                display: table-cell;
+                text-align: center;
+
+                border: 1px solid rgba(39, 174, 96, .65);
+
+                label
+                {
+                    display: block;
+                    padding: 8px;
+                    cursor: pointer;
+                    color: white;
+                    font-weight: bold;
+                }
+
+                input.install-cfg-radio:not(:checked) + label
+                {
+                    background-color: rgb(39, 174, 96);
+                }
+
+                input.install-cfg-radio:checked + label
+                {
+                    color: rgb(39, 174, 96);
+                    background-color: white;
+                }
+
+                &+ li
+                {
+                    border-left: 0px;
+                }
+            }
+        }
+    }
+}
+
+.bracp-message
+{
+    padding: 16px;
+    font-size: 12px;
+    border: 1px solid;
+
+    @include border-radius(4px);
+
+    .header, h1, h2, h3, h4
+    {
+        margin: 0px !important; padding: 0px !important;
+        font-size: 12px;
+        margin-bottom: 8px !important;
+        border-bottom: 1px dotted;
+        text-transform: capitalize;
+        font-weight: bold;
+        min-height: 0 !important;
+
+        .sub-title
+        {
+            font-size: 10px;
+            font-style: italic;
+            font-weight: none;
+            text-transform: none;
+        }
+    }
+}
+
+.info
+{
+    color: rgb(41, 128, 185);
+    background-color: rgba(52, 152, 219, 0.1);
+    border-color: rgba(52, 152, 219, 0.7);
+}
+
+.error
+{
+    color: rgb(192, 57, 43);
+    border-color: rgba(231, 76, 60, 0.7);
+    background-color: rgba(231, 76, 60, 0.1);
+}
+
+.success
+{
+    border-color: rgba(46, 204, 113, 0.7);
+    background-color: rgba(46, 204, 113, 0.1);
+    color: rgb(46, 204, 113);
+}
+
+.warning
+{
+    border-color: rgba(230, 126, 34, 0.7);
+    background-color: rgba(230, 126, 34, 0.1);
+    color: rgb(230, 126, 34);
+}
+ 

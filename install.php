@@ -69,28 +69,14 @@ $config = [
     // MySQL
     'BRACP_SQL_CP_DRIVER'                   => 'pdo_mysql',
     'BRACP_SQL_CP_HOST'                     => '127.0.0.1',
-    'BRACP_SQL_CP_USER'                     => 'ragnarok',
-    'BRACP_SQL_CP_PASS'                     => 'ragnarok',
-    'BRACP_SQL_CP_DBNAME'                   => 'ragnarok',
+    'BRACP_SQL_CP_USER'                     => 'bracp',
+    'BRACP_SQL_CP_PASS'                     => 'bracp',
+    'BRACP_SQL_CP_DBNAME'                   => 'bracp',
 
     // Contagem de servidores que o brACP está configurado.
     'BRACP_SRV_COUNT'                       => 1,
     'BRACP_SRV_DEFAULT'                     => 0,
     'BRACP_SRV_PING_DELAY'                  => 300,
-
-    // Informações de conexão dos servidores.
-    'BRACP_SRV_0_NAME'                      => 'brAthena',
-    'BRACP_SRV_0_LOGIN_IP'                  => '127.0.0.1',
-    'BRACP_SRV_0_LOGIN_PORT'                => '6900',
-    'BRACP_SRV_0_CHAR_IP'                   => '127.0.0.1',
-    'BRACP_SRV_0_CHAR_PORT'                 => '6121',
-    'BRACP_SRV_0_MAP_IP'                    => '127.0.0.1',
-    'BRACP_SRV_0_MAP_PORT'                  => '5121',
-    'BRACP_SRV_0_SQL_DRIVER'                => 'pdo_mysql',
-    'BRACP_SRV_0_SQL_HOST'                  => '127.0.0.1',
-    'BRACP_SRV_0_SQL_USER'                  => 'ragnarok',
-    'BRACP_SRV_0_SQL_PASS'                  => 'ragnarok',
-    'BRACP_SRV_0_SQL_DBNAME'                => 'ragnarok',
 
     // Servidor de E-mail
     'BRACP_ALLOW_MAIL_SEND'                 => true,
@@ -130,7 +116,7 @@ $config = [
     'BRACP_REGEXP_PASSWORD'                 => '[a-zA-Z0-9]{4,20}',
     'BRACP_REGEXP_EMAIL'                    => '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}',
     'BRACP_ALLOW_CHOOSE_THEME'              => true,
-    'BRACP_DEFAULT_THEME'                   => 'default',
+    'BRACP_DEFAULT_THEME'                   => 'classic',
     'BRACP_DEFAULT_LANGUAGE'                => 'pt_BR',
 
     // Memcache
@@ -155,6 +141,7 @@ $PPCurrency =  ['AUD', 'BRL', 'CAD', 'CZK', 'DKK', 'EUR', 'HKD',
 //  de configuração no disco sem problemas.
 if($writeable && isset($_POST) && !empty($_POST))
 {
+    file_put_contents('teste.txt', print_r($_POST, true));
     // Inicializa o cabeçalho do arquivo de configurações que será escrito.
     $configFile = "<?php\n";
     $configFile .= "/**\n";
@@ -162,25 +149,42 @@ if($writeable && isset($_POST) && !empty($_POST))
     $configFile .= " */\n";
     $configFile .= "\n";
 
-    // Varre todas as variaveis de configuração para gravar no arquivo.
-    foreach($config as $k => $v)
+    foreach( $_POST as $k => $v )
     {
-        // Verifica se a chave enviada pelo post existe no arquivo de configuração
-        //  se existir, substitui o valor e grava a configuração no arquivo.
-        if(array_key_exists($k, $_POST))
-            $v = $_POST[$k];
+        if(!preg_match('/^BRACP_/i', $k) || preg_match('/^BRACP_SERVERS$/', $k))
+            continue;
 
-        // Caso necessário adiciona o escape ao valor.
         $v = addslashes($v);
 
-        // Se for apenas valores númericos, então converte para inteiro.
         if(preg_match('/^([0-9]+)$/', $v) || preg_match('/^(true|false)$/', $v))
             $configFile .= "DEFINE('{$k}', {$v}, false);\n";
         else
             $configFile .= "DEFINE('{$k}', '{$v}', false);\n";
+
     }
 
     $configFile .= "\n";
+
+    foreach($_POST['BRACP_SERVERS'] as $index => $server)
+    {
+        $configFile .= "DEFINE('BRACP_SRV_{$index}_NAME', '".addslashes($server['name'])."');\n";
+        $configFile .= "DEFINE('BRACP_SRV_{$index}_LOGIN_IP', '".addslashes($server['login']['address'])."');\n";
+        $configFile .= "DEFINE('BRACP_SRV_{$index}_LOGIN_PORT', '".addslashes($server['login']['port'])."');\n";
+        $configFile .= "DEFINE('BRACP_SRV_{$index}_CHAR_IP', '".addslashes($server['char']['address'])."');\n";
+        $configFile .= "DEFINE('BRACP_SRV_{$index}_CHAR_PORT', '".addslashes($server['char']['port'])."');\n";
+        $configFile .= "DEFINE('BRACP_SRV_{$index}_MAP_IP', '".addslashes($server['map']['address'])."');\n";
+        $configFile .= "DEFINE('BRACP_SRV_{$index}_MAP_PORT', '".addslashes($server['map']['port'])."');\n";
+        $configFile .= "DEFINE('BRACP_SRV_{$index}_SQL_DRIVER', '".addslashes($server['sql']['driver'])."');\n";
+        $configFile .= "DEFINE('BRACP_SRV_{$index}_SQL_HOST', '".addslashes($server['sql']['host'])."');\n";
+        $configFile .= "DEFINE('BRACP_SRV_{$index}_SQL_USER', '".addslashes($server['sql']['user'])."');\n";
+        $configFile .= "DEFINE('BRACP_SRV_{$index}_SQL_PASS', '".addslashes($server['sql']['pass'])."');\n";
+        $configFile .= "DEFINE('BRACP_SRV_{$index}_SQL_DBNAME', '".addslashes($server['sql']['dbname'])."');\n";
+        $configFile .= "\n";
+    }
+
+    $configFile .= "\n";
+
+
 
     // Finaliza o arquivo e escreve os dados no arquivo de configuração.
     file_put_contents('config.php', $configFile);
@@ -209,8 +213,8 @@ else if(!$writeable)
         -->
         <meta charset="UTF-8">
 
-        <link rel="stylesheet" type="text/css" href="themes/default/css/install.css"/>
-        <link rel="stylesheet" type="text/css" href="themes/default/css/button.css"/>
+        <link rel="stylesheet" type="text/css" href="themes/classic/css/install.css"/>
+        <link rel="stylesheet" type="text/css" href="themes/classic/css/button.css"/>
 
         <script src="js/angular.min.js"></script>
         <script src="js/jquery-2.1.4.min.js"></script>
@@ -228,6 +232,7 @@ else if(!$writeable)
                 $scope.BRACP_PAYPAL_CURRENCY = <?php echo json_encode($PPCurrency); ?>;
                 $scope.BRACP_ALLOW_MEMCACHE = <?php echo intval(extension_loaded('memcache')); ?>;
 
+
                 if($scope.BRACP_ALLOW_INSTALL == false)
                 {
                     $scope.BRACP_SWITCH = 'error';
@@ -236,9 +241,21 @@ else if(!$writeable)
                 {
                     $scope.BRACP_SWITCH = 'home';
                 }
+
                 $scope.config = <?php echo json_encode($config); ?>;
+                $scope.config.BRACP_SERVERS = [];
 
                 $scope.saveAndInstall = function() {
+
+                    if($scope.config.BRACP_SERVERS.length == 0)
+                    {
+                        alert("Você deve possuir pelo menos 1 servidor configurado antes de continuar.");
+                        $scope.BRACP_SWITCH = 'servers';
+                        return false;
+                    }
+
+                    $scope.config.BRACP_SRV_COUNT = $scope.config.BRACP_SERVERS.length;
+
                     $http({
                         'url'       : 'install.php',
                         'method'    : 'POST',
@@ -249,6 +266,40 @@ else if(!$writeable)
                         window.location.reload();
                     });
                 };
+
+                $scope.addServer    = function() {
+
+                    $scope.config.BRACP_SERVERS.push({
+                        'name'  : 'brAthena',
+                        'login' : {
+                            'address'   : '127.0.0.1',
+                            'port'      : 6900
+                        },
+                        'char'  : {
+                            'address'   : '127.0.0.1',
+                            'port'      : 6121
+                        },
+                        'map'   : {
+                            'address'   : '127.0.0.1',
+                            'port'      : 5121
+                        },
+                        'sql'   : {
+                            'driver'    : 'pdo_mysql',
+                            'host'      : '127.0.0.1',
+                            'user'      : 'ragnarok',
+                            'pass'      : 'ragnarok',
+                            'dbname'    : 'ragnarok'
+                        }
+                    });
+
+                };
+
+                $scope.removeServer = function(index) {
+                    $scope.config.BRACP_SERVERS.splice(index, 1);
+                }
+
+                $scope.addServer();
+
             }]);
 
         </script>
@@ -272,8 +323,8 @@ else if(!$writeable)
                         <label for="config.home">Inicio</label>
                     </li>
                     <li>
-                        <input id="config.mysql" type="radio" ng-model="BRACP_SWITCH" value="mysql" class="install-cfg-radio"/>
-                        <label for="config.mysql">MySQL</label>
+                        <input id="config.servers" type="radio" ng-model="BRACP_SWITCH" value="servers" class="install-cfg-radio"/>
+                        <label for="config.servers">Servidores</label>
                     </li>
                     <li>
                         <input id="config.mail" type="radio" ng-model="BRACP_SWITCH" value="mail" class="install-cfg-radio"/>
@@ -397,39 +448,143 @@ else if(!$writeable)
                 </div>
 
                <!-- Configurações para o banco de dados -->
-                <div ng-switch-when="mysql" class="install-content">
-                    <h1>Configurações de acesso ao servidor de Banco de Dados</h1>
+                <div ng-switch-when="servers" class="install-content">
+                    <h1>Configurações de acesso aos servidores</h1>
 
-                    <p>O brACP trabalha com tabelas em apenas um banco de dados, isso significa que o banco de dados do seu servidor,
-                        deve estar junto ao banco de dados de itens, monstros, etc... incluindo as tabelas do brACP.</p>
+                    <p>As informações abaixo, são para configuração de acesso ao banco de dados do brACP, não do ragnarok.</p>
 
                     <div class="install-data">
 
                         <label class="input-align">
                             Servidor:
-                            <input type="text" ng-model="config.BRACP_SQL_HOST" size="40"/>
+                            <input type="text" ng-model="config.BRACP_SQL_CP_HOST" size="40"/>
                             <span>Endereço IP ou DNS do servidor de banco de dados que será utilizado.</span>
                         </label>
 
                         <label class="input-align">
                             Usuário:
-                            <input type="text" ng-model="config.BRACP_SQL_USER" size="30"/>
+                            <input type="text" ng-model="config.BRACP_SQL_CP_USER" size="30"/>
                             <span>Nome de usuário para se conectar ao servidor de banco de dados.</span>
                         </label>
 
                         <label class="input-align">
                             Senha:
-                            <input type="password" ng-model="config.BRACP_SQL_PASS" size="30"/>
-                            <span>Senha para o nome de usuário do banco de dados. (Valor padrão: <strong>ragnarok</strong>)</span>
+                            <input type="password" ng-model="config.BRACP_SQL_CP_PASS" size="30"/>
+                            <span>Senha para o nome de usuário do banco de dados. (Valor padrão: <strong>bracp</strong>)</span>
                         </label>
 
                         <label class="input-align">
                             Banco de Dados:
-                            <input type="text" ng-model="config.BRACP_SQL_DBNAME" size="30"/>
+                            <input type="text" ng-model="config.BRACP_SQL_CP_DBNAME" size="30"/>
                             <span>Nome do banco de dados que será conectado pelo painel de controle.</span>
                         </label>
 
+                        <label class="input-align">
+                            Verificação de status a cada (em segundos):
+                            <input type="text" ng-model="config.BRACP_SRV_PING_DELAY" size="5"/>
+                            <span>Tempo em segundos que será verificado o status dos servidores.</span>
+                        </label>
+
                     </div>
+
+                    <p>
+                        O brACP permite que você configure também acesso a mais de um servidor, porém, estes outros servidores, devem fazer uso de apenas um servidor
+                        de contas (login-server).
+                    </p>
+
+                    <div style="margin-bottom: 8px;">
+                        <input type="button" class="button info" value="Novo" ng-click="addServer()"/>
+                    </div>
+
+                    <div class="bracp-message error" ng-if="config.BRACP_SERVERS.length == 0">
+                        Nenhum servidor adicionado, por favor, adicione um e configure-o corretamente.
+                    </div>
+
+                    <div ng-repeat="server in config.BRACP_SERVERS track by $index" class="install-data">
+
+                        <div style="text-align: right; margin-bottom: 6px;">
+                            <input type="button" class="button error" value="Excluir {{($index+1)}} de {{config.BRACP_SERVERS.length}}" ng-click="removeServer($index)"/>
+                        </div>
+
+                        <div class="bracp-message info">
+                            <strong>Servidor: <i>{{$index}} - {{server.name}}</i></strong><br>
+                            Informações de conexão para pingar no servidor.
+                            Isso server para mostrar o status de online/offline do painel na página inicial.
+                        </div>
+
+                        <label class="input-align">
+                            Nome:
+                            <input type="text" ng-model="server.name" size="40"/>
+                            <span>Nome do sub-servidor.</span>
+                        </label>
+
+                        <label class="input-align">
+                            Login IP:
+                            <input type="text" ng-model="server.login.address" size="20"/>
+                            <span>Endereço IP para conexão com o login-server.</span>
+                        </label>
+                        <label class="input-align">
+                            Login Porta:
+                            <input type="text" ng-model="server.login.port" size="6"/>
+                            <span>Porta para conexão com o login-server.</span>
+                        </label>
+
+                        <label class="input-align">
+                            Char IP:
+                            <input type="text" ng-model="server.char.address" size="20"/>
+                            <span>Endereço IP para conexão com o char-server.</span>
+                        </label>
+                        <label class="input-align">
+                            Char Porta:
+                            <input type="text" ng-model="server.char.port" size="6"/>
+                            <span>Porta para conexão com o char-server.</span>
+                        </label>
+
+                        <label class="input-align">
+                            Map IP:
+                            <input type="text" ng-model="server.map.address" size="20"/>
+                            <span>Endereço IP para conexão com o map-server.</span>
+                        </label>
+                        <label class="input-align">
+                            Map Porta:
+                            <input type="text" ng-model="server.map.port" size="6"/>
+                            <span>Porta para conexão com o map-server.</span>
+                        </label>
+
+                        <label class="input-align">
+                            SQL Driver:
+                            <input type="text" ng-model="server.sql.driver" size="20"/>
+                            <span>Driver utilizado para conexão com o banco de dados.</span>
+                        </label>
+
+                        <label class="input-align">
+                            SQL Servidor:
+                            <input type="text" ng-model="server.sql.host" size="40"/>
+                            <span>Endereço IP ou DNS do servidor de banco de dados que será utilizado.</span>
+                        </label>
+
+                        <label class="input-align">
+                            SQL Usuário:
+                            <input type="text" ng-model="server.sql.user" size="30"/>
+                            <span>Nome de usuário para se conectar ao servidor de banco de dados.</span>
+                        </label>
+
+                        <label class="input-align">
+                            SQL Senha:
+                            <input type="password" ng-model="server.sql.pass" size="30"/>
+                            <span>Senha para o nome de usuário do banco de dados. (Valor padrão: <strong>ragnarok</strong>).</span>
+                        </label>
+
+                        <label class="input-align">
+                            SQL Database:
+                            <input type="text" ng-model="server.sql.dbname" size="30"/>
+                            <span>Nome do banco de dados que será conectado pelo painel de controle.</span>
+                        </label>
+
+
+
+                    </div>
+
                 </div>
 
                 <!-- Configurações do servidor de e-mail. -->
@@ -821,7 +976,7 @@ else if(!$writeable)
 
                     <br>
                     <center>
-                        <button class="btn btn-success" ng-click="saveAndInstall()">Salvar e Configurar</button>
+                        <button class="button success" ng-click="saveAndInstall()">Salvar e Configurar</button>
                     </center>
 
                 </div>
