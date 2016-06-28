@@ -991,7 +991,7 @@ else if(!$writeable)
                         <div ng-switch on="BRACP_ERROR_CODE">
                             <div ng-switch-when="1">
                                 Sua versão de instalação do PHP é inferior a requerida para execução do painel de controle.<br>
-                                A Versão minima para execução é a 5.4.0 ou superior.<br>
+                                A Versão minima para execução é a 5.5.0 ou superior.<br>
                                 <br>
                                 <strong><i>Hey, psiu! Talvez isso te ajude:
                                 <a href="http://php.net/" target="_blank">PHP.net</a></i></strong> 
