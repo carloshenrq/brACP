@@ -100,14 +100,6 @@ $config = [
     'BRACP_RECAPTCHA_PRIVATE_KEY'           => '',
     'BRACP_RECAPTCHA_PRIVATE_URL'           => 'https://www.google.com/recaptcha/api/siteverify',
 
-    // Doações - PayPal
-    'PAYPAL_INSTALL'                        => true,
-    'PAYPAL_ACCOUNT'                        => '',
-    'PAYPAL_CURRENCY'                       => 'BRL',
-    'DONATION_AMOUNT_MULTIPLY'              => 100,
-    'DONATION_SHOW_NEXT_PROMO'              => true,
-    'DONATION_INTERVAL_DAYS'                => 3,
-
     // Outros
     'BRACP_ALLOW_RESET_APPEAR'              => true,
     'BRACP_ALLOW_RESET_POSIT'               => true,
@@ -333,10 +325,6 @@ else if(!$writeable)
                     <li>
                         <input id="config.recaptcha" type="radio" ng-model="BRACP_SWITCH" value="recaptcha" class="install-cfg-radio"/>
                         <label for="config.recaptcha">reCAPTCHA</label>
-                    </li>
-                    <li>
-                        <input id="config.donation" type="radio" ng-model="BRACP_SWITCH" value="donation" class="install-cfg-radio"/>
-                        <label for="config.donation">Doações</label>
                     </li>
                     <li>
                         <input id="config.cache" type="radio" ng-model="BRACP_SWITCH" value="cache" class="install-cfg-radio"/>
@@ -685,60 +673,6 @@ else if(!$writeable)
                             Endereço de Validação:
                             <input type="text" ng-model="config.BRACP_RECAPTCHA_PRIVATE_URL" size="70"/>
                             <span>Endereço para validação dos dados, não altere se não tiver certeza do que está fazendo.</span>
-                        </label>
-
-                    </div>
-
-                </div>
-
-                <!-- Configurações do DONATION. -->
-                <div ng-switch-when="donation" class="install-content">
-                    
-                    <h1>Configurações de Doação</h1>
-
-                    <p>Algumas configurações padrões para qualquer serviço de doação implementado.</p>
-
-                    <div class="install-data">
-                        <label class="input-align">
-                            Multiplicador proporcional:
-                            <input type="text" ng-model="config.DONATION_AMOUNT_MULTIPLY" size="10"/>
-                            <span>Ao doar <strong>{{config.PAYPAL_CURRENCY}} 1.00</strong> recebe <strong>{{(config.DONATION_AMOUNT_MULTIPLY * 1)}} Bônus</strong></span>
-                        </label>
-
-                        <label class="input-align">
-                            <input type="checkbox" ng-model="config.DONATION_SHOW_NEXT_PROMO"/>
-                            Habilitar exibição de próximas promoções
-                            <span>Permite que o brACP informe ao jogador quando serão as próximas promoções de bônus</span>
-                        </label>
-
-                        <label ng-if="config.DONATION_SHOW_NEXT_PROMO" class="input-align">
-                            Dias para próximas promoções:
-                            <input type="text" ng-model="config.DONATION_INTERVAL_DAYS" size="10"/>
-                            <span>Exibe todas as promoções para daqui <strong>{{config.DONATION_INTERVAL_DAYS}}</strong> dias.</span>
-                        </label>
-
-                    </div>
-
-                    <p class="bracp-message info">Por enquanto, somente o <strong>PayPal</strong> está habilitado para formas de doações.</p>
-
-                    <div class="install-data">
-                        <label class="input-align">
-                            <input type="checkbox" ng-model="config.PAYPAL_INSTALL"/>
-                            Habilitar doações por PayPal
-                            <span>Permite que o servidor receba doações pelo PayPal.</span>
-                        </label>
-
-                        <label ng-if="config.PAYPAL_INSTALL" class="input-align">
-                            E-mail:
-                            <input type="text" ng-model="config.PAYPAL_ACCOUNT" size="40"/>
-                            <span>Endereço de e-mail que receberá as doações por PayPal</span>
-                        </label>
-                        <label ng-if="config.PAYPAL_INSTALL" class="input-align">
-                            Moeda de doação:
-                            <select ng-model="config.PAYPAL_CURRENCY">
-                                <option ng-repeat="currency in BRACP_PAYPAL_CURRENCY">{{currency}}</option>
-                            </select>
-                            <span>Endereço de e-mail que receberá as doações por PayPal</span>
                         </label>
 
                     </div>
