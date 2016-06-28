@@ -56,6 +56,15 @@ CREATE TABLE IF NOT EXISTS `bracp_donations` (
     `DonationStatus` VARCHAR(30) NULL DEFAULT NULL,
     `DonationType` VARCHAR(30) NULL DEFAULT NULL,
     `VerifySign` TEXT NULL DEFAULT NULL,
+    `DonationCompensate` BOOLEAN NOT NULL DEFAULT true,
+    `DonationAccountID` INTEGER NULL DEFAULT NULL,
+    `DonationServerName` VARCHAR(30) NULL DEFAULT NULL,
+    `DonationSQLHost` VARCHAR(50) NULL DEFAULT NULL,
+    `DonationSQLUser` VARCHAR(50) NULL DEFAULT NULL,
+    `DonationSQLPass` VARCHAR(50) NULL DEFAULT NULL,
+    `DonationSQLDBName` VARCHAR(50) NULL DEFAULT NULL,
+    `DonationCompensateVar` VARCHAR(50) NULL DEFAULT NULL,
+
     FOREIGN KEY (`PromotionID`) REFERENCES `bracp_donations_promo` (`PromotionID`),
     UNIQUE INDEX (`TransactionDrive`, `TransactionCode`)
 ) ENGINE=InnoDB COLLATE='utf8_swedish_ci';

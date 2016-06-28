@@ -150,6 +150,46 @@ class Donation
      */
     protected $verifySign;
 
+    /**
+     * @Column(name="DonationCompensate", type="boolean")
+     */
+    protected $compensate;
+
+    /*
+     * @Column(name="DonationAccountID", type="integer", nullable=true)
+     */
+    protected $account_id;
+
+    /**
+     * @Column(name="DonationServerName", type="string", length=30, nullable=true)
+     */
+    protected $donationServer;
+
+    /**
+     * @Column(name="DonationSQLHost", type="string", length=50, nullable=true)
+     */
+    protected $sqlHost;
+
+    /**
+     * @Column(name="DonationSQLUser", type="string", length=50, nullable=true)
+     */
+    protected $sqlUser;
+
+    /**
+     * @Column(name="DonationSQLPass", type="string", length=50, nullable=true)
+     */
+    protected $sqlPass;
+
+    /**
+     * @Column(name="DonationSQLDBName", type="string", length=50, nullable=true)
+     */
+    protected $sqlDBName;
+
+    /**
+     * @Column(name="DonationCompensateVar", type="string", length=50, nullable=true)
+     */
+    protected $compensateVar;
+
     public function getId()
     {
         return $this->id;
@@ -388,5 +428,75 @@ class Donation
     public function setVerifySign($verifySign)
     {
         return $this->verifySign = $verifySign;
+    }
+
+    public function getCompensate()
+    {
+        return $this->compensate;
+    }
+    
+    public function setCompensate($compensate)
+    {
+        return $this->compensate = $compensate;
+    }
+
+    public function getAccount_id()
+    {
+        return $this->account_id;
+    }
+    
+    public function setAccount_id($account_id)
+    {
+        return $this->account_id = $account_id;
+    }
+
+    public function getDonationServer()
+    {
+        return $this->donationServer;
+    }
+    
+    public function setDonationServer($donationServer)
+    {
+        return $this->donationServer = $donationServer;
+    }
+
+    public function getSqlHost()
+    {
+        return $this->sqlHost;
+    }
+    
+    public function setSqlHost($sqlHost)
+    {
+        return $this->sqlHost = $sqlHost;
+    }
+
+    public function getSqlUser()
+    {
+        return $this->sqlUser;
+    }
+    
+    public function setSqlUser($sqlUser)
+    {
+        return $this->sqlUser = $sqlUser;
+    }
+
+    public function getSqlPass()
+    {
+        return $this->sqlPass;
+    }
+    
+    public function setSqlPass($sqlPass)
+    {
+        return $this->sqlPass = $sqlPass;
+    }
+
+    public function getSqlDBName()
+    {
+        return $this->sqlDBName;
+    }
+    
+    public function setSqlDBName($sqlDBName)
+    {
+        return $this->sqlDBName = $sqlDBName;
     }
 }
