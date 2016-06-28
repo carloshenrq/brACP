@@ -7,7 +7,7 @@ Este é um painel de controle totalmente em português, desenvolvido por [Carlos
 O brACP foi desenvolvido em linguagem [PHP](http://php.net) com o uso do servidor de páginas [Apache](http://www.apache.org) e banco de dados [MySQL](http://mysql.com)
 Segue abaixo a lista das versões necessárias para execução do painel de controle de forma adequada:
 
-* PHP 5.4 até a versão 5.6 (Isso significa que na versão PHP 7 o painel de controle ainda não foi testado.)
+* PHP 5.5 até a versão 5.6 (Isso significa que na versão PHP 7 o painel de controle ainda não foi testado.)
 * Apache 2.4
   * _OBS.: **mod_rewrite** deve estar ativo!_
 * MySQL 5.6

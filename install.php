@@ -186,7 +186,7 @@ if($writeable && isset($_POST) && !empty($_POST))
 
 // Definição das mensagens de erro.
 $BRACP_ERROR_CODE = 0;
-if(version_compare(PHP_VERSION, '5.4.0', '<'))
+if(version_compare(PHP_VERSION, '5.5.0', '<'))
     $BRACP_ERROR_CODE = 1;
 else if (!file_exists('vendor') || !is_dir('vendor') || file_exists('vendor') && !file_exists('composer.lock'))
     $BRACP_ERROR_CODE = 2;
@@ -925,7 +925,7 @@ else if(!$writeable)
                         <div ng-switch on="BRACP_ERROR_CODE">
                             <div ng-switch-when="1">
                                 Sua versão de instalação do PHP é inferior a requerida para execução do painel de controle.<br>
-                                A Versão minima para execução é a 5.4.0 ou superior.<br>
+                                A Versão minima para execução é a 5.5.0 ou superior.<br>
                                 <br>
                                 <strong><i>Hey, psiu! Talvez isso te ajude:
                                 <a href="http://php.net/" target="_blank">PHP.net</a></i></strong> 
