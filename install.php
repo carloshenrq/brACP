@@ -194,7 +194,7 @@ if($writeable && isset($_POST) && !empty($_POST))
 
 // Definição das mensagens de erro.
 $BRACP_ERROR_CODE = 0;
-if(version_compare(PHP_VERSION, '5.4.0', '<'))
+if(version_compare(PHP_VERSION, '5.5.0', '<'))
     $BRACP_ERROR_CODE = 1;
 else if (!file_exists('vendor') || !is_dir('vendor') || file_exists('vendor') && !file_exists('composer.lock'))
     $BRACP_ERROR_CODE = 2;
