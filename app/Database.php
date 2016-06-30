@@ -67,7 +67,7 @@ class Database
                 'user'      => BRACP_SQL_CP_USER,
                 'password'  => BRACP_SQL_CP_PASS,
                 'dbname'    => BRACP_SQL_CP_DBNAME,
-            ], Setup::createAnnotationMetadataConfiguration([ BRACP_ENTITY_DIR ], BRACP_DEVELOP_MODE));
+            ], Setup::createAnnotationMetadataConfiguration([ BRACP_ENTITY_DIR ], true));
 
             // Realiza a conexão no banco de dados para ver se está tudo funcionando
             //  de forma correta e se não existirá surpresas de erros quanto a conexão.
@@ -84,7 +84,7 @@ class Database
                 'user'      => constant('BRACP_SRV_' . BRACP_SRV_DEFAULT . '_SQL_USER'),
                 'password'  => constant('BRACP_SRV_' . BRACP_SRV_DEFAULT . '_SQL_PASS'),
                 'dbname'    => constant('BRACP_SRV_' . BRACP_SRV_DEFAULT . '_SQL_DBNAME'),
-            ], Setup::createAnnotationMetadataConfiguration([ BRACP_ENTITY_DIR ], BRACP_DEVELOP_MODE));
+            ], Setup::createAnnotationMetadataConfiguration([ BRACP_ENTITY_DIR ], true));
 
             // $dfEm->getConnection()->connect();
             self::getApp()->setEm($dfEm, 'SV' . BRACP_SRV_DEFAULT);
@@ -105,7 +105,7 @@ class Database
                     'user'      => constant('BRACP_SRV_' . $index . '_SQL_USER'),
                     'password'  => constant('BRACP_SRV_' . $index . '_SQL_PASS'),
                     'dbname'    => constant('BRACP_SRV_' . $index . '_SQL_DBNAME'),
-                ], Setup::createAnnotationMetadataConfiguration([ BRACP_ENTITY_DIR ], BRACP_DEVELOP_MODE));
+                ], Setup::createAnnotationMetadataConfiguration([ BRACP_ENTITY_DIR ], true));
 
                 // $svEm->getConnection()->connect();
                 self::getApp()->setEm($svEm, 'SV' . $index);
