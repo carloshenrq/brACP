@@ -55,6 +55,8 @@ brACPApp.controller('account.login', ['$scope', '$http', function($scope, $http)
 
             if(response.data.loginSuccess)
                 window.location.reload();
+        }, function(response) {
+            console.log(response.data);
         });
     };
 }]);
@@ -102,6 +104,8 @@ brACPApp.controller('account.register', ['$scope', '$http', function($scope, $ht
             $scope.error_state      = response.data.error_state;
             $scope.success_state    = response.data.success_state;
             $scope.accept_terms     = true;
+        }, function(response) {
+            console.log(response.data);
         });
     };
 }]);
@@ -140,6 +144,8 @@ brACPApp.controller('account.register.resend', ['$scope', '$http', function($sco
             $scope.stage            = 0;
             $scope.error_state      = response.data.error_state;
             $scope.success_state    = response.data.success_state;
+        }, function(response) {
+            console.log(response.data);
         });
     };
 
@@ -162,6 +168,8 @@ brACPApp.controller('account.register.resend', ['$scope', '$http', function($sco
             $scope.stage            = 0;
             $scope.error_state      = response.data.error_state;
             $scope.success_state    = response.data.success_state;
+        }, function(response) {
+            console.log(response.data);
         });
     }
 
@@ -199,6 +207,8 @@ brACPApp.controller('account.recover', ['$scope', '$http', function($scope, $htt
             $scope.stage            = 0;
             $scope.error_state      = response.data.error_state;
             $scope.success_state    = response.data.success_state;
+        }, function(response) {
+            console.log(response.data);
         });
     };
 
@@ -221,6 +231,8 @@ brACPApp.controller('account.recover', ['$scope', '$http', function($scope, $htt
             $scope.stage            = 0;
             $scope.error_state      = response.data.error_state;
             $scope.success_state    = response.data.success_state;
+        }, function(response) {
+            console.log(response.data);
         });
     };
 
@@ -267,6 +279,8 @@ brACPApp.controller('account.password', ['$scope', '$http', function($scope, $ht
             $scope.stage            = 0;
             $scope.error_state      = response.data.error_state;
             $scope.success_state    = response.data.success_state;
+        }, function(response) {
+            console.log(response.data);
         });
     };
 }]);
@@ -305,6 +319,8 @@ brACPApp.controller('account.email', ['$scope', '$http', function($scope, $http)
             $scope.stage            = 0;
             $scope.error_state      = response.data.error_state;
             $scope.success_state    = response.data.success_state;
+        }, function(response) {
+            console.log(response.data);
         });
     };
 }]);
