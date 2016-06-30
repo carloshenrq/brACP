@@ -80,9 +80,9 @@ class Login
     protected $logincount = 0;
 
     /**
-     * @Column(name="lastlogin", type="string", length=18, options={"default":"0000-00-00 00:00:00"})
+     * @Column(name="lastlogin", type="string", length=18, options={"default":"1111-11-11 00:00:00"})
      */
-    protected $lastlogin = '0000-00-00 00:00:00';
+    protected $lastlogin = '1111-11-11 00:00:00';
 
     /**
      * @Column(name="last_ip", type="string", length=100, options={"default":"127.0.0.1"})
@@ -90,9 +90,9 @@ class Login
     protected $last_ip = '127.0.0.1';
 
     /**
-     * @Column(name="birthdate", type="string", length=10, options={"default":"0000-00-00"})
+     * @Column(name="birthdate", type="string", length=10, options={"default":"1111-11-11"})
      */
-    protected $birthdate = '0000-00-00';
+    protected $birthdate = '1111-11-11';
 
     /**
      * @Column(name="character_slots", type="integer", options={"default":0})
