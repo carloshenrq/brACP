@@ -44,14 +44,6 @@ html, body {
         font-weight: normal; }
       .content .header .menu-top.access .server-status select {
         background-color: #0d1e03; }
-      .content .header .menu-top.access .server-status span.info-status {
-        display: inline-block;
-        padding: 2px;
-        color: white; }
-        .content .header .menu-top.access .server-status span.info-status.online {
-          background-color: #2ecc71 !important; }
-        .content .header .menu-top.access .server-status span.info-status.offline {
-          background-color: #e74c3c !important; }
   .content .header .menu-top.logo {
     width: 420px;
     height: 200px;
@@ -394,6 +386,15 @@ label.input-checkbox {
       -webkit-animation-delay: 0.6s;
       -webkit-animation-duration: 0.8s;
       -webkit-animation-iteration-count: infinite; }
+
+span.info-status {
+  display: inline-block;
+  padding: 2px !important;
+  color: white; }
+  span.info-status.online {
+    background-color: #2ecc71 !important; }
+  span.info-status.offline {
+    background-color: #e74c3c !important; }
 
 @keyframes loading-body-bar-1 {
   0% {

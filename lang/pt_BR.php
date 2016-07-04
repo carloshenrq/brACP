@@ -301,6 +301,10 @@ return
      */
     'CHARS'     => [
         'TITLE' => 'Minha Conta &raquo; Personagens',
+
+        'ERROR' => [
+            'NO_CHAR'   => 'Você não tem personagens para visualizar. Tente realizar login no jogo e criar um novo personagem!'
+        ],
     ],
 
     /**
@@ -461,6 +465,13 @@ return
                 'SHA512'    => 'sha512',
             ],
         ],
+    ],
+
+    /**
+     * Mensagens de alerta.
+     */
+    'WARNING'   => [
+        'CACHE_ON'  => 'As informações contidas nesta página, podem demorar alguns instantes para serem atualizadas!',
     ],
 
     /**

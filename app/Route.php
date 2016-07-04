@@ -93,6 +93,9 @@ class Route
                                 ->add(['Controller\Account', '_login']);
                 }
 
+                $this->get('/chars', ['Controller\Account', 'chars'])
+                                ->add(['Controller\Account', '_login']);
+
             });
 
             // Verifica se os rankings estão habilitados para serem exibidos.

@@ -376,3 +376,32 @@ brACPApp.controller('serverStatus', ['$scope', '$http', function($scope, $http) 
     };
 
 }]);
+
+brACPApp.controller('account.chars', ['$scope', '$http', function($scope, $http) {
+
+    $scope.chars = [];
+    $scope.state = 0;
+
+    $scope.init = function(chars)
+    {
+        $scope.chars = chars;
+    };
+
+    $scope.resetPosit = function(char_id)
+    {
+        alert(char_id);
+    };
+
+    $scope.resetAppear = function(char_id)
+    {
+        alert(char_id);
+
+    };
+
+    $scope.resetEquips = function(char_id)
+    {
+        alert(char_id);
+
+    };
+
+}]);

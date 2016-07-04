@@ -202,8 +202,7 @@
                 </label>
 
                 <label>
-                    @@FOOTER(NAVIGATOR):
-                    <span class="navigator {$navigator->getClass()}">{$navigator->getName()} ({$navigator->getVersion()})</span>
+                    <span class="navigator {$navigator->getClass()}">{$navigator->getName()}</span>
                 </label>
             </div>
 

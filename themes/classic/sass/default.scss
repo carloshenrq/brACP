@@ -79,23 +79,6 @@ html, body
                     {
                         background-color: rgb(13, 30, 3);
                     }
-
-                    span.info-status
-                    {
-                        display: inline-block;
-                        padding: 2px;
-                        color: white;
-
-                        &.online
-                        {
-                            background-color: rgb(46, 204, 113) !important;
-                        }
-
-                        &.offline
-                        {
-                            background-color: rgb(231, 76, 60) !important;
-                        }
-                    }
                 }
             }
 
@@ -559,6 +542,24 @@ label.input-checkbox
         }
     }
 }
+
+span.info-status
+{
+    display: inline-block;
+    padding: 2px !important;
+    color: white;
+
+    &.online
+    {
+        background-color: rgb(46, 204, 113) !important;
+    }
+
+    &.offline
+    {
+        background-color: rgb(231, 76, 60) !important;
+    }
+}
+
 
 @keyframes loading-body-bar-1
 {

@@ -23,7 +23,7 @@ use Doctrine\ORM\Mapping;
 
 /**
  * @Entity
- * @Table(name="castle_db")
+ * @Table(name="guild")
  */
 class Guild
 {

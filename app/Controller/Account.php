@@ -32,6 +32,8 @@ use \Model\Confirmation;
 use \Format;
 use \Session;
 use \LogWriter;
+use \Cache;
+use \Language;
 
 /**
  * Controlador para dados de conta.
@@ -47,6 +49,92 @@ class Account
      * @var \Model\Login
      */
     private static $user = null;
+
+    /**
+     * Método para retornar os personagens que o jogador possui na conta.
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param array $args
+     */
+    public static function chars(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        // Mostra o template dos personagens da conta.
+        self::getApp()->display('account.chars', [
+            'chars' => self::fetchChars(self::loggedUser()->getAccount_id())
+        ]);
+    }
+
+    /**
+     * Obtém todos os peronagens para a conta solicitada.
+     *
+     * @param integer $account_id
+     *
+     * @return array Personagens da conta solicitada.
+     */
+    private static function fetchChars($account_id, $orderBy = 'chars.char_num ASC')
+    {
+        // Verifica se existe uma entrada no cache para o personagem do jogador.,
+        return Cache::get('BRACP_CHARS_' . $account_id, function() use ($account_id, $orderBy) {
+            $_chars = [];
+            $chars = Account::getSvrEm()
+                    ->createQuery('
+                        SELECT
+                            chars, guild, leader
+                        FROM
+                            Model\Char chars
+                        LEFT JOIN
+                            chars.guild guild
+                        LEFT JOIN
+                            guild.character leader
+                        WHERE
+                            chars.account_id = :account_id
+                        ORDER BY
+                            ' . $orderBy . '
+                    ')
+                    ->setParameter('account_id', $account_id)
+                    ->getResult();
+
+            foreach($chars as $char)
+            {
+                $_chars[] = [
+                    // Informações gerais do personagem
+                    'char_id'       => $char->getChar_id(),
+                    'name'          => $char->getName(),
+                    'zeny'          => Format::zeny($char->getZeny()),
+                    'num'           => $char->getChar_num(),
+
+                    // Informações de posicionamento.
+                    'last_map'      => $char->getLast_map(),
+                    'last_x'        => $char->getLast_x(),
+                    'last_y'        => $char->getLast_y(),
+                    'save_map'      => $char->getSave_map(),
+                    'save_x'        => $char->getSave_x(),
+                    'save_y'        => $char->getSave_y(),
+
+                    // Status do personagem.
+                    'class'         => Format::job($char->getClass()),
+                    'base_level'    => $char->getBase_level(),
+                    'job_level'     => $char->getJob_level(),
+                    'hp'            => $char->getHp(),
+                    'max_hp'        => $char->getMax_hp(),
+                    'sp'            => $char->getSp(),
+                    'max_sp'        => $char->getMax_sp(),
+                    // -> Hehe, se não estiver permitido mostrar se o usuário está online, sempre retorna offline
+                    //          porque este será utilizado em funções de rankings também. 
+                    'online'        => ((BRACP_ALLOW_SHOW_CHAR_STATUS) ? $char->getOnline() : 0),
+
+                    // Informações de grupo (@Todo: Leitura do banco de dados para informações do grupo)
+                    'party'         => null,
+
+                    // Informações de clã 
+                    'guild'         => $char->getGuild(),
+                ];
+            }
+
+            return json_decode(Language::parse(json_encode($_chars)));
+        });
+    }
 
     /**
      * Método para realizar a alteração de senha de usuários.
