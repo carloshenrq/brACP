@@ -146,9 +146,6 @@
                                         {if $smarty.const.BRACP_ALLOW_RECOVER}
                                             <li><label for="modal-recover">@@MENU,MYACC,UNAUTHENTICATED(RECOVER)</label></li>
                                         {/if}
-                                        {if $smarty.const.BRACP_ALLOW_RECOVER}
-                                            <li><label for="modal-recover">@@MENU,MYACC,UNAUTHENTICATED(RECOVER)</label></li>
-                                        {/if}
                                     {/if}
                                 {else}
 
