@@ -541,6 +541,11 @@ label.input-checkbox
             @include animation(loading-body-bar-1, .8s, infinite, .6s);
         }
     }
+
+    &+ *
+    {
+        margin-bottom: 3px;
+    }
 }
 
 span.info-status

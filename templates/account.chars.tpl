@@ -1,4 +1,4 @@
-{**
+²{**
  *  brACP - brAthena Control Panel for Ragnarok Emulators
  *  Copyright (C) 2015  brAthena, CHLFZ
  *
@@ -29,28 +29,41 @@
     {/if}
 
     <p>
-        Abaixo, segue a lista dos personagens que você possui no jogo para você realizar algumas ações como resetar posição, equipamentos e apararência...
+        @@CHARS(MESSAGE)
     </p>
 
-    <div ng-if="chars.length == 0" class="message error">
+    <p ng-if="resetState > 0" ng-switch="resetState" class="message success icon">
+        <span ng-switch-when="1">@@CHARS,SUCCESS(POSIT)</span>
+        <span ng-switch-when="2">@@CHARS,SUCCESS(APPEAR)</span>
+        <span ng-switch-when="3">@@CHARS,SUCCESS(EQUIP)</span>
+    </p>
+
+    <div class="loading-ajax" ng-if="state">
+        <div class="loading-bar loading-bar-1"></div>
+        <div class="loading-bar loading-bar-2"></div>
+        <div class="loading-bar loading-bar-3"></div>
+        <div class="loading-bar loading-bar-4"></div>
+    </div>
+
+    <div ng-if="!state && chars.length == 0" class="message error">
         @@CHARS,ERROR(NO_CHAR)
     </div>
 
-    <table class="table" ng-if="chars.length > 0">
+    <table class="table" ng-if="!state && chars.length > 0">
         <thead>
             <tr>
-                <th align="right">N.º</th>
-                <th align="left">Nome</th>
-                <th align="left">Classe</th>
-                <th align="center">Grupo</th>
-                <th align="center">Clã</th>
-                <th align="left">Local</th>
-                <th align="left">Retorno</th>
-                <th align="right">Zeny</th>
+                <th align="right">No.</th>
+                <th align="left">@@CHARS,TABLE(NAME)</th>
+                <th align="left">@@CHARS,TABLE(CLASS)</th>
+                <th align="center">@@CHARS,TABLE(PARTY)</th>
+                <th align="center">@@CHARS,TABLE(GUILD)</th>
+                <th align="left">@@CHARS,TABLE(POSIT_NOW)</th>
+                <th align="left">@@CHARS,TABLE(POSIT_SAVE)</th>
+                <th align="right">@@CHARS,TABLE(ZENY)</th>
                 {if $smarty.const.BRACP_ALLOW_SHOW_CHAR_STATUS eq true}
-                    <th align="center">Status</th>
+                    <th align="center">@@CHARS,TABLE(STATUS)</th>
                 {/if}
-                <th align="center" colspan="3">Resetar</th>
+                <th align="center" colspan="{($smarty.const.BRACP_ALLOW_RESET_POSIT + $smarty.const.BRACP_ALLOW_RESET_APPEAR + $smarty.const.BRACP_ALLOW_RESET_POSIT)}">@@CHARS,TABLE(ACTION)</th>
             </tr>
         </thead>
         <tbody>
@@ -60,13 +73,13 @@
                 <td align="left">{{char.name}}</td>
                 <td align="left">{{char.class}}</td>
                 <td align="center" ng-if="char.party == null">
-                    <i>Sem grupo</i>
+                    <i>@@CHARS,TABLE(NO_PARTY)</i>
                 </td>
                 <td align="center" ng-if="char.party != null">
                     @Todo
                 </td>
                 <td align="center" ng-if="char.guild == null">
-                    <i>Sem clã</i>
+                    <i>@@CHARS,TABLE(NO_GUILD)</i>
                 </td>
                 <td align="center" ng-if="char.guild != null">
                     @Todo
@@ -79,22 +92,30 @@
                     {literal}
                         <td align="center">
                             <span class="info-status" ng-class="{'online' : char.online, 'offline' : !char.online}">
-                                {{(char.online ? 'Online' : 'Offline')}}
+                                {{(char.online ? '@@STATUS(1)' : '@@STATUS(0)')}}
                             </span>
                         </td>
                     {/literal}
                 {/if}
-                {literal}
-                <td align="center">
-                    <button class="button small success" ng-click="resetPosit(char.char_id)">Local</button>
-                </td>
-                <td align="center">
-                    <button class="button small warning" ng-click="resetAppear(char.char_id)">Visual</button>
-                </td>
-                <td align="center">
-                    <button class="button small info" ng-click="resetEquips(char.char_id)">Equips</button>
-                </td>
-                {/literal}
+
+                {if $smarty.const.BRACP_ALLOW_RESET_POSIT eq true}
+                    <td align="center">
+                        <button class="button small success" ng-click="resetPosit(char.char_id)">@@CHARS,BUTTONS(RESET_POSIT)</button>
+                    </td>
+                {/if}
+
+                {if $smarty.const.BRACP_ALLOW_RESET_APPEAR eq true}
+                    <td align="center">
+                        <button class="button small warning" ng-click="resetAppear(char.char_id)">@@CHARS,BUTTONS(RESET_APPEAR)</button>
+                    </td>
+                {/if}
+
+                {if $smarty.const.BRACP_ALLOW_RESET_EQUIP}
+                    <td align="center">
+                        <button class="button small info" ng-click="resetEquips(char.char_id)">@@CHARS,BUTTONS(RESET_EQUIP)</button>
+                    </td>
+                {/if}
+
             </tr>
         </tbody>
     </table>

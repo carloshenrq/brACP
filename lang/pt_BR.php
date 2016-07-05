@@ -296,7 +296,7 @@ return
     ],
 
     /**
-     * @refer templates/account.chars.ajax.tpl
+     * @refer templates/account.chars.tpl
      * @author carloshenrq
      */
     'CHARS'     => [
@@ -305,6 +305,34 @@ return
         'ERROR' => [
             'NO_CHAR'   => 'Você não tem personagens para visualizar. Tente realizar login no jogo e criar um novo personagem!'
         ],
+
+        'MESSAGE'   => 'Abaixo, segue a lista dos personagens que você possui no jogo para você realizar algumas ações como resetar posição, equipamentos e apararência...',
+
+        'SUCCESS'   => [
+            'POSIT'     => 'Local resetado com sucesso!',
+            'APPEAR'    => 'Visual resetado com sucesso!',
+            'EQUIP'     => 'Equipamentos resetados com sucesso!'
+        ],
+
+        'TABLE'     => [
+            'NAME'          => 'Nome',
+            'CLASS'         => 'Classe',
+            'PARTY'         => 'Grupo',
+            'GUILD'         => 'Clã',
+            'POSIT_NOW'     => 'Local',
+            'POSIT_SAVE'    => 'Retorno',
+            'ZENY'          => 'Zeny',
+            'STATUS'        => 'Status',
+            'ACTION'        => 'Resetar',
+            'NO_PARTY'      => 'Sem Grupo',
+            'NO_GUILD'      => 'Sem clã'
+        ],
+
+        'BUTTONS'   => [
+            'RESET_POSIT'   => 'Local',
+            'RESET_APPEAR'  => 'Visual',
+            'RESET_EQUIP'   => 'Equips',
+        ]
     ],
 
     /**

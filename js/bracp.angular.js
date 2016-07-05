@@ -381,27 +381,127 @@ brACPApp.controller('account.chars', ['$scope', '$http', function($scope, $http)
 
     $scope.chars = [];
     $scope.state = 0;
+    $scope.resetState = 0;
 
     $scope.init = function(chars)
     {
         $scope.chars = chars;
     };
 
+    $scope.reloadChars  = function()
+    {
+        var urlServer = document.querySelector('#_BRACP_URL').value + 'account/chars/json';
+
+        $scope.state = 1;
+
+        $http({
+            'method'    : 'get',
+            'url'       : urlServer,
+            'headers'   : {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        }).then(function(response) {
+
+            $scope.state = 0;
+            $scope.init(response.data);
+
+        }, function(response) {
+
+            console.error(response);
+
+        });
+    };
+
     $scope.resetPosit = function(char_id)
     {
-        alert(char_id);
+        var urlServer = document.querySelector('#_BRACP_URL').value + 'account/char/reset/posit';
+        var params = $.param({
+            'char_id'         : char_id
+        });
+
+        $scope.resetState = 0;
+        $scope.state = 1;
+        $http({
+            'method'    : 'post',
+            'url'       : urlServer,
+            'data'      : params,
+            'headers'   : {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        }).then(function(response) {
+
+            $scope.resetState = response.data.error_state == 0 && response.data.success_state ? 1 : 0;
+            $scope.reloadChars();
+
+        }, function(response) {
+
+            $scope.state = 0;
+            console.error(response);
+            $scope.reloadChars();
+
+        });
     };
 
     $scope.resetAppear = function(char_id)
     {
-        alert(char_id);
+        var urlServer = document.querySelector('#_BRACP_URL').value + 'account/char/reset/appear';
+        var params = $.param({
+            'char_id'         : char_id
+        });
 
+        $scope.resetState = 0;
+        $scope.state = 1;
+        $http({
+            'method'    : 'post',
+            'url'       : urlServer,
+            'data'      : params,
+            'headers'   : {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        }).then(function(response) {
+
+            console.log(response);
+
+            $scope.resetState = response.data.error_state == 0 && response.data.success_state ? 2 : 0;
+            $scope.reloadChars();
+
+        }, function(response) {
+
+            $scope.state = 0;
+            console.error(response);
+            $scope.reloadChars();
+
+        });
     };
 
     $scope.resetEquips = function(char_id)
     {
-        alert(char_id);
+        var urlServer = document.querySelector('#_BRACP_URL').value + 'account/char/reset/equip';
+        var params = $.param({
+            'char_id'         : char_id
+        });
 
+        $scope.resetState = 0;
+        $scope.state = 1;
+        $http({
+            'method'    : 'post',
+            'url'       : urlServer,
+            'data'      : params,
+            'headers'   : {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        }).then(function(response) {
+
+            $scope.resetState = response.data.error_state == 0 && response.data.success_state ? 3 : 0;
+            $scope.reloadChars();
+
+        }, function(response) {
+
+            $scope.state = 0;
+            console.error(response);
+            $scope.reloadChars();
+
+        });
     };
 
 }]);

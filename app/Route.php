@@ -93,8 +93,15 @@ class Route
                                 ->add(['Controller\Account', '_login']);
                 }
 
-                $this->get('/chars', ['Controller\Account', 'chars'])
+                $this->get('/chars[/{type}]', ['Controller\Account', 'chars'])
                                 ->add(['Controller\Account', '_login']);
+
+                // Configuração para saber se é permitido o reset de personagem.
+                if(BRACP_ALLOW_RESET_POSIT || BRACP_ALLOW_RESET_APPEAR || BRACP_ALLOW_RESET_EQUIP)
+                {
+                    $this->post('/char/reset/{type}', ['Controller\Account', 'charReset'])
+                                    ->add(['Controller\Account', '_login']);
+                }
 
             });
 

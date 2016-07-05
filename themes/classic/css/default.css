@@ -386,6 +386,8 @@ label.input-checkbox {
       -webkit-animation-delay: 0.6s;
       -webkit-animation-duration: 0.8s;
       -webkit-animation-iteration-count: infinite; }
+  .loading-ajax + * {
+    margin-bottom: 3px; }
 
 span.info-status {
   display: inline-block;
