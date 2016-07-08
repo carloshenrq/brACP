@@ -66,12 +66,19 @@ $config = [
     'BRACP_MAINTENCE'                       => false,
     'BRACP_VERSION'                         =>'0.2.1-beta',
 
-    // MySQL
+    // MySQL - Banco de dados para o painel de controle.
     'BRACP_SQL_CP_DRIVER'                   => 'pdo_mysql',
     'BRACP_SQL_CP_HOST'                     => '127.0.0.1',
     'BRACP_SQL_CP_USER'                     => 'bracp',
     'BRACP_SQL_CP_PASS'                     => 'bracp',
     'BRACP_SQL_CP_DBNAME'                   => 'bracp',
+
+    // MySQL - Banco de dados para database de monstros e itens
+    'BRACP_SQL_DB_DRIVER'                   => 'pdo_mysql',
+    'BRACP_SQL_DB_HOST'                     => '127.0.0.1',
+    'BRACP_SQL_DB_USER'                     => 'ragnarok',
+    'BRACP_SQL_DB_PASS'                     => 'ragnarok',
+    'BRACP_SQL_DB_DBNAME'                   => 'ragnarok',
 
     // Contagem de servidores que o brACP está configurado.
     'BRACP_SRV_COUNT'                       => 1,
@@ -439,6 +446,7 @@ else if(!$writeable)
                 <div ng-switch-when="servers" class="install-content">
                     <h1>Configurações de acesso aos servidores</h1>
 
+                    <!-- Banco de dados para o Painel de Controle -->
                     <p>As informações abaixo, são para configuração de acesso ao banco de dados do brACP, não do ragnarok.</p>
 
                     <div class="install-data">
@@ -471,6 +479,37 @@ else if(!$writeable)
                             Verificação de status a cada (em segundos):
                             <input type="text" ng-model="config.BRACP_SRV_PING_DELAY" size="5"/>
                             <span>Tempo em segundos que será verificado o status dos servidores.</span>
+                        </label>
+
+                    </div>
+
+                    <!-- Banco de dados para os monstros/itens e etc... -->
+                    <p>As informações abaixo, são para configuração de acesso ao banco de dados de monstros, itens etc... do jogo.</p>
+
+                    <div class="install-data">
+
+                        <label class="input-align">
+                            Servidor:
+                            <input type="text" ng-model="config.BRACP_SQL_DB_HOST" size="40"/>
+                            <span>Endereço IP ou DNS do servidor de banco de dados que será utilizado.</span>
+                        </label>
+
+                        <label class="input-align">
+                            Usuário:
+                            <input type="text" ng-model="config.BRACP_SQL_DB_USER" size="30"/>
+                            <span>Nome de usuário para se conectar ao servidor de banco de dados.</span>
+                        </label>
+
+                        <label class="input-align">
+                            Senha:
+                            <input type="password" ng-model="config.BRACP_SQL_DB_PASS" size="30"/>
+                            <span>Senha para o nome de usuário do banco de dados. (Valor padrão: <strong>ragnarok</strong>)</span>
+                        </label>
+
+                        <label class="input-align">
+                            Banco de Dados:
+                            <input type="text" ng-model="config.BRACP_SQL_DB_DBNAME" size="30"/>
+                            <span>Nome do banco de dados que será conectado pelo painel de controle.</span>
                         </label>
 
                     </div>

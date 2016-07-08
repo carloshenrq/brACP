@@ -58,6 +58,7 @@ class Database
      */
     public static function loadConnection()
     {
+        // Conexão com o painel de controle. (BRACP)
         if(is_null(self::getApp()->getEm('cp', false)))
         {
             // Define o entitymanager para o servidor.
@@ -69,12 +70,25 @@ class Database
                 'dbname'    => BRACP_SQL_CP_DBNAME,
             ], Setup::createAnnotationMetadataConfiguration([ BRACP_ENTITY_DIR ], true));
 
-            // Realiza a conexão no banco de dados para ver se está tudo funcionando
-            //  de forma correta e se não existirá surpresas de erros quanto a conexão.
-            // $cpEm->getConnection()->connect();
             self::getApp()->setEm($cpEm, 'cp');
         }
 
+        // Conexão com o banco de dados do jogo. (item_db, mob_db, etc..)
+        if(is_null(self::getApp()->getEm('db', false)))
+        {
+            // Define o entitymanager para o servidor.
+            $dbEm = EntityManager::create([
+                'driver'    => BRACP_SQL_DB_DRIVER,
+                'host'      => BRACP_SQL_DB_HOST,
+                'user'      => BRACP_SQL_DB_USER,
+                'password'  => BRACP_SQL_DB_PASS,
+                'dbname'    => BRACP_SQL_DB_DBNAME,
+            ], Setup::createAnnotationMetadataConfiguration([ BRACP_ENTITY_DIR ], true));
+
+            self::getApp()->setEm($dbEm, 'db');
+        }
+
+        // Conexão com o banco de dados padrão para as contas (login)
         if(is_null(self::getApp()->getEm('SV' . BRACP_SRV_DEFAULT, false)))
         {
             // Define o entitymanager para o servidor.
@@ -92,6 +106,7 @@ class Database
 
         // Caso o usuário tenha selecionado um banco de dados para ser utilizado (que não seja o default)
         // Abre a conexão com o outro servidor para realizar os selects.
+        // (char, inventory, storage)
         if(self::getApp()->getSession()->BRACP_SVR_SELECTED !== BRACP_SRV_DEFAULT)
         {
             $index = self::getApp()->getSession()->BRACP_SVR_SELECTED;
@@ -107,7 +122,6 @@ class Database
                     'dbname'    => constant('BRACP_SRV_' . $index . '_SQL_DBNAME'),
                 ], Setup::createAnnotationMetadataConfiguration([ BRACP_ENTITY_DIR ], true));
 
-                // $svEm->getConnection()->connect();
                 self::getApp()->setEm($svEm, 'SV' . $index);
             }
         }
