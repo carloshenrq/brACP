@@ -22,7 +22,7 @@
 
     <h1>@@CHARS(TITLE)</h1>
 
-    {if $smarty.const.BRACP_MEMCACHE eq true}
+    {if $smarty.const.BRACP_CACHE eq true}
         <div class="message warning">
             @@WARNING(CACHE_ON)
         </div>
