@@ -71,10 +71,10 @@ class Home
 
         // Responde ao client que foi alterado com sucesso.
         $response->withJson([
-            'login' => $serverStatus->getLogin(),
-            'char' => $serverStatus->getChar(),
-            'map' => $serverStatus->getMap(),
-            'playerCount' => $serverStatus->getPlayerCount(),
+            'login'         => $serverStatus->login,
+            'char'          => $serverStatus->char,
+            'map'           => $serverStatus->map,
+            'playerCount'   => $serverStatus->playerCount,
         ]);
     }
 

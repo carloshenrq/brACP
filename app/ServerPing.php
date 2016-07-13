@@ -132,7 +132,13 @@ class ServerPing
             }
 
             // Retorna o status via cache.
-            return $status;
+            return json_decode(json_encode([
+                'index'         => $status->getIndex(),
+                'map'           => $status->getMap(),
+                'char'          => $status->getChar(),
+                'login'         => $status->getLogin(),
+                'playerCount'   => $status->getPlayerCount(),
+            ]));
         });
     }
 

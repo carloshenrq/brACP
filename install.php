@@ -119,10 +119,8 @@ $config = [
     'BRACP_DEFAULT_LANGUAGE'                => 'pt_BR',
 
     // Memcache
-    'BRACP_MEMCACHE'                        => extension_loaded('memcache'),
-    'BRACP_MEMCACHE_SERVER'                 => '127.0.0.1',
-    'BRACP_MEMCACHE_PORT'                   => 11211,
-    'BRACP_MEMCACHE_EXPIRE'                 => 600,
+    'BRACP_CACHE'                           => true,
+    'BRACP_CACHE_EXPIRE'                    => 600,
 
     // Mods a serem aplicados no painel de controle. (Recomenda-se uso do xdiff, sem isso, tera de ser aplicado manualmente o diff)
     'BRACP_ALLOW_MODS'                      => extension_loaded('xdiff'),
@@ -229,7 +227,6 @@ else if(!$writeable)
                 $scope.BRACP_ALL_THEMES = <?php echo json_encode($themes->getArrayCopy()); ?>;
                 $scope.BRACP_ALL_LANGS = <?php echo json_encode($langs); ?>;
                 $scope.BRACP_PAYPAL_CURRENCY = <?php echo json_encode($PPCurrency); ?>;
-                $scope.BRACP_ALLOW_MEMCACHE = <?php echo intval(extension_loaded('memcache')); ?>;
 
 
                 if($scope.BRACP_ALLOW_INSTALL == false)
@@ -723,49 +720,20 @@ else if(!$writeable)
                     
                     <h1>Configurações de Cache</h1>
 
-                    <div ng-switch on="BRACP_ALLOW_MEMCACHE">
+                    <p>O Uso do servidor de cache permite que algumas páginas que tenham intenso acesso ao banco de dados
+                        sejam "protegidas" por fazer o uso do cache.</p>
 
-                        <div ng-switch-when="1">
-                            
-                            <p>O Uso do servidor de cache permite que algumas páginas que tenham intenso acesso ao banco de dados
-                                sejam "protegidas" por fazer o uso do cache.</p>
-
-                            <div class="install-data">
-                                <label class="input-align">
-                                    <input type="checkbox" ng-model="config.BRACP_MEMCACHE"/>
-                                    Habilitar uso de servidor de Cache
-                                    <span>Permite que o brACP faça uso de servidor de cache para algumas informações.</span>
-                                </label>
-
-                                <label ng-if="config.BRACP_MEMCACHE" class="input-align">
-                                    Servidor:
-                                    <input type="text" ng-model="config.BRACP_MEMCACHE_SERVER" size="30"/>
-                                    <span>Endereço do servidor de cache.</span>
-                                </label>
-
-                                <label ng-if="config.BRACP_MEMCACHE" class="input-align">
-                                    Porta:
-                                    <input type="text" ng-model="config.BRACP_MEMCACHE_PORT" size="5"/>
-                                    <span>Número da porta para conexão com o servidor de cache.</span>
-                                </label>
-
-                                <label ng-if="config.BRACP_MEMCACHE" class="input-align">
-                                    Tempo de Validade:
-                                    <input type="text" ng-model="config.BRACP_MEMCACHE_EXPIRE" size="8"/>
-                                    <span>Tempo (em segundos) que o valor do cache será salvo no servidor.<br><strong>{{Math.floor(config.BRACP_MEMCACHE_EXPIRE/60)}} minuto(s) e {{(config.BRACP_MEMCACHE_EXPIRE%60)}} segundo(s)</strong></span>
-                                </label>
-                            </div>
-
-                        </div>
-
-                        <div ng-switch-when="0">
-                            <div class="bracp-message error">
-                                A Configuração de cache não pode ser realizada, o seu PHP não possui a biblioteca <strong>memcache</strong>
-                                carregada.<br>
-                                <br>
-                                <a href="http://php.net/manual/pt_BR/book.memcache.php" target="_blank">Clicando aqui</a>, talvez te ajude um pouco.
-                            </div>
-                        </div>
+                    <div class="install-data">
+                        <label class="input-align">
+                            <input type="checkbox" ng-model="config.BRACP_CACHE"/>
+                            Habilitar uso de servidor de Cache
+                            <span>Permite que o brACP faça uso de servidor de cache para algumas informações.</span>
+                        </label>
+                        <label ng-if="config.BRACP_CACHE" class="input-align">
+                            Tempo de Validade:
+                            <input type="text" ng-model="config.BRACP_CACHE_EXPIRE" size="8"/>
+                            <span>Tempo (em segundos) que o valor do cache será salvo no servidor.<br><strong>{{Math.floor(config.BRACP_MEMCACHE_EXPIRE/60)}} minuto(s) e {{(config.BRACP_MEMCACHE_EXPIRE%60)}} segundo(s)</strong></span>
+                        </label>
                     </div>
 
                 </div>

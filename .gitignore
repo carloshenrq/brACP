@@ -3,3 +3,4 @@ vendor
 /*.lock
 /config.php
 /*.cache
+/cache

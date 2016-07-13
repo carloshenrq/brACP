@@ -24,7 +24,7 @@
  */
 class Cache
 {
-    private static $memcache = false;
+    private static $cache = false;
 
     /**
      * Método utilizado para inicializar informações sobre o cache
@@ -36,8 +36,8 @@ class Cache
     public static function init()
     {
         // Se existir a biblioteca de memcache e a mesma estiver habilitada
-        if(extension_loaded('memcache') && BRACP_MEMCACHE)
-            self::$memcache = memcache_connect(BRACP_MEMCACHE_SERVER, BRACP_MEMCACHE_PORT);
+        if(BRACP_CACHE)
+            self::$cache = new LocalCache(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'cache');
     }
 
     /**
@@ -50,26 +50,10 @@ class Cache
      */
     public static function get($index, $defaultValue, $force = false)
     {
-        // Se o cache não estiver habilitado, retorna o valor diretamente
-        if(self::$memcache === false)
-            return ((is_callable($defaultValue)) ? $defaultValue():$defaultValue);
+        if(!BRACP_CACHE)
+            return ((is_callable($defaultValue)) ? $defaultValue() : $defaultValue);
 
-        // Se houver dados no cache, então retorna os dados do cache
-        if($force === false && ($fromCache = memcache_get(self::$memcache, $index, 0)) !== false)
-            return $fromCache;
-
-        // Se forcando, então deleta o indice do cache.
-        if($force === true)
-            self::delete($index);
-
-        // Para o valor padrão retornado.
-        $fromDefault = ((is_callable($defaultValue)) ? $defaultValue():$defaultValue);
-
-        // Define no cache o valor
-        memcache_set(self::$memcache, $index, $fromDefault, 0, BRACP_MEMCACHE_EXPIRE);
-
-        // Retorna do padrão.
-        return $fromDefault;
+        return self::$cache->parse($index, $defaultValue, BRACP_CACHE_EXPIRE, $force);
     }
 
     /**
@@ -79,17 +63,9 @@ class Cache
      */
     public static function delete($index)
     {
-        if(self::$memcache !== false)
-            memcache_delete(self::$memcache, $index);
-    }
+        if(!BRACP_CACHE)
+            return;
 
-    /**
-     * Limpa o cache de memória.
-     */
-    public static function flush()
-    {
-        // Limpa o cache
-        if(self::$memcache !== false)
-            memcache_flush(self::$memcache);
+        return self::$cache->erase($index);
     }
 }

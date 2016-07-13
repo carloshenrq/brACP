@@ -75,7 +75,7 @@
             <div class="header">
                 <div class="menu-top access">
 
-                    <div class="server-status" ng-controller="serverStatus" ng-init="statusInit('SRV_{$serverStatus->getIndex()}', {(($serverStatus->getLogin()) ? 'true':'false')}, {(($serverStatus->getChar()) ? 'true':'false')}, {(($serverStatus->getMap()) ? 'true':'false')});">
+                    <div class="server-status" ng-controller="serverStatus" ng-init="statusInit('SRV_{$serverStatus->index}', {(($serverStatus->login) ? 'true':'false')}, {(($serverStatus->char) ? 'true':'false')}, {(($serverStatus->map) ? 'true':'false')});">
 
                         <div ng-if="state == 0">
                             <label>
