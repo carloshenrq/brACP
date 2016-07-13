@@ -105,23 +105,23 @@ class Route
 
             });
 
-            // Verifica se os rankings estão habilitados para serem exibidos.
-            if(BRACP_ALLOW_RANKING)
-            {
-                // Abre o grupo de rotas para os rankings a serem exibidos.
-                self::getApp()->group('/rankings', function() {
-                    // Rankings para personagens.
-                    $this->get('/chars', ['Controller\Ranking', 'chars']);
-                    $this->get('/chars/json', ['Controller\Ranking', 'charJson']);
+            // // Verifica se os rankings estão habilitados para serem exibidos.
+            // if(BRACP_ALLOW_RANKING)
+            // {
+            //     // Abre o grupo de rotas para os rankings a serem exibidos.
+            //     self::getApp()->group('/rankings', function() {
+            //         // Rankings para personagens.
+            //         $this->get('/chars', ['Controller\Ranking', 'chars']);
+            //         $this->get('/chars/json', ['Controller\Ranking', 'charJson']);
 
-                    // Verifica se o ranking de zeny está habilitado a ser exibido.
-                    if(BRACP_ALLOW_RANKING_ZENY)
-                    {
-                        $this->get('/chars/economy', ['Controller\Ranking', 'economy']);
-                        $this->get('/chars/economy/json', ['Controller\Ranking', 'economyJson']);
-                    }
-                });
-            }
+            //         // Verifica se o ranking de zeny está habilitado a ser exibido.
+            //         if(BRACP_ALLOW_RANKING_ZENY)
+            //         {
+            //             $this->get('/chars/economy', ['Controller\Ranking', 'economy']);
+            //             $this->get('/chars/economy/json', ['Controller\Ranking', 'economyJson']);
+            //         }
+            //     });
+            // }
         }
 
         // Chama o próximo middleware.
