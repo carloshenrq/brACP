@@ -167,18 +167,17 @@ html, body {
           top: 0%;
           left: 70%; }
 .content .body {
-  width: 96%;
   margin: 3px auto;
   background-color: white;
-  padding: 8px;
+  padding: 16px;
   box-shadow: 0 0 3px white;
   -moz-box-shadow: 0 0 3px white;
   -webkit-box-shadow: 0 0 3px white;
   color: #0d1e03; }
   .content .body h1 {
-    padding: 0px;
-    margin: 0px 0px 8px 0px;
-    font-size: 1.1em;
+    padding: 0;
+    margin: 0px 0px 12px 0px;
+    font-size: 1.2em;
     border-bottom: 1px dotted rgba(0, 0, 0, 0.6); }
   .content .body .table {
     width: 100%;
@@ -201,9 +200,8 @@ html, body {
 .content .footer {
   color: white;
   text-align: center;
-  padding: 8px;
-  margin: 3px auto;
-  width: 96%;
+  padding: 12px;
+  margin: 0px auto;
   background-color: rgba(0, 102, 34, 0.7);
   box-shadow: 0px 0px 6px rgb(13, 30, 3);
   -moz-box-shadow: 0px 0px 6px rgb(13, 30, 3);
