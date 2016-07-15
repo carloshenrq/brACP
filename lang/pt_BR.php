@@ -500,6 +500,12 @@ return
      */
     'WARNING'   => [
         'CACHE_ON'  => 'As informações contidas nesta página, podem demorar alguns instantes para serem atualizadas!',
+
+        // issue #11 - Informativos de Formatação de Campos
+        'PATTERN'   => [
+            'ALPHANUMERIC'   => 'Somente letras e números são aceitos neste campo.',
+            'SPECIAL_CHAR'   => 'Somente letras, números, espaços e "@ $ # % & * !" são aceitos neste campo.',
+        ]
     ],
 
     /**
