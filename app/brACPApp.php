@@ -138,7 +138,7 @@ class brACPApp extends Slim\App
     {
         // Se a configuração estiver desabilitada para o captcha,
         //  não enviar requisição, apenas retornar false.
-        if(!BRACP_RECAPTCHA_ENABLED)
+        if(!BRACP_RECAPTCHA_ENABLED || empty($response))
             return false;
 
         // Realiza a requisição da key no servido reCaptcha do google

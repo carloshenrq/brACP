@@ -1188,7 +1188,7 @@ class Account
         $return = ['stage' => 0, 'loginSuccess' => false, 'loginError' => false];
 
         // Adicionado teste para recaptcha para segurança das requisições enviadas ao forms.
-        if(BRACP_RECAPTCHA_ENABLED && (empty($data['recaptcha']) || !self::getApp()->checkReCaptcha($data['recaptcha'])))
+        if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['recaptcha']))
         {
             $return['stage'] = 0;
             $return['loginError'] = true;
