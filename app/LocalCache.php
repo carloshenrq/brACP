@@ -24,13 +24,33 @@
  */
 class LocalCache implements ICache
 {
+    /**
+     * Diretório onde serão gerados os arquivos cache.
+     * @var string
+     */
     private $cacheDir;
+
+    /**
+     * Caminho para o arquivo de indice.
+     * @var string
+     */
+    private $cacheIndexFile;
 
     public function __construct($cacheDir = __DIR__ . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR)
     {
         $this->cacheDir = $cacheDir;
         if(!is_dir($cacheDir))
             mkdir($cacheDir);
+
+        // Indice de arquivo.
+        $this->cacheIndexFile = $this->cacheDir . DIRECTORY_SEPARATOR . 'cache.index';
+
+        // Verifica se o arquivo indice foi criado.
+        if(!is_file($this->cacheIndexFile))
+            file_put_contents($this->cacheIndexFile, serialize([]));
+
+        // Limpa o conteudo antigo do arquivo de cache.
+        $this->eraseOldData();
     }
 
     /**
@@ -101,6 +121,7 @@ class LocalCache implements ICache
         $cache = base64_encode(serialize(['time' => time() + $time, 'data' => $content]));
 
         file_put_contents($file, $cache);
+        $this->saveIndex($key);
 
         return true;
     }
@@ -114,9 +135,8 @@ class LocalCache implements ICache
      */
     public function erase($key)
     {
-        $file = $this->findFile($key);
-        if(file_exists($file))
-            unlink($file);
+        $this->removeIndex($key);
+
         return;
     }
 
@@ -130,5 +150,73 @@ class LocalCache implements ICache
     private function findFile($key)
     {
         return join(DIRECTORY_SEPARATOR, [ $this->cacheDir, $key . '.cache' ]);
+    }
+
+    /**
+     * Salva a chave no arquivo de indice.
+     *
+     * @param string $key Chave para o cache no arquivo de indice.
+     */
+    private function saveIndex($key)
+    {
+        $indexData = unserialize(file_get_contents($this->cacheIndexFile));
+
+        $indexData[$key] = $this->findFile($key);
+        file_put_contents($this->cacheIndexFile, serialize($indexData));
+
+        return;
+    }
+
+    /**
+     * Remove a chave do arquivo de indice.
+     *
+     * @param string $key Chave para o cache do arquivo.
+     */
+    private function removeIndex($key)
+    {
+        $indexData = unserialize(file_get_contents($this->cacheIndexFile));
+
+        if(isset($indexData[$key]))
+        {
+            unlink($indexData[$key]);
+            unset($indexData[$key]);
+            file_put_contents($this->cacheIndexFile, serialize($indexData));
+        }
+
+        return;
+    }
+
+    /**
+     * Apaga todo o conteudo antigo do arquivo de indice.
+     */
+    private function eraseOldData()
+    {
+        $indexData = unserialize(file_get_contents($this->cacheIndexFile));
+
+        foreach($indexData as $key => $file)
+        {
+            $cache = unserialize(base64_decode(file_get_contents($file)));
+
+            if($cache['time'] < time())
+                $this->removeIndex($key);
+        }
+
+        return;
+    }
+
+    /**
+     * Apaga todo o conteudo do arquivo de indice.
+     */
+    private function flushIndex()
+    {
+        $indexData = unserialize(file_get_contents($this->cacheIndexFile));
+
+        foreach( $indexData as $key => $file )
+        {
+            unlink($file);
+        }
+
+        file_put_contents($this->cacheIndexFile, serialize([]));
+        return;
     }
 }

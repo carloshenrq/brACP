@@ -36,7 +36,8 @@ class Cache
     public static function init()
     {
         // Se existir a biblioteca de memcache e a mesma estiver habilitada
-        if(BRACP_CACHE)
+        // [2016-08-02, CHLFZ] Adicionado teste porque quando o brACP não está instado a variável não está definida.
+        if(defined('BRACP_CACHE') && BRACP_CACHE)
             self::$cache = new LocalCache(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'cache');
     }
 
@@ -50,7 +51,8 @@ class Cache
      */
     public static function get($index, $defaultValue, $force = false)
     {
-        if(!BRACP_CACHE)
+        // [2016-08-02, CHLFZ] Adicionado teste porque quando o brACP não está instado a variável não está definida.
+        if(!defined('BRACP_CACHE') || !BRACP_CACHE)
             return ((is_callable($defaultValue)) ? $defaultValue() : $defaultValue);
 
         return self::$cache->parse($index, $defaultValue, BRACP_CACHE_EXPIRE, $force);
@@ -63,7 +65,8 @@ class Cache
      */
     public static function delete($index)
     {
-        if(!BRACP_CACHE)
+        // [2016-08-02, CHLFZ] Adicionado teste porque quando o brACP não está instado a variável não está definida.
+        if(!defined('BRACP_CACHE') || !BRACP_CACHE)
             return;
 
         return self::$cache->erase($index);
