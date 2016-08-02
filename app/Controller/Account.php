@@ -429,7 +429,7 @@ class Account
         // Adicionado teste para recaptcha para segurança das requisições enviadas ao forms.
         if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['recaptcha']))
         {
-            $return['error_state'] = 5;
+            $return['error_state'] = 3;
         }
         else
         {
