@@ -193,12 +193,14 @@ brACPApp.controller('account.recover', ['$scope', '$http', function($scope, $htt
     $scope.has_code = false;
     $scope.error_state = 0;
     $scope.success_state = false;
+    $scope.recaptcha_response = null;
 
     $scope.submitRecover = function() {
         var urlConfirm = document.querySelector('#_BRACP_URL').value + 'account/recover';
         var params = $.param({
             'userid'    : this.userid,
-            'email'     : this.email
+            'email'     : this.email,
+            'recaptcha' : this.recaptcha_response
         });
 
         $scope.stage = 1;
@@ -222,7 +224,8 @@ brACPApp.controller('account.recover', ['$scope', '$http', function($scope, $htt
     $scope.submitRecoverConfirm = function() {
         var urlConfirm = document.querySelector('#_BRACP_URL').value + 'account/recover';
         var params = $.param({
-            'code'    : this.code
+            'code'      : this.code,
+            'recaptcha' : this.recaptcha_response
         });
 
         $scope.stage = 1;
@@ -272,7 +275,7 @@ brACPApp.controller('account.password', ['$scope', '$http', function($scope, $ht
             'user_pass'         : this.user_pass,
             'user_pass_new'     : this.user_pass_new,
             'user_pass_conf'    : this.user_pass_conf,
-            'recaptcha'         : this.recaptcha
+            'recaptcha'         : this.recaptcha_response
         });
 
         $scope.stage = 1;
@@ -314,7 +317,7 @@ brACPApp.controller('account.email', ['$scope', '$http', function($scope, $http)
             'email'         : this.email,
             'email_new'     : this.email_new,
             'email_conf'    : this.email_conf,
-            'recaptcha'     : this.recaptcha
+            'recaptcha'     : this.recaptcha_response
         });
 
         $scope.stage = 1;

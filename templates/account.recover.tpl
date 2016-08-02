@@ -31,6 +31,7 @@
                         <div ng-switch-when="-1">@@RECOVER,ERROR(DISABLED)</div>
                         <div ng-switch-when="1">@@RECOVER,ERROR(MISMATCH)</div>
                         <div ng-switch-when="2">@@ERRORS(REGEXP)</div>
+                        <div ng-switch-when="3">@@ERRORS(RECAPTCHA)</div>
                     </div>
                 </div>
 
@@ -50,6 +51,10 @@
                     <input type="text" ng-model="email" placeholder="@@RECOVER,HOLDER(EMAIL)" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
 
                     <input id="_submitRecover" type="submit"/>
+
+                    {if $smarty.const.BRACP_RECAPTCHA_ENABLED eq true}
+                        <div class="recaptcha" ng-model="recaptcha_response" vc-recaptcha key="'{$smarty.const.BRACP_RECAPTCHA_PUBLIC_KEY}'"></div>
+                    {/if}
                 </form>
         {if $smarty.const.BRACP_MD5_PASSWORD_HASH or $smarty.const.BRACP_RECOVER_BY_CODE}
             </div>
@@ -62,6 +67,7 @@
                         <div ng-switch-when="-1">@@RECOVER,ERROR(DISABLED)</div>
                         <div ng-switch-when="1">@@RECOVER,ERROR(USED)</div>
                         <div ng-switch-when="2">@@ERRORS(REGEXP)</div>
+                        <div ng-switch-when="3">@@ERRORS(RECAPTCHA)</div>
                     </div>
                 </div>
 
@@ -76,6 +82,10 @@
                     <input type="text" ng-model="code" placeholder="@@RECOVER,HOLDER(CODE)" maxlength="32" required/>
 
                     <input id="_submitRecoverConfirm" type="submit"/>
+
+                    {if $smarty.const.BRACP_RECAPTCHA_ENABLED eq true}
+                        <div class="recaptcha" ng-model="recaptcha_response" vc-recaptcha key="'{$smarty.const.BRACP_RECAPTCHA_PUBLIC_KEY}'"></div>
+                    {/if}
                 </form>
             </div>
 

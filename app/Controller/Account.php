@@ -426,15 +426,23 @@ class Account
         // Dados de retorno para informações de erro.
         $return = ['error_state' => 0, 'success_state' => false];
 
-        // Se ambos estão definidos, a requisição é para re-envio dos dados de confirmação.
-        if(isset($data['userid']) && isset($data['email']))
-            $return['error_state']      = self::registerRecover($data['userid'], $data['email']);
-        // Se código está definido, a requisição é para confirmação da conta.
-        else if(isset($data['code']))
-            $return['error_state']      = self::registerRecoverCode($data['code']);
+        // Adicionado teste para recaptcha para segurança das requisições enviadas ao forms.
+        if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['recaptcha']))
+        {
+            $return['error_state'] = 5;
+        }
+        else
+        {
+            // Se ambos estão definidos, a requisição é para re-envio dos dados de confirmação.
+            if(isset($data['userid']) && isset($data['email']))
+                $return['error_state']      = self::registerRecover($data['userid'], $data['email']);
+            // Se código está definido, a requisição é para confirmação da conta.
+            else if(isset($data['code']))
+                $return['error_state']      = self::registerRecoverCode($data['code']);
 
-        // Define informaçõs de erro. (Caso exista)
-        $return['success_state']    = $return['error_state'] == 0;
+            // Define informaçõs de erro. (Caso exista)
+            $return['success_state']    = $return['error_state'] == 0;
+        }
 
         // Responde com um objeto json informando o estado do cadastro.
         $response->withJson($return);
