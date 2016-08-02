@@ -37,6 +37,10 @@
             <input type="password" ng-model="user_pass" placeholder="@@LOGIN,HOLDER(PASSWD)" size="32" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>
 
             <input id="_submitLogin" type="submit"/>
+
+            {if $smarty.const.BRACP_RECAPTCHA_ENABLED eq true}
+                <div class="recaptcha" ng-model="recaptcha_response" vc-recaptcha key="'{$smarty.const.BRACP_RECAPTCHA_PUBLIC_KEY}'"></div>
+            {/if}
         </form>
 
         {if $smarty.const.BRACP_ALLOW_CREATE_ACCOUNT eq true}

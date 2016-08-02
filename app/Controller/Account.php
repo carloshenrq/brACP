@@ -1187,38 +1187,47 @@ class Account
         // Dados de retorno.
         $return = ['stage' => 0, 'loginSuccess' => false, 'loginError' => false];
 
-        // Verifica os padrões para recepção dos parametros de usuário e senha verificando
-        //  se os dados estão de acordo com os patterns informados.
-        if(    !isset($data['userid'])
-            || !isset($data['user_pass'])
-            || !preg_match('/^'.BRACP_REGEXP_USERNAME.'$/', $data['userid'])
-            || !preg_match('/^'.BRACP_REGEXP_PASSWORD.'$/', $data['user_pass']))
+        // Adicionado teste para recaptcha para segurança das requisições enviadas ao forms.
+        if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['recaptcha']))
         {
-            // Informa que ocorreu erro durante o retorno.
+            $return['stage'] = 1;
             $return['loginError'] = true;
         }
         else
         {
-            // Obtém a senha que será utilizada para realizar login.
-            $user_pass = ((BRACP_MD5_PASSWORD_HASH) ? hash('md5', $data['user_pass']) : $data['user_pass']);
-
-            // Tenta obter a conta que fará login no painel de controle.
-            $account = self::getSvrDftEm()
-                            ->getRepository('Model\Login')
-                            ->findOneBy(['userid' => $data['userid'], 'user_pass' => $user_pass]);
-
-            // Se a conta digitada pelo usuário existe, então, adiciona a sessão de usuário.
-            if(!is_null($account))
+            // Verifica os padrões para recepção dos parametros de usuário e senha verificando
+            //  se os dados estão de acordo com os patterns informados.
+            if(    !isset($data['userid'])
+                || !isset($data['user_pass'])
+                || !preg_match('/^'.BRACP_REGEXP_USERNAME.'$/', $data['userid'])
+                || !preg_match('/^'.BRACP_REGEXP_PASSWORD.'$/', $data['user_pass']))
             {
-                // Define os dados de sessão para o usuário.
-                self::getApp()->getSession()->BRACP_ISLOGGEDIN = true;
-                self::getApp()->getSession()->BRACP_ACCOUNTID = $account->getAccount_id();
-
-                $return['stage'] = 1;
-                $return['loginSuccess'] = true;
+                // Informa que ocorreu erro durante o retorno.
+                $return['loginError'] = true;
             }
             else
-                $return['loginError'] = true;
+            {
+                // Obtém a senha que será utilizada para realizar login.
+                $user_pass = ((BRACP_MD5_PASSWORD_HASH) ? hash('md5', $data['user_pass']) : $data['user_pass']);
+
+                // Tenta obter a conta que fará login no painel de controle.
+                $account = self::getSvrDftEm()
+                                ->getRepository('Model\Login')
+                                ->findOneBy(['userid' => $data['userid'], 'user_pass' => $user_pass]);
+
+                // Se a conta digitada pelo usuário existe, então, adiciona a sessão de usuário.
+                if(!is_null($account))
+                {
+                    // Define os dados de sessão para o usuário.
+                    self::getApp()->getSession()->BRACP_ISLOGGEDIN = true;
+                    self::getApp()->getSession()->BRACP_ACCOUNTID = $account->getAccount_id();
+
+                    $return['stage'] = 1;
+                    $return['loginSuccess'] = true;
+                }
+                else
+                    $return['loginError'] = true;
+            }
         }
 
         // Retorna resposta do json para informar ao usuário os erros

@@ -51,9 +51,8 @@
         <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/bracp.angular.js"></script>
 
         {if $smarty.const.BRACP_RECAPTCHA_ENABLED eq true}
-            <script src="https://www.google.com/recaptcha/api.js"></script>
-        {else}
-            <script>var grecaptcha = false;</script>
+            <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/angular-recaptcha.js"></script>
+            <script src="https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&render=explicit"></script>
         {/if}
 
         <script>

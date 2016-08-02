@@ -16,7 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var brACPApp = angular.module('brACP', []);
+var brACPApp = angular.module('brACP', ['vcRecaptcha']);
 
 /**
  * Controlador para logins de acesso do painel de controle.
@@ -29,13 +29,15 @@ brACPApp.controller('account.login', ['$scope', '$http', function($scope, $http)
     $scope.stage = 0;
     $scope.loginSuccess = false;
     $scope.loginError = false;
+    $scope.recaptcha_response = null;
 
     $scope.submitLogin = function() {
 
         var urlLogin = document.querySelector('#_BRACP_URL').value + 'account/login';
         var params = $.param({
-            'userid' : this.userid,
-            'user_pass' : this.user_pass
+            'userid'    : this.userid,
+            'user_pass' : this.user_pass,
+            'recaptcha' : this.recaptcha_response
         });
 
         $scope.stage = 1;

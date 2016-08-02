@@ -52,6 +52,11 @@
           margin-top: .4em; }
       .modal .modal-body form.modal-form input[type="submit"] {
         display: none; }
+      .modal .modal-body form.modal-form div.recaptcha {
+        margin-top: .4em; }
+        .modal .modal-body form.modal-form div.recaptcha div {
+          display: block !important;
+          margin: 0px auto; }
     .modal .modal-body .message {
       max-height: 15em;
       overflow: auto; }

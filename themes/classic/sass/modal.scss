@@ -80,6 +80,16 @@
             {
                 display: none;
             }
+
+            div.recaptcha 
+            {
+                margin-top: .4em;
+                div
+                {
+                    display: block !important;
+                    margin: 0px auto;
+                }
+            }
         }
 
         .message
