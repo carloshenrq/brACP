@@ -351,15 +351,23 @@ class Account
         // Dados de retorno para informações de erro.
         $return = ['error_state' => 0, 'success_state' => false];
 
-        // Define informaçõs de erro. (Caso exista)
-        $return['error_state']      = self::accountChangeEmail(
-            self::loggedUser()->getUserid(),
-            $data['email'],
-            $data['email_new'],
-            $data['email_conf']
-        );
+        // Adicionado teste para recaptcha para segurança das requisições enviadas ao forms.
+        if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['recaptcha']))
+        {
+            $return['error_state'] = 8;
+        }
+        else
+        {
+            // Define informaçõs de erro. (Caso exista)
+            $return['error_state']      = self::accountChangeEmail(
+                self::loggedUser()->getUserid(),
+                $data['email'],
+                $data['email_new'],
+                $data['email_conf']
+            );
 
-        $return['success_state']    = $return['error_state'] == 0;
+            $return['success_state']    = $return['error_state'] == 0;
+        }
 
         // Responde com um objeto json informando o estado do cadastro.
         $response->withJson($return);
@@ -380,16 +388,24 @@ class Account
         // Dados de retorno para informações de erro.
         $return = ['error_state' => 0, 'success_state' => false];
 
-        // Define informaçõs de erro. (Caso exista)
-        $return['error_state']      = self::accountChangePass(
-            self::loggedUser()->getUserid(),
-            $data['user_pass'],
-            $data['user_pass_new'],
-            $data['user_pass_conf']
-        );
+        // Adicionado teste para recaptcha para segurança das requisições enviadas ao forms.
+        if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['recaptcha']))
+        {
+            $return['error_state'] = 5;
+        }
+        else
+        {
+            // Define informaçõs de erro. (Caso exista)
+            $return['error_state']      = self::accountChangePass(
+                self::loggedUser()->getUserid(),
+                $data['user_pass'],
+                $data['user_pass_new'],
+                $data['user_pass_conf']
+            );
 
-        // // userid, $old_pass, $new_pass, $new_pass_conf
-        $return['success_state']    = $return['error_state'] == 0;
+            // // userid, $old_pass, $new_pass, $new_pass_conf
+            $return['success_state']    = $return['error_state'] == 0;
+        }
 
         // Responde com um objeto json informando o estado do cadastro.
         $response->withJson($return);
@@ -439,15 +455,23 @@ class Account
         // Dados de retorno para informações de erro.
         $return = ['error_state' => 0, 'success_state' => false];
 
-        // Se ambos estão definidos, a requisição é para re-envio dos dados de confirmação.
-        if(isset($data['userid']) && isset($data['email']))
-            $return['error_state']      = self::registerConfirmResend($data['userid'], $data['email']);
-        // Se código está definido, a requisição é para confirmação da conta.
-        else if(isset($data['code']))
-            $return['error_state']      = self::registerConfirmCode($data['code']);
+        // Adicionado teste para recaptcha para segurança das requisições enviadas ao forms.
+        if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['recaptcha']))
+        {
+            $return['error_state'] = 2;
+        }
+        else
+        {
+            // Se ambos estão definidos, a requisição é para re-envio dos dados de confirmação.
+            if(isset($data['userid']) && isset($data['email']))
+                $return['error_state']      = self::registerConfirmResend($data['userid'], $data['email']);
+            // Se código está definido, a requisição é para confirmação da conta.
+            else if(isset($data['code']))
+                $return['error_state']      = self::registerConfirmCode($data['code']);
 
-        // Define informaçõs de erro. (Caso exista)
-        $return['success_state']    = $return['error_state'] == 0;
+            // Define informaçõs de erro. (Caso exista)
+            $return['success_state']    = $return['error_state'] == 0;
+        }
 
         // Responde com um objeto json informando o estado do cadastro.
         $response->withJson($return);
@@ -468,18 +492,26 @@ class Account
         // Inicializa vetor de retorno.
         $return = ['error_state' => 0, 'success_state' => false];
 
-        // Executa a tentativa de criar a conta do usuário no banco de dados.
-        $i_create = self::registerAccount(
-            $data['userid'], $data['user_pass'] , $data['user_pass_conf'],
-            $data['email'] , $data['email_conf'], $data['sex'],
-            false, 0
-        );
-
-        // Realiza os testes para saber o retorno do registro.
-        if($i_create != 0)
-            $return['error_state']      = $i_create;
+        // Adicionado teste para recaptcha para segurança das requisições enviadas ao forms.
+        if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['recaptcha']))
+        {
+            $return['error_state'] = 6;
+        }
         else
-            $return['success_state']    = true;
+        {
+            // Executa a tentativa de criar a conta do usuário no banco de dados.
+            $i_create = self::registerAccount(
+                $data['userid'], $data['user_pass'] , $data['user_pass_conf'],
+                $data['email'] , $data['email_conf'], $data['sex'],
+                false, 0
+            );
+
+            // Realiza os testes para saber o retorno do registro.
+            if($i_create != 0)
+                $return['error_state']      = $i_create;
+            else
+                $return['success_state']    = true;
+        }
 
         // Responde com um objeto json informando o estado do cadastro.
         $response->withJson($return);

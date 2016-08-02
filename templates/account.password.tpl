@@ -30,6 +30,7 @@
                 <div ng-switch-when="2">@@CHANGEPASS,ERROR(MISMATCH2)</div>
                 <div ng-switch-when="3">@@CHANGEPASS,ERROR(EQUALS)</div>
                 <div ng-switch-when="4">@@ERRORS(REGEXP)</div>
+                <div ng-switch-when="5">@@ERRORS(RECAPTCHA)</div>
             </div>
         </div>
 
@@ -53,6 +54,10 @@
             <input type="password" ng-model="user_pass_conf" placeholder="@@CHANGEPASS,HOLDER(CONFIRM_PASSWORD)" size="32" maxlength="32" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>
 
             <input id="_submitPassword" type="submit"/>
+            
+            {if $smarty.const.BRACP_RECAPTCHA_ENABLED eq true}
+                <div class="recaptcha" ng-model="$parent.recaptcha_response" vc-recaptcha key="'{$smarty.const.BRACP_RECAPTCHA_PUBLIC_KEY}'"></div>
+            {/if}
         </form>
     </div>
 

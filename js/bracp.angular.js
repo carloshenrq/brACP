@@ -80,6 +80,7 @@ brACPApp.controller('account.register', ['$scope', '$http', function($scope, $ht
     $scope.error_state = 0;
     $scope.success_state = false;
     $scope.accept_terms = false;
+    $scope.recaptcha_response = null;
 
     $scope.submitRegister = function() {
         var urlRegister = document.querySelector('#_BRACP_URL').value + 'account/register';
@@ -89,7 +90,8 @@ brACPApp.controller('account.register', ['$scope', '$http', function($scope, $ht
             'user_pass_conf'    : this.user_pass_conf,
             'sex'               : this.sex,
             'email'             : this.email,
-            'email_conf'        : this.email_conf
+            'email_conf'        : this.email_conf,
+            'recaptcha'         : this.recaptcha_response
         });
 
         $scope.stage = 1;
@@ -125,12 +127,14 @@ brACPApp.controller('account.register.resend', ['$scope', '$http', function($sco
     $scope.has_code = false;
     $scope.error_state = 0;
     $scope.success_state = false;
+    $scope.recaptcha_response = null;
 
     $scope.submitResend = function() {
         var urlConfirm = document.querySelector('#_BRACP_URL').value + 'account/confirmation';
         var params = $.param({
             'userid'    : this.userid,
-            'email'     : this.email
+            'email'     : this.email,
+            'recaptcha' : this.recaptcha_response
         });
 
         $scope.stage = 1;
@@ -154,7 +158,8 @@ brACPApp.controller('account.register.resend', ['$scope', '$http', function($sco
     $scope.submitConfirm = function() {
         var urlConfirm = document.querySelector('#_BRACP_URL').value + 'account/confirmation';
         var params = $.param({
-            'code'      : this.code
+            'code'      : this.code,
+            'recaptcha' : this.recaptcha_response
         });
 
         $scope.stage = 1;
@@ -252,6 +257,7 @@ brACPApp.controller('account.password', ['$scope', '$http', function($scope, $ht
     $scope.stage = 0;
     $scope.error_state = 0;
     $scope.success_state = false;
+    $scope.recaptcha_response = null;
 
     $scope.passwordInit = function(allowAdminChange, accountLv, adminLevel) {
 
@@ -265,7 +271,8 @@ brACPApp.controller('account.password', ['$scope', '$http', function($scope, $ht
         var params = $.param({
             'user_pass'         : this.user_pass,
             'user_pass_new'     : this.user_pass_new,
-            'user_pass_conf'    : this.user_pass_conf
+            'user_pass_conf'    : this.user_pass_conf,
+            'recaptcha'         : this.recaptcha
         });
 
         $scope.stage = 1;
@@ -299,13 +306,15 @@ brACPApp.controller('account.email', ['$scope', '$http', function($scope, $http)
     $scope.stage = 0;
     $scope.error_state = 0;
     $scope.success_state = false;
+    $scope.recaptcha_response = null;
 
     $scope.submitMail = function() {
         var urlConfirm = document.querySelector('#_BRACP_URL').value + 'account/email';
         var params = $.param({
             'email'         : this.email,
             'email_new'     : this.email_new,
-            'email_conf'    : this.email_conf
+            'email_conf'    : this.email_conf,
+            'recaptcha'     : this.recaptcha
         });
 
         $scope.stage = 1;

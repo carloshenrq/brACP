@@ -33,6 +33,7 @@
                 <div ng-switch-when="5">@@CHANGEMAIL,ERROR(DELAY)</div>
                 <div ng-switch-when="6">@@ERRORS(REGEXP)</div>
                 <div ng-switch-when="7">@@CHANGEMAIL,ERROR(TAKEN)</div>
+                <div ng-switch-when="8">@@ERRORS(RECAPTCHA)</div>
             </div>
         </div>
 
@@ -49,6 +50,10 @@
             <input type="text" ng-model="email_conf" placeholder="@@CHANGEMAIL,HOLDER(CONFIRM)" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
 
             <input id="_submitMail" type="submit"/>
+
+            {if $smarty.const.BRACP_RECAPTCHA_ENABLED eq true}
+                <div class="recaptcha" ng-model="$parent.recaptcha_response" vc-recaptcha key="'{$smarty.const.BRACP_RECAPTCHA_PUBLIC_KEY}'"></div>
+            {/if}
         </form>
     </div>
 

@@ -31,6 +31,7 @@
                 <div ng-switch="$parent.error_state">
                     <div ng-switch-when="-1">@@RESEND,ERROR(DISABLED)</div>
                     <div ng-switch-when="1">@@RESEND,ERROR(NOACC)</div>
+                    <div ng-switch-when="2">@@ERRORS(RECAPTCHA)</div>
                 </div>
             </div>
 
@@ -46,6 +47,10 @@
                 <input type="text" ng-model="email" placeholder="@@RESEND,HOLDER(EMAIL)" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
 
                 <input id="_submitResend" type="submit"/>
+
+                {if $smarty.const.BRACP_RECAPTCHA_ENABLED eq true}
+                    <div class="recaptcha" ng-model="$parent.recaptcha_response" vc-recaptcha key="'{$smarty.const.BRACP_RECAPTCHA_PUBLIC_KEY}'"></div>
+                {/if}
             </form>
         </div>
 
@@ -54,6 +59,7 @@
                 <div ng-switch="$parent.error_state">
                     <div ng-switch-when="-1">@@RESEND,ERROR(DISABLED)</div>
                     <div ng-switch-when="1">@@RESEND,ERROR(USED)</div>
+                    <div ng-switch-when="2">@@ERRORS(RECAPTCHA)</div>
                 </div>
             </div>
 
@@ -68,6 +74,10 @@
                 <input type="text" ng-model="code" placeholder="@@RESEND,HOLDER(CODE)" maxlength="32" required/>
 
                 <input id="_submitConfirm" type="submit"/>
+
+                {if $smarty.const.BRACP_RECAPTCHA_ENABLED eq true}
+                    <div class="recaptcha" ng-model="$parent.recaptcha_response" vc-recaptcha key="'{$smarty.const.BRACP_RECAPTCHA_PUBLIC_KEY}'"></div>
+                {/if}
             </form>
         </div>
 

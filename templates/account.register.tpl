@@ -34,6 +34,7 @@
                     <div ng-switch-when="3">@@CREATE,ERROR,MISMATCH(EMAIL)</div>
                     <div ng-switch-when="4">@@CREATE,ERROR,MISMATCH(ADMIN_MODE)</div>
                     <div ng-switch-when="5">@@ERRORS(REGEXP)</div>
+                    <div ng-switch-when="6">@@ERRORS(RECAPTCHA)</div>
                 </div>
             </div>
 
@@ -59,6 +60,10 @@
                 <input type="text" ng-model="email_conf" placeholder="@@CREATE,HOLDER(EMAIL_CONFIRM)" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
 
                 <input id="_submitRegister" type="submit"/>
+
+                {if $smarty.const.BRACP_RECAPTCHA_ENABLED eq true}
+                    <div class="recaptcha" ng-model="$parent.recaptcha_response" vc-recaptcha key="'{$smarty.const.BRACP_RECAPTCHA_PUBLIC_KEY}'"></div>
+                {/if}
             </form>
         </div>
 
