@@ -52,7 +52,7 @@
 
         {if $smarty.const.BRACP_RECAPTCHA_ENABLED eq true}
             <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/angular-recaptcha.js"></script>
-            <script src="https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&render=explicit"></script>
+            <script src="https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&render=explicit" async defer></script>
         {/if}
 
         <script>
