@@ -111,6 +111,7 @@ $config = [
     'BRACP_ALLOW_RESET_APPEAR'              => true,
     'BRACP_ALLOW_RESET_POSIT'               => true,
     'BRACP_ALLOW_RESET_EQUIP'               => true,
+    'BRACP_REGEXP_FORMAT'                   => 0x12,
     'BRACP_REGEXP_USERNAME'                 => '[a-zA-Z0-9]{4,24}',
     'BRACP_REGEXP_PASSWORD'                 => '[a-zA-Z0-9]{4,20}',
     'BRACP_REGEXP_EMAIL'                    => '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}',
@@ -227,6 +228,8 @@ else if(!$writeable)
                 $scope.BRACP_ALL_THEMES = <?php echo json_encode($themes->getArrayCopy()); ?>;
                 $scope.BRACP_ALL_LANGS = <?php echo json_encode($langs); ?>;
                 $scope.BRACP_PAYPAL_CURRENCY = <?php echo json_encode($PPCurrency); ?>;
+                $scope.BRACP_REGEXP_FORMAT_USER = "10";
+                $scope.BRACP_REGEXP_FORMAT_PASS = "02";
 
 
                 if($scope.BRACP_ALLOW_INSTALL == false)
@@ -243,6 +246,7 @@ else if(!$writeable)
 
                 $scope.saveAndInstall = function() {
 
+
                     if($scope.config.BRACP_SERVERS.length == 0)
                     {
                         alert("Você deve possuir pelo menos 1 servidor configurado antes de continuar.");
@@ -250,7 +254,17 @@ else if(!$writeable)
                         return false;
                     }
 
+                    // issue #11 - Formatação para os campos de usuário e senha que precisam de expressão regular
                     $scope.config.BRACP_SRV_COUNT = $scope.config.BRACP_SERVERS.length;
+                    $scope.config.BRACP_REGEXP_FORMAT = parseInt('0x' + (parseInt($scope.BRACP_REGEXP_FORMAT_USER) + parseInt($scope.BRACP_REGEXP_FORMAT_PASS)));
+
+                    var _tmp = $scope.config.BRACP_REGEXP_FORMAT;
+
+                    $scope.config.BRACP_REGEXP_USERNAME = _tmp&0x10 ? '[a-zA-Z0-9]{4,32}' :
+                                                          _tmp&0x20 ? '[a-zA-Z0-9\\s@\\$#%&\\*!]{4,32}' : '.{4,32}';
+
+                    $scope.config.BRACP_REGEXP_PASSWORD = _tmp&0x01 ? '[a-zA-Z0-9]{4,32}' :
+                                                          _tmp&0x02 ? '[a-zA-Z0-9\\s@\\$#%&\\*!]{4,32}' : '.{4,32}';
 
                     $http({
                         'url'       : 'install.php',
@@ -821,21 +835,36 @@ else if(!$writeable)
                         </label>
 
                         <label class="input-align">
-                            Expressão para usuários:
-                            <input type="text" ng-model="config.BRACP_REGEXP_USERNAME" size="50"/>
+                            Formato para campo de usuários:
+
+                            <select ng-model="$parent.BRACP_REGEXP_FORMAT_USER">
+                                <option value="10">Somente letras e números (sem espaço)</option>
+                                <option value="20">Letras, números, espaços e caracteres especiais ( @ $ # % & * ! )</option>
+                                <option value="30">Sem restrição de formatação</option>
+                            </select>
+
                             <span>Expressão regular para os campos de usuários.</span>
+                            <span>Você pode alterar essa configuração manualmente mais tarde.</span>
                         </label>
 
                         <label class="input-align">
-                            Expressão para senhas:
-                            <input type="text" ng-model="config.BRACP_REGEXP_PASSWORD" size="50"/>
+                            Formato para campo de senhas:
+
+                            <select ng-model="$parent.BRACP_REGEXP_FORMAT_PASS">
+                                <option value="01">Somente letras e números (sem espaço)</option>
+                                <option value="02">Letras, números, espaços e caracteres especiais ( @ $ # % & * ! )</option>
+                                <option value="03">Sem restrição de formatação</option>
+                            </select>
+
                             <span>Expressão regular para os campos de senha.</span>
+                            <span>Você pode alterar essa configuração manualmente mais tarde.</span>
                         </label>
 
                         <label class="input-align">
                             Expressão para e-mails:
                             <input type="text" ng-model="config.BRACP_REGEXP_EMAIL" size="50"/>
                             <span>Expressão regular para os campos de e-mail.</span>
+                            <span>Não é recomendado alterar esta configuração.</span>
                         </label>
                     </div>
                     <br>

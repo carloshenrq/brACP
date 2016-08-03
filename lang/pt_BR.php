@@ -503,8 +503,9 @@ return
 
         // issue #11 - Informativos de Formatação de Campos
         'PATTERN'   => [
-            'ALPHANUMERIC'   => 'Somente letras e números são aceitos neste campo.',
-            'SPECIAL_CHAR'   => 'Somente letras, números, espaços e "@ $ # % & * !" são aceitos neste campo.',
+            'NORMAL'    => 'Somente letras e números. Entre 4 e 32 caracteres.',
+            'SPECIAL'   => 'Letras, números, espaços e caracteres especiais (@ $ # % & * !). Entre 4 e 32 caracteres.',
+            'ALL'       => 'Sem restrições. Entre 4 e 32 caracteres.',
         ]
     ],
 
