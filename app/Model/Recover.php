@@ -69,14 +69,14 @@ class Recover
         return $this->id = $id;
     }
 
-    public function getAccount()
+    public function getAccount_id()
     {
-        return $this->account;
+        return $this->account_id;
     }
     
-    public function setAccount($account)
+    public function setAccount_id($account_id)
     {
-        return $this->account = $account;
+        return $this->account_id = $account_id;
     }
 
     public function getCode()
