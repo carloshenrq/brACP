@@ -16,96 +16,39 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *}
 <ul>
-    <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}" data-target=".bracp-body"><label>
-        @@MENU(HOME)
-    </label></li>
-    {if isset($session->BRACP_ISLOGGEDIN) eq true and $session->BRACP_ISLOGGEDIN eq true and
-            $account->getGroup_id() >= BRACP_ALLOW_ADMIN_GMLEVEL}
-        <li style='color: red; font-weight: bold;'>
-            <input id="menu-admin" type="checkbox" class="bracp-menu-item-check"/>
-            <label for="menu-admin">@@MENU,ADMIN(TITLE)</label>
-            <ul>
-                <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}admin/players" data-target=".bracp-body"><label>
-                    @@MENU,ADMIN(PLAYERS)
-                </label></li>
-                <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}admin/donation" data-target=".bracp-body"><label>
-                    @@MENU,ADMIN(DONATION)
-                </label></li>
-                {if $smarty.const.BRACP_ALLOW_MODS eq true}
-                    <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}admin/mods" data-target=".bracp-body"><label>
-                        @@MENU,ADMIN(MODS)
-                    </label></li>
+    <li class="icon icon-home url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}">@@MENU(HOME)</li>
+    <li class="icon icon-myacc sub-menu">@@MENU,MYACC(TITLE)
+        <ul>
+            {if isset($account) eq false}
+                <li><label for="modal-login">@@MENU,MYACC,UNAUTHENTICATED(LOGIN)</label></li>
+                {if $smarty.const.BRACP_ALLOW_CREATE_ACCOUNT eq true}
+                    <li><label for="modal-register">@@MENU,MYACC,UNAUTHENTICATED(CREATE)</label></li>
                 {/if}
-                <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}admin/backup" data-target=".bracp-body"><label>
-                    @@MENU,ADMIN(BACKUP)
-                </label></li>
-                <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}admin/theme" data-target=".bracp-body"><label>
-                    @@MENU,ADMIN(THEMES)
-                </label></li>
-                <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}admin/cache/flush" data-target=".bracp-body"><label>
-                    @@MENU,ADMIN(CACHE)
-                </label></li>
-                <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}admin/update" data-target=".bracp-body"><label>
-                    @@MENU,ADMIN(UPDATE)
-                </label></li>
-            </ul>
-        </li>
+                {if $smarty.const.BRACP_ALLOW_MAIL_SEND}
+                    {if $smarty.const.BRACP_CONFIRM_ACCOUNT}
+                        <li><label for="modal-create-resend">@@MENU,MYACC,UNAUTHENTICATED(CREATE_SEND)</label></li>
+                    {/if}
+                    {if $smarty.const.BRACP_ALLOW_RECOVER}
+                        <li><label for="modal-recover">@@MENU,MYACC,UNAUTHENTICATED(RECOVER)</label></li>
+                    {/if}
+                {/if}
+            {else}
+
+                {if $account->getGroup_id() < BRACP_ALLOW_ADMIN_GMLEVEL || BRACP_ALLOW_ADMIN_CHANGE_PASSWORD}
+                    <li><label for="modal-password">@@MENU,MYACC,AUTHENTICATED,CHANGE(PASS)</label></li>
+                {/if}
+
+                {if $smarty.const.BRACP_ALLOW_CHANGE_MAIL && $account->getGroup_id() < BRACP_ALLOW_ADMIN_GMLEVEL}
+                    <li><label for="modal-mail">@@MENU,MYACC,AUTHENTICATED,CHANGE(MAIL)</label></li>
+                {/if}
+
+                <li class="url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}account/chars"><label>@@MENU,MYACC,AUTHENTICATED(CHARS)</label></li>
+
+                <li class="url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}account/logout"><label>@@MENU,MYACC,AUTHENTICATED(LOGOUT, {$userid})</label></li>
+            {/if}
+        </ul>
+    </li>
+    {if $smarty.const.BRACP_ALLOW_RANKING}
+        {* @TODO *}
     {/if}
-	{if $smarty.const.PAYPAL_INSTALL eq true}
-		<li>
-			<input id="menu-donations" type="checkbox" class="bracp-menu-item-check"/>
-			<label for="menu-donations">@@MENU,DONATIONS(TITLE)</label>
-			<ul>
-				<li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}donations/paypal" data-target=".bracp-body"><label>
-					@@MENU,DONATIONS(PAYPAL)
-				</label></li>
-			</ul>
-		</li>
-	{/if}
-    <li>
-        <input id="menu-myaccount" type="checkbox" class="bracp-menu-item-check"/>
-        <label for="menu-myaccount">@@MENU,MYACC(TITLE)</label>
-        <ul>
-        {if isset($session->BRACP_ISLOGGEDIN) eq false or $session->BRACP_ISLOGGEDIN eq false}
-            <li><label for="bracp-modal-login">@@MENU,MYACC,UNAUTHENTICATED(LOGIN)</label></li>
-            {if $smarty.const.BRACP_ALLOW_CREATE_ACCOUNT eq true}
-                <li><label for="bracp-modal-create">@@MENU,MYACC,UNAUTHENTICATED(CREATE)</label></li>
-                {if $smarty.const.BRACP_CONFIRM_ACCOUNT eq true}
-                    <li><label for="bracp-modal-create-resend">@@MENU,MYACC,UNAUTHENTICATED(CREATE_SEND)</label></li>
-                {/if}
-            {/if}
-            {if $smarty.const.BRACP_ALLOW_RECOVER eq true}
-                <li><label for="bracp-modal-recover">@@MENU,MYACC,UNAUTHENTICATED(RECOVER)</label></li>
-            {/if}
-        {else}
-            <li><label for="bracp-modal-changepass">@@MENU,MYACC,AUTHENTICATED,CHANGE(PASS)</label></li>
-            {if $smarty.const.BRACP_ALLOW_CHANGE_MAIL eq true}
-                <li><label for="bracp-modal-changemail">@@MENU,MYACC,AUTHENTICATED,CHANGE(MAIL)</label></li>
-            {/if}
-            <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/chars" data-target=".bracp-body"><label>
-                @@MENU,MYACC,AUTHENTICATED(CHARS)
-            </label></li>
-            <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/storage" data-target=".bracp-body"><label>
-                @@MENU,MYACC,AUTHENTICATED(STORAGE)
-            </label></li>
-            <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}account/logout" data-target=".bracp-body"><label>
-                @@MENU,MYACC,AUTHENTICATED(LOGOUT, {$account->getUserid()})
-            </label></li>
-        {/if}
-        </ul>
-    </li>
-    <li>
-        <input id="menu-rankings" type="checkbox" class="bracp-menu-item-check"/>
-        <label for="menu-rankings">@@MENU,RANKINGS(TITLE)</label>
-        <ul>
-            <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}rankings/chars" data-target=".bracp-body"><label>
-                @@MENU,RANKINGS(CHARS)
-            </label></li>
-            {if $smarty.const.BRACP_ALLOW_RANKING_ZENY eq true}
-                <li class="ajax-url" data-url="{$smarty.const.BRACP_DIR_INSTALL_URL}rankings/chars/economy" data-target=".bracp-body"><label>
-                    @@MENU,RANKINGS(ECONOMY)
-                </label></li>
-            {/if}
-        </ul>
-    </li>
 </ul>

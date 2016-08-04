@@ -265,6 +265,9 @@ class brACPApp extends Slim\App
             'session' => $this->getSession(),
             'navigator' => Navigator::getBrowser($this->getContainer()->get('request')->getHeader('user-agent')[0]),
             'ipAddress' => $this->getIpAddress(),
+
+            'userNameFormat' => (((BRACP_REGEXP_FORMAT&0x10) == 0x10) ? 'NORMAL' : (((BRACP_REGEXP_FORMAT&0x20) == 0x20) ? 'SPECIAL':'ALL')),
+            'passWordFormat' => (((BRACP_REGEXP_FORMAT&0x01) == 0x01) ? 'NORMAL' : (((BRACP_REGEXP_FORMAT&0x02) == 0x02) ? 'SPECIAL':'ALL')),
         ]);
 
         // Atribui os dados ao smarty.

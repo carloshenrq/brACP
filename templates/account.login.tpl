@@ -33,8 +33,8 @@
 
         <form class="modal-form" ng-submit="submitLogin()">
 
-            <input type="text" ng-model="userid" placeholder="@@LOGIN,HOLDER(USERID)" size="32" pattern="{$smarty.const.BRACP_REGEXP_USERNAME}" required/>
-            <input type="password" ng-model="user_pass" placeholder="@@LOGIN,HOLDER(PASSWD)" size="32" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>
+            <input type="text" ng-model="userid" placeholder="@@LOGIN,HOLDER(USERID)" size="32" pattern="{$smarty.const.BRACP_REGEXP_USERNAME}" required title="@@WARNING,PATTERN({$userNameFormat})"/>
+            <input type="password" ng-model="user_pass" placeholder="@@LOGIN,HOLDER(PASSWD)" size="32" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required title="@@WARNING,PATTERN({$passWordFormat})"/>
 
             <input id="_submitLogin" type="submit"/>
 

@@ -47,7 +47,7 @@
 
                 <form class="modal-form" ng-submit="submitRecover()">
 
-                    <input type="text" ng-model="userid" placeholder="@@RECOVER,HOLDER(USERID)" size="32" pattern="{$smarty.const.BRACP_REGEXP_USERNAME}" required/>
+                    <input type="text" ng-model="userid" placeholder="@@RECOVER,HOLDER(USERID)" size="32" pattern="{$smarty.const.BRACP_REGEXP_USERNAME}" required title="@@WARNING,PATTERN({$userNameFormat})"/>
                     <input type="text" ng-model="email" placeholder="@@RECOVER,HOLDER(EMAIL)" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
 
                     <input id="_submitRecover" type="submit"/>

@@ -43,7 +43,7 @@
 
             <form class="modal-form" ng-submit="submitResend()">
 
-                <input type="text" ng-model="userid" placeholder="@@RESEND,HOLDER(USERID)" size="32" pattern="{$smarty.const.BRACP_REGEXP_USERNAME}" required/>
+                <input type="text" ng-model="userid" placeholder="@@RESEND,HOLDER(USERID)" size="32" pattern="{$smarty.const.BRACP_REGEXP_USERNAME}" required title="@@WARNING,PATTERN({$userNameFormat})"/>
                 <input type="text" ng-model="email" placeholder="@@RESEND,HOLDER(EMAIL)" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
 
                 <input id="_submitResend" type="submit"/>

@@ -504,7 +504,7 @@ return
         // issue #11 - Informativos de Formatação de Campos
         'PATTERN'   => [
             'NORMAL'    => 'Somente letras e números. Entre 4 e 32 caracteres',
-            'SPECIAL'   => 'Letras, números, espaços e caracteres especiais (@ $ # % & * !). Entre 4 e 32 caracteres',
+            'SPECIAL'   => 'Letras, números, espaços e caracteres especiais (@ $ # &#37; & * !). Entre 4 e 32 caracteres',
             'ALL'       => 'Sem restrições. Entre 4 e 32 caracteres',
         ]
     ],

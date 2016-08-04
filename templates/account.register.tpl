@@ -49,9 +49,9 @@
             <div style='max-width: 380px'>@@CREATE,MESSAGE(HEADER)</div>
 
             <form class="modal-form" ng-submit="submitRegister()">
-                <input type="text" ng-model="userid" placeholder="@@CREATE,HOLDER(USERID)" maxlength="32" pattern="{$smarty.const.BRACP_REGEXP_USERNAME}" required/>
-                <input type="password" ng-model="user_pass" placeholder="@@CREATE,HOLDER(PASSWORD)" maxlength="32" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>
-                <input type="password" ng-model="user_pass_conf" placeholder="@@CREATE,HOLDER(PASSWORD_CONFIRM)" maxlength="32" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>
+                <input type="text" ng-model="userid" placeholder="@@CREATE,HOLDER(USERID)" maxlength="32" pattern="{$smarty.const.BRACP_REGEXP_USERNAME}" required title="@@WARNING,PATTERN({$userNameFormat})"/>
+                <input type="password" ng-model="user_pass" placeholder="@@CREATE,HOLDER(PASSWORD)" maxlength="32" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required title="@@WARNING,PATTERN({$passWordFormat})"/>
+                <input type="password" ng-model="user_pass_conf" placeholder="@@CREATE,HOLDER(PASSWORD_CONFIRM)" maxlength="32" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required title="@@WARNING,PATTERN({$passWordFormat})"/>
                 <select ng-model="sex">
                     <option value="M">@@CREATE,HOLDER(MALE)</option>
                     <option value="F">@@CREATE,HOLDER(FEMALE)</option>

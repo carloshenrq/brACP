@@ -49,9 +49,9 @@
 
         <form class="modal-form" ng-submit="submitPassword()">
 
-            <input type="password" ng-model="user_pass" placeholder="@@CHANGEPASS,HOLDER(ACTUAL_PASSWORD)" size="32" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>
-            <input type="password" ng-model="user_pass_new" placeholder="@@CHANGEPASS,HOLDER(NEW_PASSWORD)" size="32" maxlength="32" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>
-            <input type="password" ng-model="user_pass_conf" placeholder="@@CHANGEPASS,HOLDER(CONFIRM_PASSWORD)" size="32" maxlength="32" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required/>
+            <input type="password" ng-model="user_pass" placeholder="@@CHANGEPASS,HOLDER(ACTUAL_PASSWORD)" size="32" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required title="@@WARNING,PATTERN({$passWordFormat})"/>
+            <input type="password" ng-model="user_pass_new" placeholder="@@CHANGEPASS,HOLDER(NEW_PASSWORD)" size="32" maxlength="32" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required title="@@WARNING,PATTERN({$passWordFormat})"/>
+            <input type="password" ng-model="user_pass_conf" placeholder="@@CHANGEPASS,HOLDER(CONFIRM_PASSWORD)" size="32" maxlength="32" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required title="@@WARNING,PATTERN({$passWordFormat})"/>
 
             <input id="_submitPassword" type="submit"/>
             
