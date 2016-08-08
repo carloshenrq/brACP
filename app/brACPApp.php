@@ -165,7 +165,13 @@ class brACPApp extends Slim\App
         //  com sucesso e que a necessidade do captcha seja removida.
         if($this->getSession()->BRACP_RECAPTCHA_ERROR_REQUEST >= 3 && $captchaResponse->success == 1)
         {
-            $this->getSession()->BRACP_RECAPTCHA_SOLVED_REQUEST++;
+            // Cada erro de reCaptcha custará mais duas requisições para o usuário.
+            // -> Acertou 4 errou 1, Precisa validar +3 pra passar
+            //    Se errar +1, precisa acertar +5 pra validar, e assim vai...
+            if($captchaResponse->success == 1)
+                $this->getSession()->BRACP_RECAPTCHA_SOLVED_REQUEST++;
+            else
+                $this->getSession()->BRACP_RECAPTCHA_SOLVED_REQUEST -= 2;
 
             // Caso tenha resolvido 5 captchas seguidos, então remove a necessidade do captcha para a sessão.
             if($this->getSession()->BRACP_RECAPTCHA_SOLVED_REQUEST >= 5)
