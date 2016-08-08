@@ -105,6 +105,12 @@ class Route
 
             });
 
+            self::getApp()->group('/donation', function() {
+
+                $this->get('/promotions', ['Controller\Donation', 'promoList']);
+
+            });
+
             // // Verifica se os rankings estão habilitados para serem exibidos.
             // if(BRACP_ALLOW_RANKING)
             // {
