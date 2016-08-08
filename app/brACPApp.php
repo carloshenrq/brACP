@@ -109,6 +109,16 @@ class brACPApp extends Slim\App
         if(!isset($this->session->BRACP_THEME))
             $this->session->BRACP_THEME = BRACP_DEFAULT_THEME;
 
+        // Verifica se existe a necessidade de chamar o reCaptcha
+        //  para o jogador, armazena as informações na sessão. Após 3 atualizações
+        //  passa a chamar o reCaptcha ao jogador.
+        // -> Só depois de 5 acertos de reCaptcha que a var é zerada.
+        if(!isset($this->session->BRACP_RECAPTCHA_ERROR_REQUEST))
+            $this->session->BRACP_RECAPTCHA_ERROR_REQUEST = 0;
+
+        if(!isset($this->session->BRACP_RECAPTCHA_SOLVED_REQUEST))
+            $this->session->BRACP_RECAPTCHA_SOLVED_REQUEST = 0;
+
         // Loads the default settings for this app.
         parent::__construct($configs);
 
@@ -150,6 +160,20 @@ class brACPApp extends Slim\App
                     'response' => $response
                 ]
             ])->getBody()->getContents());
+
+        // Atualiza a quantidade de soluções realizadas para que as próximas requisições do usuário sejam validadas
+        //  com sucesso e que a necessidade do captcha seja removida.
+        if($this->getSession()->BRACP_RECAPTCHA_ERROR_REQUEST >= 3 && $captchaResponse->success == 1)
+        {
+            $this->getSession()->BRACP_RECAPTCHA_SOLVED_REQUEST++;
+
+            // Caso tenha resolvido 5 captchas seguidos, então remove a necessidade do captcha para a sessão.
+            if($this->getSession()->BRACP_RECAPTCHA_SOLVED_REQUEST >= 5)
+            {
+                $this->getSession()->BRACP_RECAPTCHA_ERROR_REQUEST =
+                $this->getSession()->BRACP_RECAPTCHA_SOLVED_REQUEST = 0;
+            }
+        }
 
         // Se a validação for realizada com sucesso, então, retorna verdadeiro,
         //  se não, falso.
@@ -268,6 +292,8 @@ class brACPApp extends Slim\App
 
             'userNameFormat' => (((BRACP_REGEXP_FORMAT&0x10) == 0x10) ? 'NORMAL' : (((BRACP_REGEXP_FORMAT&0x20) == 0x20) ? 'SPECIAL':'ALL')),
             'passWordFormat' => (((BRACP_REGEXP_FORMAT&0x01) == 0x01) ? 'NORMAL' : (((BRACP_REGEXP_FORMAT&0x02) == 0x02) ? 'SPECIAL':'ALL')),
+
+            'needRecaptcha' =>  $this->getSession()->BRACP_RECAPTCHA_ERROR_REQUEST >= 3,
         ]);
 
         // Atribui os dados ao smarty.

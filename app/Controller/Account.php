@@ -351,8 +351,11 @@ class Account
         // Dados de retorno para informações de erro.
         $return = ['error_state' => 0, 'success_state' => false];
 
+        // Obtém os dados para caso o usuário precise realizar as requisições do captcha.
+        $needRecaptcha = self::getApp()->getSession()->BRACP_RECAPTCHA_ERROR_REQUEST >= 3;
+
         // Adicionado teste para recaptcha para segurança das requisições enviadas ao forms.
-        if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['recaptcha']))
+        if($needRecaptcha && BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['recaptcha']))
         {
             $return['error_state'] = 8;
         }
@@ -365,6 +368,10 @@ class Account
                 $data['email_new'],
                 $data['email_conf']
             );
+
+            // Em caso de erro, atualiza as necessidades de chamar o reCaptcha
+            if($return['error_state'] != 0 && BRACP_RECAPTCHA_ENABLED)
+                self::getApp()->getSession()->BRACP_RECAPTCHA_ERROR_REQUEST++;
 
             $return['success_state']    = $return['error_state'] == 0;
         }
@@ -388,8 +395,11 @@ class Account
         // Dados de retorno para informações de erro.
         $return = ['error_state' => 0, 'success_state' => false];
 
+        // Obtém os dados para caso o usuário precise realizar as requisições do captcha.
+        $needRecaptcha = self::getApp()->getSession()->BRACP_RECAPTCHA_ERROR_REQUEST >= 3;
+
         // Adicionado teste para recaptcha para segurança das requisições enviadas ao forms.
-        if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['recaptcha']))
+        if($needRecaptcha && BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['recaptcha']))
         {
             $return['error_state'] = 5;
         }
@@ -403,7 +413,11 @@ class Account
                 $data['user_pass_conf']
             );
 
-            // // userid, $old_pass, $new_pass, $new_pass_conf
+            // Em caso de erro, atualiza as necessidades de chamar o reCaptcha
+            if($return['error_state'] != 0 && BRACP_RECAPTCHA_ENABLED)
+                self::getApp()->getSession()->BRACP_RECAPTCHA_ERROR_REQUEST++;
+            
+            // userid, $old_pass, $new_pass, $new_pass_conf
             $return['success_state']    = $return['error_state'] == 0;
         }
 
@@ -426,8 +440,11 @@ class Account
         // Dados de retorno para informações de erro.
         $return = ['error_state' => 0, 'success_state' => false];
 
+        // Obtém os dados para caso o usuário precise realizar as requisições do captcha.
+        $needRecaptcha = self::getApp()->getSession()->BRACP_RECAPTCHA_ERROR_REQUEST >= 3;
+
         // Adicionado teste para recaptcha para segurança das requisições enviadas ao forms.
-        if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['recaptcha']))
+        if($needRecaptcha && BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['recaptcha']))
         {
             $return['error_state'] = 3;
         }
@@ -439,6 +456,10 @@ class Account
             // Se código está definido, a requisição é para confirmação da conta.
             else if(isset($data['code']))
                 $return['error_state']      = self::registerRecoverCode($data['code']);
+
+            // Em caso de erro, atualiza as necessidades de chamar o reCaptcha
+            if($return['error_state'] != 0 && BRACP_RECAPTCHA_ENABLED)
+                self::getApp()->getSession()->BRACP_RECAPTCHA_ERROR_REQUEST++;
 
             // Define informaçõs de erro. (Caso exista)
             $return['success_state']    = $return['error_state'] == 0;
@@ -463,8 +484,11 @@ class Account
         // Dados de retorno para informações de erro.
         $return = ['error_state' => 0, 'success_state' => false];
 
+        // Obtém os dados para caso o usuário precise realizar as requisições do captcha.
+        $needRecaptcha = self::getApp()->getSession()->BRACP_RECAPTCHA_ERROR_REQUEST >= 3;
+
         // Adicionado teste para recaptcha para segurança das requisições enviadas ao forms.
-        if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['recaptcha']))
+        if($needRecaptcha && BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['recaptcha']))
         {
             $return['error_state'] = 2;
         }
@@ -476,6 +500,10 @@ class Account
             // Se código está definido, a requisição é para confirmação da conta.
             else if(isset($data['code']))
                 $return['error_state']      = self::registerConfirmCode($data['code']);
+
+            // Em caso de erro, atualiza as necessidades de chamar o reCaptcha
+            if($return['error_state'] != 0 && BRACP_RECAPTCHA_ENABLED)
+                self::getApp()->getSession()->BRACP_RECAPTCHA_ERROR_REQUEST++;
 
             // Define informaçõs de erro. (Caso exista)
             $return['success_state']    = $return['error_state'] == 0;
@@ -500,8 +528,11 @@ class Account
         // Inicializa vetor de retorno.
         $return = ['error_state' => 0, 'success_state' => false];
 
+        // Obtém os dados para caso o usuário precise realizar as requisições do captcha.
+        $needRecaptcha = self::getApp()->getSession()->BRACP_RECAPTCHA_ERROR_REQUEST >= 3;
+
         // Adicionado teste para recaptcha para segurança das requisições enviadas ao forms.
-        if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['recaptcha']))
+        if($needRecaptcha && BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['recaptcha']))
         {
             $return['error_state'] = 6;
         }
@@ -513,6 +544,10 @@ class Account
                 $data['email'] , $data['email_conf'], $data['sex'],
                 false, 0
             );
+
+            // Em caso de erro, atualiza as necessidades de chamar o reCaptcha
+            if($i_create != 0 && BRACP_RECAPTCHA_ENABLED)
+                self::getApp()->getSession()->BRACP_RECAPTCHA_ERROR_REQUEST++;
 
             // Realiza os testes para saber o retorno do registro.
             if($i_create != 0)
@@ -1227,8 +1262,11 @@ class Account
         // Dados de retorno.
         $return = ['stage' => 0, 'loginSuccess' => false, 'loginError' => false];
 
+        // Obtém os dados para caso o usuário precise realizar as requisições do captcha.
+        $needRecaptcha = self::getApp()->getSession()->BRACP_RECAPTCHA_ERROR_REQUEST >= 3;
+
         // Adicionado teste para recaptcha para segurança das requisições enviadas ao forms.
-        if(BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['recaptcha']))
+        if($needRecaptcha && BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['recaptcha']))
         {
             $return['stage'] = 0;
             $return['loginError'] = true;
@@ -1244,6 +1282,9 @@ class Account
             {
                 // Informa que ocorreu erro durante o retorno.
                 $return['loginError'] = true;
+
+                if(BRACP_RECAPTCHA_ENABLED)
+                    self::getApp()->getSession()->BRACP_RECAPTCHA_ERROR_REQUEST++;
             }
             else
             {
@@ -1266,7 +1307,12 @@ class Account
                     $return['loginSuccess'] = true;
                 }
                 else
+                {
                     $return['loginError'] = true;
+
+                    if(BRACP_RECAPTCHA_ENABLED)
+                        self::getApp()->getSession()->BRACP_RECAPTCHA_ERROR_REQUEST++;
+                }
             }
         }
 
