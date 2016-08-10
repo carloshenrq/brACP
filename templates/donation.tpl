@@ -17,7 +17,7 @@
  *}
 
 <input type="checkbox" class="modal-trigger-check" id="modal-donation"/>
-<div class="modal" ng-controller="donation">
+<div class="modal" ng-controller="donation" ng-init="init('{if isset($userid)}{$userid}{/if}')">
 
     <div class="modal-title">
         @@DONATIONS(TITLE)
@@ -29,9 +29,9 @@
             @@DONATIONS,MESSAGE,HEADER(0)
         </p>
         
-        <div class="message warning icon">
+        <p>
             @@DONATIONS,MESSAGE,HEADER(1)
-        </div>
+        </p>
 
         <label class="input-checkbox">
             <input type="checkbox" ng-model="accept_terms">
@@ -39,15 +39,36 @@
         </label>
 
         <div ng-if="accept_terms">
-            <p class="message info">Arraste a barrinha para indicar o valor de sua doação!.</p>
 
-            <form class="modal-form" ng-submit="submitRegister()">
+            <p class="message info">@@DONATIONS(INFO)</p>
+
+            <div class="loading-ajax" ng-if="$parent.state">
+                <div class="loading-bar loading-bar-1"></div>
+                <div class="loading-bar loading-bar-2"></div>
+                <div class="loading-bar loading-bar-3"></div>
+                <div class="loading-bar loading-bar-4"></div>
+            </div>
+
+            <div class="message error" ng-if="!$parent.state && $parent.error_state">
+                <div ng-switch="$parent.error_state">
+                    <div ng-switch-when="-1">@@DONATIONS,ERROR(DISABLED)</div>
+                    <div ng-switch-when="1">@@DONATIONS,ERROR(INVALID_VALUE)</div>
+                    <div ng-switch-when="2">@@DONATIONS,ERROR(INVALID_USERID)</div>
+                    <div ng-switch-when="3">@@ERRORS(RECAPTCHA)</div>
+                </div>
+            </div>
+
+            <div class="message success" ng-if="!$parent.state && $parent.success_state">
+                @@DONATIONS(SUCCESS)
+            </div>
+
+            <form class="modal-form" ng-submit="submitDonation()" ng-if="!$parent.state">
 
                 <span class="display-money">{literal}{{donationValue}}{/literal}</span>
                 <input type="range" ng-model="donationValue" required min="{$smarty.const.BRACP_DONATION_MIN_VALUE}" max="{$smarty.const.BRACP_DONATION_MAX_VALUE}"/>
 
-                <input type="text" ng-model="login" placeholder="Nome de usuário (opcional)"/>
-                <span class="display-notify">Ao não preencher o nome de usuário, nós entendemos que você não deseja receber o CASH em sua conta.</span>
+                <input type="text" ng-model="$parent.userid" placeholder="Nome de usuário (opcional)"/>
+                <span class="display-notify">@@DONATIONS,WARNING(USERID)</span>
 
 
                 <input id="_submitDonation" type="submit"/>
@@ -58,7 +79,7 @@
     </div>
 
     <div class="modal-footer">
-        <label class="button success icon" for="_submitDonation" ng-if="accept_terms">Doar</label>
-        <label class="button warning icon" for="modal-donation">Cancelar</label>
+        <label class="button success icon" for="_submitDonation" ng-if="accept_terms">@@DONATIONS,BUTTONS(SUBMIT)</label>
+        <label class="button error icon" for="modal-donation">@@DONATIONS,BUTTONS(CLOSE)</label>
     </div>
 </div>

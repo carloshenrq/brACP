@@ -111,6 +111,9 @@ class Route
             {
                 self::getApp()->group('/donation', function() {
 
+                    // Rota para fazer o checkout da doação.
+                    $this->post('/checkout', ['Controller\Donation', 'checkout']);
+
                     // Permite rota de listagem das promoções apenas caso esteja habilitado em configuração.
                     if(BRACP_DONATION_SHOW_PROMO_LIST)
                         $this->get('/promotions', ['Controller\Donation', 'promoList']);

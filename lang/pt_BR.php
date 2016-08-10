@@ -434,6 +434,24 @@ return
 
             'ACCEPT_TERMS'  => 'Eu estou ciente que isso é uma doação e não uma compra, eu quero doar para o servidor.',
         ],
+
+        'INFO'      => 'Arraste a barrinha para indicar o valor de sua doação!',
+        'SUCCESS'   => 'Sua doação foi realizada com sucesso! Estaremos aguardando a confirmação do pagamento!',
+        'WARNING'   => [
+            'USERID'    => 'Ao não preencher o nome de usuário, nós entendemos que você não deseja receber o CASH em sua conta.',
+        ],
+
+        'BUTTONS'   => [
+            'SUBMIT'    => 'Doar',
+            'CLOSE'     => 'Fechar',
+        ],
+
+        'ERROR'     => [
+            'DISABLED'          => 'As doações estão desativadas.',
+
+            'INVALID_VALUE'     => 'O Valor da doação é inválido!',
+            'INVALID_USERID'    => 'Nome de usuário digitado é inválido!',
+        ],
     ],
 
     // Tradução dos arquivos administrativos.

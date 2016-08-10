@@ -524,6 +524,44 @@ brACPApp.controller('donation', ['$scope', '$http', function($scope, $http) {
 
     $scope.accept_terms = false;
     $scope.donationValue = 0.00;
+    $scope.userid = '';
+
+    $scope.state = 0;
+    $scope.error_state = 0;
+    $scope.success_state = false;
+
+    $scope.init = function(userid)
+    {
+        $scope.userid = userid;
+    }
+
+    $scope.submitDonation = function()
+    {
+        var urlServer = document.querySelector('#_BRACP_URL').value + 'donation/checkout';
+        var params = $.param({
+            'donationValue' : this.donationValue,
+            'userid'        : this.userid
+        });
+
+        $scope.state = 1;
+
+        $http({
+            'method'    : 'post',
+            'url'       : urlServer,
+            'data'      : params,
+            'headers'   : {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        }).then(function(response) {
+
+            $scope.state            = 0;
+            $scope.error_state      = response.data.error_state;
+            $scope.success_state    = response.data.success_state;
+
+        }, function(response) {
+
+        });
+    }
 
 }]);
 
