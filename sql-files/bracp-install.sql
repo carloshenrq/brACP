@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `bracp_donations` (
     `ReceiverID` VARCHAR(50) NULL DEFAULT NULL,
     `ReceiverMail` VARCHAR(100) NULL DEFAULT NULL,
     `SandboxMode` BOOLEAN NOT NULL DEFAULT FALSE,
-    `TransactionDrive` VARCHAR(20) NOT NULL DEFAULT 'PAYPAL',
+    `TransactionDrive` VARCHAR(20) NOT NULL DEFAULT 'PAGSEGURO',
     `TransactionCode` VARCHAR(100) NOT NULL DEFAULT '',
     `TransactionType` VARCHAR(50) NULL DEFAULT NULL,
     `TransactionUserID` VARCHAR(23) NULL DEFAULT NULL,

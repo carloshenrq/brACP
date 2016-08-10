@@ -519,3 +519,11 @@ brACPApp.controller('account.chars', ['$scope', '$http', function($scope, $http)
     };
 
 }]);
+
+brACPApp.controller('donation', ['$scope', '$http', function($scope, $http) {
+
+    $scope.accept_terms = false;
+    $scope.donationValue = 0.00;
+
+}]);
+

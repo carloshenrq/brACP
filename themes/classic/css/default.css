@@ -272,7 +272,7 @@ span.url-link, .fake-link {
   font-weight: bold;
   text-decoration: underline; }
 
-input[type="text"], input[type="password"], select {
+input[type="text"], input[type="password"], select, input[type="number"], input[type="range"] {
   border: 1px solid;
   padding: 8px;
   border-color: lightgray; }
@@ -395,6 +395,27 @@ span.info-status {
     background-color: #2ecc71 !important; }
   span.info-status.offline {
     background-color: #e74c3c !important; }
+
+.display-money {
+  display: block;
+  margin: 0 auto;
+  text-align: center;
+  font-size: 2em; }
+  .display-money:before {
+    content: 'R$';
+    margin-right: 3px; }
+  .display-money:after {
+    content: ',00'; }
+
+.display-notify {
+  display: block;
+  text-align: center;
+  font-size: .8em;
+  font-style: italic;
+  font-weight: bold;
+  color: red; }
+  .display-notify:before {
+    content: '*'; }
 
 @keyframes loading-body-bar-1 {
   0% {

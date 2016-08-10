@@ -36,10 +36,7 @@ return
             'DONATION'  => 'Doações',
             'UPDATE'    => 'Atualização de Sistema',
         ],
-        'DONATIONS' =>  [
-            'TITLE'     => 'Doações',
-            'PAYPAL'    => 'Doar pelo PayPal',
-        ],
+        'DONATION' =>  'Doações',
         'MYACC'     => [
             'TITLE'         => 'Minha Conta',
             'UNAUTHENTICATED'   => [
@@ -422,11 +419,20 @@ return
      */
     'DONATIONS' => [
         'TITLE' => 'Doações',
-        'PAYPAL'    => [
-            'TITLE' => 'Doar pelo PayPal',
 
-            'ITEM'      => 'Doação para servidor privado de Ragnarok Online',
-            'NUMBER'    => 'Realizando doações você ajuda o servidor a crescer!',
+        'MESSAGE'   => [
+            'HEADER'    =>  [
+                // 0
+                'As suas doações, são muito importantes para o servidor porque elas ajudam a nos manter online!<br>' .
+                            'Nós não obrigamos ninguém a doar ao servidor, doações são realizadas pelos jogadores por livre vontade.',
+                // 1
+                'Nós compensamos os jogadores que realizam doações ao servidor com moedas do jogo que podem ser obtidas de diversas formas ' .
+                             'dentro do jogo.<br>'.
+                             '<br>'.
+                             '<strong>Para cada R$ 1,00 que você doa, você recebe ' . BRACP_DONATION_MULTIPLY . ' de CASH para serem utilizados no jogo.</strong>'
+            ],
+
+            'ACCEPT_TERMS'  => 'Eu estou ciente que isso é uma doação e não uma compra, eu quero doar para o servidor.',
         ],
     ],
 

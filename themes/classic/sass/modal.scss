@@ -60,7 +60,7 @@
         {
             margin: 16px 0px 16px 0px;
 
-            input[type="text"], input[type="password"], select
+            input[type="text"], input[type="password"], select, input[type="number"], input[type="range"]
             {
                 display: block;
                 width: 80%;
@@ -70,10 +70,16 @@
                 -moz-box-sizing: border-box;
 
                 &+ input[type="text"], &+ input[type="password"], &+ select,
-                &+ input[type="checkbox"], &+ input[type="radio"], &+ label
+                &+ input[type="checkbox"], &+ input[type="radio"], &+ label,
+                &+ input[type="number"], &+ input[type="range"]
                 {
                     margin-top: .4em;
                 }
+            }
+
+            input[type="range"]
+            {
+                border: 0;
             }
 
             input[type="submit"]

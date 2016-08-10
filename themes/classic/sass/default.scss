@@ -466,7 +466,7 @@ span.url-link, .fake-link
     text-decoration: underline;
 }
 
-input[type="text"], input[type="password"], select
+input[type="text"], input[type="password"], select, input[type="number"], input[type="range"]
 {
     border: 1px solid;
     padding: 8px;
@@ -560,6 +560,40 @@ span.info-status
     &.offline
     {
         background-color: rgb(231, 76, 60) !important;
+    }
+}
+
+.display-money
+{
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 2em;
+
+    &:before
+    {
+        content: 'R$';
+        margin-right: 3px;
+    }
+
+    &:after
+    {
+        content: ',00';
+    }
+}
+
+.display-notify
+{
+    display: block;
+    text-align: center;
+    font-size: .8em;
+    font-style: italic;
+    font-weight: bold;
+    color: red;
+
+    &:before
+    {
+        content: '*';
     }
 }
 

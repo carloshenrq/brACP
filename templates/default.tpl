@@ -55,6 +55,10 @@
             <script src="https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&render=explicit" async defer></script>
         {/if}
 
+        {if $smarty.const.BRACP_DONATION_ENABLED eq true}
+            <script type="text/javascript" src="{$smarty.const.BRACP_PAGSEGURO_STC_URL}/pagseguro/api/v2/checkout/pagseguro.lightbox.js"></script>
+        {/if}
+
         <script>
         {if $smarty.const.BRACP_DEVELOP_MODE eq true}
             console.info("---------------------------------------\n" +
@@ -199,6 +203,10 @@
                         {include 'account.email.tpl'}
                     {/if}
 
+                {/if}
+
+                {if $smarty.const.BRACP_DONATION_ENABLED eq true}
+                    {include 'donation.tpl'}
                 {/if}
 
             </div>

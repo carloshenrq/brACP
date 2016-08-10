@@ -105,11 +105,18 @@ class Route
 
             });
 
-            self::getApp()->group('/donation', function() {
+            // Verifica se doações estão habilitadas no painel de controle,
+            // Apenas habilita as rotas de doação caso estejam configuradas como habilitadas.
+            if(BRACP_DONATION_ENABLED)
+            {
+                self::getApp()->group('/donation', function() {
 
-                $this->get('/promotions', ['Controller\Donation', 'promoList']);
+                    // Permite rota de listagem das promoções apenas caso esteja habilitado em configuração.
+                    if(BRACP_DONATION_SHOW_PROMO_LIST)
+                        $this->get('/promotions', ['Controller\Donation', 'promoList']);
 
-            });
+                });
+            }
 
             // // Verifica se os rankings estão habilitados para serem exibidos.
             // if(BRACP_ALLOW_RANKING)
