@@ -150,11 +150,11 @@ class Donation
         $donation->setVerifySign(null);
         $donation->setCompensate(!is_null($userid));
         $donation->setAccount_id(((is_null($account)) ? null : $account->getAccount_id()));
-        $donation->setDonationServer(constant('BRACP_SRV_' . self::getApp()->getSession()->BRACP_SVR_SELECTED . '_NAME'));
-        $donation->setSqlHost(constant('BRACP_SRV_' . self::getApp()->getSession()->BRACP_SVR_SELECTED . '_SQL_HOST'));
-        $donation->setSqlUser(constant('BRACP_SRV_' . self::getApp()->getSession()->BRACP_SVR_SELECTED . '_SQL_USER'));
-        $donation->setSqlPass(constant('BRACP_SRV_' . self::getApp()->getSession()->BRACP_SVR_SELECTED . '_SQL_PASS'));
-        $donation->setSqlDBName(constant('BRACP_SRV_' . self::getApp()->getSession()->BRACP_SVR_SELECTED . '_SQL_DBNAME'));
+        $donation->setDonationServer(constant('BRACP_SRV_' . $serverIndex . '_NAME'));
+        $donation->setSqlHost(constant('BRACP_SRV_' . $serverIndex . '_SQL_HOST'));
+        $donation->setSqlUser(constant('BRACP_SRV_' . $serverIndex . '_SQL_USER'));
+        $donation->setSqlPass(constant('BRACP_SRV_' . $serverIndex . '_SQL_PASS'));
+        $donation->setSqlDBName(constant('BRACP_SRV_' . $serverIndex . '_SQL_DBNAME'));
         $donation->setCompensateVar(BRACP_DONATION_VAR);
 
         self::getCpEm()->persist($donation);
