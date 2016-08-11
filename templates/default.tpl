@@ -81,15 +81,17 @@
                     <div class="server-status" ng-controller="serverStatus" ng-init="statusInit('SRV_{$serverStatus->index}', {(($serverStatus->login) ? 'true':'false')}, {(($serverStatus->char) ? 'true':'false')}, {(($serverStatus->map) ? 'true':'false')});">
 
                         <div ng-if="state == 0">
-                            <label>
-                                @@SERVER_STATUS(SERVER):
-                                <select ng-model="$parent.BRACP_SRV_SELECTED" ng-change="serverChange()">
-                                    {for $i=0 to {($smarty.const.BRACP_SRV_COUNT-1)}}
-                                        {assign var="CNST_SRV" value="BRACP_SRV_{$i}_NAME"}
-                                        <option value="SRV_{$i}">{$smarty.const.$CNST_SRV}</option>
-                                    {/for}
-                                </select>
-                            </label>
+                            {if $smarty.const.BRACP_SRV_COUNT > 1}
+                                <label>
+                                    @@SERVER_STATUS(SERVER):
+                                    <select ng-model="$parent.BRACP_SRV_SELECTED" ng-change="serverChange()">
+                                        {for $i=0 to {($smarty.const.BRACP_SRV_COUNT-1)}}
+                                            {assign var="CNST_SRV" value="BRACP_SRV_{$i}_NAME"}
+                                            <option value="SRV_{$i}">{$smarty.const.$CNST_SRV}</option>
+                                        {/for}
+                                    </select>
+                                </label>
+                            {/if}
 
                             <label>
                                 @@SERVER_STATUS(TEXT):

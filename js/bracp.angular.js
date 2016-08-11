@@ -525,14 +525,16 @@ brACPApp.controller('donation', ['$scope', '$http', function($scope, $http) {
     $scope.accept_terms = false;
     $scope.donationValue = 0.00;
     $scope.userid = '';
+    $scope.serverIndex = 0;
 
     $scope.state = 0;
     $scope.error_state = 0;
     $scope.success_state = false;
 
-    $scope.init = function(userid)
+    $scope.init = function(userid, serverIndex)
     {
-        $scope.userid = userid;
+        $scope.userid       = userid;
+        $scope.serverIndex  = serverIndex;
     }
 
     // @Todo: ajax para salvar o código de transação da doação (Gravar como AGUARDANDO)
@@ -550,7 +552,8 @@ brACPApp.controller('donation', ['$scope', '$http', function($scope, $http) {
         var urlServer = document.querySelector('#_BRACP_URL').value + 'donation/checkout';
         var params = $.param({
             'donationValue' : this.donationValue,
-            'userid'        : this.userid
+            'userid'        : this.userid,
+            'serverIndex'   : this.serverIndex
         });
 
         $scope.state = 1;

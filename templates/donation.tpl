@@ -17,7 +17,7 @@
  *}
 
 <input type="checkbox" class="modal-trigger-check" id="modal-donation"/>
-<div class="modal" ng-controller="donation" ng-init="init('{if isset($userid)}{$userid}{/if}')">
+<div class="modal" ng-controller="donation" ng-init="init('{if isset($userid)}{$userid}{/if}', '{$serverStatus->index}')">
 
     <div class="modal-title">
         @@DONATIONS(TITLE)
@@ -70,6 +70,14 @@
                 <input type="text" ng-model="$parent.userid" placeholder="Nome de usuário (opcional)"/>
                 <span class="display-notify">@@DONATIONS,WARNING(USERID)</span>
 
+                {if $smarty.const.BRACP_SRV_COUNT > 1}
+                    <select ng-model="$parent.serverIndex">
+                        {for $i=0 to {($smarty.const.BRACP_SRV_COUNT-1)}}
+                            {assign var="CNST_SRV" value="BRACP_SRV_{$i}_NAME"}
+                            <option value="{$i}">{$smarty.const.$CNST_SRV}</option>
+                        {/for}
+                    </select>
+                {/if}
 
                 <input id="_submitDonation" type="submit"/>
 

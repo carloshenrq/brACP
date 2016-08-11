@@ -59,7 +59,7 @@ class Donation
         // Dados de retorno para informações de erro.
         $return = ['error_state' => 0, 'success_state' => false, 'checkout' => false, 'id' => null];
 
-        $checkout = self::donationSave($data['donationValue'], $data['userid']);
+        $checkout = self::donationSave($data['donationValue'], $data['serverIndex'], $data['userid']);
 
         if(is_array($checkout))
         {
@@ -78,7 +78,7 @@ class Donation
     /**
      * Método para criar e salvar doações no banco de dados.
      */
-    public static function donationSave($value, $userid = null)
+    public static function donationSave($value, $serverIndex  = 0, $userid = null)
     {
         // Retorna negativo caso o sistema de doaçõe esteja desativado.
         if(!BRACP_DONATION_ENABLED)
