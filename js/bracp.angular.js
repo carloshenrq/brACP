@@ -535,6 +535,16 @@ brACPApp.controller('donation', ['$scope', '$http', function($scope, $http) {
         $scope.userid = userid;
     }
 
+    // @Todo: ajax para salvar o código de transação da doação (Gravar como AGUARDANDO)
+    $scope.saveTransaction = function(id, transactionCode)
+    {
+    };
+
+    // @Todo: ajax para abortar a doação (Gravar como ABORDATA)
+    $scope.abortTransaction = function(id)
+    {
+    };
+
     $scope.submitDonation = function()
     {
         var urlServer = document.querySelector('#_BRACP_URL').value + 'donation/checkout';
@@ -558,8 +568,24 @@ brACPApp.controller('donation', ['$scope', '$http', function($scope, $http) {
             $scope.error_state      = response.data.error_state;
             $scope.success_state    = response.data.success_state;
 
-        }, function(response) {
+            if(!response.data.error_state && response.data.success_state)
+            {
+                PagSeguroLightbox({
+                    'code' : response.data.checkout
+                }, {
+                        success : function(transactionCode)
+                        {
+                            $scope.saveTransaction(response.data.id, transactionCode);
+                        },
+                        abort   : function()
+                        {
+                            $scope.abortTransaction(response.data.id);
+                        }
+                });
+            }
 
+        }, function(response) {
+            console.log(response);
         });
     }
 

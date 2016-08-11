@@ -41,12 +41,12 @@ class Donation
     protected $promotion;
 
     /**
-     * @Column(name="ReceiverID", type="string", length=50)
+     * @Column(name="ReceiverID", type="string", length=50, nullable=true)
      */
     protected $receiverId;
 
     /**
-     * @Column(name="ReceiverMail", type="string", length=100)
+     * @Column(name="ReceiverMail", type="string", length=100, nullable=true)
      */
     protected $receiverMail;
 
@@ -66,87 +66,92 @@ class Donation
     protected $transactionCode;
 
     /**
-     * @Column(name="TransactionType", type="string", length=50)
+     * @Column(name="TransactionType", type="string", length=50, nullable=true)
      */
     protected $transactionType;
 
     /**
-     * @Column(name="TransactionUserID", type="string", length=23)
+     * @Column(name="TransactionUserID", type="string", length=23, nullable=true)
      */
     protected $transactionUserID;
 
     /**
-     * @Column(name="PayerID", type="string", length=50)
+     * @Column(name="TransactionCheckoutCode", type="string", length=100, nullable=true)
+     */
+    protected $transactionCheckoutCode;
+
+    /**
+     * @Column(name="PayerID", type="string", length=50, nullable=true)
      */
     protected $payerID;
 
     /**
-     * @Column(name="PayerMail", type="string", length=100)
+     * @Column(name="PayerMail", type="string", length=100, nullable=true)
      */
     protected $payerMail;
 
     /**
-     * @Column(name="PayerStatus", type="string", length=30)
+     * @Column(name="PayerStatus", type="string", length=30, nullable=true)
      */
     protected $payerStatus;
 
     /**
-     * @Column(name="PayerName", type="string", length=100)
+     * @Column(name="PayerName", type="string", length=100, nullable=true)
      */
     protected $payerName;
 
     /**
-     * @Column(name="PayerCountry", type="string", length=50)
+     * @Column(name="PayerCountry", type="string", length=50, nullable=true)
      */
     protected $payerCountry;
 
     /**
-     * @Column(name="PayerState", type="string", length=50)
+     * @Column(name="PayerState", type="string", length=50, nullable=true)
      */
     protected $payerState;
 
     /**
-     * @Column(name="PayerCity", type="string", length=50)
+     * @Column(name="PayerCity", type="string", length=50, nullable=true)
      */
     protected $payerCity;
 
     /**
-     * @Column(name="PayerAddress", type="string", length=200)
+     * @Column(name="PayerAddress", type="string", length=200, nullable=true)
      */
     protected $payerAddress;
 
     /**
-     * @Column(name="PayerZipCode", type="string", length=30)
+     * @Column(name="PayerZipCode", type="string", length=30, nullable=true)
      */
     protected $payerZipCode;
 
     /**
-     * @Column(name="PayerAddressConfirmed", type="boolean")
+     * @Column(name="PayerAddressConfirmed", type="boolean", nullable=true)
      */
     protected $payerAddressConfirmed;
 
     /**
-     * @Column(name="DonationValue", type="decimal", precision=12, scale=2)
+     * @Column(name="DonationValue", type="decimal", precision=12, scale=2, nullable=true)
      */
     protected $donationValue;
 
     /**
-     * @Column(name="DonationPayment", type="string", length=20)
+     * @Column(name="DonationPayment", type="string", length=20, nullable=true)
      */
     protected $donationPayment;
 
     /**
-     * @Column(name="DonationStatus", type="string", length=30)
+     * @Column(name="DonationStatus", type="string", length=30, nullable=true)
      */
     protected $donationStatus;
 
     /**
-     * @Column(name="DonationType", type="string", length=30)
+     * @Column(name="DonationType", type="string", length=30, nullable=true)
      */
     protected $donationType;
 
     /**
-     * @Column(name="VerifySign", type="text")
+     * @Column(name="VerifySign", type="text", nullable=true)
      */
     protected $verifySign;
 
@@ -278,6 +283,16 @@ class Donation
     public function setTransactionUserID($transactionUserID)
     {
         return $this->transactionUserID = $transactionUserID;
+    }
+
+    public function getTransactionCheckoutCode()
+    {
+        return $this->transactionCheckoutCode;
+    }
+    
+    public function setTransactionCheckoutCode($transactionCheckoutCode)
+    {
+        return $this->transactionCheckoutCode = $transactionCheckoutCode;
     }
 
     public function getPayerID()
@@ -498,5 +513,15 @@ class Donation
     public function setSqlDBName($sqlDBName)
     {
         return $this->sqlDBName = $sqlDBName;
+    }
+
+    public function getCompensateVar()
+    {
+        return $this->compensateVar;
+    }
+    
+    public function setCompensateVar($compensateVar)
+    {
+        return $this->compensateVar = $compensateVar;
     }
 }

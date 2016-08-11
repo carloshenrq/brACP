@@ -41,6 +41,7 @@ CREATE TABLE IF NOT EXISTS `bracp_donations` (
     `TransactionCode` VARCHAR(100) NOT NULL DEFAULT '',
     `TransactionType` VARCHAR(50) NULL DEFAULT NULL,
     `TransactionUserID` VARCHAR(23) NULL DEFAULT NULL,
+    `TransactionCheckoutCode` VARCHAR(100) NULL DEFAULT NULL,
     `PayerID` VARCHAR(50) NULL DEFAULT NULL,
     `PayerMail` VARCHAR(100) NULL DEFAULT NULL,
     `PayerStatus` VARCHAR(30) NULL DEFAULT NULL,
@@ -66,7 +67,7 @@ CREATE TABLE IF NOT EXISTS `bracp_donations` (
     `DonationCompensateVar` VARCHAR(50) NULL DEFAULT NULL,
 
     FOREIGN KEY (`PromotionID`) REFERENCES `bracp_donations_promo` (`PromotionID`),
-    UNIQUE INDEX (`TransactionDrive`, `TransactionCode`)
+    INDEX (`TransactionDrive`, `TransactionCode`)
 ) ENGINE=InnoDB COLLATE='utf8_swedish_ci';
 
 DROP TABLE IF EXISTS `bracp_compensations`;

@@ -22,6 +22,7 @@ namespace Controller;
 use \Cache;
 use \Request;
 use \PayPal\CheckNotify;
+// use \Model\Donation;
 
 use \Psr\Http\Message\ServerRequestInterface;
 use \Psr\Http\Message\ResponseInterface;
@@ -36,6 +37,14 @@ class Donation
     use \TApplication;
 
     /**
+     * Método de leitura dos dados para abortar a doação.
+     */
+    public static function abort(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+
+    }
+
+    /**
      * Método de listagem de login.
      *
      * @param ServerRequestInterface $request
@@ -48,9 +57,19 @@ class Donation
         $data = $request->getParsedBody();
 
         // Dados de retorno para informações de erro.
-        $return = ['error_state' => 0, 'success_state' => false];
+        $return = ['error_state' => 0, 'success_state' => false, 'checkout' => false, 'id' => null];
 
-        $return['error_state'] = self::donationSave($data['donationValue'], $data['userid']);
+        $checkout = self::donationSave($data['donationValue'], $data['userid']);
+
+        if(is_array($checkout))
+        {
+            $return['error_state'] = 0;
+            $return['checkout'] = $checkout['checkout'];
+            $return['id']       = $checkout['id'];
+        }
+        else
+            $return['error_state'] = $checkout;
+
 
         $return['success_state']    = $return['error_state'] == 0;
         $response->withJson($return);
@@ -69,6 +88,7 @@ class Donation
         if($value <= 0 || $value < BRACP_DONATION_MIN_VALUE || $value > BRACP_DONATION_MAX_VALUE)
             return 1;
 
+        $account = null;
         // Se o nome de usuário for enviado, então testa a existência do mesmo.
         //  Caso não exista, retorna 2.
         if(!empty($userid))
@@ -79,13 +99,98 @@ class Donation
 
             if(is_null($account))
                 return 2;
-
-            unset($account);
         }
 
-        // @Todo: Fazer salvar no banco de dados o retorno de doações.
+        // Procura promoção no banco de dados para aplicar a doação que está sendo realizada.
+        $promos =   self::getCpEm()
+                    ->createQuery('
+                        SELECT
+                            promotion
+                        FROM
+                            Model\Promotion promotion
+                        WHERE
+                            :CURDATE BETWEEN promotion.startDate AND promotion.endDate
+                                AND
+                            promotion.canceled = false
+                        ORDER BY
+                            promotion.startDate ASC,
+                            promotion.endDate ASC
+                    ')
+                    ->setParameter('CURDATE', date('Y-m-d'))
+                    ->setMaxResults(1)
+                    ->getResult();
 
-        return 0;
+        // Caso encontre a promoção.
+        $promotion = null;
+
+        $donation = new \Model\Donation;
+        $donation->setPromotion($promotion);
+        $donation->setReceiverId(BRACP_PAGSEGURO_TOKEN);
+        $donation->setReceiverMail(BRACP_PAGSEGURO_EMAIL);
+        $donation->setSandboxMode(BRACP_PAGSEGURO_SANDBOX_MODE);
+        $donation->setTransactionDrive('PAGSEGURO');
+        $donation->setTransactionCode('');
+        $donation->setTransactionType('DONATION');
+        $donation->setTransactionUserID($userid);
+        $donation->setTransactionCheckoutCode(null);
+        $donation->setPayerID(null);
+        $donation->setPayerMail(null);
+        $donation->setPayerStatus(null);
+        $donation->setPayerName(null);
+        $donation->setPayerCountry(null);
+        $donation->setPayerState(null);
+        $donation->setPayerCity(null);
+        $donation->setPayerAddress(null);
+        $donation->setPayerZipCode(null);
+        $donation->setPayerAddressConfirmed(null);
+        $donation->setDonationValue($value);
+        $donation->setDonationPayment(null);
+        $donation->setDonationStatus('INICIADA');
+        $donation->setDonationType(null);
+        $donation->setVerifySign(null);
+        $donation->setCompensate(!is_null($userid));
+        $donation->setAccount_id(((is_null($account)) ? null : $account->getAccount_id()));
+        $donation->setDonationServer(constant('BRACP_SRV_' . self::getApp()->getSession()->BRACP_SVR_SELECTED . '_NAME'));
+        $donation->setSqlHost(constant('BRACP_SRV_' . self::getApp()->getSession()->BRACP_SVR_SELECTED . '_SQL_HOST'));
+        $donation->setSqlUser(constant('BRACP_SRV_' . self::getApp()->getSession()->BRACP_SVR_SELECTED . '_SQL_USER'));
+        $donation->setSqlPass(constant('BRACP_SRV_' . self::getApp()->getSession()->BRACP_SVR_SELECTED . '_SQL_PASS'));
+        $donation->setSqlDBName(constant('BRACP_SRV_' . self::getApp()->getSession()->BRACP_SVR_SELECTED . '_SQL_DBNAME'));
+        $donation->setCompensateVar(BRACP_DONATION_VAR);
+
+        self::getCpEm()->persist($donation);
+        self::getCpEm()->flush();
+
+        $txtBody = Request::create(BRACP_PAGSEGURO_WS_URL)
+                    ->post('v2/checkout?email='.$donation->getReceiverMail().'&token='.$donation->getReceiverId(), [
+                        'form_params' => [
+                            'email'                 => $donation->getReceiverMail(),
+                            'token'                 => $donation->getReceiverId(),
+                            'currency'              => 'BRL',
+                            'itemId1'               => 'SEURO_DONATION',
+                            'itemDescription1'      => 'Doação para SeuRO - Servidor de Ragnarok Online',
+                            'itemAmount1'           => sprintf('%.2f', $donation->getDonationValue()),
+                            'itemQuantity1'         => 1,
+                            'metadataItemKey1'      => 'GAME_NAME',
+                            'metadataItemValue1'    => 'SeuRO',
+                            'metadataItemKey2'      => 'PLAYER_ID',
+                            'metadataItemValue2'    => ((empty($userid)) ? 'NO_USER':$userid),
+                        ]
+                    ])
+                    ->getBody()->getContents();
+
+        // Dados de checkout recebidos pela requisição realizada ao PagSeguro.
+        $checkout = json_decode(json_encode(simplexml_load_string($txtBody)));
+        unset($txtBody);
+
+        // Salva o código de checkout no banco de dados.
+        $donation->setTransactionCheckoutCode($checkout->code);
+        self::getCpEm()->merge($donation);
+        self::getCpEm()->flush();
+
+        return [
+            'id' => $donation->getId(),
+            'checkout' => $donation->getTransactionCheckoutCode()
+        ];
 
     }
 
