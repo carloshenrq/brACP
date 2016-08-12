@@ -42,7 +42,7 @@ class Session implements ArrayAccess
      */
     public function __get($name)
     {
-        return (($this->__isset($name)) ? $_SESSION[$name] : null);
+        return (($this->__isset($name)) ? $this->decrypt($_SESSION[$this->encrypt($name)]) : null);
     }
 
     public function offsetGet($name)
@@ -58,7 +58,7 @@ class Session implements ArrayAccess
      */
     public function __set($name, $value)
     {
-        $_SESSION[$name] = $value;
+        $_SESSION[$this->encrypt($name)] = $this->encrypt($value);
     }
 
     public function offsetSet($name, $value)
@@ -75,7 +75,7 @@ class Session implements ArrayAccess
      */
     public function __isset($name)
     {
-        return isset($_SESSION[$name]);
+        return isset($_SESSION[$this->encrypt($name)]);
     }
 
     public function offsetExists($name)
@@ -91,11 +91,39 @@ class Session implements ArrayAccess
     public function __unset($name)
     {
         if($this->__isset($name))
-            unset($_SESSION[$name]);
+            unset($_SESSION[$this->encrypt($name)]);
     }
 
     public function offsetUnset($name)
     {
         $this->__unset($name);
+    }
+
+    /**
+     * Remove a criptografia da string aplicada.
+     *
+     * @param string $data Dados criptografados
+     *
+     * @return string
+     */
+    private function decrypt($data)
+    {
+        return ((BRACP_SESSION_SECURE && extension_loaded("openssl"))
+            ? openssl_decrypt($data, BRACP_SESSION_ALGO, base64_decode(BRACP_SESSION_KEY), 0, base64_decode(BRACP_SESSION_IV))
+                : $data);
+    }
+
+    /**
+     * Criptografa os dados utilizando informações do openssl.
+     *
+     * @param string $data Dados a serem criptografados.
+     *
+     * @return string
+     */
+    private function encrypt($data)
+    {
+        return ((BRACP_SESSION_SECURE && extension_loaded("openssl"))
+            ? openssl_encrypt($data, BRACP_SESSION_ALGO, base64_decode(BRACP_SESSION_KEY), 0, base64_decode(BRACP_SESSION_IV))
+                : $data);
     }
 }
