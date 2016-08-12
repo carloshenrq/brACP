@@ -125,6 +125,25 @@ $config = [
 
     // Mods a serem aplicados no painel de controle. (Recomenda-se uso do xdiff, sem isso, tera de ser aplicado manualmente o diff)
     'BRACP_ALLOW_MODS'                      => extension_loaded('xdiff'),
+
+    // Dados de proteção da sessão
+    'BRACP_SESSION_SECURE'                  => extension_loaded('openssl'),
+    'BRACP_SESSION_ALGO'                    => 'AES-256-ECB',
+    'BRACP_SESSION_KEY'                     => base64_encode(openssl_random_pseudo_bytes(32)),
+    'BRACP_SESSION_IV'                      => base64_encode(openssl_random_pseudo_bytes(16)),
+
+    // Dados de doação
+    'BRACP_DONATION_ENABLED'                => true,
+    'BRACP_DONATION_SHOW_PROMO_LIST'        => true,
+    'BRACP_DONATION_MULTIPLY'               => 100,
+    'BRACP_DONATION_MIN_VALUE'              => 0,
+    'BRACP_DONATION_MAX_VALUE'              => 200,
+    'BRACP_DONATION_VAR'                    => '#CASHPOINTS',
+
+    // Configurações do PagSeguro
+    'BRACP_PAGSEGURO_EMAIL'                 => '',
+    'BRACP_PAGSEGURO_TOKEN'                 => '',
+    'BRACP_PAGSEGURO_SANDBOX_MODE'          => false,
 ]; 
 
 // Moedas padrões aceitas pelo PayPal.
@@ -180,9 +199,20 @@ if($writeable && isset($_POST) && !empty($_POST))
         $configFile .= "\n";
     }
 
+    $configFile .= "if(BRACP_PAGSEGURO_SANDBOX_MODE)\n";
+    $configFile .= "{\n";
+    $configFile .= "    DEFINE('BRACP_PAGSEGURO_URL', 'https://sandbox.pagseguro.uol.com.br', false);\n";
+    $configFile .= "    DEFINE('BRACP_PAGSEGURO_WS_URL', 'https://ws.sandbox.pagseguro.uol.com.br', false);\n";
+    $configFile .= "    DEFINE('BRACP_PAGSEGURO_STC_URL', 'https://stc.sandbox.pagseguro.uol.com.br', false);\n";
+    $configFile .= "}\n";
+    $configFile .= "else\n";
+    $configFile .= "{\n";
+    $configFile .= "    DEFINE('BRACP_PAGSEGURO_URL', 'https://pagseguro.uol.com.br', false);\n";
+    $configFile .= "    DEFINE('BRACP_PAGSEGURO_WS_URL', 'https://ws.pagseguro.uol.com.br', false);\n";
+    $configFile .= "    DEFINE('BRACP_PAGSEGURO_STC_URL', 'https://stc.pagseguro.uol.com.br', false);\n";
+    $configFile .= "}\n";
+
     $configFile .= "\n";
-
-
 
     // Finaliza o arquivo e escreve os dados no arquivo de configuração.
     file_put_contents('config.php', $configFile);
@@ -225,6 +255,7 @@ else if(!$writeable)
                 $scope.BRACP_ERROR_CODE = <?php echo $BRACP_ERROR_CODE; ?>;
                 $scope.BRACP_ALLOW_INSTALL = $scope.BRACP_ERROR_CODE == 0;
                 $scope.BRACP_ALL_TIMEZONE = <?php echo json_encode(timezone_identifiers_list()); ?>;
+                $scope.BRACP_ALL_OPENSSL_ALGO = <?php echo json_encode(openssl_get_cipher_methods()); ?>;
                 $scope.BRACP_ALL_THEMES = <?php echo json_encode($themes->getArrayCopy()); ?>;
                 $scope.BRACP_ALL_LANGS = <?php echo json_encode($langs); ?>;
                 $scope.BRACP_PAYPAL_CURRENCY = <?php echo json_encode($PPCurrency); ?>;
@@ -346,7 +377,11 @@ else if(!$writeable)
                     </li>
                     <li>
                         <input id="config.cache" type="radio" ng-model="BRACP_SWITCH" value="cache" class="install-cfg-radio"/>
-                        <label for="config.cache">Cache</label>
+                        <label for="config.cache">Segurança</label>
+                    </li>
+                    <li>
+                        <input id="config.donation" type="radio" ng-model="BRACP_SWITCH" value="donation" class="install-cfg-radio"/>
+                        <label for="config.donation">Doações</label>
                     </li>
                     <li>
                         <input id="config.other" type="radio" ng-model="BRACP_SWITCH" value="other" class="install-cfg-radio"/>
@@ -747,6 +782,117 @@ else if(!$writeable)
                             Tempo de Validade:
                             <input type="text" ng-model="config.BRACP_CACHE_EXPIRE" size="8"/>
                             <span>Tempo (em segundos) que o valor do cache será salvo no servidor.<br><strong>{{Math.floor(config.BRACP_MEMCACHE_EXPIRE/60)}} minuto(s) e {{(config.BRACP_MEMCACHE_EXPIRE%60)}} segundo(s)</strong></span>
+                        </label>
+                    </div>
+
+                    <br>
+                    <h1>Configurações de Sessão</h1>
+
+                    <p>As configurações abaixo, permitirão a você proteger os dados da sessão de seus jogadores não revelando os dados de sessão dos mesmos através do uso de senha.</p>
+
+                    <div class="install-data">
+                        <label class="input-align">
+                            <input type="checkbox" ng-model="config.BRACP_SESSION_SECURE"/>
+                            Habilitar proteção de sessão do usuário
+                            <span>Permite que o brACP faça uso das funções do OpenSSL para proteção de alguns dados.</span>
+                        </label>
+                        <label ng-if="config.BRACP_SESSION_SECURE" class="input-align">
+                            Algoritmo de proteção:
+                            <select ng-model="config.BRACP_SESSION_ALGO">
+                                <option ng-repeat="algo in BRACP_ALL_OPENSSL_ALGO">{{algo}}</option>
+                            </select>
+                            <span>Não altere isso se não souber o que está fazendo :)</span>
+                        </label>
+                        <label ng-if="config.BRACP_SESSION_SECURE" class="input-align">
+                            Chave de proteção:
+                            <input type="text" ng-model="config.BRACP_SESSION_KEY" size="80"/>
+                            <span>Não altere isso se não souber o que está fazendo :)</strong></span>
+                        </label>
+                        <label ng-if="config.BRACP_SESSION_SECURE" class="input-align">
+                            Vetor de Inicialização (IV):
+                            <input type="text" ng-model="config.BRACP_SESSION_IV" size="40"/>
+                            <span>Não altere isso se não souber o que está fazendo :)</strong></span>
+                        </label>
+                    </div>
+
+
+                </div>
+
+                <!-- Configurações do donation. -->
+                <div ng-switch-when="donation" class="install-content">
+                    <h1>Configurações de Doação</h1>
+
+                    <p class="bracp-message warning">
+                        As doações são formas dos jogadores ajudarem o servidor a crescer pois, de certa forma,
+                        é custoso manter um servidor online.
+                        <strong ng-if="config.BRACP_DONATION_ENABLED">
+                            <br>
+                            Seja um administrador consciente,
+                            permita que eles possam adquirir os cash sem a necessidade de donatar,
+                            mas peça a colaboração. ;)
+                        </strong>
+                    </p>
+
+                    <div class="install-data">
+                        <label class="input-align">
+                            <input type="checkbox" ng-model="config.BRACP_DONATION_ENABLED"/>
+                            Habilitar doações
+                            <span>Permite que os jogadores doem para o servidor.</span>
+                        </label>
+                        <label ng-if="config.BRACP_DONATION_ENABLED" class="input-align">
+                            <input type="checkbox" ng-model="config.BRACP_DONATION_SHOW_PROMO_LIST"/>
+                            Exibir lista de promoções
+                            <span>Se você pretende fazer promoções de cash, habilite esta opção para os usuários saberem o melhor momento de donatar.</span>
+                        </label>
+                        <label ng-if="config.BRACP_DONATION_ENABLED" class="input-align">
+                            Multiplicador:
+                            <input type="text" ng-model="config.BRACP_DONATION_MULTIPLY" size="6"/>
+                            <span>A Cada R$ 1,00 doado, o jogador receberá {{config.BRACP_DONATION_MULTIPLY}} em cash</span>
+                        </label>
+                        <label ng-if="config.BRACP_DONATION_ENABLED" class="input-align">
+                            Valor Mínimo:
+                            <input type="text" ng-model="config.BRACP_DONATION_MIN_VALUE" size="6"/>
+                            <span>Valor mínimo permitido para doação.</span>
+                        </label>
+                        <label ng-if="config.BRACP_DONATION_ENABLED" class="input-align">
+                            Valor Máximo:
+                            <input type="text" ng-model="config.BRACP_DONATION_MAX_VALUE" size="6"/>
+                            <span>Valor máximo permitido para doação.</span>
+                        </label>
+                        <label ng-if="config.BRACP_DONATION_ENABLED" class="input-align">
+                            Variavel para Compensação:
+                            <input type="text" ng-model="config.BRACP_DONATION_VAR" size="30"/>
+                            <span>Nome da variavel que será atualizada quando a doação for compensada.</span>
+                        </label>
+                    </div>
+
+                    <p ng-if="config.BRACP_DONATION_ENABLED" class="bracp-message info">
+                        O brACP utiliza o PagSeguro como motor de doações, então é preciso que você configure o brACP
+                        com seus dados do PagSeguro para que seja possível realizar a integração.
+                    </p>
+
+                    <p ng-if="config.BRACP_DONATION_ENABLED && config.BRACP_PAGSEGURO_SANDBOX_MODE" class="bracp-message error">
+                        Quando o modo SandBox está ativo, as doações realizadas são todas feitas em ambiente de testes, ou seja,
+                        o dinheiro gerado por essas transações não poderão ser sacados.
+                    </p>
+
+                    <div ng-if="config.BRACP_DONATION_ENABLED" class="install-data">
+                        <label class="input-align">
+                            E-mail:
+                            <input type="text" ng-model="config.BRACP_PAGSEGURO_EMAIL" size="60"/>
+                            <span>Endereço de e-mail para a conta do PagSeguro.</span>
+                        </label>
+
+                        <label class="input-align">
+                            Token:
+                            <input type="text" ng-model="config.BRACP_PAGSEGURO_TOKEN" size="40"/>
+                            <span>Token de acesso para validação das transações.</span>
+                        </label>
+
+                        <label class="input-align">
+                            <input type="checkbox" ng-model="config.BRACP_PAGSEGURO_SANDBOX_MODE"/>
+                            Habilitar modo SandBox
+                            <span>Não altere isso se não souber o que está fazendo :)</strong></span>
                         </label>
                     </div>
 
