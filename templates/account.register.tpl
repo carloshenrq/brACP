@@ -23,7 +23,6 @@
         <label for="modal-register" class="modal-close" ng-if="stage == 0">&times;</label>
     </div>
     <div class="modal-body" ng-if="stage == 0">
-
         <div ng-if="accept_terms">
 
             <div ng-if="error_state > 0" class="message error">

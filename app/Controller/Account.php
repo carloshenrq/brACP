@@ -1043,6 +1043,7 @@ class Account
         $account->setUser_pass($user_pass);
         $account->setEmail($email);
         $account->setGroup_id($group_id);
+        $account->setSex($sex);
         // NOTA.: NÃO USAR state=5 PARA CONTAS EM CONFIRMAÇÃO,
         //        O STATE=5 É DEFINIDO PARA O USUÁRIO
         //        QUANDO FOR UTILIZADO O COMANDO @BLOCK POR UM GM DENTRO DO JOGO.
