@@ -49,76 +49,9 @@
         @@CHARS,ERROR(NO_CHAR)
     </div>
 
-    <table class="table" ng-if="!state && chars.length > 0">
-        <thead>
-            <tr>
-                <th align="right">No.</th>
-                <th align="left">@@CHARS,TABLE(NAME)</th>
-                <th align="left">@@CHARS,TABLE(CLASS)</th>
-                <th align="center">@@CHARS,TABLE(PARTY)</th>
-                <th align="center">@@CHARS,TABLE(GUILD)</th>
-                <th align="left">@@CHARS,TABLE(POSIT_NOW)</th>
-                <th align="left">@@CHARS,TABLE(POSIT_SAVE)</th>
-                <th align="right">@@CHARS,TABLE(ZENY)</th>
-                {if $smarty.const.BRACP_ALLOW_SHOW_CHAR_STATUS eq true}
-                    <th align="center">@@CHARS,TABLE(STATUS)</th>
-                {/if}
-                <th align="center" colspan="{($smarty.const.BRACP_ALLOW_RESET_POSIT + $smarty.const.BRACP_ALLOW_RESET_APPEAR + $smarty.const.BRACP_ALLOW_RESET_POSIT)}">@@CHARS,TABLE(ACTION)</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="char in chars">
-                {literal}
-                <td align="right">{{char.num}}</td>
-                <td align="left">{{char.name}}</td>
-                <td align="left">{{char.class}}</td>
-                <td align="center" ng-if="char.party == null">
-                    <i>@@CHARS,TABLE(NO_PARTY)</i>
-                </td>
-                <td align="center" ng-if="char.party != null">
-                    @Todo
-                </td>
-                <td align="center" ng-if="char.guild == null">
-                    <i>@@CHARS,TABLE(NO_GUILD)</i>
-                </td>
-                <td align="center" ng-if="char.guild != null">
-                    @Todo
-                </td>
-                <td align="left">{{char.last_map}} ({{char.last_x}}, {{char.last_y}})</td>
-                <td align="left">{{char.save_map}} ({{char.save_x}}, {{char.save_y}})</td>
-                <td align="right">{{char.zeny}}</td>
-                {/literal}
-                {if $smarty.const.BRACP_ALLOW_SHOW_CHAR_STATUS eq true}
-                    {literal}
-                        <td align="center">
-                            <span class="info-status" ng-class="{'online' : char.online, 'offline' : !char.online}">
-                                {{(char.online ? '@@STATUS(1)' : '@@STATUS(0)')}}
-                            </span>
-                        </td>
-                    {/literal}
-                {/if}
+    <div class="char-info" ng-repeat="char in chars">{literal}
 
-                {if $smarty.const.BRACP_ALLOW_RESET_POSIT eq true}
-                    <td align="center">
-                        <button class="button small success" ng-click="resetPosit(char.char_id)">@@CHARS,BUTTONS(RESET_POSIT)</button>
-                    </td>
-                {/if}
-
-                {if $smarty.const.BRACP_ALLOW_RESET_APPEAR eq true}
-                    <td align="center">
-                        <button class="button small warning" ng-click="resetAppear(char.char_id)">@@CHARS,BUTTONS(RESET_APPEAR)</button>
-                    </td>
-                {/if}
-
-                {if $smarty.const.BRACP_ALLOW_RESET_EQUIP}
-                    <td align="center">
-                        <button class="button small info" ng-click="resetEquips(char.char_id)">@@CHARS,BUTTONS(RESET_EQUIP)</button>
-                    </td>
-                {/if}
-
-            </tr>
-        </tbody>
-    </table>
+    {/literal}</div>
 
 </div>
 {/block}

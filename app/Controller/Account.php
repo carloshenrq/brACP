@@ -288,6 +288,7 @@ class Account
     {
         $char_data = [
             'name'          => $char->getName(),
+            'classId'       => $char->getClass(),
             'class'         => Format::job($char->getClass()),
             'base_level'    => $char->getBase_level(),
             'job_level'     => $char->getJob_level(),
