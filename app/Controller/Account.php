@@ -114,6 +114,8 @@ class Account
 
         // @Todo: Fazer reset de equipamentos.
 
+        Cache::delete('BRACP_CHARS_' . $char->getAccount_id());
+
         return 0;
     }
 
@@ -155,6 +157,8 @@ class Account
         self::getSvrEm()->merge($char);
         self::getSvrEm()->flush();
 
+        Cache::delete('BRACP_CHARS_' . $char->getAccount_id());
+
         return 0;
     }
 
@@ -188,6 +192,8 @@ class Account
 
         self::getSvrEm()->merge($char);
         self::getSvrEm()->flush();
+
+        Cache::delete('BRACP_CHARS_' . $char->getAccount_id());
 
         return 0;
     }

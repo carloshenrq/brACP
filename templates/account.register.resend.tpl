@@ -48,7 +48,7 @@
 
                 <input id="_submitResend" type="submit"/>
 
-                {if $smarty.const.BRACP_RECAPTCHA_ENABLED eq true}
+                {if $smarty.const.BRACP_RECAPTCHA_ENABLED eq true and $needRecaptcha eq true}
                     <div class="recaptcha" ng-model="recaptcha_response" vc-recaptcha key="'{$smarty.const.BRACP_RECAPTCHA_PUBLIC_KEY}'"></div>
                 {/if}
             </form>
