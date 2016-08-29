@@ -39,9 +39,21 @@ class Donation
     /**
      * Método de leitura dos dados para abortar a doação.
      */
+    public static function save(ServerRequestInterface $request, ResponseInterface $response, $args)
+    {
+        $data = $request->getParsedBody();
+
+        $save = self::donationSaveTransaction($data['donationId'], $data['transactionCode']);
+    }
+
+    /**
+     * Método de leitura dos dados para abortar a doação.
+     */
     public static function abort(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
+        $data = $request->getParsedBody();
 
+        $abort = self::donationAbort($data['donationId']);
     }
 
     /**
@@ -73,6 +85,77 @@ class Donation
 
         $return['success_state']    = $return['error_state'] == 0;
         $response->withJson($return);
+    }
+
+    /**
+     * Método para marcar uma doação como abortada.
+     *
+     * @param integer $donationId
+     */
+    public static function donationSaveTransaction($donationId, $transactionCode)
+    {
+        if(!BRACP_DONATION_ENABLED)
+            return;
+
+        $donation = self::getCpEm()
+                        ->createQuery('
+                            SELECT
+                                donation
+                            FROM
+                                Model\Donation donation
+                            WHERE
+                                donation.id = :id AND
+                                donation.donationPayment is null AND
+                                donation.donationStatus = :donationStatus
+                        ')
+                        ->setParameter('id', $donationId)
+                        ->setParameter('donationStatus', 'INICIADA')
+                        ->getOneOrNullResult();
+
+        if(is_null($donation))
+            return;
+
+        $donation->setDonationStatus('AGUARDANDO');
+        $donation->setTransactionCode($transactionCode);
+        self::getCpEm()->marge($donation);
+        self::getCpEm()->flush();
+
+        return;
+    }
+
+    /**
+     * Método para marcar uma doação como abortada.
+     *
+     * @param integer $donationId
+     */
+    public static function donationAbort($donationId)
+    {
+        if(!BRACP_DONATION_ENABLED)
+            return;
+
+        $donation = self::getCpEm()
+                        ->createQuery('
+                            SELECT
+                                donation
+                            FROM
+                                Model\Donation donation
+                            WHERE
+                                donation.id = :id AND
+                                donation.donationPayment is null AND
+                                donation.donationStatus = :donationStatus
+                        ')
+                        ->setParameter('id', $donationId)
+                        ->setParameter('donationStatus', 'INICIADA')
+                        ->getOneOrNullResult();
+
+        if(is_null($donation))
+            return;
+
+        $donation->setDonationStatus('ABORTADA');
+        self::getCpEm()->marge($donation);
+        self::getCpEm()->flush();
+
+        return;
     }
 
     /**

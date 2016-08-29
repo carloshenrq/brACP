@@ -114,6 +114,12 @@ class Route
                     // Rota para fazer o checkout da doação.
                     $this->post('/checkout', ['Controller\Donation', 'checkout']);
 
+                    // Rota para abortar uma doação.
+                    $this->post('/abort', ['Controller\Donation', 'abort']);
+
+                    // Rota para salvar o código de transação de uma doação.
+                    $this->post('/save', ['Controller\Donation', 'save']);
+
                     // Permite rota de listagem das promoções apenas caso esteja habilitado em configuração.
                     if(BRACP_DONATION_SHOW_PROMO_LIST)
                         $this->get('/promotions', ['Controller\Donation', 'promoList']);

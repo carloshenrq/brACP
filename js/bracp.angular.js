@@ -537,14 +537,58 @@ brACPApp.controller('donation', ['$scope', '$http', function($scope, $http) {
         $scope.serverIndex  = serverIndex;
     }
 
-    // @Todo: ajax para salvar o código de transação da doação (Gravar como AGUARDANDO)
+    /**
+     * Envia a requisição para gravar o código de transação de operação.
+     *
+     * @param integer id
+     * @param string transactionCode
+     */
     $scope.saveTransaction = function(id, transactionCode)
     {
+        var urlServer = document.querySelector('#_BRACP_URL').value + 'donation/save';
+        var params = $.param({
+            'donationId'    : id,
+            'transactionCode' : transactionCode
+        });
+
+        $http({
+            'method'    : 'post',
+            'url'       : urlServer,
+            'data'      : params,
+            'headers'   : {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        }).then(function(response) {
+
+        }, function(response) {
+
+        });
     };
 
-    // @Todo: ajax para abortar a doação (Gravar como ABORDATA)
+    /**
+     * Envia requisição para gravar o id como abortado.
+     *
+     * @param integer id
+     */
     $scope.abortTransaction = function(id)
     {
+        var urlServer = document.querySelector('#_BRACP_URL').value + 'donation/abort';
+        var params = $.param({
+            'donationId'    : id
+        });
+
+        $http({
+            'method'    : 'post',
+            'url'       : urlServer,
+            'data'      : params,
+            'headers'   : {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        }).then(function(response) {
+
+        }, function(response) {
+
+        });
     };
 
     $scope.submitDonation = function()
