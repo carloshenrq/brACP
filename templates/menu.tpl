@@ -49,10 +49,6 @@
         </ul>
     </li>
 
-    {if $smarty.const.BRACP_DONATION_ENABLED eq true}
-        <li><label for="modal-donation">@@MENU(DONATION)</label></li>
-    {/if}
-
     {if $smarty.const.BRACP_ALLOW_RANKING}
         {* @TODO *}
     {/if}

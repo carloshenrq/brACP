@@ -105,28 +105,6 @@ class Route
 
             });
 
-            // Verifica se doações estão habilitadas no painel de controle,
-            // Apenas habilita as rotas de doação caso estejam configuradas como habilitadas.
-            if(BRACP_DONATION_ENABLED)
-            {
-                self::getApp()->group('/donation', function() {
-
-                    // Rota para fazer o checkout da doação.
-                    $this->post('/checkout', ['Controller\Donation', 'checkout']);
-
-                    // Rota para abortar uma doação.
-                    $this->post('/abort', ['Controller\Donation', 'abort']);
-
-                    // Rota para salvar o código de transação de uma doação.
-                    $this->post('/save', ['Controller\Donation', 'save']);
-
-                    // Permite rota de listagem das promoções apenas caso esteja habilitado em configuração.
-                    if(BRACP_DONATION_SHOW_PROMO_LIST)
-                        $this->get('/promotions', ['Controller\Donation', 'promoList']);
-
-                });
-            }
-
             // // Verifica se os rankings estão habilitados para serem exibidos.
             // if(BRACP_ALLOW_RANKING)
             // {

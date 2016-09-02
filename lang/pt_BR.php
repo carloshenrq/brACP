@@ -33,10 +33,8 @@ return
             'CACHE'     => 'Limpar Cache',
             'MODS'      => 'Customizações',
             'PLAYERS'   => 'Jogadores',
-            'DONATION'  => 'Doações',
             'UPDATE'    => 'Atualização de Sistema',
         ],
-        'DONATION' =>  'Doações',
         'MYACC'     => [
             'TITLE'         => 'Minha Conta',
             'UNAUTHENTICATED'   => [
@@ -413,47 +411,6 @@ return
         ],
     ],
 
-    /**
-     * @refer templates/donation.paypal.ajax.tpl
-     * @author carloshenrq
-     */
-    'DONATIONS' => [
-        'TITLE' => 'Doações',
-
-        'MESSAGE'   => [
-            'HEADER'    =>  [
-                // 0
-                'As suas doações, são muito importantes para o servidor porque elas ajudam a nos manter online!<br>' .
-                            'Nós não obrigamos ninguém a doar ao servidor, doações são realizadas pelos jogadores por livre vontade.',
-                // 1
-                'Nós compensamos os jogadores que realizam doações ao servidor com moedas do jogo que podem ser obtidas de diversas formas ' .
-                             'dentro do jogo.<br>'.
-                             '<br>'.
-                             '<strong>Para cada R$ 1,00 que você doa, você recebe ' . BRACP_DONATION_MULTIPLY . ' de CASH para serem utilizados no jogo.</strong>'
-            ],
-
-            'ACCEPT_TERMS'  => 'Eu estou ciente que isso é uma doação e não uma compra, eu quero doar para o servidor.',
-        ],
-
-        'INFO'      => 'Arraste a barrinha para indicar o valor de sua doação!',
-        'SUCCESS'   => 'Sua doação foi realizada com sucesso! Estaremos aguardando a confirmação do pagamento!',
-        'WARNING'   => [
-            'USERID'    => 'Ao não preencher o nome de usuário, nós entendemos que você não deseja receber o CASH em sua conta.',
-        ],
-
-        'BUTTONS'   => [
-            'SUBMIT'    => 'Doar',
-            'CLOSE'     => 'Fechar',
-        ],
-
-        'ERROR'     => [
-            'DISABLED'          => 'As doações estão desativadas.',
-
-            'INVALID_VALUE'     => 'O Valor da doação é inválido!',
-            'INVALID_USERID'    => 'Nome de usuário digitado é inválido!',
-        ],
-    ],
-
     // Tradução dos arquivos administrativos.
     'ADMIN'     => [
         /**
@@ -462,14 +419,6 @@ return
          */
         'PLAYER'   => [
             'TITLE' => 'Administração &raquo; Jogadores',
-        ],
-
-        /**
-         * @refer templates/admin.donation.ajax.tpl
-         * @author carloshenrq
-         */
-        'DONATION'   => [
-            'TITLE' => 'Administração &raquo; Doações',
         ],
 
         /**

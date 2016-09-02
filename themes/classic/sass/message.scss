@@ -19,6 +19,12 @@
         font-size: 14px;
     }
 
+    h1 + h2
+    {
+        margin: 0;
+        font-size: .8em;
+    }
+
     &.icon
     {
         padding-left: 64px;
@@ -43,6 +49,11 @@
     &+ .message
     {
         margin-top: 4px;
+    }
+
+    .message
+    {
+        margin: 1em;
     }
 
     &.error

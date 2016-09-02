@@ -143,20 +143,6 @@ class Admin
      * @param ResponseInterface $response
      * @param array $args
      */
-    public static function donation(ServerRequestInterface $request, ResponseInterface $response, $args)
-    {
-        // Exibe o display para home.
-        self::getApp()->display('admin.donation', [
-        ]);
-    }
-
-    /**
-     * Método inicial para exibição dos templates na tela.
-     *
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     * @param array $args
-     */
     public static function backup(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
         // Exibe o display para home.

@@ -25,7 +25,6 @@ use \Psr\Http\Message\ResponseInterface;
 use \Model\Login;
 use \Model\Recover;
 use \Model\EmailLog;
-use \Model\Donation;
 use \Model\Compensate;
 use \Model\Confirmation;
 use \Model\Char;

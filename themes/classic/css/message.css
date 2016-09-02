@@ -9,6 +9,9 @@
     padding: 0px;
     margin: 0px 0px 6px 0px;
     font-size: 14px; }
+  .message h1 + h2 {
+    margin: 0;
+    font-size: .8em; }
   .message.icon {
     padding-left: 64px; }
     .message.icon:before {
@@ -31,6 +34,8 @@
       -webkit-transform: translate(-50%, -50%); }
   .message + .message {
     margin-top: 4px; }
+  .message .message {
+    margin: 1em; }
   .message.error {
     border-color: #e74c3c;
     background-color: #ffe6e6; }

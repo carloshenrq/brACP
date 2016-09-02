@@ -19,69 +19,6 @@ CREATE TABLE IF NOT EXISTS `bracp_server_status` (
     INDEX (`ServerIndex`, `StatusExpire`)
 ) ENGINE=MyISAM COLLATE='utf8_swedish_ci';
 
-DROP TABLE IF EXISTS `bracp_donations_promo`;
-CREATE TABLE IF NOT EXISTS `bracp_donations_promo` (
-    `PromotionID` INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `PromotionDescription` VARCHAR(1024) NOT NULL DEFAULT '',
-    `BonusMultiply` INTEGER NOT NULL DEFAULT 0,
-    `PromotionStartDate` DATE NOT NULL DEFAULT '0000-00-00',
-    `PromotionEndDate` DATE NOT NULL DEFAULT '0000-00-00',
-    `PromotionCanceled` BOOLEAN NOT NULL DEFAULT FALSE,
-    INDEX (`PromotionStartDate`, `PromotionEndDate`)
-) ENGINE=InnoDB COLLATE='utf8_swedish_ci';
-
-DROP TABLE IF EXISTS `bracp_donations`;
-CREATE TABLE IF NOT EXISTS `bracp_donations` (
-    `DonationID` INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `PromotionID` INTEGER NULL DEFAULT NULL,
-    `ReceiverID` VARCHAR(50) NULL DEFAULT NULL,
-    `ReceiverMail` VARCHAR(100) NULL DEFAULT NULL,
-    `SandboxMode` BOOLEAN NOT NULL DEFAULT FALSE,
-    `TransactionDrive` VARCHAR(20) NOT NULL DEFAULT 'PAGSEGURO',
-    `TransactionCode` VARCHAR(100) NOT NULL DEFAULT '',
-    `TransactionType` VARCHAR(50) NULL DEFAULT NULL,
-    `TransactionUserID` VARCHAR(23) NULL DEFAULT NULL,
-    `TransactionCheckoutCode` VARCHAR(100) NULL DEFAULT NULL,
-    `PayerID` VARCHAR(50) NULL DEFAULT NULL,
-    `PayerMail` VARCHAR(100) NULL DEFAULT NULL,
-    `PayerStatus` VARCHAR(30) NULL DEFAULT NULL,
-    `PayerName` VARCHAR(100) NULL DEFAULT NULL,
-    `PayerCountry` VARCHAR(50) NULL DEFAULT NULL,
-    `PayerState` VARCHAR(50) NULL DEFAULT NULL,
-    `PayerCity` VARCHAR(50) NULL DEFAULT NULL,
-    `PayerAddress` VARCHAR(200) NULL DEFAULT NULL,
-    `PayerZipCode` VARCHAR(30) NULL DEFAULT NULL,
-    `PayerAddressConfirmed` BOOLEAN NULL DEFAULT NULL,
-    `DonationValue` DECIMAL(12, 2) NULL DEFAULT NULL,
-    `DonationPayment` DATETIME NULL DEFAULT NULL,
-    `DonationStatus` VARCHAR(30) NULL DEFAULT NULL,
-    `DonationType` VARCHAR(30) NULL DEFAULT NULL,
-    `VerifySign` TEXT NULL DEFAULT NULL,
-    `DonationCompensate` BOOLEAN NOT NULL DEFAULT true,
-    `DonationAccountID` INTEGER NULL DEFAULT NULL,
-    `DonationServerName` VARCHAR(30) NULL DEFAULT NULL,
-    `DonationSQLHost` VARCHAR(50) NULL DEFAULT NULL,
-    `DonationSQLUser` VARCHAR(50) NULL DEFAULT NULL,
-    `DonationSQLPass` VARCHAR(50) NULL DEFAULT NULL,
-    `DonationSQLDBName` VARCHAR(50) NULL DEFAULT NULL,
-    `DonationCompensateVar` VARCHAR(50) NULL DEFAULT NULL,
-
-    FOREIGN KEY (`PromotionID`) REFERENCES `bracp_donations_promo` (`PromotionID`),
-    INDEX (`TransactionDrive`, `TransactionCode`)
-) ENGINE=InnoDB COLLATE='utf8_swedish_ci';
-
-DROP TABLE IF EXISTS `bracp_compensations`;
-CREATE TABLE IF NOT EXISTS `bracp_compensations` (
-    `CompensateID` INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `DonationID` INTEGER NOT NULL,
-    `AccountID` INTEGER NULL DEFAULT NULL,
-    `UserID` VARCHAR(23) NULL DEFAULT NULL,
-    `CompensatePending` BOOLEAN NOT NULL DEFAULT TRUE,
-    `CompensateDate` DATETIME NULL DEFAULT NULL,
-
-    FOREIGN KEY (`DonationID`) REFERENCES `bracp_donations` (`DonationID`)
-) ENGINE=InnoDB COLLATE='utf8_swedish_ci';
-
 DROP TABLE IF EXISTS `bracp_recover`;
 CREATE TABLE IF NOT EXISTS `bracp_recover` (
     `RecoverID` INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,

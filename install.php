@@ -131,19 +131,6 @@ $config = [
     'BRACP_SESSION_ALGO'                    => 'AES-256-ECB',
     'BRACP_SESSION_KEY'                     => base64_encode(openssl_random_pseudo_bytes(32)),
     'BRACP_SESSION_IV'                      => base64_encode(openssl_random_pseudo_bytes(16)),
-
-    // Dados de doação
-    'BRACP_DONATION_ENABLED'                => true,
-    'BRACP_DONATION_SHOW_PROMO_LIST'        => true,
-    'BRACP_DONATION_MULTIPLY'               => 100,
-    'BRACP_DONATION_MIN_VALUE'              => 0,
-    'BRACP_DONATION_MAX_VALUE'              => 200,
-    'BRACP_DONATION_VAR'                    => '#CASHPOINTS',
-
-    // Configurações do PagSeguro
-    'BRACP_PAGSEGURO_EMAIL'                 => '',
-    'BRACP_PAGSEGURO_TOKEN'                 => '',
-    'BRACP_PAGSEGURO_SANDBOX_MODE'          => false,
 ]; 
 
 // Moedas padrões aceitas pelo PayPal.
@@ -241,6 +228,7 @@ else if(!$writeable)
         -->
         <meta charset="UTF-8">
 
+        <link rel="stylesheet" type="text/css" href="themes/classic/css/message.css"/>
         <link rel="stylesheet" type="text/css" href="themes/classic/css/install.css"/>
         <link rel="stylesheet" type="text/css" href="themes/classic/css/button.css"/>
 
@@ -252,6 +240,7 @@ else if(!$writeable)
             install.controller('install', ['$scope', '$http', function($scope, $http) {
 
                 $scope.Math = window.Math;
+                $scope.BRACP_ACCEPT_TERMS = false;
                 $scope.BRACP_ERROR_CODE = <?php echo $BRACP_ERROR_CODE; ?>;
                 $scope.BRACP_ALLOW_INSTALL = $scope.BRACP_ERROR_CODE == 0;
                 $scope.BRACP_ALL_TIMEZONE = <?php echo json_encode(timezone_identifiers_list()); ?>;
@@ -569,7 +558,7 @@ else if(!$writeable)
                         <input type="button" class="button info" value="Novo" ng-click="addServer()"/>
                     </div>
 
-                    <div class="bracp-message error" ng-if="config.BRACP_SERVERS.length == 0">
+                    <div class="message error" ng-if="config.BRACP_SERVERS.length == 0">
                         Nenhum servidor adicionado, por favor, adicione um e configure-o corretamente.
                     </div>
 
@@ -579,7 +568,7 @@ else if(!$writeable)
                             <input type="button" class="button error" value="Excluir {{($index+1)}} de {{config.BRACP_SERVERS.length}}" ng-click="removeServer($index)"/>
                         </div>
 
-                        <div class="bracp-message info">
+                        <div class="message info">
                             <strong>Servidor: <i>{{$index}} - {{server.name}}</i></strong><br>
                             Informações de conexão para pingar no servidor.
                             Isso server para mostrar o status de online/offline do painel na página inicial.
@@ -665,7 +654,7 @@ else if(!$writeable)
 
                     <h1>Configurações de acesso ao servidor SMTP</h1>
 
-                    <div ng-if="config.BRACP_MD5_PASSWORD_HASH" class="bracp-message error">
+                    <div ng-if="config.BRACP_MD5_PASSWORD_HASH" class="message error">
                         <h1>O Uso de md5 nas senhas está habilitado</h1>
                         É extremamente recomendado que você configure o envio de e-mails pois você habilitou o uso de md5 nas senhas.<br>
                         As senhas cadastradas com md5, não podem ser recuperadas, apenas resetadas.
@@ -729,7 +718,7 @@ else if(!$writeable)
 
                     <p>O reCAPTCHA ajuda a deixar os formulários mais seguros, validando a requisição contra os bots de internet.</p>
 
-                    <div class="bracp-message info">
+                    <div class="message info">
                         Para usar o reCAPTCHA você precisa obter uma chave para o dominio que fará uso desta chave.<br>
                         Você pode obte-la <a href="https://www.google.com/recaptcha/intro/index.html" target="_blank">clicando aqui</a>.
                     </div>
@@ -820,80 +809,43 @@ else if(!$writeable)
 
                 <!-- Configurações do donation. -->
                 <div ng-switch-when="donation" class="install-content">
-                    <h1>Configurações de Doação</h1>
 
-                    <p class="bracp-message warning">
-                        As doações são formas dos jogadores ajudarem o servidor a crescer pois, de certa forma,
-                        é custoso manter um servidor online.
-                        <strong ng-if="config.BRACP_DONATION_ENABLED">
-                            <br>
-                            Seja um administrador consciente,
-                            permita que eles possam adquirir os cash sem a necessidade de donatar,
-                            mas peça a colaboração. ;)
-                        </strong>
-                    </p>
+                    <div class="message error">
 
-                    <div class="install-data">
-                        <label class="input-align">
-                            <input type="checkbox" ng-model="config.BRACP_DONATION_ENABLED"/>
-                            Habilitar doações
-                            <span>Permite que os jogadores doem para o servidor.</span>
-                        </label>
-                        <label ng-if="config.BRACP_DONATION_ENABLED" class="input-align">
-                            <input type="checkbox" ng-model="config.BRACP_DONATION_SHOW_PROMO_LIST"/>
-                            Exibir lista de promoções
-                            <span>Se você pretende fazer promoções de cash, habilite esta opção para os usuários saberem o melhor momento de donatar.</span>
-                        </label>
-                        <label ng-if="config.BRACP_DONATION_ENABLED" class="input-align">
-                            Multiplicador:
-                            <input type="text" ng-model="config.BRACP_DONATION_MULTIPLY" size="6"/>
-                            <span>A Cada R$ 1,00 doado, o jogador receberá {{config.BRACP_DONATION_MULTIPLY}} em cash</span>
-                        </label>
-                        <label ng-if="config.BRACP_DONATION_ENABLED" class="input-align">
-                            Valor Mínimo:
-                            <input type="text" ng-model="config.BRACP_DONATION_MIN_VALUE" size="6"/>
-                            <span>Valor mínimo permitido para doação.</span>
-                        </label>
-                        <label ng-if="config.BRACP_DONATION_ENABLED" class="input-align">
-                            Valor Máximo:
-                            <input type="text" ng-model="config.BRACP_DONATION_MAX_VALUE" size="6"/>
-                            <span>Valor máximo permitido para doação.</span>
-                        </label>
-                        <label ng-if="config.BRACP_DONATION_ENABLED" class="input-align">
-                            Variavel para Compensação:
-                            <input type="text" ng-model="config.BRACP_DONATION_VAR" size="30"/>
-                            <span>Nome da variavel que será atualizada quando a doação for compensada.</span>
-                        </label>
-                    </div>
+                        O Suporte a doações, oficial, foi desativado, sem previsão de retorno, pelo uso inadequado dos conceitos sobre o que é uma doação.
 
-                    <p ng-if="config.BRACP_DONATION_ENABLED" class="bracp-message info">
-                        O brACP utiliza o PagSeguro como motor de doações, então é preciso que você configure o brACP
-                        com seus dados do PagSeguro para que seja possível realizar a integração.
-                    </p>
+                        <div class="message warning icon">
+                            <h1>CC - Lei nº 10.406 de 10 de Janeiro de 2002</h1>
+                            <h2>Institui o Código Civil.</h2>
 
-                    <p ng-if="config.BRACP_DONATION_ENABLED && config.BRACP_PAGSEGURO_SANDBOX_MODE" class="bracp-message error">
-                        Quando o modo SandBox está ativo, as doações realizadas são todas feitas em ambiente de testes, ou seja,
-                        o dinheiro gerado por essas transações não poderão ser sacados.
-                    </p>
+                            <p>
+                                <strong>Art. 538.</strong>
+                                Considera-se doação o contrato em que uma pessoa, por liberalidade, transfere do seu patrimônio bens ou vantagens para o de outra.
+                            </p>
+                        </div>
 
-                    <div ng-if="config.BRACP_DONATION_ENABLED" class="install-data">
-                        <label class="input-align">
-                            E-mail:
-                            <input type="text" ng-model="config.BRACP_PAGSEGURO_EMAIL" size="60"/>
-                            <span>Endereço de e-mail para a conta do PagSeguro.</span>
-                        </label>
+                        <p>
+                            Visto que, dentro do ambiente "ragnarok", a palavra "doação", não está em seu conceito, perante o <strong>Art. 538</strong> do Código Civil,
+                            aqui no brACP não existirá suporte oficial a "doações" automáticas, pois, os sistemas de pagamento somente devolvem os dados
+                            automaticamente quando são realizadas <strong>VENDAS</strong>.
+                        </p>
 
-                        <label class="input-align">
-                            Token:
-                            <input type="text" ng-model="config.BRACP_PAGSEGURO_TOKEN" size="40"/>
-                            <span>Token de acesso para validação das transações.</span>
-                        </label>
+                        <div class="message warning icon">
+                            <h1>CC - Lei nº 10.406 de 10 de Janeiro de 2002</h1>
+                            <h2>Institui o Código Civil.</h2>
 
-                        <label class="input-align">
-                            <input type="checkbox" ng-model="config.BRACP_PAGSEGURO_SANDBOX_MODE"/>
-                            Habilitar modo SandBox
-                            <span>Não altere isso se não souber o que está fazendo :)</strong></span>
-                        </label>
+                            <p>
+                                <strong>Art. 481.</strong>
+                                Pelo contrato de compra e venda, um dos contratantes se obriga a transferir o domínio de certa coisa, e o outro, a pagar-lhe certo preço em dinheiro.
+                            </p>
+                        </div> 
+
+                        <p><i>
+                            Se você, for colocar suporte a "doações". Faça por conta e risco.
+                            Nós, do brAthena, não nos responsabilizamos pelas suas ações. O Código fonte é livre,
+                                qualquer alteração além do que está disponibilizado no github é de sua responsabilidade.
+                        </i></p>
+
                     </div>
 
                 </div>
@@ -1090,16 +1042,26 @@ else if(!$writeable)
                         </label>
                     </div>
 
-                    <br>
+                    <label class="input-align" style="padding: 8px; margin: 3px;">
+                        <input type="checkbox" ng-model="BRACP_ACCEPT_TERMS"/>
+                        Eu, aceito e entendo que todas e quaisquer alterações realizadas no código fonte que não constem no código fonte disponibilizado no
+                        <a href="https://github.com/carloshenrq/brACP/" target="_blank">repositório oficial</a>, são de total responsabilidade minha,
+                        incluindo também todas as responsabilidades previstas em leis.
+                    </label>
+
+                    <div class="message success icon" ng-if="BRACP_ACCEPT_TERMS" style="margin-bottom: 1em">
+                        Faça um bom uso do brACP! E lembre-se, você aceitou os termos acima.
+                    </div>
+
                     <center>
-                        <button class="button success" ng-click="saveAndInstall()">Salvar e Configurar</button>
+                        <button class="button success icon" ng-if="BRACP_ACCEPT_TERMS" ng-click="saveAndInstall()">Salvar e Configurar</button>
                     </center>
 
                 </div>
 
                 <!-- Bem vindo a instalação do painel de controle. -->
                 <div ng-switch-default class="install-content">
-                    <div class="bracp-message error">
+                    <div class="message error">
                         <div class="header">
                             Falha de verificação <span class="sub-title">(Código: {{BRACP_ERROR_CODE}})</span>
                         </div>
