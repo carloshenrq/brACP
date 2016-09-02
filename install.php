@@ -186,19 +186,6 @@ if($writeable && isset($_POST) && !empty($_POST))
         $configFile .= "\n";
     }
 
-    $configFile .= "if(BRACP_PAGSEGURO_SANDBOX_MODE)\n";
-    $configFile .= "{\n";
-    $configFile .= "    DEFINE('BRACP_PAGSEGURO_URL', 'https://sandbox.pagseguro.uol.com.br', false);\n";
-    $configFile .= "    DEFINE('BRACP_PAGSEGURO_WS_URL', 'https://ws.sandbox.pagseguro.uol.com.br', false);\n";
-    $configFile .= "    DEFINE('BRACP_PAGSEGURO_STC_URL', 'https://stc.sandbox.pagseguro.uol.com.br', false);\n";
-    $configFile .= "}\n";
-    $configFile .= "else\n";
-    $configFile .= "{\n";
-    $configFile .= "    DEFINE('BRACP_PAGSEGURO_URL', 'https://pagseguro.uol.com.br', false);\n";
-    $configFile .= "    DEFINE('BRACP_PAGSEGURO_WS_URL', 'https://ws.pagseguro.uol.com.br', false);\n";
-    $configFile .= "    DEFINE('BRACP_PAGSEGURO_STC_URL', 'https://stc.pagseguro.uol.com.br', false);\n";
-    $configFile .= "}\n";
-
     $configFile .= "\n";
 
     // Finaliza o arquivo e escreve os dados no arquivo de configuração.
