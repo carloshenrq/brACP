@@ -120,6 +120,9 @@ html, body
                     &.step-error
                     {
                         background-color: rgba(231, 76, 60, .2);
+                        color: black;
+                        font-weight: normal;
+
                         &:before
                         {
                             color: white;
@@ -153,6 +156,8 @@ html, body
             text-justify: inter-word;
 
             width: auto;
+            height: 200px;
+            overflow: auto;
 
             h1
             {
@@ -161,6 +166,61 @@ html, body
                 font-weight: normal;
                 border-bottom: .1em dotted rgb(0, 0, 0);
             }
+
+            .requisites
+            {
+                display: table;
+                width: 70%;
+                margin: 1em auto;
+                box-sizing: border-box;
+
+                .row
+                {
+                    display: table-row;
+
+                    .cell
+                    {
+                        display: table-cell;
+                        padding: .5em;
+
+                        &.cell-success, &.cell-error
+                        {
+                            &:before
+                            {
+                                margin-right: .2em;
+                                @include border-radius(50%);
+                                color: white;
+                                text-align: center;
+                                @include size(16px, 16px);
+                                display: inline-block;
+                            }
+                        }
+
+                        &.cell-success
+                        {
+                            color: #2ecc71;
+
+                            &:before
+                            {
+                                content: '\2713';
+                                background-color: #2ecc71;
+                            }
+                        }
+
+                        &.cell-error
+                        {
+                            color: rgb(231, 76, 60);
+
+                            &:before
+                            {
+                                content: '!';
+                                background-color: rgb(231, 76, 60);
+                            }
+                        }
+                    }
+                }
+            }
+
         }
     }
 
@@ -190,4 +250,52 @@ html, body
 
     }
 
+}
+
+.error
+{
+    color: rgb(231, 76, 60) !important;
+
+    &.icon:before
+    {
+        content: '\00d7';
+    }
+}
+
+.success
+{
+    color: rgb(46, 204, 113) !important;
+
+    &.icon:before
+    {
+        content: '\2713';
+    }
+}
+
+.info
+{
+    color: rgb(52, 152, 219) !important;
+
+    &.icon
+    {
+        &:before
+        {
+            content: '!';
+        }
+
+        &.icon.icon-question:before
+        {
+            content: '?';
+        }
+    }
+}
+
+.warning
+{
+    color: rgb(243, 156, 18) !important;
+
+    &.icon:before
+    {
+        content: '!';
+    }
 }

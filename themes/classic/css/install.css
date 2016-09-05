@@ -89,7 +89,9 @@ html, body {
               -moz-box-shadow: 0 0 1px #f39c12;
               -webkit-box-shadow: 0 0 1px #f39c12; }
           .install .content .steps ul li label.step-error {
-            background-color: rgba(231, 76, 60, 0.2); }
+            background-color: rgba(231, 76, 60, 0.2);
+            color: black;
+            font-weight: normal; }
             .install .content .steps ul li label.step-error:before {
               color: white;
               content: '!';
@@ -111,13 +113,45 @@ html, body {
       vertical-align: top;
       text-align: justify;
       text-justify: inter-word;
-      width: auto; }
+      width: auto;
+      height: 200px;
+      overflow: auto; }
       .install .content .body h1 {
         padding: 0;
         margin: 0 0 1em 0;
         font-size: 1.2em;
         font-weight: normal;
         border-bottom: 0.1em dotted black; }
+      .install .content .body .requisites {
+        display: table;
+        width: 70%;
+        margin: 1em auto;
+        box-sizing: border-box; }
+        .install .content .body .requisites .row {
+          display: table-row; }
+          .install .content .body .requisites .row .cell {
+            display: table-cell;
+            padding: .5em; }
+            .install .content .body .requisites .row .cell.cell-success:before, .install .content .body .requisites .row .cell.cell-error:before {
+              margin-right: .2em;
+              border-radius: 50%;
+              -moz-border-radius: 50%;
+              -webkit-border-radius: 50%;
+              color: white;
+              text-align: center;
+              width: 16px;
+              height: 16px;
+              display: inline-block; }
+            .install .content .body .requisites .row .cell.cell-success {
+              color: #2ecc71; }
+              .install .content .body .requisites .row .cell.cell-success:before {
+                content: '\2713';
+                background-color: #2ecc71; }
+            .install .content .body .requisites .row .cell.cell-error {
+              color: #e74c3c; }
+              .install .content .body .requisites .row .cell.cell-error:before {
+                content: '!';
+                background-color: #e74c3c; }
   .install .footer {
     padding: 1em;
     background-color: #ecf0f1;
@@ -131,3 +165,25 @@ html, body {
       text-align: left; }
     .install .footer .next {
       text-align: right; }
+
+.error {
+  color: #e74c3c !important; }
+  .error.icon:before {
+    content: '\00d7'; }
+
+.success {
+  color: #2ecc71 !important; }
+  .success.icon:before {
+    content: '\2713'; }
+
+.info {
+  color: #3498db !important; }
+  .info.icon:before {
+    content: '!'; }
+  .info.icon.icon.icon-question:before {
+    content: '?'; }
+
+.warning {
+  color: #f39c12 !important; }
+  .warning.icon:before {
+    content: '!'; }
