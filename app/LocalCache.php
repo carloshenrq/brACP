@@ -65,10 +65,10 @@ class LocalCache implements ICache
      */
     public function parse($key, $value, $time = 600, $force = false)
     {
-        if(($cache = $this->read($key)) !== false)
+        if(!$force && ($cache = $this->read($key)) !== false)
             return $cache;
 
-        if( $this->write($key, $value, $time, $force) === true )
+        if($this->write($key, $value, $time, $force) === true)
             return $this->parse($key, $value, $time, $force);
 
         return false;
@@ -90,7 +90,7 @@ class LocalCache implements ICache
 
         $cache = unserialize(base64_decode(file_get_contents($file)));
 
-        if($cache['time'] < time())
+        if($cache['time'] > 0 && $cache['time'] < time())
         {
             $this->erase($key);
             return false;
@@ -118,7 +118,7 @@ class LocalCache implements ICache
         $file = $this->findFile($key);
 
         $content = ((is_callable($value)) ? $value() : $value);
-        $cache = base64_encode(serialize(['time' => time() + $time, 'data' => $content]));
+        $cache = base64_encode(serialize(['time' => (($time == -1) ? -1 : time() + $time), 'data' => $content]));
 
         file_put_contents($file, $cache);
         $this->saveIndex($key);
@@ -197,7 +197,7 @@ class LocalCache implements ICache
         {
             $cache = unserialize(base64_decode(file_get_contents($file)));
 
-            if($cache['time'] < time())
+            if($cache['time'] >= 0 && $cache['time'] < time())
                 $this->removeIndex($key);
         }
 

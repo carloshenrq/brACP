@@ -49,13 +49,13 @@ class Cache
      *
      * @return $mixed
      */
-    public static function get($index, $defaultValue, $force = false)
+    public static function get($index, $defaultValue, $force = false, $cache = BRACP_CACHE_EXPIRE)
     {
         // [2016-08-02, CHLFZ] Adicionado teste porque quando o brACP não está instado a variável não está definida.
         if(!defined('BRACP_CACHE') || !BRACP_CACHE)
             return ((is_callable($defaultValue)) ? $defaultValue() : $defaultValue);
 
-        return self::$cache->parse($index, $defaultValue, BRACP_CACHE_EXPIRE, $force);
+        return self::$cache->parse($index, $defaultValue, $cache, $force);
     }
 
     /**

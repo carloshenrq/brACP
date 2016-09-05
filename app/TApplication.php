@@ -40,6 +40,11 @@ trait TApplication
         return self::getApp()->getEm($name);
     }
 
+    public static function getDbEm()
+    {
+        return self::getApp()->getEm('db');
+    }
+
     public static function getCpEm()
     {
         return self::getApp()->getEm('cp');
