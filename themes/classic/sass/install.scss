@@ -20,227 +20,154 @@
 
 html, body
 {
-    margin: 0px; padding: 0px;
+    padding: 0; margin: 0;
     font-family: Tahoma, Verdana, Arial;
     font-size: 12px;
+
+    background-color: white;
 }
 
-html
+.install
 {
-    background-color: #fff;
-}
+    display: block;
+    width: 60em;
+    margin: 1em auto;
+    background-color: #27ae60;
 
-.install-cfg-radio
-{
-    display: none;
-}
-
-.bracp-install-body
-{
-    width: 600px;
-    @include border-radius(6px);
-    color: rgb(39, 174, 96);
-
-    position: relative;
-    top: 40px;
-
-    margin: auto;
-    margin-bottom: 120px;
-
-    @include box-shadow('0px 0px 6px rgba(39, 174, 96, .65)');
-
-    .install-title
+    .title
     {
-        padding: 20px;
-        text-align: center;
+        padding: 1em;
 
         color: white;
-        font-size: 15px;
         font-weight: bold;
-        background-color: rgb(46, 204, 113);
-
-        border: 1px solid rgba(255, 255, 255, .6);
-
-        @include border-radius(6px 6px 0px 0px);
+        text-align: right;
     }
 
-    .install-body
+    .content
     {
-        display: inline-block;
+        display: table;
         width: 100%;
-        height: 100%;
-        margin: 0px; padding: 0px;
-        background-color: white;
+        padding: .5em;
+        box-sizing: border-box;
 
-        @include box-shadow('0px 0px 0px 1px rgba(39, 174, 96, .65) inset');
-        @include border-radius(0px 0px 6px 6px);
-
-        div.install-content
+        .steps, .body
         {
-            padding: 16px;
-            min-height: 300px;
+            padding: 0;
+            background-color: white;
+            display: table-cell;
+            @include box-shadow(0 0 1px 1px rgba(0, 0, 0, .2) inset);
+       }
+
+        .steps
+        {
+            width: 14em;
+
+            ul
+            {
+                margin: 0; padding: 0;
+                list-style: none;
+
+                li label
+                {
+                    padding: .6em;
+                    display: block;
+                    cursor: pointer;
+                    @include transition('background-color .2s ease-in-out');
+
+                    &:hover
+                    {
+                        background-color: rgba(26, 188, 156, .1);
+                    }
+
+                    &:before
+                    {
+                        display: inline-block;
+
+                        content: '\00a0';
+                        text-align: center;
+
+                        width: 16px; height: 16px;
+                        margin-right: .4em;
+                        @include border-radius(50%);
+                    }
+
+                    &.step-selected
+                    {
+                        background-color: #2ecc71;
+                        color: white;
+                        font-weight: bold;
+
+                        &:before
+                        {
+                            content: '\203A';
+                        }
+                    }
+
+                    &.step-warning
+                    {
+                        background-color: rgba(243, 156, 18, .2);
+                        &:before
+                        {
+                            color: white;
+                            content: '!';
+                            background-color: rgb(243, 156, 18);
+                            @include box-shadow(0 0 1px rgba(243, 156, 18, 1.0));
+                        }
+                    }
+
+                    &.step-error
+                    {
+                        background-color: rgba(231, 76, 60, .2);
+                        &:before
+                        {
+                            color: white;
+                            content: '!';
+                            background-color: rgb(231, 76, 60);
+                            @include box-shadow(0 0 1px rgba(231, 76, 60, 1.0));
+                        }
+                    }
+
+                    &.step-success
+                    {
+                        background-color: rgba(46, 204, 113, .2);
+                        &:before
+                        {
+                            color: white;
+                            content: '\2713';
+                            background-color: #2ecc71;
+                            @include box-shadow(0 0 1px rgba(46, 204, 113, 1.0));
+                        }
+                    }
+                }
+            }
+        }
+
+        .body
+        {
+            padding: 1em;
+            vertical-align: top;
+
             text-align: justify;
+            text-justify: inter-word;
+
+            width: auto;
 
             h1
             {
-                padding: 0px;
-                margin: 0px 0px 6px 0px;
-                font-size: 14px;
-                border-bottom: 1px dotted rgb(39, 174, 96);
-            }
-
-            .install-data
-            {
-                padding: 12px;
-                background-color: rgba(39, 174, 96, .1);
-                @include border-radius(6px);
-                @include box-shadow('0px 0px 1px 1px rgba(39, 174, 96, .65)');
+                padding: 0; margin: 0 0 1em 0;
+                font-size: 1.2em;
+                font-weight: normal;
+                border-bottom: .1em dotted rgb(0, 0, 0);
             }
         }
     }
 
-    .install-cfg-allow
+    .footer
     {
-        display: none;
+        padding: 1em;
+        background-color: #2ecc71;
 
-        &:not(:checked) + .bracp-install-menu
-        {
-            display: none;
-        }
+        text-align: right;
     }
 
-    .bracp-install-menu
-    {
-        width: 100%;
-        ul
-        {
-            width: 100%;
-            list-style: none;
-            margin: 0; padding: 0;
-            display: table;
-            table-layout: fixed;
-
-            li
-            {
-                display: table-cell;
-                text-align: center;
-
-                border: 1px solid rgba(39, 174, 96, .65);
-
-                label
-                {
-                    display: block;
-                    padding: 8px;
-                    cursor: pointer;
-                    color: white;
-                    font-weight: bold;
-                }
-
-                input.install-cfg-radio:not(:checked) + label
-                {
-                    background-color: rgb(39, 174, 96);
-                }
-
-                input.install-cfg-radio:checked + label
-                {
-                    color: rgb(39, 174, 96);
-                    background-color: white;
-                }
-
-                &+ li
-                {
-                    border-left: 0px;
-                }
-            }
-        }
-    }
-}
-
-
-.error
-{
-    color: rgb(231, 76, 60) !important;
-
-    &.icon:before
-    {
-        content: '\00d7';
-    }
-}
-
-.success
-{
-    color: rgb(46, 204, 113) !important;
-
-    &.icon:before
-    {
-        content: '\2713';
-    }
-}
-
-.info
-{
-    color: rgb(52, 152, 219) !important;
-
-    &.icon
-    {
-        &:before
-        {
-            content: '!';
-        }
-
-        &.icon.icon-question:before
-        {
-            content: '?';
-        }
-    }
-}
-
-.warning
-{
-    color: rgb(243, 156, 18) !important;
-
-    &.icon:before
-    {
-        content: '!';
-    }
-}
-
-label.input-align
-{
-    display: block;
-
-    span
-    {
-        font-style: italic;
-        font-size: 10px;
-        color: rgb(230, 126, 34);
-        display: block;
-
-        &:before
-        {
-            content: '*';
-        }
-    }
-
-    input[type="checkbox"]
-    {
-        width: 13px;
-        height: 13px;
-        padding: 0;
-        margin:0;
-        vertical-align: bottom;
-        position: relative;
-        top: -1px;
-        *overflow: hidden;
-    }
-
-    select, input[type="text"], input[type="password"]
-    {
-        display: block;
-    }
-
-    &+ label
-    {
-        margin-top: 12px;
-    }
 }
