@@ -30,7 +30,7 @@ html, body
 .install
 {
     display: block;
-    width: 60em;
+    width: 80em;
     margin: 1em auto;
     background-color: #27ae60;
 
@@ -165,6 +165,14 @@ html, body
                 font-size: 1.2em;
                 font-weight: normal;
                 border-bottom: .1em dotted rgb(0, 0, 0);
+            }
+
+            pre.install-license
+            {
+                max-height: 200px;
+                padding: 1em;
+                background-color: #ecf0f1;
+                overflow: auto;
             }
 
             .requisites

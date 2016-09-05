@@ -78,6 +78,7 @@ $PRE_REQUISITES = array(
                 $scope.STEP_SUCCESS = [];
 
                 $scope.PRE_REQUISITES = <?php echo json_encode($PRE_REQUISITES); ?>;
+                $scope.ACCEPT_TERMS = false;
 
                 // Testa os requisitos do step 1
                 window.jQuery.each($scope.PRE_REQUISITES, function(index, value) {
@@ -89,6 +90,21 @@ $PRE_REQUISITES = array(
 
                 $scope.validateStep     = function(step, foward)
                 {
+
+                    switch(step)
+                    {
+                        case 2:
+                            if($scope.ACCEPT_TERMS == false && $scope.STEP_ERROR.indexOf(step) == -1 )
+                                $scope.STEP_ERROR.push(step)
+                            else if($scope.ACCEPT_TERMS && $scope.STEP_ERROR.indexOf(step) >= 0)
+                            {
+                                var ind = $scope.STEP_ERROR.indexOf(step);
+                                $scope.STEP_ERROR.splice(ind, 1); 
+                            }
+
+                            break;
+                    }
+
                     if(foward && $scope.STEP_ERROR.indexOf(step) >= 0)
                     {
                         alert('Você não pode continuar. Existem itens que não podem ser validados.')
@@ -246,7 +262,22 @@ $PRE_REQUISITES = array(
                         
                         <h1>Licença</h1>
 
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        <div class="message info icon">
+                            <h1>Lembre-se</h1>
+                            Todas as alterações aplicadas no brACP, são de inteira responsabilidade sua.
+                        </div>
+
+                        <pre class="install-license"><?php include "license"; ?></pre>
+
+                        <div ng-if="!$parent.ACCEPT_TERMS" class="message error icon">
+                            É necessário aceitar os termos de licença antes de realizar a instalação.
+                        </div>
+
+                        <label>
+                            <input type="checkbox" ng-model="$parent.ACCEPT_TERMS">
+                            Eu declaro que aceito e compreendo os termos acima.
+                        </label>
+
                     </div>
 
                     <div ng-if="STEP == 3" class="body">
