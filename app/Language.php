@@ -98,7 +98,7 @@ class Language
                     if(isset($lang[$data2Pop]))
                     {
                         // Chama o sprintf e obtém o texto a ser alterado.
-                        $find = call_user_func_array('sprintf', array_merge([$lang[$data2Pop]], $data));
+                        $find = call_user_func_array('sprintf', array_merge(array($lang[$data2Pop]), $data));
 
                         // Troca no texto as variaveis informadas.
                         $textToTranslate = str_replace($origins[$i], $find, $textToTranslate);
@@ -134,7 +134,7 @@ class Language
                 return preg_match('/^([a-z]{2})_([A-Z]{2}).php$/', $file) != 0;
             });
 
-            $langs = [];
+            $langs = array();
             foreach($tmp_langs as $lang)
                 $langs[] = substr($lang, 0, 5);
 
