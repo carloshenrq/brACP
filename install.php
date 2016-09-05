@@ -76,7 +76,7 @@ require_once __DIR__ . '/app/Cache.php';
         <div class="install">
 
             <div class="title">
-                Guia de instalação do brACP - Passo {{STEP}} de 12
+                Guia de instalação do brACP - Passo {{STEP}} de 13
             </div>
 
             <div class="content">
@@ -194,8 +194,14 @@ require_once __DIR__ . '/app/Cache.php';
 
             <div class="footer">
                 
-                <button ng-if="STEP <= 12" ng-click="validateStep(STEP, true)" class="button info">Próximo {{STEP}} de 12</button>
-                <button ng-if="STEP > 1" ng-click="validateStep(STEP, false)" class="button error">Voltar</button>
+                <div class="back">
+                    <button ng-if="STEP > 1" ng-click="validateStep(STEP, false)" class="button error">Voltar</button>
+                </div>
+
+                <div class="next">
+                    <button ng-if="STEP <= 12" ng-click="validateStep(STEP, true)" class="button info">Próximo</button>
+                    <button ng-if="STEP == 13" ng-click="validateStep(STEP, true)" class="button success">Instalar</button>
+                </div>
 
             </div>
 

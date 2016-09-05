@@ -34,6 +34,8 @@ html, body
     margin: 1em auto;
     background-color: #27ae60;
 
+    @include box-shadow(0 0 .1em .1em rgba(39, 174, 96, 1.0));
+
     .title
     {
         padding: 1em;
@@ -165,9 +167,27 @@ html, body
     .footer
     {
         padding: 1em;
-        background-color: #2ecc71;
+        background-color: #ecf0f1;
+        display: table;
+        width: 100%;
+        box-sizing: border-box;
 
-        text-align: right;
+        div
+        {
+            display: table-cell;
+            width: auto;
+        }
+
+        .back
+        {
+            text-align: left;
+        }
+        .next
+        {
+            text-align: right;
+        }
+
+
     }
 
 }

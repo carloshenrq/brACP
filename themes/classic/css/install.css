@@ -26,7 +26,10 @@ html, body {
   display: block;
   width: 60em;
   margin: 1em auto;
-  background-color: #27ae60; }
+  background-color: #27ae60;
+  box-shadow: 0 0 0.1em 0.1em #27ae60;
+  -moz-box-shadow: 0 0 0.1em 0.1em #27ae60;
+  -webkit-box-shadow: 0 0 0.1em 0.1em #27ae60; }
   .install .title {
     padding: 1em;
     color: white;
@@ -117,5 +120,14 @@ html, body {
         border-bottom: 0.1em dotted black; }
   .install .footer {
     padding: 1em;
-    background-color: #2ecc71;
-    text-align: right; }
+    background-color: #ecf0f1;
+    display: table;
+    width: 100%;
+    box-sizing: border-box; }
+    .install .footer div {
+      display: table-cell;
+      width: auto; }
+    .install .footer .back {
+      text-align: left; }
+    .install .footer .next {
+      text-align: right; }
