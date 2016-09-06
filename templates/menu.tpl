@@ -49,6 +49,8 @@
         </ul>
     </li>
 
+    <li class="url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}vending">@@MENU(MERCHANTS)</li>
+
     {if $smarty.const.BRACP_ALLOW_RANKING}
         {* @TODO *}
     {/if}

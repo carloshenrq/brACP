@@ -53,6 +53,7 @@ return
                 'LOGOUT'    => 'Sair (%s)',
             ],
         ],
+        'MERCHANTS' =>  'Mercadores',
         'RANKINGS'  =>  [
             'TITLE'     => 'Classificações',
             'PLAYERS'   => 'Jogadores',

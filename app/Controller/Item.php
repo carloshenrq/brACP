@@ -126,12 +126,11 @@ class Item
         $obj = (object)[
             // Informações do item (Direto do banco)
             'id'            => $item->getId(),
-            'name'          => $item->getName_japanese(),
+            'name'          => utf8_encode($item->getName_japanese()),
             'type'          => $item->getType(),
             'slots'         => $item->getSlots(),
 
             // Dados para exibição do item
-            'exib_name'     => $item->getName_japanese() . (($item->getSlots() > 0) ? " [{$item->getSlots()}]":''),
             'icon'          => BRACP_DIR_INSTALL_URL . 'data/items/icons/' . $item->getId() . '.png',
             'image'         => BRACP_DIR_INSTALL_URL . 'data/items/images/' . $item->getId() . '.png',
 
