@@ -105,11 +105,16 @@ class Route
 
             });
 
-            self::getApp()->group('/vending', function() {
+            // Adicionado configurador para que, se for configurado a exibição das lojas
+            //  então exibir os dados da loja.
+            if(BRACP_ALLOW_VENDING)
+            {
+                self::getApp()->group('/vending', function() {
 
-                $this->get('', ['Controller\Vending', 'index']);
+                    $this->get('', ['Controller\Vending', 'index']);
 
-            });
+                });
+            }
 
             // // Verifica se os rankings estão habilitados para serem exibidos.
             // if(BRACP_ALLOW_RANKING)

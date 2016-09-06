@@ -107,6 +107,11 @@ class Vending
      */
     public static function getAllMerchants()
     {
+        // Se não estiver habilitado o sistema de exibição das vendas online
+        //  então, retornar vetor vazio.
+        if(!BRACP_ALLOW_VENDING)
+            return [];
+
         // Obtém os dados de mercadores gravados no cache para que não seja
         //  realizado flood de consultas no banco. (Pode ser uma consulta demorada...)
         $data = Cache::get('BRACP_CACHE_MERCHANT_SVR_' . self::getApp()->getSession()->BRACP_SVR_SELECTED, function() {
