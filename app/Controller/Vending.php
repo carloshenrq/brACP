@@ -23,6 +23,7 @@ use \Psr\Http\Message\ServerRequestInterface;
 use \Psr\Http\Message\ResponseInterface;
 use \ServerPing;
 use \Cache;
+use \Format;
 
 /**
  * Controlador para dados de conta.
@@ -42,8 +43,10 @@ class Vending
      */
     public static function index(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
-        // // Exibe o display para home.
-        // self::getApp()->display('home');
+        // Exibe o display para home.
+        self::getApp()->display('vending.list', [
+            'merchants' => self::getAllMerchants()
+        ]);
     }
 
     /**
@@ -164,8 +167,8 @@ class Vending
                 $index = array_search($char_id, $_parsedChar);
                 $merchants_data[$index]->items[] = (object)[
                     'item'      => Item::get($merchant->getCart()->getNameid()),
-                    'amount'    => $merchant->getAmount(),
-                    'price'     => $merchant->getPrice(),
+                    'amount'    => Format::zeny($merchant->getAmount()),
+                    'price'     => Format::zeny($merchant->getPrice()),
                 ];
             }
 

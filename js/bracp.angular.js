@@ -519,3 +519,15 @@ brACPApp.controller('account.chars', ['$scope', '$http', function($scope, $http)
     };
 
 }]);
+
+brACPApp.controller('vending.list', ['$scope', '$http', function($scope, $http) {
+
+    $scope.list = [];
+
+
+    $scope.init     = function(list)
+    {
+        $scope.list = list;
+    };
+
+}]);

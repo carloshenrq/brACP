@@ -510,6 +510,13 @@ return
 
     ],
 
+    'VENDING'   => [
+        'TITLE'     => 'Mercadores Online',
+        'MESSAGE'   => 'Segue abaixo a lista de todos os mercadores online dentro do jogo e os itens que estes estão vendendo.',
+
+        'NO_VENDING'    => 'Nenhum mercador com venda aberta online para exibir.',
+    ],
+
     /**
      *
      *

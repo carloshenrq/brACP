@@ -611,6 +611,65 @@ span.info-status
     #{'100%'} { @include transform('scale(1, .6)');  }
 }
 
+.vending
+{
+    display: inline-block;
+
+    margin: .2em;
+    width: 25em;
+
+    @include border-radius(2px);
+    @include box-shadow('0 0 .7em .1em rgba(0, 0, 0, .5)');
+
+    .vending-title
+    {
+        font-size: 1.2em;
+        font-weight: bold;
+        padding: .8em;
+        background-color: #004400;
+        color: white;
+
+        &[data-map]:after
+        {
+            font-size: .8em;
+            font-weight: normal;
+            font-style: italic;
+            margin-left: 1em;
+            content: attr(data-map);
+        }
+    }
+
+    .vending-items
+    {
+        display: table;
+        width: 100%;
+
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+
+        .vending-item
+        {
+            display: table-row;
+            cursor: default;
+            @include transition('background-color .2s ease-in-out');
+
+            &:hover
+            {
+                background-color: rgba(0, 68, 0, .2);
+            }
+
+            .vending-item-cell
+            {
+                display: table-cell;
+                width: auto;
+                padding: .4em;
+            }
+        }
+
+    }
+
+}
 
 .item-info
 {

@@ -105,6 +105,12 @@ class Route
 
             });
 
+            self::getApp()->group('/vending', function() {
+
+                $this->get('', ['Controller\Vending', 'index']);
+
+            });
+
             // // Verifica se os rankings estão habilitados para serem exibidos.
             // if(BRACP_ALLOW_RANKING)
             // {

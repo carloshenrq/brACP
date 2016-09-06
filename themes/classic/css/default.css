@@ -430,6 +430,48 @@ span.info-status {
     transform: scale(1, .6);
     -ms-transform: scale(1, .6);
     -webkit-transform: scale(1, .6); } }
+.vending {
+  display: inline-block;
+  margin: .2em;
+  width: 25em;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  box-shadow: 0 0 .7em .1em rgba(0, 0, 0, .5);
+  -moz-box-shadow: 0 0 .7em .1em rgba(0, 0, 0, .5);
+  -webkit-box-shadow: 0 0 .7em .1em rgba(0, 0, 0, .5); }
+  .vending .vending-title {
+    font-size: 1.2em;
+    font-weight: bold;
+    padding: .8em;
+    background-color: #004400;
+    color: white; }
+    .vending .vending-title[data-map]:after {
+      font-size: .8em;
+      font-weight: normal;
+      font-style: italic;
+      margin-left: 1em;
+      content: attr(data-map); }
+  .vending .vending-items {
+    display: table;
+    width: 100%;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box; }
+    .vending .vending-items .vending-item {
+      display: table-row;
+      cursor: default;
+      transition: background-color .2s ease-in-out;
+      -o-transition: background-color .2s ease-in-out;
+      -moz-transition: background-color .2s ease-in-out;
+      -webkit-transition: background-color .2s ease-in-out; }
+      .vending .vending-items .vending-item:hover {
+        background-color: rgba(0, 68, 0, 0.2); }
+      .vending .vending-items .vending-item .vending-item-cell {
+        display: table-cell;
+        width: auto;
+        padding: .4em; }
+
 .item-info {
   position: relative;
   display: inline-block;
