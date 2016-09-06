@@ -430,3 +430,27 @@ span.info-status {
     transform: scale(1, .6);
     -ms-transform: scale(1, .6);
     -webkit-transform: scale(1, .6); } }
+.item-info {
+  position: relative;
+  display: inline-block;
+  padding: 4px 4px 4px 26px;
+  background-repeat: no-repeat;
+  background-position: left center;
+  cursor: pointer; }
+  .item-info.item-broken {
+    color: red;
+    font-style: italic; }
+  .item-info[data-refine]:before {
+    content: "+" attr(data-refine);
+    margin-right: 4px;
+    font-weight: bold; }
+  .item-info[data-amount]:before {
+    position: absolute;
+    top: 1em;
+    left: -.4em;
+    content: attr(data-amount);
+    color: black;
+    text-shadow: 0px 0px 1px white,0px 0px 1px white,0px 0px 1px white,0px 0px 1px white; }
+  .item-info[data-slot]:after {
+    margin-left: 4px;
+    content: "[" attr(data-slot) "]"; }

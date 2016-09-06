@@ -37,35 +37,15 @@ class Format
     }
 
     /**
-     * Formata a exibição de um item no inventário/armazém do jogaodor.
-     * NOTA.: Arquivos de imagem obtidos em:
-     *
-     * https://github.com/HerculesWS/FluxCP/wiki
-     * http://herculesws.github.io/FluxCP/downloads/FluxCP_Item_Icons_2012-04-08.zip
-     *
-     * @param mixed $item
-     * @link https://github.com/HerculesWS/FluxCP/wiki
-     *
-     * @return string
+     * Formata um item para seus dados e informações.
      */
-    public static function inventory($item)
+    public static function item($id, $amount = 0, $refine = 0, $broken = false)
     {
-        $img = '<img src="'.BRACP_DIR_INSTALL_URL.'data/items/icons/'.(($item->getIdentify() > 0) ? $item->getItem()->getId():'512').'.png"/>';
-        $str = (($item->getIdentify() > 0) ? (($item->getRefine() > 0) ? '+' . $item->getRefine().' ':'') . self::item($item->getItem()) : '@@ITEM(NOT_IDENTIFY) (ID: ????)');
+        $item = Controller\Item::get($id);
 
-        return '<div class="item-display"><div class="item-image"><div class="item-amount">'.$item->getAmount().'</div>'.$img.'</div><div class="item-text">'.$str.'</div></div>';
-    }
-
-    /**
-     * Formata a exibição de um item. (Não do inventário)
-     *
-     * @param Model\Item $item
-     *
-     * @return string
-     */
-    public static function item(Model\Item $item)
-    {
-        return utf8_encode($item->getName_japanese()) . (($item->getSlots() > 0) ? ' ['.$item->getSlots().']':'') . ' (ID: '.$item->getId().')';
+        return '<div class="item-info '.(($broken) ? 'item-broken':'').'" '.(($refine > 0) ? 'data-refine="'.$refine.'"':'').' '.(($amount > 1) ? 'data-amount="'.$amount.'"':'').' '.(($item->slots > 0) ? 'data-slot="'.$item->slots.'"':'').' style="background-image: url('.$item->icon.');">'.
+                    $item->name . 
+               '</div>';
     }
 
     /**

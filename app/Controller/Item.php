@@ -123,6 +123,15 @@ class Item
                     ->setParameter('id', $id)
                     ->getOneOrNullResult();
 
+        if(is_null($item))
+        {
+            $item = new \Model\Item;
+            $item->setId($id);
+            $item->setName_japanese('Unknow');
+            $item->setType(0);
+            $item->setSlots(0);
+        }
+
         $obj = (object)[
             // Informações do item (Direto do banco)
             'id'            => $item->getId(),
