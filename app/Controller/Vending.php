@@ -51,9 +51,10 @@ class Vending
      */
     public static function getAllMerchants()
     {
-        $app = self::getApp();
-
+        // Obtém os dados de mercadores gravados no cache para que não seja
+        //  realizado flood de consultas no banco. (Pode ser uma consulta demorada...)
         $data = Cache::get('BRACP_CACHE_MERCHANT_SVR_' . self::getApp()->getSession()->BRACP_SVR_SELECTED, function() {
+            // Obtém todos os dados de vendas no banco de dados
             $merchants = Vending::getSvrEm()
                             ->createQuery('
                                 SELECT
@@ -77,10 +78,12 @@ class Vending
             $merchants_data = [];
             $i = 0;
 
+            // Varre todas as vendinhas recebidas
             foreach($merchants as $merchant)
             {
                 $char_id = $merchant->getMerchant()->getChar_id();
 
+                // Verifica se o char já foi tratado e inicializa o vetor para não repetir a mesma lojinha varias vezes.
                 if(!in_array($char_id, $_parsedChar))
                 {
                     $_parsedChar[$i] = $char_id;
@@ -96,6 +99,9 @@ class Vending
                     $i++;
                 }
 
+                // Dados de itens dos mercadores
+                // Obtém o item (via cache [item_db]) e armazena também no vetor, informações
+                //  de quantidade e preço.
                 $index = array_search($char_id, $_parsedChar);
                 $merchants_data[$index]->items[] = (object)[
                     'item'      => Item::get($merchant->getCart()->getNameid()),
@@ -104,6 +110,8 @@ class Vending
                 ];
             }
 
+            // Retorna em formato json, pode ser que isso seja feito via request
+            //  para uma exibição em patcher/client
             return json_decode(json_encode($merchants_data));
         });
 
