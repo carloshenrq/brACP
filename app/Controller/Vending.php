@@ -47,7 +47,60 @@ class Vending
     }
 
     /**
+     * Encontra todos os mercadores por mapa.
+     *
+     * @param string $map Nome do mapa.
+     * @param Array $filter Caso já tenha filtrado por outro campo, enviar resultado aqui
+     *
+     * @return Array
+     */
+    public static function getMerchantsByMap($map, $filter = null)
+    {
+        $data = [];
+
+        if(is_null($filter))
+            $filter = self::getAllMerchants();
+
+        foreach($filter as $i => $shop)
+        {
+            if(!strcasecmp($map, $shop->map))
+                $data[] = $shop;
+        }
+
+        return $data;
+    }
+
+    /**
+     * Retorna os mercadores que estão vendendo o item selecionado.
+     *
+     * @param integer $id Código do item
+     * @param Array $filter Caso já tenha filtrado por outro campo, enviar resultado aqui
+     *
+     * @return Array
+     */
+    public static function getMerchantsById($id, $filter = null)
+    {
+        $data = [];
+
+        if(is_null($filter))
+            $filter = self::getAllMerchants();
+
+        foreach($filter as $i => $shop)
+        {
+            foreach($shop->items as $j => $item)
+            {
+                if($item->item->id == $id)
+                   $data[] = $shop; 
+            }
+        }
+
+        return $data;
+    }
+
+    /**
      * Obtém todos os mercadores online e os itens que estão vendendo.
+     *
+     * @return Array
      */
     public static function getAllMerchants()
     {
@@ -71,6 +124,12 @@ class Vending
                                     item.merchant merc
                                 INNER JOIN
                                     merc.char merc_char
+                                ORDER BY
+                                    merc_char.last_map ASC,
+                                    merc_char.last_x ASC,
+                                    merc_char.last_y ASC,
+                                    merc_char.char_id ASC,
+                                    item.itemkey ASC
                             ')
                             ->getResult();
 
