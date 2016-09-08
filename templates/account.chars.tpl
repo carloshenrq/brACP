@@ -51,6 +51,16 @@
 
     <div class="char-info" ng-repeat="char in chars">{literal}
 
+        <div class="char-title" data-num="{{char.num}}" data-job="{{char.class}}">{{char.name}}</div>
+
+        <div class="char-data">
+            <div class="char-level">{{char.base_level}}/{{char.job_level}}</div>
+            <div class="char-zeny">{{char.zeny}}</div>
+            <div class="char-status" ng-class="(char.online ? 'char-status-online':'char-status-offline')">{{(char.online ? '@@STATUS(1)':'@@STATUS(0)')}}</div>
+        </div>
+
+        <canvas width="300" height="300" class="char-stats" data-stats="[{{char.stats.str}}, {{char.stats.agi}}, {{char.stats.vit}}, {{char.stats.int}}, {{char.stats.dex}}, {{char.stats.luk}}]" data-translator="Atributos"></canvas>
+
     {/literal}</div>
 
 </div>

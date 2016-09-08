@@ -710,3 +710,88 @@ span.info-status
         content: '['attr(data-slot)']';
     }
 }
+
+.char-info
+{
+    display: inline-block;
+    @include box-shadow('0 0 .7em .1em rgba(0, 0, 0, .5)');
+
+    .char-title
+    {
+        display: block;
+        padding: .8em;
+        background-color: #004400;
+        color: white;
+        font-size: 1.2em;
+        text-align: left;
+
+        &[data-num]:before, &[data-job]:after
+        {
+            font-style: italic;
+            fint-size: .1em !important;
+        }
+
+        &[data-num]:before
+        {
+            content: attr(data-num);
+            margin-right: 1.4em;
+        }
+
+        &[data-job]:after
+        {
+            margin-left: 1.4em;
+            content: attr(data-job);
+        }
+    }
+
+    .char-data
+    {
+        display: table;
+        width: 100%;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        padding: .2em;
+
+        .char-job, .char-level, .char-zeny, .char-status
+        {
+            display: table-cell;
+            width: auto;
+            text-align: center;
+            cursor: default;
+            padding: .5em;
+        }
+
+        .char-zeny:after
+        {
+            content: 'z';
+        }
+
+        .char-status
+        {
+            @include border-radius(.2em);
+            &.char-status-offline
+            {
+                background-color: #c0392b;
+                color: white;
+            }
+
+            &.char-status-online
+            {
+                background-color: #27ae60;
+                color: white;
+            }
+        }
+    }
+
+    canvas
+    {
+        margin: 1em;
+    }
+
+
+    & +.char-info
+    {
+        margin-left: 1.8em;
+    }
+}

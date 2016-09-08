@@ -47,4 +47,38 @@ var grecaptcha_timer = false;
         $(this).prop('checked', checked);
     });
 
+    $(document).on('ready', function() {
+
+        $('canvas.char-stats').each(function() {
+
+            var statsData = $(this).data('stats');
+
+            var radar = new Chart(this, {
+                type : 'radar',
+                data : {
+                    labels : ["Str", "Agi", "Vit", "Int", "Dex", "Luk"],
+                    datasets : [{
+                        fill: true,
+                        data: statsData,
+                        label : $(this).data('translator'),
+                        backgroundColor : ['rgba(153, 204, 255, .4)'],
+                        scaleStepWidth : '0'
+                    }]
+                },
+                options : {
+                    responsive: false,
+                    maintainAspectRatio: false,
+                    scale: {
+                        reverse: false,
+                        ticks : {
+                            beginAtZero : true,
+                            max : Math.max.apply(null, statsData)
+                        }
+                    }
+                }
+            });
+        });
+
+    });
+
 } (window.jQuery);

@@ -248,6 +248,8 @@ class Account
                                     guild.character leader
                                 WHERE
                                     char.account_id = :account_id
+                                ORDER BY
+                                    char.char_num ASC
                             ')
                             ->setParameter('account_id', $account_id)
                             ->getResult();
@@ -293,7 +295,17 @@ class Account
             'job_level'     => $char->getJob_level(),
             'zeny'          => (($type == 0 && !BRACP_ALLOW_RANKING_ZENY_SHOW_ZENY) ? 0 : Format::zeny($char->getZeny())),
             'guild'         => $char->getGuild(),
-            'online'        => ((BRACP_ALLOW_SHOW_CHAR_STATUS) ? $char->getOnline() : 0)
+            'online'        => ((BRACP_ALLOW_SHOW_CHAR_STATUS) ? $char->getOnline() : 0),
+
+            'stats'         => [
+                'str'   => $char->getStr(),
+                'agi'   => $char->getAgi(),
+                'vit'   => $char->getVit(),
+                'int'   => $char->getInt(),
+                'dex'   => $char->getDex(),
+                'luk'   => $char->getLuk(),
+            ]
+
         ];
 
         // Se a consulta é tipo detalhada do personagem, então
