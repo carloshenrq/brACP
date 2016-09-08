@@ -60,7 +60,7 @@ var grecaptcha_timer = false;
                     datasets : [{
                         fill: true,
                         data: statsData,
-                        label : $(this).data('translator'),
+                        label : false,
                         backgroundColor : ['rgba(153, 204, 255, .4)'],
                         scaleStepWidth : '0'
                     }]
@@ -80,6 +80,7 @@ var grecaptcha_timer = false;
                     }
                 }
             });
+            radar.options.legend.display = false;
         });
 
     });
