@@ -531,7 +531,8 @@ span.info-status {
       display: table-cell; }
   .char-info .char-status-info {
     padding: .2em;
-    text-align: center; }
+    text-align: center;
+    margin: .4em 0 0 0; }
     .char-info .char-status-info.status-online, .char-info .char-status-info.status-offline {
       color: white; }
     .char-info .char-status-info.status-online {

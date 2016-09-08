@@ -50,16 +50,12 @@
     </div>
 
     <div class="char-info" ng-repeat="char in chars">
-        {literal}
-        <div class="char-status-info" ng-class="(char.online ? 'status-online' : 'status-offline')">
-            {{(char.online ? '@@STATUS(1)' : '@@STATUS(0)')}}
+        <div class="char-graphic" style="background-image: url({$smarty.const.BRACP_DIR_INSTALL_URL}data/jobs/images/{$account->getSex()}/{literal}{{char.classId}}{/literal}.gif);"
+            data-name="{literal}{{char.name}} ({{char.base_level}}/{{char.job_level}}{/literal})"
+            data-job="{literal}{{char.class}}{/literal}">
         </div>
-        {/literal}
 
-        <div class="char-graphic" style="background-image: url({$smarty.const.BRACP_DIR_INSTALL_URL}data/jobs/images/{$account->getSex()}/{literal}{{char.classId}}.gif);"
-            data-name="{{char.name}} ({{char.base_level}}/{{char.job_level}})"
-            data-job="{{char.class}}">
-        </div>
+        {literal}
 
         <div class="char-data">
             <div class="char-data-cell">
@@ -100,9 +96,15 @@
             </div>
 
             <div class="char-status-canvas">
-                <canvas height="200" width="200" class="char-stats" data-stats="[{{char.stats.str}}, {{char.stats.agi}}, {{char.stats.vit}}, {{char.stats.int}}, {{char.stats.dex}}, {{char.stats.luk}}]" data-translator="Atributo"></div>
+                <canvas height="200" width="200" class="char-stats" data-stats="[{{char.stats.str}}, {{char.stats.agi}}, {{char.stats.vit}}, {{char.stats.int}}, {{char.stats.dex}}, {{char.stats.luk}}]" data-translator="Atributo">
+                </canvas>
             </div>
         </div>
+
+        <div class="char-status-info" ng-class="(char.online ? 'status-online' : 'status-offline')">
+            {{(char.online ? '@@STATUS(1)' : '@@STATUS(0)')}}
+        </div>
+
         {/literal}
     </div>
 </div>
