@@ -70,6 +70,9 @@ var grecaptcha_timer = false;
                     maintainAspectRatio: false,
                     scale: {
                         reverse: false,
+                        scaleLabel: {
+                            display: false
+                        },
                         ticks : {
                             beginAtZero : true,
                             max : Math.max.apply(null, statsData)

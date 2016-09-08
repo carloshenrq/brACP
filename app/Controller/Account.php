@@ -296,16 +296,6 @@ class Account
             'zeny'          => (($type == 0 && !BRACP_ALLOW_RANKING_ZENY_SHOW_ZENY) ? 0 : Format::zeny($char->getZeny())),
             'guild'         => $char->getGuild(),
             'online'        => ((BRACP_ALLOW_SHOW_CHAR_STATUS) ? $char->getOnline() : 0),
-
-            'stats'         => [
-                'str'   => $char->getStr(),
-                'agi'   => $char->getAgi(),
-                'vit'   => $char->getVit(),
-                'int'   => $char->getInt(),
-                'dex'   => $char->getDex(),
-                'luk'   => $char->getLuk(),
-            ]
-
         ];
 
         // Se a consulta é tipo detalhada do personagem, então
@@ -322,6 +312,15 @@ class Account
                 'save_map'  => $char->getSave_map(),
                 'save_x'    => $char->getSave_x(),
                 'save_y'    => $char->getSave_y(),
+
+                'stats'         => [
+                    'str'   => $char->getStr(),
+                    'agi'   => $char->getAgi(),
+                    'vit'   => $char->getVit(),
+                    'int'   => $char->getInt(),
+                    'dex'   => $char->getDex(),
+                    'luk'   => $char->getLuk(),
+                ],
             ]);
         }
 

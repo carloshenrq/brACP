@@ -49,19 +49,61 @@
         @@CHARS,ERROR(NO_CHAR)
     </div>
 
-    <div class="char-info" ng-repeat="char in chars">{literal}
+    <div class="char-info" ng-repeat="char in chars">
+        {literal}
+        <div class="char-status-info" ng-class="(char.online ? 'status-online' : 'status-offline')">
+            {{(char.online ? '@@STATUS(1)' : '@@STATUS(0)')}}
+        </div>
+        {/literal}
 
-        <div class="char-title" data-num="{{char.num}}" data-job="{{char.class}}">{{char.name}}</div>
-
-        <div class="char-data">
-            <div class="char-level">{{char.base_level}}/{{char.job_level}}</div>
-            <div class="char-zeny">{{char.zeny}}</div>
-            <div class="char-status" ng-class="(char.online ? 'char-status-online':'char-status-offline')">{{(char.online ? '@@STATUS(1)':'@@STATUS(0)')}}</div>
+        <div class="char-graphic" style="background-image: url({$smarty.const.BRACP_DIR_INSTALL_URL}data/jobs/images/{$account->getSex()}/{literal}{{char.classId}}.gif);"
+            data-name="{{char.name}} ({{char.base_level}}/{{char.job_level}})"
+            data-job="{{char.class}}">
         </div>
 
-        <canvas width="300" height="300" class="char-stats" data-stats="[{{char.stats.str}}, {{char.stats.agi}}, {{char.stats.vit}}, {{char.stats.int}}, {{char.stats.dex}}, {{char.stats.luk}}]" data-translator="Atributos"></canvas>
+        <div class="char-data">
+            <div class="char-data-cell">
+                <div class="char-data-info">
+                    <div class="char-data-row">
+                        <div class="char-data-cell-header">Nome</div>
+                        <div>{{char.name}}</div>
+                    </div>
+                    <div class="char-data-row">
+                        <div class="char-data-cell-header">Classe</div>
+                        <div>{{char.class}}</div>
+                    </div>
+                    <div class="char-data-row">
+                        <div class="char-data-cell-header">Grupo</div>
+                        <div>{{char.party}}</div>
+                    </div>
+                    <div class="char-data-row">
+                        <div class="char-data-cell-header">Clã</div>
+                        <div>{{char.guild}}</div>
+                    </div>
+                    <div class="char-data-row">
+                        <div class="char-data-cell-header">Level</div>
+                        <div>{{char.base_level}}/{{char.job_level}}</div>
+                    </div>
+                    <div class="char-data-row">
+                        <div class="char-data-cell-header">Mapa</div>
+                        <div>{{char.last_map}} ({{char.last_x}}, {{char.last_y}})</div>
+                    </div>
+                    <div class="char-data-row">
+                        <div class="char-data-cell-header">Retorno</div>
+                        <div>{{char.save_map}} ({{char.save_x}}, {{char.save_y}})</div>
+                    </div>
+                    <div class="char-data-row">
+                        <div class="char-data-cell-header">Zeny</div>
+                        <div>{{char.zeny}}z</div>
+                    </div>
+                </div>
+            </div>
 
-    {/literal}</div>
-
+            <div class="char-status-canvas">
+                <canvas height="200" width="200" class="char-stats" data-stats="[{{char.stats.str}}, {{char.stats.agi}}, {{char.stats.vit}}, {{char.stats.int}}, {{char.stats.dex}}, {{char.stats.luk}}]" data-translator="Atributo"></div>
+            </div>
+        </div>
+        {/literal}
+    </div>
 </div>
 {/block}

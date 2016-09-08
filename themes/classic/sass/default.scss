@@ -597,13 +597,6 @@ span.info-status
     }
 }
 
-.char-info
-{
-
-
-
-}
-
 @keyframes loading-body-bar-1
 {
     #{'0%'}   { @include transform('scale(1, .6)'); }
@@ -713,85 +706,92 @@ span.info-status
 
 .char-info
 {
+    position: relative;
     display: inline-block;
-    @include box-shadow('0 0 .7em .1em rgba(0, 0, 0, .5)');
 
-    .char-title
+    .char-graphic
     {
-        display: block;
-        padding: .8em;
-        background-color: #004400;
-        color: white;
-        font-size: 1.2em;
-        text-align: left;
+        background-repeat: no-repeat;
+        background-position: bottom center;
 
-        &[data-num]:before, &[data-job]:after
-        {
-            font-style: italic;
-            fint-size: .1em !important;
-        }
+        height: 10em;
+        width: 12em;
 
-        &[data-num]:before
-        {
-            content: attr(data-num);
-            margin-right: 1.4em;
-        }
-
-        &[data-job]:after
-        {
-            margin-left: 1.4em;
-            content: attr(data-job);
-        }
+        margin: 0 auto;
     }
 
     .char-data
     {
         display: table;
-        width: 100%;
-        box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-        padding: .2em;
 
-        .char-job, .char-level, .char-zeny, .char-status
+        .char-data-cell
         {
             display: table-cell;
-            width: auto;
-            text-align: center;
-            cursor: default;
-            padding: .5em;
+            vertical-align: middle;
+
+            .char-data-info
+            {
+                display: table;
+                width: 100%;
+                box-sizing: border-box;
+                padding: 1em;
+
+                .char-data-row
+                {
+                    display: table-row;
+
+                    div
+                    {
+                        display: table-cell;
+                        text-align: left;
+                        padding-left: .2em;
+
+                        &.char-data-cell-header
+                        {
+                            padding-left: 0;
+                            font-weight: bold;
+
+                            &:after
+                            {
+                                content: ':';
+                            }
+                        }
+                    }
+                }
+            }
         }
 
-        .char-zeny:after
+        .char-status-canvas
         {
-            content: 'z';
-        }
-
-        .char-status
-        {
-            @include border-radius(.2em);
-            &.char-status-offline
-            {
-                background-color: #c0392b;
-                color: white;
-            }
-
-            &.char-status-online
-            {
-                background-color: #27ae60;
-                color: white;
-            }
+            display: table-cell;
         }
     }
 
-    canvas
+    .char-status-info
     {
-        margin: 1em;
+        padding: .2em;
+        text-align: center;
+
+        &.status-online, &.status-offline
+        {
+            color: white;
+        }
+
+        &.status-online
+        {
+            background-color: #27ae60;
+            @include box-shadow('0 0 .2em #27ae60');
+        }
+
+        &.status-offline
+        {
+            background-color: #c0392b;
+            @include box-shadow('0 0 .2em #c0392b');
+        }
     }
 
-
-    & +.char-info
+    &+ .char-info
     {
-        margin-left: 1.8em;
+        margin-left: 1.5em;
     }
 }
