@@ -251,7 +251,7 @@ class Account
                         ->getResult();
 
         // Retorna os dados de personagens tratados.
-        return self::charParse($chars, 1);
+        return self::charsParse($chars, 1);
     }
 
     /**
