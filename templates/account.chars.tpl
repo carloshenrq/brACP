@@ -22,12 +22,6 @@
 
     <h1>@@CHARS(TITLE)</h1>
 
-    {if $smarty.const.BRACP_CACHE eq true}
-        <div class="message warning">
-            @@WARNING(CACHE_ON)
-        </div>
-    {/if}
-
     <p>
         @@CHARS(MESSAGE)
     </p>
@@ -61,35 +55,35 @@
             <div class="char-data-cell">
                 <div class="char-data-info">
                     <div class="char-data-row">
-                        <div class="char-data-cell-header">Nome</div>
+                        <div class="char-data-cell-header">@@CHARS,TABLE(NAME)</div>
                         <div>{{char.name}}</div>
                     </div>
                     <div class="char-data-row">
-                        <div class="char-data-cell-header">Classe</div>
+                        <div class="char-data-cell-header">@@CHARS,TABLE(CLASS)</div>
                         <div>{{char.class}}</div>
                     </div>
                     <div class="char-data-row">
-                        <div class="char-data-cell-header">Grupo</div>
+                        <div class="char-data-cell-header">@@CHARS,TABLE(PARTY)</div>
                         <div>{{char.party}}</div>
                     </div>
                     <div class="char-data-row">
-                        <div class="char-data-cell-header">Clã</div>
+                        <div class="char-data-cell-header">@@CHARS,TABLE(GUILD)</div>
                         <div>{{char.guild}}</div>
                     </div>
                     <div class="char-data-row">
-                        <div class="char-data-cell-header">Level</div>
+                        <div class="char-data-cell-header">@@CHARS,TABLE(LEVEL)</div>
                         <div>{{char.base_level}}/{{char.job_level}}</div>
                     </div>
                     <div class="char-data-row">
-                        <div class="char-data-cell-header">Mapa</div>
+                        <div class="char-data-cell-header">@@CHARS,TABLE(POSIT_NOW)</div>
                         <div>{{char.last_map}} ({{char.last_x}}, {{char.last_y}})</div>
                     </div>
                     <div class="char-data-row">
-                        <div class="char-data-cell-header">Retorno</div>
+                        <div class="char-data-cell-header">@@CHARS,TABLE(POSIT_SAVE)</div>
                         <div>{{char.save_map}} ({{char.save_x}}, {{char.save_y}})</div>
                     </div>
                     <div class="char-data-row">
-                        <div class="char-data-cell-header">Zeny</div>
+                        <div class="char-data-cell-header">@@CHARS,TABLE(ZENY)</div>
                         <div>{{char.zeny}}z</div>
                     </div>
                 </div>

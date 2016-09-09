@@ -231,32 +231,27 @@ class Account
      */
     public static function charAccount($account_id, $admin = false)
     {
-        // Indice do cache a ser usado.
-        $cacheIndex = 'BRACP_CHARS_' . $account_id;
+        // Personagens da conta em questão.
+        $chars = Account::getSvrEm()
+                        ->createQuery('
+                            SELECT
+                                char, guild, leader
+                            FROM
+                                Model\Char char
+                            LEFT JOIN
+                                char.guild guild
+                            LEFT JOIN
+                                guild.character leader
+                            WHERE
+                                char.account_id = :account_id
+                            ORDER BY
+                                char.char_num ASC
+                        ')
+                        ->setParameter('account_id', $account_id)
+                        ->getResult();
 
-        return Cache::get($cacheIndex, function() use ($account_id) {
-            // Personagens da conta em questão.
-            $chars = Account::getSvrEm()
-                            ->createQuery('
-                                SELECT
-                                    char, guild, leader
-                                FROM
-                                    Model\Char char
-                                LEFT JOIN
-                                    char.guild guild
-                                LEFT JOIN
-                                    guild.character leader
-                                WHERE
-                                    char.account_id = :account_id
-                                ORDER BY
-                                    char.char_num ASC
-                            ')
-                            ->setParameter('account_id', $account_id)
-                            ->getResult();
-
-            // Retorna os personagens encontrados de forma detalhada.
-            return self::charsParse($chars, 1);
-        }, $admin);
+        // Retorna os dados de personagens tratados.
+        return self::charParse($chars, 1);
     }
 
     /**

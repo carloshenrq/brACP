@@ -315,6 +315,7 @@ return
             'CLASS'         => 'Classe',
             'PARTY'         => 'Grupo',
             'GUILD'         => 'Clã',
+            'LEVEL'         => 'Nível',
             'POSIT_NOW'     => 'Local',
             'POSIT_SAVE'    => 'Retorno',
             'ZENY'          => 'Zeny',
