@@ -94,7 +94,21 @@
                 </canvas>
             </div>
         </div>
-
+        {/literal}
+        {if $smarty.const.BRACP_ALLOW_RESET_APPEAR || $smarty.const.BRACP_ALLOW_RESET_POSIT || $smarty.const.BRACP_ALLOW_RESET_EQUIP}
+            <div class="char-reset-info" data-text="@@CHARS,TABLE(ACTION)">
+                {if $smarty.const.BRACP_ALLOW_RESET_POSIT}
+                    <button class="button success small">@@CHARS,BUTTONS(RESET_POSIT)</button>
+                {/if}
+                {if $smarty.const.BRACP_ALLOW_RESET_APPEAR}
+                    <button class="button warning small">@@CHARS,BUTTONS(RESET_APPEAR)</button>
+                {/if}
+                {if $smarty.const.BRACP_ALLOW_RESET_EQUIP}
+                    <button class="button info small">@@CHARS,BUTTONS(RESET_EQUIP)</button>
+                {/if}
+            </div>
+        {/if}
+        {literal}
         <div class="char-status-info" ng-class="(char.online ? 'status-online' : 'status-offline')">
             {{(char.online ? '@@STATUS(1)' : '@@STATUS(0)')}}
         </div>

@@ -320,7 +320,7 @@ return
             'POSIT_SAVE'    => 'Retorno',
             'ZENY'          => 'Zeny',
             'STATUS'        => 'Status',
-            'ACTION'        => 'Resetar',
+            'ACTION'        => 'Resetar Informações',
             'NO_PARTY'      => 'Sem Grupo',
             'NO_GUILD'      => 'Sem clã'
         ],

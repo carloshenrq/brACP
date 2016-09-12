@@ -545,5 +545,13 @@ span.info-status {
       box-shadow: 0 0 .2em #c0392b;
       -moz-box-shadow: 0 0 .2em #c0392b;
       -webkit-box-shadow: 0 0 .2em #c0392b; }
+  .char-info .char-reset-info {
+    text-align: center;
+    margin-bottom: .3em; }
+    .char-info .char-reset-info:before {
+      display: block;
+      content: attr(data-text);
+      padding: .2em;
+      font-weight: bold; }
   .char-info + .char-info {
     margin-left: 1.5em; }

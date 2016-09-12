@@ -792,6 +792,20 @@ span.info-status
         }
     }
 
+    .char-reset-info
+    {
+        text-align: center;
+        margin-bottom: .3em;
+
+        &:before
+        {
+            display: block;
+            content: attr(data-text);
+            padding: .2em;
+            font-weight: bold;
+        }
+    }
+
     &+ .char-info
     {
         margin-left: 1.5em;
