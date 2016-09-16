@@ -30,7 +30,10 @@ class Session implements ArrayAccess
     public function __construct()
     {
         session_cache_limiter(false);
-        session_start();
+
+        // Se a sessão estiver desligada, então ativa a mesma.
+        if(session_status() == PHP_SESSION_NONE)
+            session_start();
     }
 
     /**
