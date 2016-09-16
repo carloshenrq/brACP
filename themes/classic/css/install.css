@@ -157,6 +157,40 @@ html, body {
               .install .content .body .requisites .row .cell.cell-error:before {
                 content: '!';
                 background-color: #e74c3c; }
+      .install .content .body input.input-checkbox[type="checkbox"] {
+        display: none; }
+        .install .content .body input.input-checkbox[type="checkbox"] + label.input-checkbox {
+          vertical-align: middle; }
+        .install .content .body input.input-checkbox[type="checkbox"] + label.input-checkbox:before {
+          position: relative;
+          top: .1em;
+          display: inline-block;
+          padding-right: .2em;
+          font-size: 1.6em; }
+        .install .content .body input.input-checkbox[type="checkbox"]:not(:checked) + label.input-checkbox:before {
+          content: '\2610';
+          color: #e74c3c; }
+        .install .content .body input.input-checkbox[type="checkbox"]:checked + label.input-checkbox:before {
+          content: '\2611';
+          color: #2ecc71; }
+      .install .content .body label {
+        display: block;
+        width: 100%; }
+        .install .content .body label input[type="text"], .install .content .body label select {
+          padding: .6em;
+          width: 100%;
+          box-sizing: border-box; }
+        .install .content .body label[data-info]:before {
+          display: block;
+          content: attr(data-info) ": ";
+          font-weight: bold; }
+        .install .content .body label[data-warning]:after {
+          display: block;
+          content: "* " attr(data-warning);
+          font-style: italic;
+          color: #e74c3c; }
+        .install .content .body label + label {
+          margin-top: 1.3em; }
   .install .footer {
     padding: 1em;
     background-color: #ecf0f1;

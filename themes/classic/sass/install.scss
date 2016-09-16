@@ -229,6 +229,76 @@ html, body
                 }
             }
 
+            input.input-checkbox[type="checkbox"]
+            {
+                display: none;
+
+                &+ label.input-checkbox
+                {
+                    vertical-align: middle;
+                }
+
+                &+ label.input-checkbox:before
+                {
+                    position: relative;
+                    top: .1em;
+                    display: inline-block;
+                    padding-right: .2em;
+                    font-size: 1.6em;
+                }
+
+                &:not(:checked) + label.input-checkbox:before
+                {
+                    content: '\2610';
+                    color: rgb(231, 76, 60);
+                }
+
+                &:checked + label.input-checkbox:before
+                {
+                    content: '\2611';
+                    color: rgb(46, 204, 113);
+                }
+            }
+
+            label
+            {
+                display: block;
+                width: 100%;
+
+                input[type="text"], select
+                {
+                    padding: .6em;
+                    width: 100%;
+                    box-sizing: border-box;
+                }
+
+                &[data-info]
+                {
+                    &:before
+                    {
+                        display: block;
+                        content: attr(data-info) ': ';
+                        font-weight: bold;
+                    }
+                }
+
+                &[data-warning]
+                {
+                    &:after
+                    {
+                        display: block;
+                        content: '* ' attr(data-warning);
+                        font-style: italic;
+                        color: rgba(231, 76, 60, 1);
+                    }
+                }
+
+                &+ label
+                {
+                    margin-top: 1.3em;
+                }
+            }
+
         }
     }
 
