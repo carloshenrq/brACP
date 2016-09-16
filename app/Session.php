@@ -108,9 +108,16 @@ class Session implements ArrayAccess
      */
     private function decrypt($data)
     {
-        return ((BRACP_SESSION_SECURE && extension_loaded("openssl"))
-            ? @openssl_decrypt($data, BRACP_SESSION_ALGO, base64_decode(BRACP_SESSION_KEY), 0, base64_decode(BRACP_SESSION_IV))
-                : $data);
+        // Se o brACP estiver configurado para proteger os dados da sessão
+        //  Então encripta e decripta os dados com o OpenSSL.
+        if(BRACP_SESSION_SECURE && extension_loaded('openssl'))
+        {
+            $iv = ((openssl_cipher_iv_length(BRACP_SESSION_ALGO) > 0) ? base64_decode(BRACP_SESSION_IV) : '');
+            return openssl_decrypt($data , BRACP_SESSION_ALGO, base64_decode(BRACP_SESSION_KEY), 0, $iv);
+        }
+
+        // Caso não esteja criptografado, retorna apenas o valor.
+        return $data;
     }
 
     /**
@@ -122,8 +129,15 @@ class Session implements ArrayAccess
      */
     private function encrypt($data)
     {
-        return ((BRACP_SESSION_SECURE && extension_loaded("openssl"))
-            ? @openssl_encrypt($data, BRACP_SESSION_ALGO, base64_decode(BRACP_SESSION_KEY), 0, base64_decode(BRACP_SESSION_IV))
-                : $data);
+        // Se o brACP estiver configurado para proteger os dados da sessão
+        //  Então encripta e decripta os dados com o OpenSSL.
+        if(BRACP_SESSION_SECURE && extension_loaded('openssl'))
+        {
+            $iv = ((openssl_cipher_iv_length(BRACP_SESSION_ALGO) > 0) ? base64_decode(BRACP_SESSION_IV) : '');
+            return openssl_encrypt($data , BRACP_SESSION_ALGO, base64_decode(BRACP_SESSION_KEY), 0, $iv);
+        }
+
+        // Caso não esteja criptografado, retorna apenas o valor.
+        return $data;
     }
 }
