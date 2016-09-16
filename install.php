@@ -382,7 +382,7 @@ $_CONFIG_DATA = array(
                         </label>
 
                         <label ng-if="INSTALL_VARS.BRACP_RECAPTCHA_ENABLED" data-info="Chave Pública" data-warning="Chave pública para o reCAPTCHA, usada para gerar o código de validação.">
-                            <input type="text" ng-model="INSTALL_VARS.BRACP_RECAPTCHA_PRIVATE_KEY"/>
+                            <input type="text" ng-model="INSTALL_VARS.BRACP_RECAPTCHA_PUBLIC_KEY"/>
                         </label>
 
                         <label ng-if="INSTALL_VARS.BRACP_RECAPTCHA_ENABLED" data-info="URL para Verificação" data-warning="Endereço para validação dos códigos de retorno.">
