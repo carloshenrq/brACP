@@ -61,12 +61,40 @@ $_CONFIG_DATA = array(
     // Expressões regulares (STEP=4)
     'BRACP_REGEXP_EMAIL'                => '[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}',
 
-    // Recaptcha
+    // Recaptcha (STEP=5)
     'BRACP_RECAPTCHA_ENABLED'           => false,
     'BRACP_RECAPTCHA_PRIVATE_KEY'       => '',
     'BRACP_RECAPTCHA_PUBLIC_KEY'        => '',
     'BRACP_RECAPTCHA_PRIVATE_URL'       => 'https://www.google.com/recaptcha/api/siteverify',
+
+    // Servidor de e-mail (STEP=6)
+    'BRACP_ALLOW_MAIL_SEND'             => false,
+    'BRACP_MAIL_HOST'                   => '',
+    'BRACP_MAIL_PORT'                   => 25,
+    'BRACP_MAIL_USER'                   => '',
+    'BRACP_MAIL_PASS'                   => '',
+    'BRACP_MAIL_FROM'                   => '',
+    'BRACP_MAIL_FROM_NAME'              => '',
+
+    // Configurações de conta. (STEP=7)
+    'BRACP_ALLOW_CREATE_ACCOUNT'        => true,
+    'BRACP_MD5_PASSWORD_HASH'           => false,
+    'BRACP_MAIL_REGISTER_ONCE'          => false,
+    'BRACP_ALLOW_CHANGE_MAIL'           => false,
+    'BRACP_CHANGE_MAIL_DELAY'           => 60,
+    'BRACP_CONFIRM_ACCOUNT'             => false,
+    'BRACP_ALLOW_RECOVER'               => false,
+    'BRACP_RECOVER_BY_CODE'             => false,
+    'BRACP_RECOVER_CODE_EXPIRE'         => 120,
+    'BRACP_RECOVER_STRING_LENGTH'       => 8,
+    'BRACP_RECOVER_RANDOM_STRING'       => 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
+    'BRACP_NOTIFY_CHANGE_PASSWORD'      => false,
+    'BRACP_NOTIFY_CHANGE_MAIL'          => false,
+    'BRACP_ALLOW_LOGIN_GMLEVEL'         => 0,
+    'BRACP_ALLOW_ADMIN_GMLEVEL'         => 99,
+    'BRACP_ALLOW_ADMIN_CHANGE_PASSWORD' => false,
 );
+
 
 ?>
 <!DOCTYPE html>
@@ -91,7 +119,7 @@ $_CONFIG_DATA = array(
 
             install.controller('install', ['$scope', '$http', function($scope, $http) {
 
-                $scope.STEP = 5;
+                $scope.STEP = 8;
                 $scope.STEP_ERROR   = [];
                 $scope.STEP_WARNING = [];
                 $scope.STEP_SUCCESS = [];
@@ -395,14 +423,111 @@ $_CONFIG_DATA = array(
                         
                         <h1>E-Mail</h1>
 
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        <input id="EMAIL_ALLOW" ng-model="INSTALL_VARS.BRACP_ALLOW_MAIL_SEND" class="input-checkbox" type="checkbox">
+                        <label for="EMAIL_ALLOW" class="input-checkbox" data-warning="Permite que alguns e-mails sejam enviados apartir do painel de controle.">Habilitar envio de e-mails</label>
+
+                        <p ng-if="!INSTALL_VARS.BRACP_ALLOW_MAIL_SEND" class="message warning icon">
+                            Algumas opções de configuração somente serão possíveis caso a configuração de e-mails esteja habilitada.<br>
+                            Essas configuração são por exemplo:<br>
+                            <strong>Confirmação de Contas, Recuperação de senhas, Notificações de Mudanças (Senha e E-mail)</strong>.
+                        </p>
+
+                        <p ng-if="INSTALL_VARS.BRACP_ALLOW_MAIL_SEND" class="message info icon">
+                            Procure com o seu provedor as informações de SMTP para preenchimento dos dados abaixo.
+                        </p>
+
+                        <label ng-if="INSTALL_VARS.BRACP_ALLOW_MAIL_SEND" data-info="Servidor" data-warning="Endereço do servidor SMTP que será utilizado para envio dos e-mails.">
+                            <input type="text" ng-model="INSTALL_VARS.BRACP_MAIL_HOST"/>
+                        </label>
+
+                        <label ng-if="INSTALL_VARS.BRACP_ALLOW_MAIL_SEND" data-info="Porta" data-warning="Porta que o serviço SMTP está sendo executado no servidor.">
+                            <input type="text" ng-model="INSTALL_VARS.BRACP_MAIL_PORT"/>
+                        </label>
+
+                        <label ng-if="INSTALL_VARS.BRACP_ALLOW_MAIL_SEND" data-info="Usuário" data-warning="Nome de usuário para uso do serviço SMTP.">
+                            <input type="text" ng-model="INSTALL_VARS.BRACP_MAIL_USER"/>
+                        </label>
+
+                        <label ng-if="INSTALL_VARS.BRACP_ALLOW_MAIL_SEND" data-info="Senha" data-warning="Senha do usuário para uso do serviço SMTP.">
+                            <input type="password" ng-model="INSTALL_VARS.BRACP_MAIL_PASS"/>
+                        </label>
+
+                        <label ng-if="INSTALL_VARS.BRACP_ALLOW_MAIL_SEND" data-info="Endereço do Remetente" data-warning="Endereço de e-mail do remetente.">
+                            <input type="text" ng-model="INSTALL_VARS.BRACP_MAIL_FROM"/>
+                        </label>
+
+                        <label ng-if="INSTALL_VARS.BRACP_ALLOW_MAIL_SEND" data-info="Nome do Remetente" data-warning="Nome de quem está enviando o e-mail.">
+                            <input type="text" ng-model="INSTALL_VARS.BRACP_MAIL_FROM"/>
+                        </label>
+
                     </div>
 
                     <div ng-if="STEP == 7" class="body">
                         
                         <h1>Contas e Usuários</h1>
 
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        <input id="ACC_CREATE_0" ng-model="INSTALL_VARS.BRACP_ALLOW_CREATE_ACCOUNT" class="input-checkbox" type="checkbox">
+                        <label for="ACC_CREATE_0" class="input-checkbox" data-warning="Permite que novas contas sejam criadas através do brACP.">Habilitar a criação de novas contas</label>
+
+                        <input id="ACC_CREATE_1" ng-model="INSTALL_VARS.BRACP_MD5_PASSWORD_HASH" class="input-checkbox" type="checkbox">
+                        <label for="ACC_CREATE_1" class="input-checkbox" data-warning="Permite o uso de MD5 nas senhas de usuários">Habilitar senhas com MD5</label>
+
+                        <input id="ACC_CREATE_2" ng-model="INSTALL_VARS.BRACP_MAIL_REGISTER_ONCE" class="input-checkbox" type="checkbox">
+                        <label for="ACC_CREATE_2" class="input-checkbox" data-warning="Permite que seja utilizado somente uma vez o endereço de e-mail informado.">Bloquear uso duplicado de e-mails.</label>
+
+                        <input id="ACC_CREATE_3" ng-model="INSTALL_VARS.BRACP_ALLOW_CHANGE_MAIL" class="input-checkbox" type="checkbox">
+                        <label for="ACC_CREATE_3" class="input-checkbox" data-warning="Permite que o jogador possa alterar seu endereço de e-mail pelo brACP.">Habilitar alteração de e-mail.</label>
+
+                        <label ng-if="INSTALL_VARS.BRACP_ALLOW_CHANGE_MAIL" data-info="Delay para mudança de e-mail" data-warning="Tempo de espera para a próxima mudança de e-mail.">
+                            <input type="text" ng-model="INSTALL_VARS.BRACP_CHANGE_MAIL_DELAY"/>
+                        </label>
+
+                        <p ng-if="!INSTALL_VARS.BRACP_ALLOW_MAIL_SEND" class="message warning icon">
+                            Todas as configurações abaixo dependem que o painel de controle esteja configurado para envio de e-mails.
+                        </p>
+
+                        <input id="ACC_CREATE_4" ng-model="INSTALL_VARS.BRACP_CONFIRM_ACCOUNT" class="input-checkbox" type="checkbox">
+                        <label for="ACC_CREATE_4" class="input-checkbox" data-warning="Permite que o brACP valide novas contas criadas apartir de um código de cadastrado enviado por e-mail.">Habilitar confirmação de contas</label>
+
+                        <input id="ACC_CREATE_5" ng-model="INSTALL_VARS.BRACP_ALLOW_RECOVER" class="input-checkbox" type="checkbox">
+                        <label for="ACC_CREATE_5" class="input-checkbox" data-warning="Permite que o brACP habilite a recuperação de contas por e-mail.">Habilitar recuperação de contas</label>
+
+                        <p ng-if="INSTALL_VARS.BRACP_ALLOW_MAIL_SEND && INSTALL_VARS.BRACP_MD5_PASSWORD_HASH && INSTALL_VARS.BRACP_ALLOW_RECOVER" class="message info">
+                            A <strong>Recuperação por código</strong> será utilizada automaticamente no caso de uso de senhas com MD5.
+                        </p>
+
+                        <input id="ACC_CREATE_6" ng-model="INSTALL_VARS.BRACP_RECOVER_BY_CODE" class="input-checkbox" type="checkbox">
+                        <label for="ACC_CREATE_6" ng-if="INSTALL_VARS.BRACP_ALLOW_RECOVER" class="input-checkbox" data-warning="Permite uma validação de código de recuperação por e-mail antes de alterar a senha da conta.">Recuperação por código.</label>
+
+                        <label ng-if="INSTALL_VARS.BRACP_ALLOW_RECOVER && INSTALL_VARS.BRACP_RECOVER_BY_CODE" data-info="Tempo (em minutos) para expirar o código de recuperação" data-warning="Validade para o código de ativação.">
+                            <input type="text" ng-model="INSTALL_VARS.BRACP_RECOVER_CODE_EXPIRE"/>
+                        </label>
+
+                        <label ng-if="INSTALL_VARS.BRACP_ALLOW_MAIL_SEND && INSTALL_VARS.BRACP_ALLOW_RECOVER" data-info="Tamanho para a senha gerada" data-warning="Tamanho que a nova senha gerada pelo painel de controle irá ter após recuperada">
+                            <input type="text" ng-model="INSTALL_VARS.BRACP_RECOVER_STRING_LENGTH"/>
+                        </label>
+
+                        <label ng-if="INSTALL_VARS.BRACP_ALLOW_MAIL_SEND && INSTALL_VARS.BRACP_ALLOW_RECOVER" data-info="Caracteres habilitados para nova senha" data-warning="Se você desejar, algum novo caractere para a nova senha gerada, digite abaixo. A Nova senha é gerada aleatoriamente.">
+                            <input type="text" ng-model="INSTALL_VARS.BRACP_RECOVER_RANDOM_STRING"/>
+                        </label>
+
+                        <input id="ACC_CREATE_7" ng-model="INSTALL_VARS.BRACP_NOTIFY_CHANGE_PASSWORD" class="input-checkbox" type="checkbox">
+                        <label for="ACC_CREATE_7" ng-if="INSTALL_VARS.BRACP_ALLOW_MAIL_SEND" class="input-checkbox" data-warning="A Cada alteração de senha do jogador, será enviado um e-mail para a conta dele.">Habilitar notificações de mudança de senha</label>
+
+                        <input id="ACC_CREATE_8" ng-model="INSTALL_VARS.BRACP_NOTIFY_CHANGE_MAIL" class="input-checkbox" type="checkbox">
+                        <label for="ACC_CREATE_8" ng-if="INSTALL_VARS.BRACP_ALLOW_MAIL_SEND" class="input-checkbox" data-warning="A cada alteração de e-mail do jogador, será enviado um e-mail tanto para o antigo quanto para o novo.">Habilitar notificações de mudança de e-mail</label>
+
+                        <label data-info="Nível mínimo da conta para logar" data-warning="Valor mínimo no campo 'group_id' para permitir o login do usuário.">
+                            <input type="text" ng-model="INSTALL_VARS.BRACP_ALLOW_LOGIN_GMLEVEL"/>
+                        </label>
+
+                        <label data-info="Nível mínimo da conta para considerar administrador" data-warning="Valor mínimo no campo 'group_id' para o brACP cpnsiderar a conta nível administrador.">
+                            <input type="text" ng-model="INSTALL_VARS.BRACP_ALLOW_ADMIN_GMLEVEL"/>
+                        </label>
+
+                        <input id="ACC_CREATE_9" ng-model="INSTALL_VARS.BRACP_ALLOW_ADMIN_CHANGE_PASSWORD" class="input-checkbox" type="checkbox">
+                        <label for="ACC_CREATE_9" class="input-checkbox" data-warning="Permite que usuários nível adminsitrador realizem alteração de senha pelo brACP. (não recomendado)">Habilitar alteração de senha de adminsitradores</label>
+
                     </div>
 
                     <div ng-if="STEP == 8" class="body">

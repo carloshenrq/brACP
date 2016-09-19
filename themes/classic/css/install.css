@@ -176,7 +176,7 @@ html, body {
       .install .content .body label {
         display: block;
         width: 100%; }
-        .install .content .body label input[type="text"], .install .content .body label select {
+        .install .content .body label input[type="text"], .install .content .body label input[type="password"], .install .content .body label select {
           padding: .6em;
           width: 100%;
           box-sizing: border-box; }
