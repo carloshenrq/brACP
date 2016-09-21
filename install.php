@@ -95,6 +95,31 @@ $_CONFIG_DATA = array(
     'BRACP_ALLOW_ADMIN_CHANGE_PASSWORD' => false,
 );
 
+// Informações sobre criptografia de sessão.
+$_CONFIG_CIPHER = array();
+
+if(extension_loaded('openssl'))
+{
+    foreach(openssl_get_cipher_methods() as $cipher)
+    {
+        if(in_array($cipher, $_CONFIG_CIPHER))
+            continue;
+
+        $password = base64_encode(openssl_random_pseudo_bytes(32));
+        $iv = null;
+        $iv_len = openssl_cipher_iv_length($cipher);
+
+        if($iv_len > 0)
+            $iv = base64_encode(openssl_random_pseudo_bytes($iv_len));
+
+        $_CONFIG_CIPHER[$cipher] = (object)array(
+            'password'  => $password,
+            'iv'        => $iv
+        );
+
+        unset($password, $iv, $iv_len);
+    }
+}
 
 ?>
 <!DOCTYPE html>
