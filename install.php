@@ -107,6 +107,16 @@ $_CONFIG_DATA = array(
     'BRACP_SQL_DB_USER'                 => 'ragnarok',
     'BRACP_SQL_DB_PASS'                 => 'ragnarok',
     'BRACP_SQL_DB_DBNAME'               => 'ragnarok',
+
+    // Configurações de geração de cache. (STEP=11)
+    'BRACP_CACHE'                       => true,
+    'BRACP_CACHE_EXPIRE'                => 600,
+
+    // Configurações de sessão e segurança de sessão  (STEP=12)
+    'BRACP_SESSION_SECURE'              => true,
+    'BRACP_SESSION_ALGO'                => 'AES-256-ECB',
+    'BRACP_SESSION_KEY'                 => '',
+    'BRACP_SESSION_IV'                  => '',
 );
 
 // print_r($PDO_DRIVES);
@@ -160,7 +170,7 @@ if(extension_loaded('openssl'))
 
             install.controller('install', ['$scope', '$http', function($scope, $http) {
 
-                $scope.STEP = 11;
+                $scope.STEP = 13;
                 $scope.STEP_ERROR   = [];
                 $scope.STEP_WARNING = [];
                 $scope.STEP_SUCCESS = [];
@@ -170,6 +180,7 @@ if(extension_loaded('openssl'))
 
                 // Variaveis de configuração inicial.
                 $scope.INSTALL_VARS = <?php echo json_encode($_CONFIG_DATA); ?>;
+                $scope.SESSION_ALGO_KEY_IV = <?php echo json_encode($_CONFIG_CIPHER); ?>;
 
                 // Variavel de configuração para os servidores.
                 $scope.BRACP_SERVERS = [];
@@ -185,6 +196,15 @@ if(extension_loaded('openssl'))
                         $scope.STEP_ERROR.push(1);
 
                 });
+
+                $scope.sessionAlgoChange    = function()
+                {
+                    var SESSION_ALGO = $scope.INSTALL_VARS.BRACP_SESSION_ALGO;
+                    var SESSION_KEY_IV = $scope.SESSION_ALGO_KEY_IV[SESSION_ALGO];
+
+                    $scope.INSTALL_VARS.BRACP_SESSION_KEY   =   SESSION_KEY_IV.password;
+                    $scope.INSTALL_VARS.BRACP_SESSION_IV    =   SESSION_KEY_IV.iv;
+                };
 
                 // Configuração para adicionar um novo sub-servidor.
                 $scope.addServer = function()
@@ -751,14 +771,41 @@ if(extension_loaded('openssl'))
                         
                         <h1>Cache</h1>
 
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        <p class="message info icon">
+                            O Serviço de cache permite que algumas respostas ficam mais rápidas como o caso de classificações e tradução do painel de controle.
+                        </p>
+
+                        <input id="BRACP_CACHE_CHK" ng-model="INSTALL_VARS.BRACP_CACHE" class="input-checkbox" type="checkbox">
+                        <label for="BRACP_CACHE_CHK" class="input-checkbox" data-warning="Define se o serviço de cache será habilitado para o brACP.">Habilitar cache</label>
+
+                        <label ng-show="INSTALL_VARS.BRACP_CACHE" data-info="Tempo (em segundos) de duração" data-warning="Tempo que o cache será mantido antes de ser excluído">
+                            <input type="text" ng-model="INSTALL_VARS.BRACP_CACHE_EXPIRE"/>
+                        </label>
                     </div>
 
                     <div ng-if="STEP == 12" class="body">
                         
                         <h1>Sessões</h1>
 
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        <input id="BRACP_SESSION_SECURE_CHK" ng-model="INSTALL_VARS.BRACP_SESSION_SECURE" class="input-checkbox" type="checkbox">
+                        <label for="BRACP_SESSION_SECURE_CHK" class="input-checkbox" data-warning="Define se o brACP irá tratar as sessões de forma segura, com criptografia.">Habilitar sessões seguras</label>
+                        
+                        <label ng-show="INSTALL_VARS.BRACP_SESSION_SECURE" data-info="Algoritmo de Criptografia" data-warning="Algoritmo de criptografia para as sessões o KEY e IV serão exibidos logo abaixo.">
+                            <select ng-model="INSTALL_VARS.BRACP_SESSION_ALGO" ng-change="sessionAlgoChange();">
+                                <?php foreach($_CONFIG_CIPHER as $cipher => $data) { ?>
+                                    <option data-password="<?php echo $data->password; ?>" data-iv="<?php echo $data->password; ?>" value="<?php echo $cipher; ?>"><?php echo $cipher; ?></option>
+                                <?php } ?>
+                            </select>
+                        </label>
+
+                        <label ng-show="INSTALL_VARS.BRACP_SESSION_SECURE" data-info="Chave de Criptografia" data-warning="Chave de criptografia para o algoritmo selecionado.">
+                            <input type="text" ng-model="INSTALL_VARS.BRACP_SESSION_KEY" readonly/>
+                        </label>
+
+                        <label ng-show="INSTALL_VARS.BRACP_SESSION_SECURE" data-info="IV" data-warning="IV para a chave de criptografia selecionada.">
+                            <input type="text" ng-model="INSTALL_VARS.BRACP_SESSION_IV" readonly/>
+                        </label>
+
                     </div>
 
                     <div ng-if="STEP == 13" class="body">

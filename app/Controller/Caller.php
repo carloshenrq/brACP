@@ -105,7 +105,10 @@ class Caller
         if(method_exists($instance, $callMethod) && $instance->canCall($callMethod))
             $instance->{$callMethod}($get_params, $data_params, $response);
         else
-            $response->withStatusCode(403);
+            return $response->withStatusCode(403);
+
+        // Retorna a resposta para o browse.
+        return $response;
     }
 }
 
