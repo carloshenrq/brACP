@@ -131,6 +131,11 @@ $_CONFIG_DATA = array(
     'BRACP_ALLOW_RANKING_ZENY'              => true,
     'BRACP_ALLOW_RANKING_ZENY_SHOW_ZENY'    => true,
     'BRACP_ALLOW_SHOW_CHAR_STATUS'          => false,
+    'BRACP_DEFAULT_THEME'                   => 'classic',
+    'BRACP_DEFAULT_LANGUAGE'                => 'pt_BR',
+    'BRACP_SRV_PING_DELAY'                  => 300,
+    'BRACP_ALLOW_VENDING'                   => false,
+    'BRACP_ALLOW_MODS'                      => false,
 );
 
 // print_r($PDO_DRIVES);
@@ -163,7 +168,7 @@ if(extension_loaded('openssl'))
 
 // Obtém todos os temas e linguagens que estão na pasta.
 $themes = Themes::readAll();
-$lang = Language::readAll();
+$langs = Language::readAll();
 ?>
 <!DOCTYPE html>
 <html>
@@ -187,7 +192,7 @@ $lang = Language::readAll();
 
             install.controller('install', ['$scope', '$http', function($scope, $http) {
 
-                $scope.STEP = 13;
+                $scope.STEP = 1;
                 $scope.STEP_ERROR   = [];
                 $scope.STEP_WARNING = [];
                 $scope.STEP_SUCCESS = [];
@@ -213,6 +218,14 @@ $lang = Language::readAll();
                         $scope.STEP_ERROR.push(1);
 
                 });
+
+                /**
+                 * Realiza a instalação do brACP.
+                 */
+                $scope.install              = function()
+                {
+                    alert('!!! @Todo !!!');
+                }
 
                 $scope.sessionAlgoChange    = function()
                 {
@@ -853,6 +866,32 @@ $lang = Language::readAll();
 
                         <input id="BRACP_ALLOW_SHOW_CHAR_STATUS_CHK" ng-model="INSTALL_VARS.BRACP_ALLOW_SHOW_CHAR_STATUS" class="input-checkbox" type="checkbox">
                         <label for="BRACP_ALLOW_SHOW_CHAR_STATUS_CHK" class="input-checkbox" data-warning="Define se em páginas de classificações será exibido se o personagem está online.">Habilitar exibição de estado do personagem</label>
+                        
+                        <label data-info="Tema Padrão" data-warning="Tema de visualização principal do brACP.">
+                            <select ng-model="INSTALL_VARS.BRACP_DEFAULT_THEME">
+                                <?php foreach($themes as $i => $theme) { ?>
+                                    <option value="<?php echo $theme->folder; ?>"><?php echo $theme->name; ?> (<?php echo $theme->version; ?>, <?php echo $theme->folder; ?>)</option>
+                                <?php } ?>
+                            </select>
+                        </label>
+                        
+                        <label data-info="Idioma Padrão" data-warning="Idioma de visualização principal do brACP.">
+                            <select ng-model="INSTALL_VARS.BRACP_DEFAULT_LANGUAGE">
+                                <?php foreach($langs as $i => $lang) { ?>
+                                    <option value="<?php echo $lang; ?>"><?php echo $lang; ?></option>
+                                <?php } ?>
+                            </select>
+                        </label>
+
+                        <label data-info="Intervalo máximo (em segundos) para ping nos servidores" data-warning="Tempo em segundos de espera para poder realizar um próximo nas portas dos servidores (login, char e map)">
+                            <input type="text" ng-model="INSTALL_VARS.BRACP_SRV_PING_DELAY" readonly/>
+                        </label>
+
+                        <input id="BRACP_ALLOW_VENDING_CHK" ng-model="INSTALL_VARS.BRACP_ALLOW_VENDING" class="input-checkbox" type="checkbox">
+                        <label for="BRACP_ALLOW_VENDING_CHK" class="input-checkbox" data-warning="Define se irá habilitar a exibição de mercadores online no brACP">Habilitar vendas do servidor online</label>
+
+                        <input id="BRACP_ALLOW_MODS_CHK" ng-model="INSTALL_VARS.BRACP_ALLOW_MODS" class="input-checkbox" type="checkbox">
+                        <label for="BRACP_ALLOW_MODS_CHK" ng-show="INSTALL_VARS.BRACP_ALLOW_ADMIN" class="input-checkbox" data-warning="Define se irá habilitar a aplicação de mods (AdminCP).">Habilitar aplicador de mods</label>
                     </div>
 
             </div>
@@ -865,7 +904,7 @@ $lang = Language::readAll();
 
                 <div class="next">
                     <button ng-if="STEP <= 12" ng-click="validateStep(STEP, true)" class="button info">Próximo</button>
-                    <button ng-if="STEP == 13" ng-click="validateStep(STEP, true)" class="button success">Instalar</button>
+                    <button ng-if="STEP == 13" ng-click="install()" class="button success">Instalar</button>
                 </div>
 
             </div>
