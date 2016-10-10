@@ -45,14 +45,15 @@ class Route
 
             $app = self::getApp();
 
+            // Redireciona a rota para o home-index
+            $app->any('/', function($request, $response, $args) {
+                return $response->withRedirect('/home/index/');
+            });
+
             // Adicionado mapa para todas as rotas 
             $app->any('/{controller}/{action}/[{sub_action}/]', ['Controller\Caller', 'parseRoute']);
 
-            /*// Define a rota para a tela principal.
-            self::getApp()->get('/', ['Controller\Home', 'index']);
-
-            // Define a rota para a tela principal.
-            self::getApp()->post('/server', ['Controller\Home', 'server']);
+            /*
 
             // Mapeia o grupo account.
             self::getApp()->group('/account', function() {
