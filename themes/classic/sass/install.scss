@@ -299,6 +299,23 @@ html, body
                 }
             }
 
+            .install-server
+            {
+                margin-top: 1em;
+                padding: 1em;
+                @include background-gradient(#fff, #e6ffe6);
+                @include border-radius(.3em);
+                @include box-shadow('0 0 .2em rgba(0, 0, 0, .3)');
+
+                .install-server-info, .install-server-sql
+                {
+                    padding: 1em;
+                    margin: .8em;
+                    @include border-radius(.3em);
+                    @include box-shadow('0 0 .2em rgba(0, 0, 0, .3)');
+                }
+            }
+
         }
     }
 

@@ -93,7 +93,23 @@ $_CONFIG_DATA = array(
     'BRACP_ALLOW_LOGIN_GMLEVEL'         => 0,
     'BRACP_ALLOW_ADMIN_GMLEVEL'         => 99,
     'BRACP_ALLOW_ADMIN_CHANGE_PASSWORD' => false,
+
+    // Configurações de banco de dados do brACP (STEP=8)
+    'BRACP_SQL_CP_DRIVER'               => 'pdo_mysql',
+    'BRACP_SQL_CP_HOST'                 => '127.0.0.1',
+    'BRACP_SQL_CP_USER'                 => 'bracp',
+    'BRACP_SQL_CP_PASS'                 => 'bracp',
+    'BRACP_SQL_CP_DBNAME'               => 'bracp',
+
+    // Configurações de banco de dados de monstros e itens (STEP=9)
+    'BRACP_SQL_DB_DRIVER'               => 'pdo_mysql',
+    'BRACP_SQL_DB_HOST'                 => '127.0.0.1',
+    'BRACP_SQL_DB_USER'                 => 'ragnarok',
+    'BRACP_SQL_DB_PASS'                 => 'ragnarok',
+    'BRACP_SQL_DB_DBNAME'               => 'ragnarok',
 );
+
+// print_r($PDO_DRIVES);
 
 // Informações sobre criptografia de sessão.
 $_CONFIG_CIPHER = array();
@@ -144,7 +160,7 @@ if(extension_loaded('openssl'))
 
             install.controller('install', ['$scope', '$http', function($scope, $http) {
 
-                $scope.STEP = 8;
+                $scope.STEP = 11;
                 $scope.STEP_ERROR   = [];
                 $scope.STEP_WARNING = [];
                 $scope.STEP_SUCCESS = [];
@@ -154,6 +170,9 @@ if(extension_loaded('openssl'))
 
                 // Variaveis de configuração inicial.
                 $scope.INSTALL_VARS = <?php echo json_encode($_CONFIG_DATA); ?>;
+
+                // Variavel de configuração para os servidores.
+                $scope.BRACP_SERVERS = [];
 
                 // Configuração para expressão regular de usuários.
                 $scope.REGEXP_USERNAME = '10';
@@ -166,6 +185,42 @@ if(extension_loaded('openssl'))
                         $scope.STEP_ERROR.push(1);
 
                 });
+
+                // Configuração para adicionar um novo sub-servidor.
+                $scope.addServer = function()
+                {
+                    var length = $scope.BRACP_SERVERS.length;
+
+                    $scope.BRACP_SERVERS.push({
+                        'name'  : 'brAthena',
+                        'sql'   : {
+                            'driver'    : 'pdo_mysql',
+                            'host'      : '127.0.0.1',
+                            'user'      : 'ragnarok',
+                            'pass'      : 'ragnaork',
+                            'dbname'    : 'ragnarok'
+                        },
+                        'servers'    : {
+                            'login' : { 'address' : '127.0.0.1', 'port' : 6900 },
+                            'char'  : { 'address' : '127.0.0.1', 'port' : 6121 },
+                            'map'   : { 'address' : '127.0.0.1', 'port' : 5121 }
+                        },
+                        'default' : (length == 0)
+                    });
+                }
+
+                // Função para remover um sub-servidor.
+                $scope.remServer = function(index)
+                {
+                    if($scope.BRACP_SERVERS.length <= 1)
+                    {
+                        alert("Você deve possuir ao menos 1 servidor adicionado.");
+                        return;
+                    }
+
+
+                    $scope.BRACP_SERVERS.splice(index, 1);
+                }
 
                 $scope.validateStep     = function(step, foward)
                 {
@@ -202,6 +257,8 @@ if(extension_loaded('openssl'))
                     return true;
                 };
 
+                // Adiciona o primeiro sub-server.
+                $scope.addServer();
             }]);
 
         </script>
@@ -559,21 +616,135 @@ if(extension_loaded('openssl'))
                         
                         <h1>SQL - brACP</h1>
 
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        <p>Segue abaixo as configurações de acesso ao banco de dados do brACP.</p>
+
+                        <p class="message info icon">Essas configurações são apenas para o banco de dados do brACP e não do ragnarok.</p>
+                        
+                        <label data-info="Drive para conexão" data-warning="Não alterar se não souber o que está fazendo.">
+                            <input type="text" ng-model="INSTALL_VARS.BRACP_SQL_CP_DRIVER"/>
+                        </label>
+                        
+                        <label data-info="Servidor de Banco de Dados" data-warning="Endereço IP ou Dominio do servidor de banco de dados.">
+                            <input type="text" ng-model="INSTALL_VARS.BRACP_SQL_CP_HOST"/>
+                        </label>
+                        
+                        <label data-info="Usuário" data-warning="Nome de usuário para acesso ao banco de dados.">
+                            <input type="text" ng-model="INSTALL_VARS.BRACP_SQL_CP_USER"/>
+                        </label>
+                        
+                        <label data-info="Senha" data-warning="Senha de usuário para acesso ao banco de dados (Padrão: bracp)">
+                            <input type="password" ng-model="INSTALL_VARS.BRACP_SQL_CP_USER"/>
+                        </label>
+                        
+                        <label data-info="Database (Schema)" data-warning="Nome do banco de dados para a conexão.">
+                            <input type="text" ng-model="INSTALL_VARS.BRACP_SQL_CP_DBNAME"/>
+                        </label>
+
                     </div>
 
                     <div ng-if="STEP == 9" class="body">
                         
                         <h1>SQL - Database</h1>
 
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        <p>Segue abaixo as configurações de acesso ao banco de dados de monstros e itens.</p>
+
+                        <p class="message info icon">Essas configurações são apenas para o banco de dados de monstros e itens, também utilizadas pelo emulador.</p>
+
+                        <label data-info="Drive para conexão" data-warning="Não alterar se não souber o que está fazendo.">
+                            <input type="text" ng-model="INSTALL_VARS.BRACP_SQL_DB_DRIVER"/>
+                        </label>
+                        
+                        <label data-info="Servidor de Banco de Dados" data-warning="Endereço IP ou Dominio do servidor de banco de dados.">
+                            <input type="text" ng-model="INSTALL_VARS.BRACP_SQL_DB_HOST"/>
+                        </label>
+                        
+                        <label data-info="Usuário" data-warning="Nome de usuário para acesso ao banco de dados.">
+                            <input type="text" ng-model="INSTALL_VARS.BRACP_SQL_DB_USER"/>
+                        </label>
+                        
+                        <label data-info="Senha" data-warning="Senha de usuário para acesso ao banco de dados (Padrão: ragnarok)">
+                            <input type="password" ng-model="INSTALL_VARS.BRACP_SQL_DB_USER"/>
+                        </label>
+                        
+                        <label data-info="Database (Schema)" data-warning="Nome do banco de dados para a conexão.">
+                            <input type="text" ng-model="INSTALL_VARS.BRACP_SQL_DB_DBNAME"/>
+                        </label>
+
                     </div>
 
                     <div ng-if="STEP == 10" class="body">
                         
                         <h1>SQL - Servidores</h1>
+                        
+                        <div class="message warning icon">
+                            <h1>Suporte a Sub-Servidores</h1>
+                            Você poderá ter vários sub-servidores configurados. Clique no botão <strong>Adicionar</strong> para criar um novo registro ou <strong>Remover</strong> para deletar um dos registros.
+                        </div>
 
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        <p>
+                            <button class="button info" ng-click="addServer()">Adicionar Servidor</button>
+                        </p>
+
+                        <div class="install-server" ng-repeat="server in BRACP_SERVERS track by $index">
+
+                            <button ng-show="BRACP_SERVERS.length > 1" class="button error" ng-click="remServer($index)" >Remover {{($index+1)}} de {{BRACP_SERVERS.length}}</button>
+
+                            <div class="install-server-info">
+                                <label data-info="Nome" data-warning="Nome do sub-servidor.">
+                                    <input type="text" ng-model="server.name"/>
+                                </label>
+                                <input id="server_{{$index}}" ng-model="server.default" class="input-checkbox" type="checkbox">
+                                <label for="server_{{$index}}" class="input-checkbox" data-warning="Servidor a ser usado como servidor de contas.">Servidor de contas?</label>
+                            </div>
+                            <div class="install-server-info">
+                                <label data-info="Endereço/Domino do servidor de login" data-warning="Endereço IP ou Dominio do servidor de login.">
+                                    <input type="text" ng-model="server.servers.login.address"/>
+                                </label>
+                                <label data-info="Porta do servidor de login" data-warning="Porta do servidor de login.">
+                                    <input type="text" ng-model="server.servers.login.port"/>
+                                </label>
+                            </div>
+
+                            <div class="install-server-info">
+                                <label data-info="Endereço/Domino do servidor de personagem" data-warning="Endereço IP ou Dominio do servidor de personagem.">
+                                    <input type="text" ng-model="server.servers.char.address"/>
+                                </label>
+                                <label data-info="Porta do servidor de personagem" data-warning="Porta do servidor de personagem.">
+                                    <input type="text" ng-model="server.servers.char.port"/>
+                                </label>
+                            </div>
+
+                            <div class="install-server-info">
+                                <label data-info="Endereço/Domino do servidor de mapas" data-warning="Endereço IP ou Dominio do servidor de mapas.">
+                                    <input type="text" ng-model="server.servers.map.address"/>
+                                </label>
+                                <label data-info="Porta do servidor de mapas" data-warning="Porta do servidor de mapas.">
+                                    <input type="text" ng-model="server.servers.map.port"/>
+                                </label>
+                            </div>
+
+                            <div class="install-server-sql">
+                                <label data-info="Drive para conexão" data-warning="Não alterar se não souber o que está fazendo.">
+                                    <input type="text" ng-model="server.sql.driver"/>
+                                </label>
+                                
+                                <label data-info="Servidor de Banco de Dados" data-warning="Endereço IP ou Dominio do servidor de banco de dados.">
+                                    <input type="text" ng-model="server.sql.host"/>
+                                </label>
+                                
+                                <label data-info="Usuário" data-warning="Nome de usuário para acesso ao banco de dados.">
+                                    <input type="text" ng-model="server.sql.user"/>
+                                </label>
+                                
+                                <label data-info="Senha" data-warning="Senha de usuário para acesso ao banco de dados (Padrão: ragnarok)">
+                                    <input type="password" ng-model="server.sql.pass"/>
+                                </label>
+                                
+                                <label data-info="Database (Schema)" data-warning="Nome do banco de dados para a conexão.">
+                                    <input type="text" ng-model="server.sql.dbname"/>
+                                </label>
+                            </div>
+                        </div>
                     </div>
 
                     <div ng-if="STEP == 11" class="body">

@@ -191,6 +191,30 @@ html, body {
           color: #e74c3c; }
         .install .content .body label + label {
           margin-top: 1.3em; }
+      .install .content .body .install-server {
+        margin-top: 1em;
+        padding: 1em;
+        background: #fff;
+        background: -moz-linear-gradient(top, #fff 0%, #e6ffe6 100%);
+        background: -webkit-linear-gradient(top, #fff 0%, #e6ffe6 100%);
+        background: linear-gradient(to bottom, #fff 0%, #e6ffe6 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fff', endColorstr='#e6ffe6',GradientType=0 );
+        background-repeat: repeat-x;
+        border-radius: 0.3em;
+        -moz-border-radius: 0.3em;
+        -webkit-border-radius: 0.3em;
+        box-shadow: 0 0 .2em rgba(0, 0, 0, .3);
+        -moz-box-shadow: 0 0 .2em rgba(0, 0, 0, .3);
+        -webkit-box-shadow: 0 0 .2em rgba(0, 0, 0, .3); }
+        .install .content .body .install-server .install-server-info, .install .content .body .install-server .install-server-sql {
+          padding: 1em;
+          margin: .8em;
+          border-radius: 0.3em;
+          -moz-border-radius: 0.3em;
+          -webkit-border-radius: 0.3em;
+          box-shadow: 0 0 .2em rgba(0, 0, 0, .3);
+          -moz-box-shadow: 0 0 .2em rgba(0, 0, 0, .3);
+          -webkit-box-shadow: 0 0 .2em rgba(0, 0, 0, .3); }
   .install .footer {
     padding: 1em;
     background-color: #ecf0f1;
