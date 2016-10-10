@@ -161,7 +161,7 @@ return
         'HOLDER'    => [
             'USERID'                => 'Nome de usuário',
             'PASSWORD'              => 'Senha de usuário',
-            'PASSWORD_CONFIRM'      => 'Confime a senha',
+            'PASSWORD_CONFIRM'      => 'Confirme a senha',
             'MALE'                  => 'Masculino',
             'FEMALE'                => 'Feminino',
             'EMAIL'                 => 'Endereço de e-mail',
@@ -588,7 +588,7 @@ return
                             '<strong>Código de Ativação:</strong> <u>%1$s</u><br>'.
                             '<i>Código válido até <strong>%2$s</strong>.</i><br>'.
                             '<br>'.
-                            'Para aplicar o código de recuperação, você deve acessar o menu: <i><strong>Minha Conta &raquo; Código de Ativação</strong></i>.<br>'.
+                            'Para aplicar o código de ativação, você deve acessar o menu: <i><strong>Minha Conta &raquo; Código de Ativação</strong></i>.<br>'.
                             '<br>'.
                             'Após ativar sua conta, você receberá informando que o servidor aceitou a ativação de sua conta.',
             /**
