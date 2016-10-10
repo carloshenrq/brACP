@@ -279,6 +279,7 @@ if(extension_loaded('openssl'))
 
                 // Adiciona o primeiro sub-server.
                 $scope.addServer();
+                $scope.sessionAlgoChange();
             }]);
 
         </script>
