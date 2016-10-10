@@ -33,7 +33,7 @@ brACPApp.controller('account.login', ['$scope', '$http', function($scope, $http)
 
     $scope.submitLogin = function() {
 
-        var urlLogin = document.querySelector('#_BRACP_URL').value + 'account/login';
+        var urlLogin = document.querySelector('#_BRACP_URL').value + 'account/login/';
         var params = $.param({
             'userid'    : this.userid,
             'user_pass' : this.user_pass,
@@ -83,7 +83,7 @@ brACPApp.controller('account.register', ['$scope', '$http', function($scope, $ht
     $scope.recaptcha_response = null;
 
     $scope.submitRegister = function() {
-        var urlRegister = document.querySelector('#_BRACP_URL').value + 'account/register';
+        var urlRegister = document.querySelector('#_BRACP_URL').value + 'account/register/';
         var params = $.param({
             'userid'            : this.userid,
             'user_pass'         : this.user_pass,
@@ -130,7 +130,7 @@ brACPApp.controller('account.register.resend', ['$scope', '$http', function($sco
     $scope.recaptcha_response = null;
 
     $scope.submitResend = function() {
-        var urlConfirm = document.querySelector('#_BRACP_URL').value + 'account/confirmation';
+        var urlConfirm = document.querySelector('#_BRACP_URL').value + 'account/confirmation/';
         var params = $.param({
             'userid'    : this.userid,
             'email'     : this.email,
@@ -156,7 +156,7 @@ brACPApp.controller('account.register.resend', ['$scope', '$http', function($sco
     };
 
     $scope.submitConfirm = function() {
-        var urlConfirm = document.querySelector('#_BRACP_URL').value + 'account/confirmation';
+        var urlConfirm = document.querySelector('#_BRACP_URL').value + 'account/confirmation/';
         var params = $.param({
             'code'      : this.code,
             'recaptcha' : this.recaptcha_response
@@ -196,7 +196,7 @@ brACPApp.controller('account.recover', ['$scope', '$http', function($scope, $htt
     $scope.recaptcha_response = null;
 
     $scope.submitRecover = function() {
-        var urlConfirm = document.querySelector('#_BRACP_URL').value + 'account/recover';
+        var urlConfirm = document.querySelector('#_BRACP_URL').value + 'account/recover/';
         var params = $.param({
             'userid'    : this.userid,
             'email'     : this.email,
@@ -222,7 +222,7 @@ brACPApp.controller('account.recover', ['$scope', '$http', function($scope, $htt
     };
 
     $scope.submitRecoverConfirm = function() {
-        var urlConfirm = document.querySelector('#_BRACP_URL').value + 'account/recover';
+        var urlConfirm = document.querySelector('#_BRACP_URL').value + 'account/recover/';
         var params = $.param({
             'code'      : this.code,
             'recaptcha' : this.recaptcha_response
@@ -270,7 +270,7 @@ brACPApp.controller('account.password', ['$scope', '$http', function($scope, $ht
     };
 
     $scope.submitPassword = function() {
-        var urlConfirm = document.querySelector('#_BRACP_URL').value + 'account/password';
+        var urlConfirm = document.querySelector('#_BRACP_URL').value + 'account/password/';
         var params = $.param({
             'user_pass'         : this.user_pass,
             'user_pass_new'     : this.user_pass_new,
@@ -312,7 +312,7 @@ brACPApp.controller('account.email', ['$scope', '$http', function($scope, $http)
     $scope.recaptcha_response = null;
 
     $scope.submitMail = function() {
-        var urlConfirm = document.querySelector('#_BRACP_URL').value + 'account/email';
+        var urlConfirm = document.querySelector('#_BRACP_URL').value + 'account/email/';
         var params = $.param({
             'email'         : this.email,
             'email_new'     : this.email_new,
@@ -359,7 +359,7 @@ brACPApp.controller('serverStatus', ['$scope', '$http', function($scope, $http) 
 
     $scope.serverChange = function()
     {
-        var urlServer = document.querySelector('#_BRACP_URL').value + 'server';
+        var urlServer = document.querySelector('#_BRACP_URL').value + 'home/server/';
         var params = $.param({
             'BRACP_SRV_SELECTED'         : $scope.BRACP_SRV_SELECTED.match(/^SRV_([0-9]+)$/)[1]
         });
@@ -404,7 +404,7 @@ brACPApp.controller('account.chars', ['$scope', '$http', function($scope, $http)
 
     $scope.reloadChars  = function()
     {
-        var urlServer = document.querySelector('#_BRACP_URL').value + 'account/chars/json';
+        var urlServer = document.querySelector('#_BRACP_URL').value + 'account/chars/json/';
 
         $scope.state = 1;
 
@@ -428,7 +428,7 @@ brACPApp.controller('account.chars', ['$scope', '$http', function($scope, $http)
 
     $scope.resetPosit = function(char_id)
     {
-        var urlServer = document.querySelector('#_BRACP_URL').value + 'account/char/reset/posit';
+        var urlServer = document.querySelector('#_BRACP_URL').value + 'account/char/reset_posit/';
         var params = $.param({
             'char_id'         : char_id
         });
@@ -458,7 +458,7 @@ brACPApp.controller('account.chars', ['$scope', '$http', function($scope, $http)
 
     $scope.resetAppear = function(char_id)
     {
-        var urlServer = document.querySelector('#_BRACP_URL').value + 'account/char/reset/appear';
+        var urlServer = document.querySelector('#_BRACP_URL').value + 'account/char/reset_appear/';
         var params = $.param({
             'char_id'         : char_id
         });
@@ -490,7 +490,7 @@ brACPApp.controller('account.chars', ['$scope', '$http', function($scope, $http)
 
     $scope.resetEquips = function(char_id)
     {
-        var urlServer = document.querySelector('#_BRACP_URL').value + 'account/char/reset/equip';
+        var urlServer = document.querySelector('#_BRACP_URL').value + 'account/char/reset_equip/';
         var params = $.param({
             'char_id'         : char_id
         });

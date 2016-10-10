@@ -22,7 +22,7 @@
 <script>
 
 	setTimeout(function() {
-		window.location.href = '{$smarty.const.BRACP_DIR_INSTALL_URL}';
+		window.location.href = '{$smarty.const.BRACP_DIR_INSTALL_URL}home/index/';
 	}, 1000);
 
 </script>

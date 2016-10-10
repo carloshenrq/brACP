@@ -16,7 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *}
 <ul>
-    <li class="icon icon-home url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}">@@MENU(HOME)</li>
+    <li class="icon icon-home url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}home/index/">@@MENU(HOME)</li>
     <li class="icon icon-myacc sub-menu">@@MENU,MYACC(TITLE)
         <ul>
             {if isset($account) eq false}
@@ -42,14 +42,14 @@
                     <li><label for="modal-mail">@@MENU,MYACC,AUTHENTICATED,CHANGE(MAIL)</label></li>
                 {/if}
 
-                <li class="url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}account/chars"><label>@@MENU,MYACC,AUTHENTICATED(CHARS)</label></li>
+                <li class="url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}account/chars/"><label>@@MENU,MYACC,AUTHENTICATED(CHARS)</label></li>
 
-                <li class="url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}account/logout"><label>@@MENU,MYACC,AUTHENTICATED(LOGOUT, {$userid})</label></li>
+                <li class="url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}account/logout/"><label>@@MENU,MYACC,AUTHENTICATED(LOGOUT, {$userid})</label></li>
             {/if}
         </ul>
     </li>
 
-    <li class="url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}vending">@@MENU(MERCHANTS)</li>
+    <li class="url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}vending/">@@MENU(MERCHANTS)</li>
 
     {if $smarty.const.BRACP_ALLOW_RANKING}
         {* @TODO *}
