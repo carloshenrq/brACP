@@ -51,72 +51,86 @@ $PRE_REQUISITES = array(
 
 // Teste para as variaveis de configuração do painel de controle.
 $_CONFIG_DATA = array(
+
+    // Informações de versão
+    'BRACP_VERSION'                         => '0.2.2-beta',
+
     // Endereços (STEP=3)
-    'BRACP_URL'                         =>  'http' . ((isset($_SERVER['HTTPS'])) ? 's':'') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'],
-    'BRACP_DIR_INSTALL_URL'             =>  $_SERVER['REQUEST_URI'],
-    'BRACP_TEMPLATE_DIR'                =>  dirname(__FILE__) . DIRECTORY_SEPARATOR . 'templates',
-    'BRACP_ENTITY_DIR'                  =>  dirname(__FILE__) . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'Model',
-    'BRACP_DEFAULT_TIMEZONE'            =>  @date_default_timezone_get(),
+    'BRACP_URL'                             =>  'http' . ((isset($_SERVER['HTTPS'])) ? 's':'') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'],
+    'BRACP_DIR_INSTALL_URL'                 =>  $_SERVER['REQUEST_URI'],
+    'BRACP_TEMPLATE_DIR'                    =>  dirname(__FILE__) . DIRECTORY_SEPARATOR . 'templates',
+    'BRACP_ENTITY_DIR'                      =>  dirname(__FILE__) . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'Model',
+    'BRACP_DEFAULT_TIMEZONE'                =>  @date_default_timezone_get(),
 
     // Expressões regulares (STEP=4)
-    'BRACP_REGEXP_EMAIL'                => '[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}',
+    'BRACP_REGEXP_EMAIL'                    => '[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}',
 
     // Recaptcha (STEP=5)
-    'BRACP_RECAPTCHA_ENABLED'           => false,
-    'BRACP_RECAPTCHA_PRIVATE_KEY'       => '',
-    'BRACP_RECAPTCHA_PUBLIC_KEY'        => '',
-    'BRACP_RECAPTCHA_PRIVATE_URL'       => 'https://www.google.com/recaptcha/api/siteverify',
+    'BRACP_RECAPTCHA_ENABLED'               => false,
+    'BRACP_RECAPTCHA_PRIVATE_KEY'           => '',
+    'BRACP_RECAPTCHA_PUBLIC_KEY'            => '',
+    'BRACP_RECAPTCHA_PRIVATE_URL'           => 'https://www.google.com/recaptcha/api/siteverify',
 
     // Servidor de e-mail (STEP=6)
-    'BRACP_ALLOW_MAIL_SEND'             => false,
-    'BRACP_MAIL_HOST'                   => '',
-    'BRACP_MAIL_PORT'                   => 25,
-    'BRACP_MAIL_USER'                   => '',
-    'BRACP_MAIL_PASS'                   => '',
-    'BRACP_MAIL_FROM'                   => '',
-    'BRACP_MAIL_FROM_NAME'              => '',
+    'BRACP_ALLOW_MAIL_SEND'                 => false,
+    'BRACP_MAIL_HOST'                       => '',
+    'BRACP_MAIL_PORT'                       => 25,
+    'BRACP_MAIL_USER'                       => '',
+    'BRACP_MAIL_PASS'                       => '',
+    'BRACP_MAIL_FROM'                       => '',
+    'BRACP_MAIL_FROM_NAME'                  => '',
 
     // Configurações de conta. (STEP=7)
-    'BRACP_ALLOW_CREATE_ACCOUNT'        => true,
-    'BRACP_MD5_PASSWORD_HASH'           => false,
-    'BRACP_MAIL_REGISTER_ONCE'          => false,
-    'BRACP_ALLOW_CHANGE_MAIL'           => false,
-    'BRACP_CHANGE_MAIL_DELAY'           => 60,
-    'BRACP_CONFIRM_ACCOUNT'             => false,
-    'BRACP_ALLOW_RECOVER'               => false,
-    'BRACP_RECOVER_BY_CODE'             => false,
-    'BRACP_RECOVER_CODE_EXPIRE'         => 120,
-    'BRACP_RECOVER_STRING_LENGTH'       => 8,
-    'BRACP_RECOVER_RANDOM_STRING'       => 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
-    'BRACP_NOTIFY_CHANGE_PASSWORD'      => false,
-    'BRACP_NOTIFY_CHANGE_MAIL'          => false,
-    'BRACP_ALLOW_LOGIN_GMLEVEL'         => 0,
-    'BRACP_ALLOW_ADMIN_GMLEVEL'         => 99,
-    'BRACP_ALLOW_ADMIN_CHANGE_PASSWORD' => false,
+    'BRACP_ALLOW_CREATE_ACCOUNT'            => true,
+    'BRACP_MD5_PASSWORD_HASH'               => false,
+    'BRACP_MAIL_REGISTER_ONCE'              => false,
+    'BRACP_ALLOW_CHANGE_MAIL'               => false,
+    'BRACP_CHANGE_MAIL_DELAY'               => 60,
+    'BRACP_CONFIRM_ACCOUNT'                 => false,
+    'BRACP_ALLOW_RECOVER'                   => false,
+    'BRACP_RECOVER_BY_CODE'                 => false,
+    'BRACP_RECOVER_CODE_EXPIRE'             => 120,
+    'BRACP_RECOVER_STRING_LENGTH'           => 8,
+    'BRACP_RECOVER_RANDOM_STRING'           => 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
+    'BRACP_NOTIFY_CHANGE_PASSWORD'          => false,
+    'BRACP_NOTIFY_CHANGE_MAIL'              => false,
+    'BRACP_ALLOW_LOGIN_GMLEVEL'             => 0,
+    'BRACP_ALLOW_ADMIN_GMLEVEL'             => 99,
+    'BRACP_ALLOW_ADMIN_CHANGE_PASSWORD'     => false,
 
     // Configurações de banco de dados do brACP (STEP=8)
-    'BRACP_SQL_CP_DRIVER'               => 'pdo_mysql',
-    'BRACP_SQL_CP_HOST'                 => '127.0.0.1',
-    'BRACP_SQL_CP_USER'                 => 'bracp',
-    'BRACP_SQL_CP_PASS'                 => 'bracp',
-    'BRACP_SQL_CP_DBNAME'               => 'bracp',
+    'BRACP_SQL_CP_DRIVER'                   => 'pdo_mysql',
+    'BRACP_SQL_CP_HOST'                     => '127.0.0.1',
+    'BRACP_SQL_CP_USER'                     => 'bracp',
+    'BRACP_SQL_CP_PASS'                     => 'bracp',
+    'BRACP_SQL_CP_DBNAME'                   => 'bracp',
 
     // Configurações de banco de dados de monstros e itens (STEP=9)
-    'BRACP_SQL_DB_DRIVER'               => 'pdo_mysql',
-    'BRACP_SQL_DB_HOST'                 => '127.0.0.1',
-    'BRACP_SQL_DB_USER'                 => 'ragnarok',
-    'BRACP_SQL_DB_PASS'                 => 'ragnarok',
-    'BRACP_SQL_DB_DBNAME'               => 'ragnarok',
+    'BRACP_SQL_DB_DRIVER'                   => 'pdo_mysql',
+    'BRACP_SQL_DB_HOST'                     => '127.0.0.1',
+    'BRACP_SQL_DB_USER'                     => 'ragnarok',
+    'BRACP_SQL_DB_PASS'                     => 'ragnarok',
+    'BRACP_SQL_DB_DBNAME'                   => 'ragnarok',
 
     // Configurações de geração de cache. (STEP=11)
-    'BRACP_CACHE'                       => true,
-    'BRACP_CACHE_EXPIRE'                => 600,
+    'BRACP_CACHE'                           => true,
+    'BRACP_CACHE_EXPIRE'                    => 600,
 
     // Configurações de sessão e segurança de sessão  (STEP=12)
-    'BRACP_SESSION_SECURE'              => true,
-    'BRACP_SESSION_ALGO'                => 'AES-256-ECB',
-    'BRACP_SESSION_KEY'                 => '',
-    'BRACP_SESSION_IV'                  => '',
+    'BRACP_SESSION_SECURE'                  => true,
+    'BRACP_SESSION_ALGO'                    => 'AES-256-ECB',
+    'BRACP_SESSION_KEY'                     => '',
+    'BRACP_SESSION_IV'                      => '',
+
+    // Outras configurações (STEP=13)
+    'BRACP_DEVELOP_MODE'                    => false,
+    'BRACP_MAINTENCE'                       => false,
+    'BRACP_ALLOW_ADMIN'                     => false,
+    'BRACP_ALLOW_CHOOSE_THEME'              => true,
+    'BRACP_ALLOW_RANKING'                   => true,
+    'BRACP_ALLOW_RANKING_ZENY'              => true,
+    'BRACP_ALLOW_RANKING_ZENY_SHOW_ZENY'    => true,
+    'BRACP_ALLOW_SHOW_CHAR_STATUS'          => false,
 );
 
 // print_r($PDO_DRIVES);
@@ -147,6 +161,9 @@ if(extension_loaded('openssl'))
     }
 }
 
+// Obtém todos os temas e linguagens que estão na pasta.
+$themes = Themes::readAll();
+$lang = Language::readAll();
 ?>
 <!DOCTYPE html>
 <html>
@@ -813,7 +830,29 @@ if(extension_loaded('openssl'))
                         
                         <h1>Outros</h1>
 
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        <input id="BRACP_DEVELOP_MODE_CHK" ng-model="INSTALL_VARS.BRACP_DEVELOP_MODE" class="input-checkbox" type="checkbox">
+                        <label for="BRACP_DEVELOP_MODE_CHK" class="input-checkbox" data-warning="Define se o brACP irá executar em modo desenvolvimento.">Habilitar modo desenvolvedor</label>
+
+                        <input id="BRACP_MAINTENCE_CHK" ng-model="INSTALL_VARS.BRACP_MAINTENCE" class="input-checkbox" type="checkbox">
+                        <label for="BRACP_MAINTENCE_CHK" class="input-checkbox" data-warning="Define se o brACP irá executar em modo manutenção.">Habilitar modo desenvolvedor</label>
+
+                        <input id="BRACP_ALLOW_ADMIN_CHK" ng-model="INSTALL_VARS.BRACP_ALLOW_ADMIN" class="input-checkbox" type="checkbox">
+                        <label for="BRACP_ALLOW_ADMIN_CHK" class="input-checkbox" data-warning="Define se irá permitir o brACP operar com o modo administrador (AdminCP).">Habilitar modo administrador</label>
+
+                        <input id="BRACP_ALLOW_CHOOSE_THEME_CHK" ng-model="INSTALL_VARS.BRACP_ALLOW_CHOOSE_THEME" class="input-checkbox" type="checkbox">
+                        <label for="BRACP_ALLOW_CHOOSE_THEME_CHK" class="input-checkbox" data-warning="Define se usuários poderão trocar de tema.">Habilitar alteração de temas</label>
+
+                        <input id="BRACP_ALLOW_RANKING_CHK" ng-model="INSTALL_VARS.BRACP_ALLOW_RANKING" class="input-checkbox" type="checkbox">
+                        <label for="BRACP_ALLOW_RANKING_CHK" class="input-checkbox" data-warning="Define se as classificações (rankings) estarão habilitados.">Habilitar classificações</label>
+
+                        <input id="BRACP_ALLOW_RANKING_ZENY_CHK" ng-model="INSTALL_VARS.BRACP_ALLOW_RANKING_ZENY" class="input-checkbox" type="checkbox">
+                        <label ng-show="INSTALL_VARS.BRACP_ALLOW_RANKING" for="BRACP_ALLOW_RANKING_ZENY_CHK" class="input-checkbox" data-warning="Define se irá habilitar a classificação de zenys.">Habilitar classificação de zeny</label>
+
+                        <input id="BRACP_ALLOW_RANKING_ZENY_SHOW_ZENY_CHK" ng-model="INSTALL_VARS.BRACP_ALLOW_RANKING_ZENY_SHOW_ZENY" class="input-checkbox" type="checkbox">
+                        <label ng-show="INSTALL_VARS.BRACP_ALLOW_RANKING_ZENY" for="BRACP_ALLOW_RANKING_ZENY_SHOW_ZENY_CHK" class="input-checkbox" data-warning="Define se irá habilitar a exibição da quantidade de zenys dos personagens.">Habilitar exibição da quantidade de zenys na classificação de zenys</label>
+
+                        <input id="BRACP_ALLOW_SHOW_CHAR_STATUS_CHK" ng-model="INSTALL_VARS.BRACP_ALLOW_SHOW_CHAR_STATUS" class="input-checkbox" type="checkbox">
+                        <label for="BRACP_ALLOW_SHOW_CHAR_STATUS_CHK" class="input-checkbox" data-warning="Define se em páginas de classificações será exibido se o personagem está online.">Habilitar exibição de estado do personagem</label>
                     </div>
 
             </div>

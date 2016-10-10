@@ -49,8 +49,13 @@ class Cache
      *
      * @return $mixed
      */
-    public static function get($index, $defaultValue, $force = false, $cache = BRACP_CACHE_EXPIRE)
+    public static function get($index, $defaultValue, $force = false, $cache = null)
     {
+        // [2016-10-10, CHLFZ] Problemas durante a instalação, leitura das pastas sem a definição
+        //                     estava causando um pequeno problema durante a execução.
+        if(is_null($cache))
+            $cache = (defined('BRACP_CACHE_EXPIRE') ? BRACP_CACHE_EXPIRE : 600);
+
         // [2016-08-02, CHLFZ] Adicionado teste porque quando o brACP não está instado a variável não está definida.
         if(!defined('BRACP_CACHE') || !BRACP_CACHE)
             return ((is_callable($defaultValue)) ? $defaultValue() : $defaultValue);
