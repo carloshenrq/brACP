@@ -138,7 +138,14 @@ $_CONFIG_DATA = array(
     'BRACP_ALLOW_MODS'                      => false,
 );
 
-// print_r($PDO_DRIVES);
+
+// Verifica se foram enviados dados de instalação
+if($PRE_REQUISITES['is_writable'] && isset($_POST) && !empty($_POST))
+{
+    // @Todo: Fazer os testes de instalação.
+
+    exit;
+}
 
 // Informações sobre criptografia de sessão.
 $_CONFIG_CIPHER = array();
@@ -224,7 +231,25 @@ $langs = Language::readAll();
                  */
                 $scope.install              = function()
                 {
-                    alert('!!! @Todo !!!');
+                    var installData = $.param(angular.merge(
+                        $scope.INSTALL_VARS,
+                        {
+                            'BRACP_SERVERS' : $scope.BRACP_SERVERS
+                        }
+                    ));
+
+                    $http({
+                        'method'    : 'post',
+                        'url'       : 'install.php',
+                        'data'      : installData,
+                        'headers'   : {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        }
+                    }).then(function(response) {
+                        console.info(response);
+                    }, function(response) {
+                        console.error(response);
+                    });
                 }
 
                 $scope.sessionAlgoChange    = function()
