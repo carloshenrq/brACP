@@ -28,46 +28,66 @@ use \ServerPing;
  *
  * @static
  */
-class Home
+class Home extends Caller
 {
-    use \TApplication;
-
     /**
-     * Método para alterar o tema padrão do painel de controle.
-     *
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     * @param array $args
+     * Construtor para o 
      */
-    public static function theme(ServerRequestInterface $request, ResponseInterface $response, $args)
+    public function __construct(\brACPApp $app)
     {
-        // Atualiza informações do tema.
-        $post = $request->getParsedBody();
-
-        // Realiza a alteração de tema se for necessário.
-        if(isset($post['BRACP_THEME']))
-        {
-            self::getApp()->getSession()->BRACP_THEME = $post['BRACP_THEME'];
-        }
+        // Controller sem restrições de chamada
+        parent::__construct($app, []);
     }
 
     /**
-     * Método para alterar a linguagem padrão do painel de controle.
+     * Página principal para o brACP.
      *
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     * @param array $args
+     * @param array $get
+     * @param array $post
      */
-    public static function server(ServerRequestInterface $request, ResponseInterface $response, $args)
+    public function index_GET($get, $post, $response)
     {
-        // Atualiza informações do tema.
-        $post = $request->getParsedBody();
+        $this->getApp()->display('home');
+    }
 
+    /**
+     * Rota para alterar a linguagem de tradução do brACP.
+     *
+     * @param array $get
+     * @param array $post
+     */
+    public function language_POST($get, $post, $response)
+    {
+        if(isset($post['BRACP_LANGUAGE']))
+            $this->getApp()->getSession()->BRACP_LANGUAGE = $post['BRACP_LANGUAGE'];
+    }
+
+    /**
+     * Action para alterar o tema do brACP.
+     *
+     * @param array $get
+     * @param array $post
+     */
+    public function theme_POST($get, $post, $response)
+    {
+        if(isset($post['BRACP_THEME']))
+            $this->getApp()->getSession()->BRACP_THEME = $post['BRACP_THEME'];
+    }
+
+    /**
+     * Método para alterar o servidor de execução atual do brACP.
+     *
+     * @param array $get
+     * @param array $post
+     */
+    public function server_POST($get, $post, $response)
+    {
         // Realiza a alteração de tema se for necessário.
         if(isset($post['BRACP_SRV_SELECTED']))
-            self::getApp()->getSession()->BRACP_SVR_SELECTED = $post['BRACP_SRV_SELECTED'];
+            $this->getApp()->getSession()->BRACP_SVR_SELECTED = $post['BRACP_SRV_SELECTED'];
 
-        $serverStatus = ServerPing::pingServer(self::getApp()->getSession()->BRACP_SVR_SELECTED, true);
+        // Obtém o status do servidor selecionado.
+        $serverStatus = ServerPing::pingServer($this->getApp()->getSession()->BRACP_SVR_SELECTED, true);
 
         // Responde ao client que foi alterado com sucesso.
         $response->withJson([
@@ -77,38 +97,5 @@ class Home
             'playerCount'   => $serverStatus->playerCount,
         ]);
     }
-
-    /**
-     * Método para alterar a linguagem padrão do painel de controle.
-     *
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     * @param array $args
-     */
-    public static function language(ServerRequestInterface $request, ResponseInterface $response, $args)
-    {
-        // Atualiza informações do tema.
-        $post = $request->getParsedBody();
-
-        // Realiza a alteração de tema se for necessário.
-        if(isset($post['BRACP_LANGUAGE']))
-        {
-            self::getApp()->getSession()->BRACP_LANGUAGE = $post['BRACP_LANGUAGE'];
-        }
-    }
-
-    /**
-     * Método inicial para exibição dos templates na tela.
-     *
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     * @param array $args
-     */
-    public static function index(ServerRequestInterface $request, ResponseInterface $response, $args)
-    {
-        // Exibe o display para home.
-        self::getApp()->display('home');
-    }
-
 }
 

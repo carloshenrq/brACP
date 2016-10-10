@@ -43,7 +43,12 @@ class Route
             if(!file_exists( __DIR__ . '/../theme.cache'))
                 Themes::cacheAll();
 
-            // Define a rota para a tela principal.
+            $app = self::getApp();
+
+            // Adicionado mapa para todas as rotas 
+            $app->any('/{controller}/{action}/[{sub_action}/]', ['Controller\Caller', 'parseRoute']);
+
+            /*// Define a rota para a tela principal.
             self::getApp()->get('/', ['Controller\Home', 'index']);
 
             // Define a rota para a tela principal.
@@ -132,7 +137,7 @@ class Route
             //             $this->get('/chars/economy/json', ['Controller\Ranking', 'economyJson']);
             //         }
             //     });
-            // }
+            // } */
         }
 
         // Chama o próximo middleware.
