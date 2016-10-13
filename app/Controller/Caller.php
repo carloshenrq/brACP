@@ -103,12 +103,9 @@ class Caller
 
         // Verifica se o método de chamada existe no controller.
         if(method_exists($instance, $callMethod) && $instance->canCall($callMethod))
-            $instance->{$callMethod}($get_params, $data_params, $response);
+            return $instance->{$callMethod}($get_params, $data_params, $response);
         else
             return $response->withStatusCode(403);
-
-        // Retorna a resposta para o browse.
-        return $response;
     }
 }
 

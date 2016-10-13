@@ -19,8 +19,6 @@
 
 namespace Controller;
 
-use \Psr\Http\Message\ServerRequestInterface;
-use \Psr\Http\Message\ResponseInterface;
 use \ServerPing;
 
 /**
@@ -48,6 +46,7 @@ class Home extends Caller
     public function index_GET($get, $post, $response)
     {
         $this->getApp()->display('home');
+        return $response;
     }
 
     /**
@@ -60,6 +59,7 @@ class Home extends Caller
     {
         if(isset($post['BRACP_LANGUAGE']))
             $this->getApp()->getSession()->BRACP_LANGUAGE = $post['BRACP_LANGUAGE'];
+        return $response;
     }
 
     /**
@@ -72,6 +72,8 @@ class Home extends Caller
     {
         if(isset($post['BRACP_THEME']))
             $this->getApp()->getSession()->BRACP_THEME = $post['BRACP_THEME'];
+
+        return $response;
     }
 
     /**
@@ -96,6 +98,8 @@ class Home extends Caller
             'map'           => $serverStatus->map,
             'playerCount'   => $serverStatus->playerCount,
         ]);
+
+        return $response;
     }
 }
 
