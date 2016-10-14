@@ -365,6 +365,46 @@ class brACPApp extends Slim\App
     }
 
     /**
+     * Obtém o conector com o banco de dados para os monstros, itens etc...
+     *
+     * @return object
+     */
+    public function getDbEm()
+    {
+        return $this->getEm('db');
+    }
+
+    /**
+     * Obtém o conector com o banco de dados para o servidor da CP.
+     *
+     * @return object
+     */
+    public function getCpEm()
+    {
+        return $this->getEm('cp');
+    }
+
+    /**
+     * Obtém o conector com o banco de dados para o servidor selecionado pelo jogador.
+     *
+     * @return object
+     */
+    public function getSvrEm()
+    {
+        return $this->getEm('SV' . $this->getSession()->BRACP_SVR_SELECTED);
+    }
+
+    /**
+     * Obtém o conector com o banco de dados para o servidor de contas.
+     *
+     * @return object
+     */
+    public function getSvrDftEm()
+    {
+        return $this->getEm('SV' . BRACP_SRV_DEFAULT);
+    }
+
+    /**
      * Obtém o define do servidor para o jogador conectado.
      */
     public function setServerStatus($server_status)

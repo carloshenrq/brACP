@@ -126,7 +126,7 @@
                                 <label for="modal-register" class="button small success">@@MENU,MYACC,UNAUTHENTICATED(CREATE)</label>
                             {/if}
                         {else}
-                            <div class="url-link button small error" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}account/logout">@@MENU,MYACC,AUTHENTICATED(LOGOUT, {$userid})</div>
+                            <div class="url-link button small error" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}account/logout/">@@MENU,MYACC,AUTHENTICATED(LOGOUT, {$userid})</div>
                         {/if}
                     </div>
 

@@ -78,6 +78,19 @@ class Caller
     }
 
     /**
+     * Valida a string informada contra a expressão regular.
+     *
+     * @param string $string
+     * @param string $regexp
+     *
+     * @return boolean Caso verdadeiro, validou com sucesso.
+     */
+    protected function validate($string, $regexp)
+    {
+        return preg_match('/^' . $regexp . '$/', $string) == 1;
+    }
+
+    /**
      * Método utilizado para tratamento de rotas.
      */
     public static function parseRoute(ServerRequestInterface $request, ResponseInterface $response, $args)
@@ -105,7 +118,7 @@ class Caller
         if(method_exists($instance, $callMethod) && $instance->canCall($callMethod))
             return $instance->{$callMethod}($get_params, $data_params, $response);
         else
-            return $response->withStatusCode(403);
+            throw new \Slim\Exception\NotFoundException($request, $response);
     }
 }
 

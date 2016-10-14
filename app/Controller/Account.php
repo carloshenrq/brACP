@@ -42,16 +42,16 @@ use \Language;
  */
 class Account extends Caller
 {
+    /**
+     * Obtém o usuário logado no sistema.
+     * @var \Model\Login
+     */
+    private static $user = null;
+
     public function __construct(\brACPApp $app)
     {
         parent::__construct($app, []);
     }
-
-    // /**
-    //  * Obtém o usuário logado no sistema.
-    //  * @var \Model\Login
-    //  */
-    // private static $user = null;
 
     // /**
     //  * Método para retornar os dados de personagem.
@@ -1265,6 +1265,12 @@ class Account extends Caller
 
     /**
      * Rota definida para realizar login do usuário.
+     *
+     * @param array $get
+     * @param array $post
+     * @param object $response
+     *
+     * @return object
      */
     public function login_POST($get, $post, $response)
     {
@@ -1276,18 +1282,76 @@ class Account extends Caller
         ];
 
         // Verifica configurações do reCaptcha para realizar o login.
-        if($this->getApp()->testRecaptcha($post))
+        if($this->getApp()->testRecaptcha($post)
+            && isset($post['userid']) && $this->validate($post['userid'], BRACP_REGEXP_USERNAME)
+            && isset($post['user_pass']) && $this->validate($post['user_pass'], BRACP_REGEXP_PASSWORD))
         {
-            // @todo: Finalizar informações para login.
+            $userid = $post['userid'];
+            $user_pass = $post['user_pass'];
+
+            if(BRACP_MD5_PASSWORD_HASH)
+                $user_pass = hash('md5', $user_pass);
+
+            try
+            {
+                // Procura a conta no banco de dados.
+                $account = $this->getApp()
+                                ->getSvrDftEm()
+                                ->getRepository('Model\Login')
+                                ->findOneBy([
+                                    'userid'        => $userid,
+                                    'user_pass'     => $user_pass
+                                ]);
+            }
+            catch(Exception $ex)
+            {
+                $account = null;
+                $return = array_merge($return, [
+                    'info' => $ex->getMessage(),
+                ]);
+            }
+
+            // Caso a conta não seja encontrada no banco de dados.
+            if(is_null($account))
+            {
+                if(BRACP_RECAPTCHA_ENABLED)
+                    $this->getApp()->getSession()->BRACP_RECAPTCHA_ERROR_REQUEST++;
+            }
+            else
+            {
+                $this->getApp()->getSession()->BRACP_ISLOGGEDIN = true;
+                $this->getApp()->getSession()->BRACP_ACCOUNTID  = $account->getAccount_id();
+
+                // Define que o login foi realizado com sucesso.
+                $return['stage'] = 1;
+                $return['loginSuccess'] = true;
+                $return['loginError'] = false;
+            }
         }
 
         // Dados de retorno.
         return $response->withJson($return);
     }
 
-    public static function isLoggedIn()
+    /**
+     * Método utilizado para realizar logout da conta.
+     *
+     * @param array $get
+     * @param array $post
+     * @param object $response
+     *
+     * @return object
+     */
+    public function logout_GET($get, $post, $response)
     {
-        return false;
+        // Apaga da sessão dados do usuário.
+        unset($this->getApp()->getSession()->BRACP_ISLOGGEDIN,
+                $this->getApp()->getSession()->BRACP_ACCOUNTID);
+
+        // Exibe o form de logout.
+        $this->getApp()->display('account.logout');
+
+        return $response;
     }
 
     // /**
@@ -1356,32 +1420,36 @@ class Account extends Caller
     //     return $response;
     // }
 
-    // /**
-    //  * Verifica se o usuário está logado no sistema.
-    //  *
-    //  * @return boolean
-    //  */
-    // public static function isLoggedIn()
-    // {
-    //     return isset(self::getApp()->getSession()->BRACP_ISLOGGEDIN)
-    //                 and self::getApp()->getSession()->BRACP_ISLOGGEDIN == true;
-    // }
+    /**
+     * Verifica se o usuário está logado no sistema.
+     *
+     * @return boolean
+     */
+    public static function isLoggedIn()
+    {
+        $app = \brACPApp::getInstance();
 
-    // /**
-    //  * Obtém o usuário logado no sistema.
-    //  *
-    //  * @return \Model\Login
-    //  */
-    // public static function loggedUser()
-    // {
-    //     // Se não possui usuário em cache, obtém o usuário do banco
-    //     //  e atribui ao cache.
-    //     if(is_null(self::$user))
-    //         self::$user = self::getSvrDftEm()
-    //                             ->getRepository('Model\Login')
-    //                             ->findOneBy(['account_id' => self::getApp()->getSession()->BRACP_ACCOUNTID]);
-    //     // Retorna o usuário logado.
-    //     return self::$user;
-    // }
+        return isset($app->getSession()->BRACP_ISLOGGEDIN)
+                    and $app->getSession()->BRACP_ISLOGGEDIN == true;
+    }
+
+    /**
+     * Obtém o usuário logado no sistema.
+     *
+     * @return \Model\Login
+     */
+    public static function loggedUser()
+    {
+        $app = \brACPApp::getInstance();
+
+        // Se não possui usuário em cache, obtém o usuário do banco
+        //  e atribui ao cache.
+        if(is_null(self::$user))
+            self::$user = $app->getSvrDftEm()
+                            ->getRepository('Model\Login')
+                            ->findOneBy(['account_id' => $app->getSession()->BRACP_ACCOUNTID]);
+        // Retorna o usuário logado.
+        return self::$user;
+    }
 }
 

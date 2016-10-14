@@ -56,6 +56,8 @@ brACPApp.controller('account.login', ['$scope', '$http', function($scope, $http)
             }
         }).then(function(response) {
 
+            console.log(response);
+
             $scope.stage = response.data.stage;
             $scope.loginSuccess = response.data.loginSuccess;
             $scope.loginError = response.data.loginError;
