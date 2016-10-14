@@ -92,14 +92,12 @@ class Home extends Caller
         $serverStatus = ServerPing::pingServer($this->getApp()->getSession()->BRACP_SVR_SELECTED, true);
 
         // Responde ao client que foi alterado com sucesso.
-        $response->withJson([
+        return $response->withJson([
             'login'         => $serverStatus->login,
             'char'          => $serverStatus->char,
             'map'           => $serverStatus->map,
             'playerCount'   => $serverStatus->playerCount,
         ]);
-
-        return $response;
     }
 }
 
