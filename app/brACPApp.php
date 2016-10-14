@@ -409,7 +409,7 @@ class brACPApp extends Slim\App
         if($needRecaptcha && isset($post['recaptcha']))
             return $this->checkReCaptcha($post['recaptcha']);
 
-        return false;
+        return !$needRecaptcha;
     }
 
     /**
