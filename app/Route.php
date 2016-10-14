@@ -47,7 +47,7 @@ class Route
 
             // Redireciona a rota para o home-index
             $app->any('/', function($request, $response, $args) {
-                return $response->withRedirect('/home/index/');
+                return $response->withRedirect(BRACP_DIR_INSTALL_URL . 'home/index/');
             });
 
             // Adicionado mapa para todas as rotas 

@@ -192,7 +192,108 @@ if($PRE_REQUISITES['is_writable'] && isset($_POST) && !empty($_POST))
         exit;
     }
 
-    // @Todo: Fazer os testes de instalação.
+    // Varre todos os servidores para testar a conexão com o banco de dados
+    // Verificando se está tudo certo.
+    foreach($_POST['BRACP_SERVERS'] as $i => $server)
+    {
+        try
+        {
+            // Realiza um teste em todos os sub-servidores para saber se a conexão com o banco
+            // está ok e pode ser utilizada sem problemas.
+            $sql = $server['sql'];
+            $dsn = 'mysql:dbname=' . $sql['dbname'] . ';host=' . $sql['host'];
+            $uid = $sql['user'];
+            $pid = $sql['pass'];
+
+            $pdo = new PDO($dsn, $uid, $pid, [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+            ]);
+
+            $pdo = null;
+            unset($dsn, $uid, $pid, $pdo);
+        }
+        catch(Exception $ex)
+        {
+            echo json_encode([
+                'status'    => '1',
+                'local'     => 'SQL - Servidores (' . $server['name'] . ')',
+                'message'   => $ex->getMessage(),
+            ]);
+            exit;
+        }
+    }
+
+    // Inicializa o arquivo de instalação do brACP.
+    // Realizar gravação dos arquivos.
+    $configData = [];
+
+    $configData[] = '<?php';
+    $configData[] = '/**';
+    $configData[] = ' * Este arquivo de instalação foi gerado pelo programa de instalação do brACP ';
+    $configData[] = ' * Esta cópia do brACP foi instalada em ' . date( 'Y-m-d H:i:s' );
+    $configData[] = ' * ---- Versão do brACP:   ' . $_POST['BRACP_VERSION'];
+    $configData[] = ' * ---- URL de Instalação: ' . $_POST['BRACP_URL'];
+    $configData[] = ' */';
+    $configData[] = '';
+
+    $_tmpServerDefault = 0;
+    $_tmpServerCount = 0;
+
+    foreach($_POST as $k => $data)
+    {
+        // Se a variavel de instalação não for do brACP, então
+        // Ignora o indice.
+        // if(!preg_match('/^BRACP_', $k))
+        //     continue;
+
+        if(!is_array($data))
+        {
+            if(preg_match('/^([0-9]+)$/', $data) || preg_match('/^(true|false)$/i', $data))
+                $configData[]   = "DEFINE('{$k}', {$data}, false);";
+            else
+                $configData[]   = "DEFINE('{$k}', '" . addslashes($data) . "', false);";
+        }
+        else
+        {
+            // @Todo: Gravação de dados de array como por exemplo o BRACP_SERVERS.
+            if($k == 'BRACP_SERVERS')
+            {
+                foreach($data as $i => $server)
+                {
+                    $sql = $server['sql'];
+                    $sub = $server['servers'];
+
+                    $configData[] = "DEFINE('BRACP_SRV_{$i}_NAME', '" .         addslashes($server['name']) . "', false);";
+                    $configData[] = "DEFINE('BRACP_SRV_{$i}_LOGIN_IP', '" .     addslashes($sub['login']['address']) . "', false);";
+                    $configData[] = "DEFINE('BRACP_SRV_{$i}_LOGIN_PORT', '" .   addslashes($sub['login']['port']) . "', false);";
+                    $configData[] = "DEFINE('BRACP_SRV_{$i}_CHAR_IP', '" .      addslashes($sub['char']['address']) . "', false);";
+                    $configData[] = "DEFINE('BRACP_SRV_{$i}_CHAR_PORT', '" .    addslashes($sub['char']['port']) . "', false);";
+                    $configData[] = "DEFINE('BRACP_SRV_{$i}_MAP_IP', '" .       addslashes($sub['map']['address']) . "', false);";
+                    $configData[] = "DEFINE('BRACP_SRV_{$i}_MAP_PORT', '" .     addslashes($sub['map']['port']) . "', false);";
+                    $configData[] = "DEFINE('BRACP_SRV_{$i}_SQL_DRIVER', '" .   addslashes($sql['driver']) . "', false);";
+                    $configData[] = "DEFINE('BRACP_SRV_{$i}_SQL_HOST', '" .     addslashes($sql['host']) . "', false);";
+                    $configData[] = "DEFINE('BRACP_SRV_{$i}_SQL_USER', '" .     addslashes($sql['user']) . "', false);";
+                    $configData[] = "DEFINE('BRACP_SRV_{$i}_SQL_PASS', '" .     addslashes($sql['pass']) . "', false);";
+                    $configData[] = "DEFINE('BRACP_SRV_{$i}_SQL_DBNAME', '" .   addslashes($sql['dbname']) . "', false);";
+
+                    if(intval($server['default']) == 1)
+                        $_tmpServerDefault = $i;
+
+                    $_tmpServerCount++;
+                }
+            }
+        }
+    }
+
+
+    $configData[] = '';
+    $configData[] = "DEFINE('BRACP_SRV_DEFAULT', {$_tmpServerDefault}, false);";
+    $configData[] = "DEFINE('BRACP_SRV_COUNT', {$_tmpServerCount}, false);";
+    $configData[] = '';
+    $configData[] = '// Fim da instalação do brACP.';
+    $configData[] = '';
+
+    file_put_contents('config.php', implode("\n", $configData));
 
     echo json_encode([
         'status'    => 0,
@@ -285,13 +386,22 @@ $langs = Language::readAll();
                  */
                 $scope.install              = function()
                 {
+                    var _tmp = parseInt('0x' + parseInt($scope.REGEXP_USERNAME) + parseInt($scope.REGEXP_PASSWORD));
+                    var _username = _tmp&0x10 ? '[a-zA-Z0-9]{4,32}' :
+                                    _tmp&0x20 ? '[a-zA-Z0-9\\s@\\$#%&\\*!]{4,32}' : '.{4,32}';
+                    var _password = _tmp&0x01 ? '[a-zA-Z0-9]{4,32}' :
+                                    _tmp&0x02 ? '[a-zA-Z0-9\\s@\\$#%&\\*!]{4,32}' : '.{4,32}';
+
                     var installData = $.param(angular.merge(
                         $scope.INSTALL_VARS,
                         {
-                            'BRACP_SERVERS' : $scope.BRACP_SERVERS
+                            'BRACP_SERVERS'         : $scope.BRACP_SERVERS,
+                            'BRACP_REGEXP_FORMAT'   : _tmp,
+                            'BRACP_REGEXP_USERNAME' : _username,
+                            'BRACP_REGEXP_PASSWORD' : _password,
                         }
                     ));
-
+                    // $scope.config.BRACP_REGEXP_FORMAT = parseInt('0x' + (parseInt($scope.BRACP_REGEXP_FORMAT_USER) + parseInt($scope.BRACP_REGEXP_FORMAT_PASS)));
                     $http({
                         'method'    : 'post',
                         'url'       : 'install.php',
@@ -309,6 +419,7 @@ $langs = Language::readAll();
                             return;
                         }
 
+                        console.log(data);
 
                     }, function(response) {
                         console.error(response);
