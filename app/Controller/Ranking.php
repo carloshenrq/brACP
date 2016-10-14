@@ -21,136 +21,142 @@ namespace Controller;
 
 use \Cache;
 
-use \Psr\Http\Message\ServerRequestInterface;
-use \Psr\Http\Message\ResponseInterface;
-
 /**
  * Controlador para dados de conta.
  *
  * @static
  */
-class Ranking
+class Ranking extends Caller
 {
-    use \TApplication;
-
     /**
-     * Método inicial para exibição dos templates na tela.
-     *
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     * @param array $args
+     * Construtor para o 
      */
-    public static function chars(ServerRequestInterface $request, ResponseInterface $response, $args)
+    public function __construct(\brACPApp $app)
     {
-        // Exibe o display para home.
-        self::getApp()->display('rankings.chars');
+        // Controller sem restrições de chamada
+        parent::__construct($app, []);
     }
 
-    /**
-     * Método inicial para exibição dos templates na tela.
-     *
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     * @param array $args
-     */
-    public static function charJson(ServerRequestInterface $request, ResponseInterface $response, $args)
-    {
-        // Define que irá carregar o cache de personagens a serem exibidos
-        //  ou criar o cache.
-        $app = self::getApp();
-        $chars = Cache::get('BRACP_RANKING_CHARS', function() use ($app) {
-            $_cacheData = [];
-            $data = $app->getEm()
-                        ->createQuery('
-                            SELECT
-                                chars
-                            FROM
-                                Model\Char chars
-                            ORDER BY
-                                chars.base_level DESC,
-                                chars.job_level DESC,
-                                chars.base_exp DESC,
-                                chars.job_exp DESC
-                        ')
-                        ->setMaxResults(20)
-                        ->getResult();
+    // use \TApplication;
 
-            foreach($data as $i => $char)
-            {
-                $_cacheData[] = [
-                    'pos' => 1 + $i,
-                    'name' => $char->getName(),
-                    'class' => '@@JOBS('.$char->getClass().')',
-                    'baseLevel' => $char->getBase_Level(),
-                    'jobLevel' => $char->getJob_Level(),
-                    'online' => $char->getOnline(),
-                    'status' => '@@STATUS('.$char->getOnline().')',
-                ];
-            }
+    // /**
+    //  * Método inicial para exibição dos templates na tela.
+    //  *
+    //  * @param ServerRequestInterface $request
+    //  * @param ResponseInterface $response
+    //  * @param array $args
+    //  */
+    // public static function chars(ServerRequestInterface $request, ResponseInterface $response, $args)
+    // {
+    //     // Exibe o display para home.
+    //     self::getApp()->display('rankings.chars');
+    // }
 
-            return json_decode(\Language::parse(json_encode($_cacheData)));
-        });
+    // /**
+    //  * Método inicial para exibição dos templates na tela.
+    //  *
+    //  * @param ServerRequestInterface $request
+    //  * @param ResponseInterface $response
+    //  * @param array $args
+    //  */
+    // public static function charJson(ServerRequestInterface $request, ResponseInterface $response, $args)
+    // {
+    //     // Define que irá carregar o cache de personagens a serem exibidos
+    //     //  ou criar o cache.
+    //     $app = self::getApp();
+    //     $chars = Cache::get('BRACP_RANKING_CHARS', function() use ($app) {
+    //         $_cacheData = [];
+    //         $data = $app->getEm()
+    //                     ->createQuery('
+    //                         SELECT
+    //                             chars
+    //                         FROM
+    //                             Model\Char chars
+    //                         ORDER BY
+    //                             chars.base_level DESC,
+    //                             chars.job_level DESC,
+    //                             chars.base_exp DESC,
+    //                             chars.job_exp DESC
+    //                     ')
+    //                     ->setMaxResults(20)
+    //                     ->getResult();
 
-        $response->withJson($chars);
-    }
+    //         foreach($data as $i => $char)
+    //         {
+    //             $_cacheData[] = [
+    //                 'pos' => 1 + $i,
+    //                 'name' => $char->getName(),
+    //                 'class' => '@@JOBS('.$char->getClass().')',
+    //                 'baseLevel' => $char->getBase_Level(),
+    //                 'jobLevel' => $char->getJob_Level(),
+    //                 'online' => $char->getOnline(),
+    //                 'status' => '@@STATUS('.$char->getOnline().')',
+    //             ];
+    //         }
 
-    /**
-     * Método inicial para exibição dos templates na tela.
-     *
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     * @param array $args
-     */
-    public static function economy(ServerRequestInterface $request, ResponseInterface $response, $args)
-    {
-        // Exibe o display para home.
-        self::getApp()->display('rankings.chars.economy');
-    }
+    //         return json_decode(\Language::parse(json_encode($_cacheData)));
+    //     });
 
-    /**
-     * Método inicial para exibição dos templates na tela.
-     *
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     * @param array $args
-     */
-    public static function economyJson(ServerRequestInterface $request, ResponseInterface $response, $args)
-    {
-        // Define que irá carregar o cache de personagens a serem exibidos
-        //  ou criar o cache.
-        $app = self::getApp();
-        $chars = Cache::get('BRACP_RANKING_ECONOMY', function() use ($app) {
-            $_cacheData = [];
-            $data = $app->getEm()
-                        ->createQuery('
-                            SELECT
-                                chars
-                            FROM
-                                Model\Char chars
-                            ORDER BY
-                                chars.zeny DESC
-                        ')
-                        ->setMaxResults(20)
-                        ->getResult();
+    //     $response->withJson($chars);
+    // }
 
-            foreach($data as $i => $char)
-            {
-                $_cacheData[] = [
-                    'pos' => 1 + $i,
-                    'name' => $char->getName(),
-                    'class' => '@@JOBS('.$char->getClass().')',
-                    'baseLevel' => $char->getBase_Level(),
-                    'jobLevel' => $char->getJob_Level(),
-                    'zeny'  => \Format::zeny($char->getZeny()),
-                    'online' => $char->getOnline(),
-                    'status' => '@@STATUS('.$char->getOnline().')',
-                ];
-            }
+    // /**
+    //  * Método inicial para exibição dos templates na tela.
+    //  *
+    //  * @param ServerRequestInterface $request
+    //  * @param ResponseInterface $response
+    //  * @param array $args
+    //  */
+    // public static function economy(ServerRequestInterface $request, ResponseInterface $response, $args)
+    // {
+    //     // Exibe o display para home.
+    //     self::getApp()->display('rankings.chars.economy');
+    // }
 
-            return json_decode(\Language::parse(json_encode($_cacheData)));
-        });
+    // /**
+    //  * Método inicial para exibição dos templates na tela.
+    //  *
+    //  * @param ServerRequestInterface $request
+    //  * @param ResponseInterface $response
+    //  * @param array $args
+    //  */
+    // public static function economyJson(ServerRequestInterface $request, ResponseInterface $response, $args)
+    // {
+    //     // Define que irá carregar o cache de personagens a serem exibidos
+    //     //  ou criar o cache.
+    //     $app = self::getApp();
+    //     $chars = Cache::get('BRACP_RANKING_ECONOMY', function() use ($app) {
+    //         $_cacheData = [];
+    //         $data = $app->getEm()
+    //                     ->createQuery('
+    //                         SELECT
+    //                             chars
+    //                         FROM
+    //                             Model\Char chars
+    //                         ORDER BY
+    //                             chars.zeny DESC
+    //                     ')
+    //                     ->setMaxResults(20)
+    //                     ->getResult();
 
-        $response->withJson($chars);
-    }
+    //         foreach($data as $i => $char)
+    //         {
+    //             $_cacheData[] = [
+    //                 'pos' => 1 + $i,
+    //                 'name' => $char->getName(),
+    //                 'class' => '@@JOBS('.$char->getClass().')',
+    //                 'baseLevel' => $char->getBase_Level(),
+    //                 'jobLevel' => $char->getJob_Level(),
+    //                 'zeny'  => \Format::zeny($char->getZeny()),
+    //                 'online' => $char->getOnline(),
+    //                 'status' => '@@STATUS('.$char->getOnline().')',
+    //             ];
+    //         }
+
+    //         return json_decode(\Language::parse(json_encode($_cacheData)));
+    //     });
+
+    //     $response->withJson($chars);
+    // }
 }
 

@@ -19,8 +19,6 @@
 
 namespace Controller;
 
-use \Psr\Http\Message\ServerRequestInterface;
-use \Psr\Http\Message\ResponseInterface;
 use \ServerPing;
 use \Cache;
 
@@ -29,126 +27,135 @@ use \Cache;
  *
  * @static
  */
-class Item
+class Item extends Caller
 {
-    use \TApplication;
-
-    private static $itemsCache = [];
-    private static $loaded = false;
-
     /**
-     * Método para incializar os itens em cache.
+     * Construtor para o 
      */
-    public static function cacheLoad()
+    public function __construct(\brACPApp $app)
     {
-        if(self::$loaded)
-            return;
-
-        self::$itemsCache = Cache::get('BRACP_ITEMDB', function() {
-            return [];
-        }, false, -1);
-
-        self::$loaded = true;
+        // Controller sem restrições de chamada
+        parent::__construct($app, []);
     }
 
-    /**
-     * Obtém dados do item por Id
-     *
-     * @param integer $id
-     *
-     * @return object
-     */
-    public static function get($id)
-    {
-        return self::getFromCacheId($id);
-    }
+    // use \TApplication;
 
-    /**
-     * Obtém o item do cache.
-     *
-     * @param integer $id
-     */
-    public static function getFromCacheId($id)
-    {
-        self::cacheLoad();
+    // private static $itemsCache = [];
+    // private static $loaded = false;
 
-        $items = self::$itemsCache;
-        self::$itemsCache = null;
+    // /**
+    //  * Método para incializar os itens em cache.
+    //  */
+    // public static function cacheLoad()
+    // {
+    //     if(self::$loaded)
+    //         return;
 
-        if(!isset($items[$id]))
-        {
-            $item = self::getFromId($id);
-            $item->cache_expire = time() + BRACP_CACHE_EXPIRE;
-            $items[$id] = $item;
+    //     self::$itemsCache = Cache::get('BRACP_ITEMDB', function() {
+    //         return [];
+    //     }, false, -1);
 
-            Cache::delete('BRACP_ITEMDB');
+    //     self::$loaded = true;
+    // }
 
-           self::$itemsCache = Cache::get('BRACP_ITEMDB', function() use ($items) {
-                return $items;
-            }, false, -1);
-        }
+    // /**
+    //  * Obtém dados do item por Id
+    //  *
+    //  * @param integer $id
+    //  *
+    //  * @return object
+    //  */
+    // public static function get($id)
+    // {
+    //     return self::getFromCacheId($id);
+    // }
 
-        self::$itemsCache = $items;
-        $item = self::$itemsCache[$id];
+    // /**
+    //  * Obtém o item do cache.
+    //  *
+    //  * @param integer $id
+    //  */
+    // public static function getFromCacheId($id)
+    // {
+    //     self::cacheLoad();
 
-        if($item->cache_expire <= time())
-        {
-            unset(self::$itemsCache[$id]);
-            return self::getFromCacheId($id);
-        }
+    //     $items = self::$itemsCache;
+    //     self::$itemsCache = null;
 
-        return self::$itemsCache[$id];
-    }
+    //     if(!isset($items[$id]))
+    //     {
+    //         $item = self::getFromId($id);
+    //         $item->cache_expire = time() + BRACP_CACHE_EXPIRE;
+    //         $items[$id] = $item;
 
-    /**
-     * Obtém os dados do item por id, direto na conexão com o banco
-     *
-     * @param integer $id
-     *
-     * @return object
-     */
-    private static function getFromId($id)
-    {
-        self::cacheLoad();
+    //         Cache::delete('BRACP_ITEMDB');
 
-        $item = self::getDbEm()
-                    ->createQuery('
-                        SELECT
-                            item
-                        FROM
-                            Model\Item item
-                        WHERE
-                            item.id = :id
-                    ')
-                    ->setParameter('id', $id)
-                    ->getOneOrNullResult();
+    //        self::$itemsCache = Cache::get('BRACP_ITEMDB', function() use ($items) {
+    //             return $items;
+    //         }, false, -1);
+    //     }
 
-        if(is_null($item))
-        {
-            $item = new \Model\Item;
-            $item->setId($id);
-            $item->setName_japanese('Unknow');
-            $item->setType(0);
-            $item->setSlots(0);
-        }
+    //     self::$itemsCache = $items;
+    //     $item = self::$itemsCache[$id];
 
-        $obj = (object)[
-            // Informações do item (Direto do banco)
-            'id'            => $item->getId(),
-            'name'          => utf8_encode($item->getName_japanese()),
-            'type'          => $item->getType(),
-            'slots'         => $item->getSlots(),
+    //     if($item->cache_expire <= time())
+    //     {
+    //         unset(self::$itemsCache[$id]);
+    //         return self::getFromCacheId($id);
+    //     }
 
-            // Dados para exibição do item
-            'icon'          => BRACP_DIR_INSTALL_URL . 'data/items/icons/' . $item->getId() . '.png',
-            'image'         => BRACP_DIR_INSTALL_URL . 'data/items/images/' . $item->getId() . '.png',
+    //     return self::$itemsCache[$id];
+    // }
 
-            // Informações de cache.
-            'cache'         => time(),
-            'cache_expire'  => time()
-        ];
+    // *
+    //  * Obtém os dados do item por id, direto na conexão com o banco
+    //  *
+    //  * @param integer $id
+    //  *
+    //  * @return object
+     
+    // private static function getFromId($id)
+    // {
+    //     self::cacheLoad();
 
-        return $obj;
-    }
+    //     $item = self::getDbEm()
+    //                 ->createQuery('
+    //                     SELECT
+    //                         item
+    //                     FROM
+    //                         Model\Item item
+    //                     WHERE
+    //                         item.id = :id
+    //                 ')
+    //                 ->setParameter('id', $id)
+    //                 ->getOneOrNullResult();
+
+    //     if(is_null($item))
+    //     {
+    //         $item = new \Model\Item;
+    //         $item->setId($id);
+    //         $item->setName_japanese('Unknow');
+    //         $item->setType(0);
+    //         $item->setSlots(0);
+    //     }
+
+    //     $obj = (object)[
+    //         // Informações do item (Direto do banco)
+    //         'id'            => $item->getId(),
+    //         'name'          => utf8_encode($item->getName_japanese()),
+    //         'type'          => $item->getType(),
+    //         'slots'         => $item->getSlots(),
+
+    //         // Dados para exibição do item
+    //         'icon'          => BRACP_DIR_INSTALL_URL . 'data/items/icons/' . $item->getId() . '.png',
+    //         'image'         => BRACP_DIR_INSTALL_URL . 'data/items/images/' . $item->getId() . '.png',
+
+    //         // Informações de cache.
+    //         'cache'         => time(),
+    //         'cache_expire'  => time()
+    //     ];
+
+    //     return $obj;
+    // }
 }
 

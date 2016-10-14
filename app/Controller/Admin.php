@@ -30,142 +30,151 @@ use \Request;
  *
  * @static
  */
-class Admin
+class Admin extends Caller
 {
-    use \TApplication;
-
     /**
-     * Método inicial para exibição dos templates na tela.
-     *
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     * @param array $args
+     * Construtor para o 
      */
-    public static function update(ServerRequestInterface $request, ResponseInterface $response, $args)
+    public function __construct(\brACPApp $app)
     {
-        // Obtém os dados de versão a serem atualizados.
-        // Cria o cache para evitar que a requisição fique sendo realizada
-        //  varias vezes pelo administrador.
-        $req = Cache::get('BRACP_GIT_UPDATE', function() {
-            return json_decode(Request::create('https://api.github.com/repos/carloshenrq/brACP/')
-                                ->get('releases')->getBody()->getContents());
-        });
-
-        // Array de atualizações para o painel de controle.
-        $updates = [];
-
-        // Varre todos os dados retornados para exibição das versões que podem ser
-        // atualizadas.
-        foreach($req as $up)
-        {
-            $files = null;
-
-            foreach($up->assets as $file)
-            {
-                $files = [
-                    'name' => $file->name,
-                    'type' => $file->content_type,
-                    'size' => $file->size,
-                    'link' => $file->browser_download_url,
-                ];
-                break;
-            }
-
-            $tmp = json_decode(json_encode([
-                'version' => [
-                    'name'          => $up->name,
-                    'number'        => $up->tag_name,
-                    'prerelease'    => $up->prerelease,
-                    'published'     => $up->created_at,
-                ],
-                'files' => $files,
-            ]));
-
-            $updates[] = $tmp;
-
-            unset($tmp, $files);
-        }
-
-        // Exibe o display para as versões que podem ser atualizadas.
-        self::getApp()->display('admin.update', [
-            'updates' => $updates
-        ]);
+        // Controller sem restrições de chamada
+        parent::__construct($app, []);
     }
 
-    /**
-     * Método inicial para exibição dos templates na tela.
-     *
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     * @param array $args
-     */
-    public static function cacheFlush(ServerRequestInterface $request, ResponseInterface $response, $args)
-    {
-        // Limpa o cache de memória para todo o painel de controle.
-        Cache::flush();
+    // use \TApplication;
 
-        // Exibe o display para home.
-        self::getApp()->display('home');
-    }
+    // /**
+    //  * Método inicial para exibição dos templates na tela.
+    //  *
+    //  * @param ServerRequestInterface $request
+    //  * @param ResponseInterface $response
+    //  * @param array $args
+    //  */
+    // public static function update(ServerRequestInterface $request, ResponseInterface $response, $args)
+    // {
+    //     // Obtém os dados de versão a serem atualizados.
+    //     // Cria o cache para evitar que a requisição fique sendo realizada
+    //     //  varias vezes pelo administrador.
+    //     $req = Cache::get('BRACP_GIT_UPDATE', function() {
+    //         return json_decode(Request::create('https://api.github.com/repos/carloshenrq/brACP/')
+    //                             ->get('releases')->getBody()->getContents());
+    //     });
 
-    /**
-     * Método inicial para exibição dos templates na tela.
-     *
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     * @param array $args
-     */
-    public static function mods(ServerRequestInterface $request, ResponseInterface $response, $args)
-    {
-        // Exibe o display para home.
-        self::getApp()->display('admin.mods', [
-        ]);
-    }
+    //     // Array de atualizações para o painel de controle.
+    //     $updates = [];
 
-    /**
-     * Método inicial para exibição dos templates na tela.
-     *
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     * @param array $args
-     */
-    public static function players(ServerRequestInterface $request, ResponseInterface $response, $args)
-    {
-        // Exibe o display para home.
-        self::getApp()->display('admin.players', [
-        ]);
-    }
+    //     // Varre todos os dados retornados para exibição das versões que podem ser
+    //     // atualizadas.
+    //     foreach($req as $up)
+    //     {
+    //         $files = null;
 
-    /**
-     * Método inicial para exibição dos templates na tela.
-     *
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     * @param array $args
-     */
-    public static function backup(ServerRequestInterface $request, ResponseInterface $response, $args)
-    {
-        // Exibe o display para home.
-        self::getApp()->display('admin.backup', [
-            'bkp_response' => self::getApp()->createBackup()
-        ]);
-    }
+    //         foreach($up->assets as $file)
+    //         {
+    //             $files = [
+    //                 'name' => $file->name,
+    //                 'type' => $file->content_type,
+    //                 'size' => $file->size,
+    //                 'link' => $file->browser_download_url,
+    //             ];
+    //             break;
+    //         }
 
-    /**
-     * Método inicial para exibição dos templates na tela.
-     *
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     * @param array $args
-     */
-    public static function theme(ServerRequestInterface $request, ResponseInterface $response, $args)
-    {
-        // Refaz o cache para os temas.
-        Themes::cacheAll();
+    //         $tmp = json_decode(json_encode([
+    //             'version' => [
+    //                 'name'          => $up->name,
+    //                 'number'        => $up->tag_name,
+    //                 'prerelease'    => $up->prerelease,
+    //                 'published'     => $up->created_at,
+    //             ],
+    //             'files' => $files,
+    //         ]));
 
-        // Exibe o display para home.
-        self::getApp()->display('home');
-    }
+    //         $updates[] = $tmp;
+
+    //         unset($tmp, $files);
+    //     }
+
+    //     // Exibe o display para as versões que podem ser atualizadas.
+    //     self::getApp()->display('admin.update', [
+    //         'updates' => $updates
+    //     ]);
+    // }
+
+    // *
+    //  * Método inicial para exibição dos templates na tela.
+    //  *
+    //  * @param ServerRequestInterface $request
+    //  * @param ResponseInterface $response
+    //  * @param array $args
+     
+    // public static function cacheFlush(ServerRequestInterface $request, ResponseInterface $response, $args)
+    // {
+    //     // Limpa o cache de memória para todo o painel de controle.
+    //     Cache::flush();
+
+    //     // Exibe o display para home.
+    //     self::getApp()->display('home');
+    // }
+
+    // /**
+    //  * Método inicial para exibição dos templates na tela.
+    //  *
+    //  * @param ServerRequestInterface $request
+    //  * @param ResponseInterface $response
+    //  * @param array $args
+    //  */
+    // public static function mods(ServerRequestInterface $request, ResponseInterface $response, $args)
+    // {
+    //     // Exibe o display para home.
+    //     self::getApp()->display('admin.mods', [
+    //     ]);
+    // }
+
+    // /**
+    //  * Método inicial para exibição dos templates na tela.
+    //  *
+    //  * @param ServerRequestInterface $request
+    //  * @param ResponseInterface $response
+    //  * @param array $args
+    //  */
+    // public static function players(ServerRequestInterface $request, ResponseInterface $response, $args)
+    // {
+    //     // Exibe o display para home.
+    //     self::getApp()->display('admin.players', [
+    //     ]);
+    // }
+
+    // /**
+    //  * Método inicial para exibição dos templates na tela.
+    //  *
+    //  * @param ServerRequestInterface $request
+    //  * @param ResponseInterface $response
+    //  * @param array $args
+    //  */
+    // public static function backup(ServerRequestInterface $request, ResponseInterface $response, $args)
+    // {
+    //     // Exibe o display para home.
+    //     self::getApp()->display('admin.backup', [
+    //         'bkp_response' => self::getApp()->createBackup()
+    //     ]);
+    // }
+
+    // /**
+    //  * Método inicial para exibição dos templates na tela.
+    //  *
+    //  * @param ServerRequestInterface $request
+    //  * @param ResponseInterface $response
+    //  * @param array $args
+    //  */
+    // public static function theme(ServerRequestInterface $request, ResponseInterface $response, $args)
+    // {
+    //     // Refaz o cache para os temas.
+    //     Themes::cacheAll();
+
+    //     // Exibe o display para home.
+    //     self::getApp()->display('home');
+    // }
 
 }
 
