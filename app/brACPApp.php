@@ -128,7 +128,6 @@ class brACPApp extends Slim\App
         $this->view->setCaching(false);
 
         // Adiciona os middlewares na rota para serem executados.
-        $this->add(new RouteCustom());
         $this->add(new Route());
         $this->add(new ServerPing());
         $this->add(new Database());
