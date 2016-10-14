@@ -392,6 +392,27 @@ class brACPApp extends Slim\App
     }
 
     /**
+     * Verifica a necessidade de testar o recaptcha.
+     *
+     * @return boolean Se está tudo certo.
+     */
+    public function testRecaptcha($post)
+    {
+        // Verifica se o recaptcha está habilitado e ok.
+        if(!BRACP_RECAPTCHA_ENABLED)
+            return true;
+
+        // Verifica a necessidade do teste.
+        $needRecaptcha = $this->getSession()->BRACP_RECAPTCHA_ERROR_REQUEST >= 3;
+
+        // Se o recaptcha for necessário então realiza o teste
+        if($needRecaptcha && isset($post['recaptcha']))
+            return $this->checkReCaptcha($post['recaptcha']);
+
+        return false;
+    }
+
+    /**
      * Método para criar um backup do painel de controle.
      * NOTA.: Este backup não é um backup do banco de dados. É somente de todos os arquivos
      *        contidos na pasta painel de controle. É um backup completo, incluindo as pastas de cache e vendor.
