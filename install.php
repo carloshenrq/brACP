@@ -142,8 +142,62 @@ $_CONFIG_DATA = array(
 // Verifica se foram enviados dados de instalação
 if($PRE_REQUISITES['is_writable'] && isset($_POST) && !empty($_POST))
 {
+    try
+    {
+        // Realiza um teste de conexão com as informações de instalação
+        // para a conexão com o banco de dados do brACP.
+        $dsn = 'mysql:dbname=' . $_POST['BRACP_SQL_CP_DBNAME'] . ';host=' . $_POST['BRACP_SQL_CP_HOST'];
+        $uid = $_POST['BRACP_SQL_CP_USER'];
+        $pid = $_POST['BRACP_SQL_CP_PASS'];
+
+        $pdo = new PDO($dsn, $uid, $pid, [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+        ]);
+
+        $pdo = null;
+        unset($dsn, $uid, $pid, $pdo);
+    }
+    catch(Exception $ex)
+    {
+        echo json_encode([
+            'status'    => '1',
+            'local'     => 'SQL - brACP',
+            'message'   => $ex->getMessage(),
+        ]);
+        exit;
+    }
+
+    try
+    {
+        // Realiza um teste de conexão com as informações de instalação
+        // para a conexão com o banco de dados de monstros e itens...
+        $dsn = 'mysql:dbname=' . $_POST['BRACP_SQL_DB_DBNAME'] . ';host=' . $_POST['BRACP_SQL_DB_HOST'];
+        $uid = $_POST['BRACP_SQL_DB_USER'];
+        $pid = $_POST['BRACP_SQL_DB_PASS'];
+
+        $pdo = new PDO($dsn, $uid, $pid, [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+        ]);
+
+        $pdo = null;
+        unset($dsn, $uid, $pid, $pdo);
+    }
+    catch(Exception $ex)
+    {
+        echo json_encode([
+            'status'    => '1',
+            'local'     => 'SQL - Database',
+            'message'   => $ex->getMessage(),
+        ]);
+        exit;
+    }
+
     // @Todo: Fazer os testes de instalação.
 
+    echo json_encode([
+        'status'    => 0,
+        'message'   => 'Instalação realizada com sucesso! Seu navegador será atualizado.'
+    ]);
     exit;
 }
 
@@ -246,7 +300,16 @@ $langs = Language::readAll();
                             'Content-Type': 'application/x-www-form-urlencoded'
                         }
                     }).then(function(response) {
-                        console.info(response);
+                        
+                        var data = response.data;
+
+                        if(data.status > 0)
+                        {
+                            alert('Ocorreu um erro durante a instalação:\n\n' + data.local+ '\n\n' + data.message);
+                            return;
+                        }
+
+
                     }, function(response) {
                         console.error(response);
                     });
@@ -709,7 +772,7 @@ $langs = Language::readAll();
                         </label>
                         
                         <label data-info="Senha" data-warning="Senha de usuário para acesso ao banco de dados (Padrão: bracp)">
-                            <input type="password" ng-model="INSTALL_VARS.BRACP_SQL_CP_USER"/>
+                            <input type="password" ng-model="INSTALL_VARS.BRACP_SQL_CP_PASS"/>
                         </label>
                         
                         <label data-info="Database (Schema)" data-warning="Nome do banco de dados para a conexão.">
@@ -739,7 +802,7 @@ $langs = Language::readAll();
                         </label>
                         
                         <label data-info="Senha" data-warning="Senha de usuário para acesso ao banco de dados (Padrão: ragnarok)">
-                            <input type="password" ng-model="INSTALL_VARS.BRACP_SQL_DB_USER"/>
+                            <input type="password" ng-model="INSTALL_VARS.BRACP_SQL_DB_PASS"/>
                         </label>
                         
                         <label data-info="Database (Schema)" data-warning="Nome do banco de dados para a conexão.">
