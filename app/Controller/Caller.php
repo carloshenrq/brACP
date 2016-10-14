@@ -42,6 +42,20 @@ class Caller
     private $routeRestrictions;
 
     /**
+     * Define as rotas custons e para o Controller.
+     *
+     * @var array
+     */
+    private $routeModded;
+
+    /**
+     * Restrições para as rotas custons relacionadas aos mods.
+     *
+     * @var array
+     */
+    private $routeModdedRestrictions;
+
+    /**
      * Define as restrições de rota para os actions informados.
      *
      * @param array $routeRestrictions
@@ -50,6 +64,18 @@ class Caller
     {
         $this->routeRestrictions = $routeRestrictions;
         $this->app = $app;
+        $this->routeModded = [];
+    }
+
+    /**
+     * Carrega todos os mods para o controller informado.
+     *
+     * @return void
+     */
+    private function loadMods()
+    {
+        // @Todo: Fazer algoritmo para carregar os mods aplicados ao controller.
+        return;
     }
 
     /**
@@ -63,6 +89,30 @@ class Caller
     }
 
     /**
+     * Verifica se a rota informada está com mod aplicado
+     */
+    private function routeIsModded($action)
+    {
+        return isset($this->routeModded[$action]);
+    }
+
+    /**
+     * Chama a rota com mod aplicada.
+     *
+     * @param string $account
+     * @param array $get
+     * @param array $post
+     * @param object $response
+     *
+     * @return object
+     */
+    private function routeModdedCall($action, $get, $post, $response)
+    {
+        $clFunc = \Closure::bind($this->routeModded[$action], $this);
+        return $clFunc($get, $post, $response);
+    }
+
+    /**
      * Verifica se a action pode ser chamada.
      *
      * @param string $action
@@ -71,8 +121,33 @@ class Caller
      */
     public function canCall($action)
     {
+        // Se está definido a restrição por rotas
+        // Chama a rota com os dados informados.
         if(isset($this->routeRestrictions[$action]))
-            return $this->routeRestrictions[$action]();
+        {
+            $clFunc = \Closure::bind($this->routeRestrictions[$action], $this);
+            return $clFunc();
+        }
+
+        return true;
+    }
+
+    /**
+     * Verifica se a rota com mod pode ser chamada.
+     *
+     * @param string $action
+     *
+     * @return boolean
+     */
+    private function canCallMod($action)
+    {
+        // Se está definido para testar restrições das restrições de
+        //  mods aplicados as rotas.
+        if(isset($this->routeModdedRestrictions[$action]))
+        {
+            $clFunc = \Closure::bind($this->routeModdedRestrictions[$action], $this);
+            return $clFunc();
+        }
 
         return true;
     }
@@ -114,7 +189,12 @@ class Caller
         // Cria uma nova instância do controller solicitado.
         $instance = new $controller(\brACPApp::getInstance());
 
-        // Verifica se o método de chamada existe no controller.
+        // Carrega os mods para o controler informado.
+        $instance->loadMods();
+
+        // Verifica se a rota está com mod aplicado para ser chamada primeiro.
+        if($instance->routeIsModded($callMethod) && $instance->canCallMod($callMethod))
+            return $instance->routeModdedCall($callMethod, $get_params, $data_params, $response);
         if(method_exists($instance, $callMethod) && $instance->canCall($callMethod))
             return $instance->{$callMethod}($get_params, $data_params, $response);
         else
