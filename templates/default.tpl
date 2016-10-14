@@ -49,13 +49,16 @@
             <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/angular.min.js"></script>
         {/if}
 
-        <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/jquery.bracp.js"></script>
-        <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/bracp.angular.js"></script>
-
         {if $smarty.const.BRACP_RECAPTCHA_ENABLED eq true}
             <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/angular-recaptcha.js"></script>
             <script src="https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&render=explicit" async defer></script>
+            <script>var vRecaptchaIsLoaded = true;</script>
+        {else}
+            <script>var vRecaptchaIsLoaded = false;</script>
         {/if}
+
+        <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/jquery.bracp.js"></script>
+        <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/bracp.angular.js"></script>
 
         <script>
         {if $smarty.const.BRACP_DEVELOP_MODE eq true}

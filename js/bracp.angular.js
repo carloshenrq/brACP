@@ -16,7 +16,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var brACPApp = angular.module('brACP', ['vcRecaptcha']);
+var moduleLoads = [];
+
+if(vRecaptchaIsLoaded)
+    moduleLoads.push('vcRecaptcha');
+
+var brACPApp = angular.module('brACP', moduleLoads);
 
 /**
  * Controlador para logins de acesso do painel de controle.
