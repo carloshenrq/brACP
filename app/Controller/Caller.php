@@ -165,24 +165,20 @@ class Caller
      */
     public function __call($name, $arguments)
     {
+        // Inicializa o objeto de chamada.
+        $clFunc = null;
+
         // Verifica se a rota está com mod aplicado
         // Se possuir, então, realiza as chamadas necssárias para trazer a rota
         // A Execução.
-        if(isset($this->routeModded[$name]) && count($arguments) == 3)
-        {
-            $get_params = $arguments[0];
-            $data_params = $arguments[1];
-            $response = $arguments[2];
-
-            // Aplica os dados a rota informada.
+        if(isset($this->isModdedRoute($name))
             $clFunc = Closure::bind($this->routeModded[$name], $this);
-            return $clFunc($get_params, $data_params, $response);
-        }
+            // return $clFunc($get_params, $data_params, $response);
         else if(isset($this->funcModded[$name]))
-        {
             $clFunc = Closure::bind($this->funcModded[$name], $this);
+
+        if(!is_null($clFunc) && is_callable($clFunc))
             return call_user_func_array($clFunc, $arguments);
-        }
         else
             throw new \Exception('Call to undefined method ' . get_class($this) . '::' . $name);
     }
