@@ -82,6 +82,9 @@ class Caller
         $this->routeModded = [];
         $this->funcModded = [];
         $this->attrModded = [];
+
+        // Carrega todos os mods para serem aplicados neste controller.
+        $this->loadMods();
     }
 
     /**
@@ -140,6 +143,18 @@ class Caller
         }
 
         return false;
+    }
+
+    /** 
+     * Verifica se action informada está com mod aplicado.
+     *
+     * @param string $action
+     *
+     * @return boolean
+     */
+    public function isModdedRoute($action)
+    {
+        return isset($this->routeModded[$action]);
     }
 
     /**
@@ -265,13 +280,17 @@ class Caller
         // Cria uma nova instância do controller solicitado.
         $instance = new $controller(\brACPApp::getInstance());
 
-        // Carrega os mods para o controler informado.
-        $instance->loadMods();
-
         // Verifica se é possível chamar o método informado
         // Se for possível, envia os parâmetros para tratamento.
         if($instance->canCall($callMethod))
-            return $instance->{$callMethod}($get_params, $data_params, $response);
+        {
+            // Caso a rota esteja com mod aplicado e seja um método padrão
+            // Do Controller, então, faz a chamada do mod e não da padrão.
+            if($instance->isModdedRoute($callMethod) && method_exists($instance, $callMethod))
+                return $instance->__call($callMethod, [$get_params, $data_params, $response]);
+            else
+                return $instance->{$callMethod}($get_params, $data_params, $response);
+        }
         else
             throw new \Slim\Exception\NotFoundException($request, $response);
     }
