@@ -21,6 +21,7 @@ namespace Controller;
 
 use \Psr\Http\Message\ServerRequestInterface;
 use \Psr\Http\Message\ResponseInterface;
+use \Closure;
 
 /**
  * Controlador para dados de conta.
@@ -56,6 +57,20 @@ class Caller
     private $routeModdedRestrictions;
 
     /**
+     * Define o array de novas funções com mods aplicados.
+     *
+     * @var array
+     */
+    private $funcModded;
+
+    /**
+     * Define o array para os atributos com mods aplicados.
+     *
+     * @var array
+     */
+    private $attrModded;
+
+    /**
      * Define as restrições de rota para os actions informados.
      *
      * @param array $routeRestrictions
@@ -65,6 +80,8 @@ class Caller
         $this->routeRestrictions = $routeRestrictions;
         $this->app = $app;
         $this->routeModded = [];
+        $this->funcModded = [];
+        $this->attrModded = [];
     }
 
     /**
@@ -89,30 +106,6 @@ class Caller
     }
 
     /**
-     * Verifica se a rota informada está com mod aplicado
-     */
-    private function routeIsModded($action)
-    {
-        return isset($this->routeModded[$action]);
-    }
-
-    /**
-     * Chama a rota com mod aplicada.
-     *
-     * @param string $account
-     * @param array $get
-     * @param array $post
-     * @param object $response
-     *
-     * @return object
-     */
-    private function routeModdedCall($action, $get, $post, $response)
-    {
-        $clFunc = \Closure::bind($this->routeModded[$action], $this);
-        return $clFunc($get, $post, $response);
-    }
-
-    /**
      * Verifica se a action pode ser chamada.
      *
      * @param string $action
@@ -121,35 +114,118 @@ class Caller
      */
     public function canCall($action)
     {
-        // Se está definido a restrição por rotas
-        // Chama a rota com os dados informados.
-        if(isset($this->routeRestrictions[$action]))
+        // Verifica se a rota está com o mod aplicado,
+        //  Se estiver, faz a chamada de restrições por rota com mod.
+        if(isset($this->routeModded[$action]))
         {
-            $clFunc = \Closure::bind($this->routeRestrictions[$action], $this);
-            return $clFunc();
+            if(isset($this->routeModdedRestrictions[$action]))
+            {
+                $clFunc = Closure::bind($this->routeModdedRestrictions[$action], $this);
+                return $clFunc();
+            }
+
+            return true;
+        }
+        // Se a rota não possuir mod aplicado, então
+        // Verifica se o método existe no objeto atual.
+        else if(method_exists($this, $action))
+        {
+            if(isset($this->routeRestrictions[$action]))
+            {
+                $clFunc = Closure::bind($this->routeRestrictions[$action], $this);
+                return $clFunc();
+            }
+
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     /**
-     * Verifica se a rota com mod pode ser chamada.
+     * Normalmente é chamado para mods aplicados.
      *
-     * @param string $action
+     * @param string $name
+     * @param array $arguments
+     */
+    public function __call($name, $arguments)
+    {
+        // Verifica se a rota está com mod aplicado
+        // Se possuir, então, realiza as chamadas necssárias para trazer a rota
+        // A Execução.
+        if(isset($this->routeModded[$name]) && count($arguments) == 3)
+        {
+            $get_params = $arguments[0];
+            $data_params = $arguments[1];
+            $response = $arguments[2];
+
+            // Aplica os dados a rota informada.
+            $clFunc = Closure::bind($this->routeModded[$name], $this);
+            return $clFunc($get_params, $data_params, $response);
+        }
+        else if(isset($this->funcModded[$name]))
+        {
+            $clFunc = Closure::bind($this->funcModded[$name], $this);
+            return call_user_func_array($clFunc, $arguments);
+        }
+        else
+            throw new \Exception('Call to undefined method ' . get_class($this) . '::' . $name);
+    }
+
+    /**
+     * Verifica se o atributo está definido como existente.
+     *
+     * @param string $name
      *
      * @return boolean
      */
-    private function canCallMod($action)
+    public function __isset($name)
     {
-        // Se está definido para testar restrições das restrições de
-        //  mods aplicados as rotas.
-        if(isset($this->routeModdedRestrictions[$action]))
-        {
-            $clFunc = \Closure::bind($this->routeModdedRestrictions[$action], $this);
-            return $clFunc();
-        }
+        return isset($this->attrModded[$name]);
+    }
 
-        return true;
+    /**
+     * Remove a definição do atributo.
+     *
+     * @param string $name
+     */
+    public function __unset($name)
+    {
+        if($this->__isset($name))
+            unset($this->attrModded[$name]);
+        else
+            throw new \Exception('Undefined property ' . get_class($this) . '::$' . $name);
+    }
+
+    /**
+     * Obtém acesso as propriedades com mods aplicados.
+     *
+     * @param string $name
+     *
+     * @return mixed
+     */
+    public function __get($name)
+    {
+        if($this->__isset($name))
+            return $this->attrModded[$name];
+        else
+            throw new \Exception('Undefined property ' . get_class($this) . '::$' . $name);
+    }
+
+    /**
+     * Define acesso as propriedades com mods.
+     *
+     * @param string $name
+     * @param mixed $value
+     *
+     * @return void
+     */
+    public function __set($name, $value)
+    {
+        if($this->__isset($name))
+            $this->attrModded[$name] = $value;
+        else
+            throw new \Exception('Undefined property ' . get_class($this) . '::$' . $name);
     }
 
     /**
@@ -192,10 +268,9 @@ class Caller
         // Carrega os mods para o controler informado.
         $instance->loadMods();
 
-        // Verifica se a rota está com mod aplicado para ser chamada primeiro.
-        if($instance->routeIsModded($callMethod) && $instance->canCallMod($callMethod))
-            return $instance->routeModdedCall($callMethod, $get_params, $data_params, $response);
-        if(method_exists($instance, $callMethod) && $instance->canCall($callMethod))
+        // Verifica se é possível chamar o método informado
+        // Se for possível, envia os parâmetros para tratamento.
+        if($instance->canCall($callMethod))
             return $instance->{$callMethod}($get_params, $data_params, $response);
         else
             throw new \Slim\Exception\NotFoundException($request, $response);
