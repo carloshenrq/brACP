@@ -1,0 +1,95 @@
+<?php
+/**
+ *  brACP - brAthena Control Panel for Ragnarok Emulators
+ *  Copyright (C) 2015  brAthena, CHLFZ
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+return [
+
+    /**
+     * Definições de cabeçalho! Sempre serão testados a cada execução do sistema.
+     * Não aplicará o mod duas vezes ou se o administrador colocar o mod duas vezes.
+     *
+     *
+     * -> Tomar cuidado com:
+     *
+     * ---- Mods que usam os mesmos nomes de métodos, atributos e rotas! Estes não serão carregados/aplicados.
+     * ---- Os arquivos devem seguir a estrutura:
+     *     -> <Controller>.<????>.mod.php
+     *     -> Ex.: <Controller>-> Home., Account., Ranking., etc...
+     *     ->      <????> -> Algo que identifique o mod. Ex: Home.example.mod.php, Account.example.mod.php, etc...
+     *     -> Sempre deve possuir final '.mod.php'
+     *
+     * ---- !!!!!!!! Mods com nomes repetidos não serão aplicados !!!!!!!!!!!
+     *
+     * ---- Este arquivo é um arquivo de estrutura exemplo para aplicação de mods!
+     */
+
+    'controller'    => 'Home',
+    'name'          => 'example_mod',
+    'version'       => '0.2.2-beta',
+
+    /** 
+     * Definições de todos os atributos personalizados.
+     */
+    'attributes'    => [
+        'helloWorld'   => 'Hello brACP World Mod',
+    ],
+
+    /**
+     * Definições de todos os métodos para esta mod!
+     */
+    'methods'   => [
+        // Chamada de método sem parametro!
+        'test'  =>  function()
+        {
+            echo $this->helloWorld;
+        },
+        // Método com parametro!
+        'testWithParam' => function($hello)
+        {
+            $this->helloWorld = $hello;
+            echo $this->helloWorld;
+        }
+    ],
+
+    /**
+     * Definições de todas as rotas para esta mod
+     */
+    'routes'        => [
+        // Método de rota para execução de rotas personalizadas
+        'test_GET'  =>  function($get, $post, $response) {
+
+            // Atributo personalizado!
+            echo $this->helloWorld;
+
+            echo '<br><br>';
+
+            // Método personalizado!
+            $this->test();
+            echo '<br><br>';
+
+            // Método personalizado!
+            $this->testWithParam('Olá mundo!');
+
+            // Sempre deve retornar o response! Se for com json, deve-se retornar
+            // Com $response->withJson( <array> );
+            return $response;
+        }
+    ],
+
+];
+

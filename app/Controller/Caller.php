@@ -43,6 +43,13 @@ class Caller
     private $routeRestrictions;
 
     /**
+     * Obtém todos os mods carregados em memória.
+     *
+     * @var array
+     */
+    private $modsLoaded;
+
+    /**
      * Define as rotas custons e para o Controller.
      *
      * @var array
@@ -80,8 +87,10 @@ class Caller
         $this->routeRestrictions = $routeRestrictions;
         $this->app = $app;
         $this->routeModded = [];
+        $this->routeModdedRestrictions = [];
         $this->funcModded = [];
         $this->attrModded = [];
+        $this->modsLoaded = [];
 
         // Carrega todos os mods para serem aplicados neste controller.
         $this->loadMods();
@@ -94,7 +103,154 @@ class Caller
      */
     private function loadMods()
     {
-        // @Todo: Fazer algoritmo para carregar os mods aplicados ao controller.
+        // Desabilita o uso de mods para o brACP?
+        if(!BRACP_ALLOW_MODS)
+            return;
+
+        // Diretório e classe que irá buscar para os mods.
+        $path2mod = __DIR__ . DIRECTORY_SEPARATOR . 'mods';
+        $class2mod = basename(get_class($this));
+
+        // Se o diretório de mods estiver criado, então incializa os testes para
+        // Os mods de classe.
+        if(is_dir($path2mod))
+        {
+            // Obtém todos os arquivos mods para o controller chamado.
+            $modFiles = array_filter(scandir($path2mod), function($file) use ($class2mod) {
+                return preg_match('/'.$class2mod.'.([^\.]+).mod.php$/i', $file);
+            });
+            sort($modFiles);
+
+            foreach($modFiles as $modFile)
+            {
+                // Obtém o caminho do arquivo de mod.
+                $mod2file = $path2mod . DIRECTORY_SEPARATOR . $modFile;
+                $modHash = hash_file('sha512', $mod2file);
+
+                // Verifica se o mod já foi aplicado anteriormente.
+                if(in_array($modHash, $this->modsLoaded))
+                    continue;
+
+                // Obtém os dados do arquvio de mod.
+                $modContent = (include_once $mod2file);
+
+                // Necessário estar definido o nome do controller
+                // E Este ser igual a quem está realizando a chamada!
+                if(!isset($modContent['controller'])
+                    || strncasecmp($class2mod, $modContent['controller'], strlen($class2mod))
+                    || !isset($modContent['name'])
+                    || !isset($modContent['version'])
+                    || isset($this->modsLoaded[$modContent['name']]))
+                    continue;
+
+                // Realiza o teste de versão para saber se pode carregar o mod.
+                if(!version_compare($modContent['version'], BRACP_VERSION, '>='))
+                    continue;
+
+                // Define se houve erros de aplicação com mod.
+                $modApplyError = false;
+
+                // Define a var para carregar os atributos do mod.
+                $_modAttribute = [];
+
+                // Verifica se existem atributos para serem carregados no mod.
+                if(isset($modContent['attributes']))
+                {
+                    foreach($modContent['attributes'] as $attr => $default)
+                    {
+                        // Não pode sobre-escrever propriedades existentes ou mesmo
+                        // Atributos com mods já aplicados.
+                        if(property_exists($this, $attr) || isset($this->attrModded[$attr]))
+                        {
+                            $modApplyError = true;
+                            break;
+                        }
+
+                        // Define o mod com seu valor padrão.
+                        $_modAttribute[$attr] = $default;
+                    }
+                }
+
+                // Define a var para carregar os novos métodos.
+                $_modMethods = [];
+
+                // Verifica se existem funções a serem aplicadas.
+                if(!$modApplyError && isset($modContent['methods']))
+                {
+                    foreach($modContent['methods'] as $method => $callable)
+                    {
+                        // Não permite que métodos sejam sobre-escritos.
+                        if(method_exists($this, $method) || isset($this->funcModded[$method]) || !is_callable($callable))
+                        {
+                            $modApplyError = true;
+                            break;
+                        }
+
+                        // Define o metodo de execucao.
+                        $_modMethods[$method] = $callable;
+                    }
+                }
+
+                // Define a var para as rotas que serão aplicadas.
+                $_modRoutes = [];
+
+                // Verifica se existem rotas para o mod informado.
+                if(!$modApplyError && isset($modContent['routes']))
+                {
+                    foreach($modContent['routes'] as $route => $callable)
+                    {
+                        // Aqui nós podemos sobreescrever rotas padrão
+                        // Mas somente se elas não tiverem sido definidas anteriormente.
+                        if(isset($this->routeModded[$route]) || !is_callable($callable))
+                        {
+                            $modApplyError = true;
+                            break;
+                        }
+
+                        // Define a rota
+                        $_modRoutes[$route] = $callable;
+                    }
+                }
+
+                // Define a var para restrições de rota que serão aplicadas.
+                $_modRouteRestrictions = [];
+
+                // Define a função de restrição para as rotas informadas.
+                if(!$modApplyError && isset($modContent['routes_restriction']))
+                {
+                    // Varre todas as restrições para as rotas informadas.
+                    foreach($modContent['routes_restriction'] as $route => $restriction)
+                    {
+                        if(!(isset($_modRoutes[$route])
+                            || $this->routeModded[$route]
+                            || method_exists($this, $route)))
+                        {
+                            $modApplyError = true;
+                            break;
+                        }
+
+                        $_modRouteRestrictions[$route] = $restriction;
+                    }
+                }
+
+                // Caso exista erros durante a aplicação do mod, então,
+                // Não permite que o mod seja carregado.
+                if($modApplyError)
+                    continue;
+
+                // Informa que o mod foi carregado.
+                $this->modsLoaded[$modContent['name']] = $modHash;
+
+                $this->attrModded = array_merge($this->attrModded, $_modAttribute);
+                $this->funcModded = array_merge($this->funcModded, $_modMethods);
+                $this->routeModded = array_merge($this->routeModded, $_modRoutes);
+                $this->routeModdedRestrictions = array_merge($this->routeModdedRestrictions, $_modRouteRestrictions);
+
+                unset($_modAttribute, $_modMethods, $_modRoutes, $_modRouteRestrictions);
+            }
+
+        }
+
         return;
     }
 
@@ -171,9 +327,8 @@ class Caller
         // Verifica se a rota está com mod aplicado
         // Se possuir, então, realiza as chamadas necssárias para trazer a rota
         // A Execução.
-        if(isset($this->isModdedRoute($name))
+        if($this->isModdedRoute($name))
             $clFunc = Closure::bind($this->routeModded[$name], $this);
-            // return $clFunc($get_params, $data_params, $response);
         else if(isset($this->funcModded[$name]))
             $clFunc = Closure::bind($this->funcModded[$name], $this);
 
