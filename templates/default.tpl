@@ -58,6 +58,7 @@
         {/if}
 
         <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/jquery.bracp.js"></script>
+        <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/angular-datetime.js"></script>
         <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/bracp.angular.js"></script>
 
         <script>

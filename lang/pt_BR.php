@@ -166,7 +166,11 @@ return
             'FEMALE'                => 'Feminino',
             'EMAIL'                 => 'Endereço de e-mail',
             'EMAIL_CONFIRM'         => 'Confirme o e-mail',
+            'BIRTHDATE'             => 'Data de Nascimento',
             'ACCEPT_TERMS'          => 'Eu concordo com os termos do servidor.',
+        ],
+        'FORMAT'    =>  [
+            'BIRTHDATE'             => 'dd/MM/yyyy',
         ],
         'BUTTONS'   => [
             'SUBMIT'    => 'Registrar',

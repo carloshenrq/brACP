@@ -16,7 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var moduleLoads = [];
+var moduleLoads = ["datetime"];
 
 if(vRecaptchaIsLoaded)
     moduleLoads.push('vcRecaptcha');
@@ -82,6 +82,7 @@ brACPApp.controller('account.register', ['$scope', '$http', function($scope, $ht
     $scope.sex = 'M';
     $scope.email = '';
     $scope.email_conf = '';
+    $scope.birthdate = '';
 
     $scope.stage = 0;
     $scope.error_state = 0;

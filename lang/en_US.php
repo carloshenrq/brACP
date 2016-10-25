@@ -166,7 +166,11 @@ return
             'FEMALE'                => 'Female',
             'EMAIL'                 => 'E-mail Address',
             'EMAIL_CONFIRM'         => 'Confirm E-mail Address',
+            'BIRTHDATE'             => 'Date of birth',
             'ACCEPT_TERMS'          => 'I\'ve read and agree to the terms of use for this server.',
+        ],
+        'FORMAT'    =>  [
+            'BIRTHDATE'             => 'yyyy-MM-dd',
         ],
         'BUTTONS'   => [
             'SUBMIT'    => 'Register',
