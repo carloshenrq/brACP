@@ -99,6 +99,7 @@ brACPApp.controller('account.register', ['$scope', '$http', function($scope, $ht
             'sex'               : this.sex,
             'email'             : this.email,
             'email_conf'        : this.email_conf,
+            'birthdate'         : this.birthdate,
             'recaptcha'         : this.recaptcha_response
         });
 
