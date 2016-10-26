@@ -20,8 +20,9 @@
 {block name="brACP_Body"}
 
     <div class="message error icon">
-        <h1>@@ERRORS,NOT_FOUND(TITLE)</h1>
+        <h1>{translate}@ERRORS_NOT.FOUND_TITLE@{/translate}</h1>
 
-        @@ERRORS,NOT_FOUND(MESSAGE)
+        {translate}@ERRORS_NOT.FOUND_MESSAGE@{/translate}
     </div>
+
 {/block}

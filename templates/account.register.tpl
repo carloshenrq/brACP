@@ -19,7 +19,7 @@
 <input type="checkbox" class="modal-trigger-check" id="modal-register"/>
 <div class="modal" ng-controller="account.register">
     <div class="modal-title">
-        @@CREATE(TITLE)
+        {translate}@CREATE_TITLE@{/translate}
         <label for="modal-register" class="modal-close" ng-if="stage == 0">&times;</label>
     </div>
     <div class="modal-body" ng-if="stage == 0">
@@ -27,37 +27,37 @@
 
             <div ng-if="error_state > 0" class="message error">
                 <div ng-switch="error_state">
-                    <div ng-switch-when="-1">@@CREATE,ERROR(DISABLED)</div>
-                    <div ng-switch-when="1">@@CREATE,ERROR(USED)</div>
-                    <div ng-switch-when="2">@@CREATE,ERROR,MISMATCH(PASSWORD)</div>
-                    <div ng-switch-when="3">@@CREATE,ERROR,MISMATCH(EMAIL)</div>
-                    <div ng-switch-when="4">@@CREATE,ERROR,MISMATCH(ADMIN_MODE)</div>
-                    <div ng-switch-when="5">@@ERRORS(REGEXP)</div>
-                    <div ng-switch-when="6">@@ERRORS(RECAPTCHA)</div>
+                    <div ng-switch-when="-1">{translate}@CREATE_ERROR_DISABLED@{/translate}</div>
+                    <div ng-switch-when="1">{translate}@CREATE_ERROR_USED@{/translate}</div>
+                    <div ng-switch-when="2">{translate}@CREATE_ERROR_MISMATCH_PASSWORD@{/translate}</div>
+                    <div ng-switch-when="3">{translate}@CREATE_ERROR_MISMATCH_EMAIL@{/translate}</div>
+                    <div ng-switch-when="4">{translate}@CREATE_ERROR_MISMATCH_ADMIN.MODE@{/translate}</div>
+                    <div ng-switch-when="5">{translate}@ERRORS_REGEXP@{/translate}</div>
+                    <div ng-switch-when="6">{translate}@ERRORS_RECAPTCHA@{/translate}</div>
                 </div>
             </div>
 
             <div ng-if="success_state" class="message success">
-                @@CREATE(SUCCESS)
+                {translate}@CREATE_SUCCESS@{/translate}
                 {if $smarty.const.BRACP_ALLOW_MAIL_SEND && $smarty.const.BRACP_CONFIRM_ACCOUNT}
                     <br>
-                    <i>@@RESEND(SUCCESS)</i>
+                    {translate}@RESEND_SUCCESS@{/translate}
                 {/if}
             </div>
 
-            <div style='max-width: 380px'>@@CREATE,MESSAGE(HEADER)</div>
+            <div style='max-width: 380px'>{translate}@CREATE_MESSAGE_HEADER@{/translate}</div>
 
             <form class="modal-form" ng-submit="submitRegister()">
-                <input type="text" ng-model="userid" placeholder="@@CREATE,HOLDER(USERID)" maxlength="32" pattern="{$smarty.const.BRACP_REGEXP_USERNAME}" required title="@@WARNING,PATTERN({$userNameFormat})"/>
-                <input type="password" ng-model="user_pass" placeholder="@@CREATE,HOLDER(PASSWORD)" maxlength="32" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required title="@@WARNING,PATTERN({$passWordFormat})"/>
-                <input type="password" ng-model="user_pass_conf" placeholder="@@CREATE,HOLDER(PASSWORD_CONFIRM)" maxlength="32" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required title="@@WARNING,PATTERN({$passWordFormat})"/>
+                <input type="text" ng-model="userid" placeholder="{translate}@CREATE_HOLDER_USERID@{/translate}" maxlength="32" pattern="{$smarty.const.BRACP_REGEXP_USERNAME}" required title="@@WARNING,PATTERN({$userNameFormat})"/>
+                <input type="password" ng-model="user_pass" placeholder="{translate}@CREATE_HOLDER_PASSWORD@{/translate}" maxlength="32" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required title="@@WARNING,PATTERN({$passWordFormat})"/>
+                <input type="password" ng-model="user_pass_conf" placeholder="{translate}@CREATE_HOLDER_PASSWORD.CONFIRM@{/translate}" maxlength="32" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required title="@@WARNING,PATTERN({$passWordFormat})"/>
                 <select ng-model="sex">
-                    <option value="M">@@CREATE,HOLDER(MALE)</option>
-                    <option value="F">@@CREATE,HOLDER(FEMALE)</option>
+                    <option value="M">{translate}@CREATE_HOLDER_MALE@{/translate}</option>
+                    <option value="F">{translate}@CREATE_HOLDER_FEMALE@{/translate}</option>
                 </select>
-                <input type="text" ng-model="email" placeholder="@@CREATE,HOLDER(EMAIL)" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
-                <input type="text" ng-model="email_conf" placeholder="@@CREATE,HOLDER(EMAIL_CONFIRM)" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
-                <input type="text" ng-model="birthdate" datetime="@@CREATE,FORMAT(BIRTHDATE)" placeholder="@@CREATE,HOLDER(BIRTHDATE)" required/>
+                <input type="text" ng-model="email" placeholder="{translate}@CREATE_HOLDER_EMAIL@{/translate}" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
+                <input type="text" ng-model="email_conf" placeholder="{translate}@CREATE_HOLDER_EMAIL.CONFIRM@{/translate}" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
+                <input type="text" ng-model="birthdate" datetime="{translate}@CREATE_FORMAT_BIRTHDATE@{/translate}" placeholder="{translate}@CREATE_HOLDER_BIRTHDATE@{/translate}" required/>
 
                 <input id="_submitRegister" type="submit"/>
 
@@ -73,7 +73,7 @@
 
         <label class="input-checkbox">
             <input type="checkbox" ng-model="$parent.accept_terms" required/>
-            @@CREATE,HOLDER(ACCEPT_TERMS)
+            {translate}@CREATE_HOLDER_ACCEPT.TERMS@{/translate}
         </label>
     </div>
     <div class="modal-body" ng-if="stage == 1">
@@ -85,7 +85,7 @@
         </div>
     </div>
     <div class="modal-footer" ng-if="stage == 0">
-        <label class="button success icon" for="_submitRegister" ng-if="accept_terms">@@CREATE,BUTTONS(SUBMIT)</label>
-        <label class="button error icon" for="modal-register">@@CREATE,BUTTONS(CLOSE)</label>
+        <label class="button success icon" for="_submitRegister" ng-if="accept_terms">{translate}@@CREATE_BUTTONS_SUBMIT@{/translate}</label>
+        <label class="button error icon" for="modal-register">{translate}@CREATE_BUTTONS_CLOSE@{/translate}</label>
     </div>
 </div>

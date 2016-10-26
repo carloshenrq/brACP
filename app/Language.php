@@ -25,18 +25,46 @@
 class Language
 {
     /**
+     * Array contendo os dados de tradução para o brACP.
      *
+     * @var array
      */
     private $translate;
 
     /**
      * Construtor para a classe de linguagens.
+     *
+     * @param string $lang Linguagem a ser carregada.
      */
     public function __construct($lang)
     {
-        $this->translate = Cache::get('BRACP_LANG_' . $lang, function() use ($lang) {
-            return (include_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR .'lang' . DIRECTORY_SEPARATOR . $lang . '.php');
+        // Diretório para inclusão das linguagens.
+        $lang_dir = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR .'lang';
+
+        // Obtém os dados de tradução que estão em memória.
+        $this->translate = Cache::get('BRACP_LANG_' . $lang, function() use ($lang_dir, $lang) {
+            return (include_once $lang_dir . DIRECTORY_SEPARATOR . $lang . '.php');
         });
+
+        // Veririca se o brACP está permitindo mods
+        // Se estiver, verifica a pasta em busca de mods para tradução
+        // do brACP.
+        if(BRACP_ALLOW_MODS)
+        {
+            // Inicializa o loading dos mods para a linguagem em questão.
+            $langMods = array_filter(scandir($lang_dir), function($file) use ($lang) {
+                return preg_match('/^'.$lang.'\.([^\.]+)\.mod\.php$/i', $file);
+            });
+            sort($langMods);
+
+            // Carrega os strings de tradução com mods aplicados.
+            foreach($langMods as $langMod)
+            {
+                $this->translate = array_merge($this->translate,
+                    (include_once $lang_dir . DIRECTORY_SEPARATOR . $langMod )
+                );
+            }
+        }
     }
 
     /**
@@ -53,15 +81,27 @@ class Language
     }
 
     /**
-     * 
+     * Obtém o string de translate para o index informado.
+     *
+     * @param string $index
+     *
+     * @return string Index com a tradução ou se não encontrar o proprio index.
      */
     public function getTranslate($index)
     {
+        // Verifica se é o formato para ser uma string de tradução.
+        // Inicia-se com @
+        // Termina-se com @
+        // Se não for, verifica se é uma constante definida,
+        //  Se for, exibe a constante, se não, retorna o index.
         if(!preg_match('/\@([^\@]+)\@$/i', $index, $match))
-            return $index;
+            return (defined($index) ? constant($index) : $index);
 
+        // Obtém todos os indexes para procurar a string de tradução
+        // Solicitada.
         $indexes = explode('_', $match[1]);
 
+        // Varre os indices procurando a string de tradução.
         $_tmp = $this->translate;
         $_translate = $index;
         while(count($indexes) > 0)
@@ -77,9 +117,12 @@ class Language
             $_tmp = $_tmp[$_curIndex];
         }
 
+        // Se for encontrado o indice, então retorna a tradução para
+        // o indice informado.
         if(!is_null($_tmp) && !is_array($_tmp) && is_string($_tmp))
             $_translate = $_tmp;
 
+        // Retorna o dado de tradução.
         return $_translate;
     }
 

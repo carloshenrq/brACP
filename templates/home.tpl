@@ -18,5 +18,9 @@
 
 {extends file="default.tpl"}
 {block name="brACP_Body"}
-    {include 'home.ajax.tpl'}
+
+    <h1>{translate}@HOME_TITLE@{/translate}</h1>
+
+    <p>{translate}@HOME_MESSAGE@{/translate}</p>
+
 {/block}

@@ -28,8 +28,8 @@
 </script>
 
 <div class="message success icon">
-	<h1>@@LOGOUT(TITLE)</h1>
-    @@LOGOUT(SUCCESS)
+	<h1>{translate}@LOGOUT_TITLE@{/translate}</h1>
+    {translate}@LOGOUT_SUCCESS@{/translate}
 </div>
 
 {/block}

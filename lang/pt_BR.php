@@ -50,7 +50,7 @@ return
                 ],
                 'STORAGE'   => 'Armazém',
                 'CHARS'     => 'Personagens',
-                'LOGOUT'    => 'Sair (%s)',
+                'LOGOUT'    => 'Encerrar',
             ],
         ],
         'MERCHANTS' =>  'Mercadores',
@@ -144,7 +144,7 @@ return
         'TITLE'     => 'Minha Conta &raquo; Registrar',
         'ERROR'     => [
             'DISABLED'  => 'Criação de contas está desativada.',
-            'ADMIN_MODE'    => 'A Criação deste tipo de conta somente é possivel em modo administrador.',
+            'ADMIN.MODE'    => 'A Criação deste tipo de conta somente é possivel em modo administrador.',
             'MISMATCH'  => [
                 'PASSWORD'  => 'As senhas digitadas não conferem!',
                 'EMAIL'     => 'Os endereços de e-mail digitados não conferem!',
@@ -161,13 +161,13 @@ return
         'HOLDER'    => [
             'USERID'                => 'Nome de usuário',
             'PASSWORD'              => 'Senha de usuário',
-            'PASSWORD_CONFIRM'      => 'Confirme a senha',
+            'PASSWORD.CONFIRM'      => 'Confirme a senha',
             'MALE'                  => 'Masculino',
             'FEMALE'                => 'Feminino',
             'EMAIL'                 => 'Endereço de e-mail',
-            'EMAIL_CONFIRM'         => 'Confirme o e-mail',
+            'EMAIL.CONFIRM'         => 'Confirme o e-mail',
             'BIRTHDATE'             => 'Data de Nascimento',
-            'ACCEPT_TERMS'          => 'Eu concordo com os termos do servidor.',
+            'ACCEPT.TERMS'          => 'Eu concordo com os termos do servidor.',
         ],
         'FORMAT'    =>  [
             'BIRTHDATE'             => 'dd/MM/yyyy',
@@ -361,9 +361,9 @@ return
         'SUCCESS'   =>  'Sua senha foi alterada com sucesso!',
 
         'HOLDER'    =>  [
-            'ACTUAL_PASSWORD'   => 'Senha atual',
-            'NEW_PASSWORD'      => 'Digite sua nova senha',
-            'CONFIRM_PASSWORD'  => 'Confirme sua nova senha',
+            'ACTUAL.PASSWORD'   => 'Senha atual',
+            'NEW.PASSWORD'      => 'Digite sua nova senha',
+            'CONFIRM.PASSWORD'  => 'Confirme sua nova senha',
         ],
 
         'BUTTONS'   => [
@@ -498,7 +498,7 @@ return
 
         'REGEXP'    => 'Falha na restrição de pattern de alguns campos. Tente novamente.',
 
-        'NOT_FOUND' => [
+        'NOT.FOUND' => [
             'TITLE'         => 'Ops! Parece que a página que você estava procurando não foi encontrada!',
             'MESSAGE'       => 'x____x\' nos desculpe mas a página que você estava procurando, não foi encontrada...<br>'.
                                 'Você pode voltar a página principal clicando <span class="url-link" data-href="'.BRACP_DIR_INSTALL_URL.'">aqui</span>.',
@@ -621,7 +621,7 @@ return
         ],
     ],
 
-    'SERVER_STATUS' =>  [
+    'SERVER.STATUS' =>  [
         'SERVER'    => 'Servidor',
         'TEXT'      => 'Estado',
         'PLAYER'    => 'Jogadores Online',
