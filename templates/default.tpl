@@ -29,10 +29,10 @@
 
         <link rel="shortcut icon" href="{$smarty.const.BRACP_DIR_INSTALL_URL}fav.ico">
         <!-- Here loads all CSS files. -->
-        <link rel="stylesheet" type="text/css" href="{$smarty.const.BRACP_DIR_INSTALL_URL}themes/classic/css/default.css"/>
-        <link rel="stylesheet" type="text/css" href="{$smarty.const.BRACP_DIR_INSTALL_URL}themes/classic/css/message.css"/>
-        <link rel="stylesheet" type="text/css" href="{$smarty.const.BRACP_DIR_INSTALL_URL}themes/classic/css/button.css"/>
-        <link rel="stylesheet" type="text/css" href="{$smarty.const.BRACP_DIR_INSTALL_URL}themes/classic/css/modal.css"/>
+        <link rel="stylesheet" type="text/css" href="{$smarty.const.BRACP_DIR_INSTALL_URL}style/css/?file=default.scss"/>
+        <link rel="stylesheet" type="text/css" href="{$smarty.const.BRACP_DIR_INSTALL_URL}style/css/?file=message.scss"/>
+        <link rel="stylesheet" type="text/css" href="{$smarty.const.BRACP_DIR_INSTALL_URL}style/css/?file=button.scss"/>
+        <link rel="stylesheet" type="text/css" href="{$smarty.const.BRACP_DIR_INSTALL_URL}style/css/?file=modal.scss"/>
         <style>
         {block name="brACP_StyleCss"}
         {/block}
