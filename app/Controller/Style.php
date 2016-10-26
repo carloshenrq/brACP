@@ -49,6 +49,17 @@ class Style extends Caller
         $pathfile = $scss_path . DIRECTORY_SEPARATOR . $get['file'];
 
         $scss = new Compiler;
+        $scss->setVariables([
+            'data_path'     => implode('/', [
+                '/' . basename(BRACP_DIR_INSTALL_URL),
+                'data'
+            ]),
+            'theme_path'    => implode('/',[
+                '/' . basename(BRACP_DIR_INSTALL_URL),
+                'themes',
+                $this->getApp()->getSession()->BRACP_THEME
+            ])
+        ]);
         $scss->addImportPath($scss_path);   // Caminho para os mixins
         echo $scss->compile(file_get_contents($pathfile)); // Arquivo a ser compilado.
 
