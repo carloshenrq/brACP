@@ -45,8 +45,11 @@ class Style extends Caller
             'themes',
             $this->getApp()->getSession()->BRACP_THEME]);
 
+        // Obtém o nome do arquivo base que será compilado.
+        $basefile = $get['file'];
+
         // Caminho para o arquivo ser compilado.
-        $pathfile = $scss_path . DIRECTORY_SEPARATOR . $get['file'];
+        $pathfile = $scss_path . DIRECTORY_SEPARATOR . $basefile . '.scss';
 
         $scss = new Compiler;
         $scss->setVariables([
@@ -61,8 +64,32 @@ class Style extends Caller
             ])
         ]);
         $scss->addImportPath($scss_path);   // Caminho para os mixins
-        echo $scss->compile(file_get_contents($pathfile)); // Arquivo a ser compilado.
 
+        // Arquivos a serem compilados e retornados ao usuário.
+        $scss_files = [$pathfile];
+
+        if(BRACP_ALLOW_MODS)
+        {
+            // Inicializa o loading dos mods para a linguagem em questão.
+            $scssMods = array_filter(scandir($scss_path), function($file) use ($basefile) {
+                return preg_match('/^'.$basefile.'\.([^\.]+)\.mod\.scss$/i', $file);
+            });
+            sort($scssMods);
+
+            // Adiciona os arquivos scss para compilação.
+            foreach($scssMods as $sccsFile)
+                $scss_files[] = $pathfile . DIRECTORY_SEPARATOR . $sccsFile;
+        }
+
+        // Obtém todos os dados para compilação do css.
+        $scss_compiled = [];
+        foreach($scss_files as $scss_file)
+            $scss_compiled[] = $scss->compile(file_get_contents($scss_file));
+
+        // Escreve todos os dados do scss compilado (incluindo arquivos de mod)
+        echo implode(' ', $scss_compiled);
+
+        // Responde a requisição com os dados compilados.
         return $response
                 ->withHeader('Content-Type', 'text/css');
     }
