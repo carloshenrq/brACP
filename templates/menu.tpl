@@ -16,40 +16,40 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *}
 <ul>
-    <li class="icon icon-home url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}home/index/">@@MENU(HOME)</li>
-    <li class="icon icon-myacc sub-menu">@@MENU,MYACC(TITLE)
+    <li class="icon icon-home url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}home/index/">{translate}@MENU_HOME@{/translate}</li>
+    <li class="icon icon-myacc sub-menu">{translate}@MENU_MYACC_TITLE@{/translate}
         <ul>
             {if isset($account) eq false}
-                <li><label for="modal-login">@@MENU,MYACC,UNAUTHENTICATED(LOGIN)</label></li>
+                <li><label for="modal-login">{translate}@MENU_MYACC_UNAUTHENTICATED_LOGIN@{/translate}</label></li>
                 {if $smarty.const.BRACP_ALLOW_CREATE_ACCOUNT eq true}
-                    <li><label for="modal-register">@@MENU,MYACC,UNAUTHENTICATED(CREATE)</label></li>
+                    <li><label for="modal-register">{translate}@MENU_MYACC_UNAUTHENTICATED_CREATE@{/translate}</label></li>
                 {/if}
                 {if $smarty.const.BRACP_ALLOW_MAIL_SEND}
                     {if $smarty.const.BRACP_CONFIRM_ACCOUNT}
-                        <li><label for="modal-create-resend">@@MENU,MYACC,UNAUTHENTICATED(CREATE_SEND)</label></li>
+                        <li><label for="modal-create-resend">{translate}@MENU_MYACC_UNAUTHENTICATED_CREATE.SEND)@{/translate}</label></li>
                     {/if}
                     {if $smarty.const.BRACP_ALLOW_RECOVER}
-                        <li><label for="modal-recover">@@MENU,MYACC,UNAUTHENTICATED(RECOVER)</label></li>
+                        <li><label for="modal-recover">{translate}@MENU_MYACC_UNAUTHENTICATED_RECOVER@{/translate}</label></li>
                     {/if}
                 {/if}
             {else}
 
                 {if $account->getGroup_id() < BRACP_ALLOW_ADMIN_GMLEVEL || BRACP_ALLOW_ADMIN_CHANGE_PASSWORD}
-                    <li><label for="modal-password">@@MENU,MYACC,AUTHENTICATED,CHANGE(PASS)</label></li>
+                    <li><label for="modal-password">{translate}@MENU_MYACC_AUTHENTICATED_CHANGE_PASS@{/translate}</label></li>
                 {/if}
 
                 {if $smarty.const.BRACP_ALLOW_CHANGE_MAIL && $account->getGroup_id() < BRACP_ALLOW_ADMIN_GMLEVEL}
-                    <li><label for="modal-mail">@@MENU,MYACC,AUTHENTICATED,CHANGE(MAIL)</label></li>
+                    <li><label for="modal-mail">{translate}@MENU_MYACC_AUTHENTICATED_CHANGE_MAIL@{/translate}</label></li>
                 {/if}
 
-                <li class="url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}account/chars/"><label>@@MENU,MYACC,AUTHENTICATED(CHARS)</label></li>
+                <li class="url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}account/chars/"><label>{translate}@MENU_MYACC_AUTHENTICATED_CHARS@{/translate}</label></li>
 
-                <li class="url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}account/logout/"><label>@@MENU,MYACC,AUTHENTICATED(LOGOUT, {$userid})</label></li>
+                <li class="url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}account/logout/"><label>{translate}@MENU_MYACC_AUTHENTICATED_LOGOUT@{/translate}</label></li>
             {/if}
         </ul>
     </li>
 
-    <li class="url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}vending/index/">@@MENU(MERCHANTS)</li>
+    <li class="url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}vending/index/">{translate}@MENU_MERCHANTS@{/translate}</li>
 
     {if $smarty.const.BRACP_ALLOW_RANKING}
         {* @TODO *}

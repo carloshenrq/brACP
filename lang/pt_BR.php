@@ -40,7 +40,7 @@ return
             'UNAUTHENTICATED'   => [
                 'LOGIN'         => 'Entrar',
                 'CREATE'        => 'Registrar',
-                'CREATE_SEND'   => 'Código de Ativação',
+                'CREATE.SEND'   => 'Código de Ativação',
                 'RECOVER'       => 'Recuperar',
             ],
             'AUTHENTICATED'     => [

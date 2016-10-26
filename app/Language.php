@@ -25,95 +25,62 @@
 class Language
 {
     /**
-     * Dados da tradução para o painel de controle.
-     */
-    private static $translation;
-
-    /**
-     * Linguagem que será utilizada para uso do painel.
-     */
-    private static $lang;
-
-    /**
-     * Inicializador da classe de traduções.
      *
-     * @param string $lang Tradução da linguagem a ser utilizada
      */
-    public static function load($lang = 'pt_BR')
+    private $translate;
+
+    /**
+     * Construtor para a classe de linguagens.
+     */
+    public function __construct($lang)
     {
-        self::$lang = $lang;
-
-        // Obtém os dados do brACP de linguagem do cache ou da memória.
-        self::$translation = Cache::get('BRACP_LANGUAGE_'.$lang, function() use ($lang) {
-
-            $langFile = realpath(__DIR__ . '/../lang/') . '/' . $lang . '.php';
-            if(!file_exists($langFile))
-                $langFile = realpath(__DIR__ . '/../lang/') . '/' . BRACP_DEFAULT_LANGUAGE . '.php';
-
-            return include_once($langFile);
+        $this->translate = Cache::get('BRACP_LANG_' . $lang, function() use ($lang) {
+            return (include_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR .'lang' . DIRECTORY_SEPARATOR . $lang . '.php');
         });
     }
 
     /**
-     * Realiza o parse de informações para traduzir os dados de arquivos.
+     * Método para tratar informações de tradução para o smarty.
      */
-    public static function parse($textToTranslate)
+    public function __translate($params, $content, $template, &$repeat)
     {
-        // Retorna de acordo com o cache do sistema.
-        return Cache::get('BRACP_LANG_' . self::$lang . '_' . hash('md5', $textToTranslate), function() use ($textToTranslate) {
-            // Marca os locais que a expressão regular de tradução ocorreram.
-            if(preg_match_all('/\@\@([^\(]+)\(([^\)]+)*\)/', $textToTranslate, $matches))
+        // Verifica se o string não encaixa nos dados de tradução.
+        if(empty($content))
+            return "";
+
+        // Tenta realizar a tradução.
+        return $this->getTranslate($content);
+    }
+
+    /**
+     * 
+     */
+    public function getTranslate($index)
+    {
+        if(!preg_match('/\@([^\@]+)\@$/i', $index, $match))
+            return $index;
+
+        $indexes = explode('_', $match[1]);
+
+        $_tmp = $this->translate;
+        $_translate = $index;
+        while(count($indexes) > 0)
+        {
+            $_curIndex = array_shift($indexes);
+            
+            if(!isset($_tmp[$_curIndex]))
             {
-                $origins = $matches[0];
-                $indexes = $matches[1];
-                $values  = $matches[2];
-
-                $count = count($origins);
-
-                for($i = 0; $i < $count; $i++)
-                {
-                    $itens = explode(',', $indexes[$i]);
-                    $lang = null;
-
-                    foreach($itens as $item)
-                    {
-                        if(is_null($lang))
-                            $lang = self::$translation[trim($item)];
-                        else if(isset($lang[$item]))
-                            $lang = $lang[$item];
-                    }
-
-                    // Obtém os dados a serem utilizados.
-                    $data = explode(',', trim($values[$i]));
-
-                    // Primeiro elemento diz que será o index a ser alterado.
-                    $data2Pop = array_shift($data);
-
-                    foreach($data as &$ptr)
-                    {
-                        $ptr = trim($ptr);
-                    }
-
-                    // Se a variavel for definida na tradução, então realiza a tradução da linha.
-                    if(isset($lang[$data2Pop]))
-                    {
-                        // Chama o sprintf e obtém o texto a ser alterado.
-                        $find = call_user_func_array('sprintf', array_merge(array($lang[$data2Pop]), $data));
-
-                        // Troca no texto as variaveis informadas.
-                        $textToTranslate = str_replace($origins[$i], $find, $textToTranslate);
-                    }
-
-                    // Remove da memória as variaveis identificadas.
-                    unset($lang, $find, $data2Pop, $data, $itens);
-                }
-
-                unset($i, $count, $values, $indexes, $origins);
+                $_tmp = null;
+                break;
             }
-            unset($maches);
 
-            return $textToTranslate;
-        });
+            $_tmp = $_tmp[$_curIndex];
+        }
+
+        if(!is_null($_tmp) && !is_array($_tmp) && is_string($_tmp))
+            $_translate = $_tmp;
+
+        return $_translate;
     }
 
     /**

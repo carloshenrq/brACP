@@ -32,7 +32,9 @@ set_error_handler(function($errno , $errstr, $errfile, $errline, $errcontext) {
 // Defines the autoloader class for this app.
 spl_autoload_register(function($className) {
     // Includes the class file on the code.
-    include_once (__DIR__ . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $className) . '.php');
+
+	if(!preg_match('/^Smarty/i', $className))
+    	include_once (__DIR__ . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $className) . '.php');
 }, true);
 
 

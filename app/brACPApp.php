@@ -95,14 +95,13 @@ class brACPApp extends Slim\App
         if(!isset($this->session->BRACP_LANGUAGE))
             $this->session->BRACP_LANGUAGE = BRACP_DEFAULT_LANGUAGE;
 
+        // Inicializa a linguagem.
+        $this->language = new Language($this->session->BRACP_LANGUAGE);
+
         // Servidor de banco de dados selecionado pelo usuário.
         if(!isset($this->session->BRACP_SVR_SELECTED)
             || $this->session->BRACP_SVR_SELECTED < 0 && $this->session->BRACP_SVR_SELECTED >= BRACP_SRV_COUNT)
             $this->session->BRACP_SVR_SELECTED = BRACP_SRV_DEFAULT;
-
-        // Inicializa a linguagem em modo PORTUGUÊS BR.
-        //  @Temporario, pois será alterado para variavel de sessão.
-        Language::load($this->session->BRACP_LANGUAGE);
 
         // Verifica se a variavel de tema para a sessão está definida.
         // Se não estiver, define como a do tema padrão.
@@ -125,7 +124,10 @@ class brACPApp extends Slim\App
         // Cria a instância do smarty.
         $this->view = new Smarty;
         $this->view->setTemplateDir(BRACP_TEMPLATE_DIR);
-        $this->view->setCaching(false);
+
+        $this->view->setCaching(Smarty::CACHING_OFF);
+
+        $this->view->registerPlugin('block', 'translate', [$this->language, '__translate'], false);
 
         // Adiciona os middlewares na rota para serem executados.
         $this->add(new Route());
@@ -309,7 +311,7 @@ class brACPApp extends Slim\App
             $template .= '.ajax';
 
         // Renderiza o template.
-        return Language::parse($this->view->fetch($template . '.tpl'));
+        return $this->view->fetch($template . '.tpl');
     }
 
     /**
