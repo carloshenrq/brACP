@@ -121,14 +121,6 @@ class brACPApp extends Slim\App
         // Loads the default settings for this app.
         parent::__construct($configs);
 
-        // Cria a instância do smarty.
-        $this->view = new Smarty;
-        $this->view->setTemplateDir(BRACP_TEMPLATE_DIR);
-
-        $this->view->setCaching(Smarty::CACHING_OFF);
-
-        $this->view->registerPlugin('block', 'translate', [$this->language, '__translate'], false);
-
         // Adiciona os middlewares na rota para serem executados.
         $this->add(new Route());
         $this->add(new ServerPing());
@@ -136,6 +128,9 @@ class brACPApp extends Slim\App
 
         // Define a instância global como sendo o proprio.
         self::$app = $this;
+
+        // Cria a instância do smarty.
+        $this->view = new brACPSmarty;
     }
 
     /**
@@ -431,6 +426,16 @@ class brACPApp extends Slim\App
     public function getSession()
     {
         return $this->session;
+    }
+
+    /**
+     * Obtém o objeto de linguagem que contém os dados de tradução para o painel.
+     *
+     * @return Language
+     */
+    public function getLanguage()
+    {
+        return $this->language;
     }
 
     /**
