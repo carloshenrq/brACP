@@ -59,14 +59,19 @@ class Style extends Caller
                 // Caminho para o arquivo ser compilado.
                 $pathfile = $scss_path . DIRECTORY_SEPARATOR . $basefile . '.scss';
 
+                // Caminho padrão para o bracp.
+                $basepath_bracp = basename(BRACP_DIR_INSTALL_URL);
+                if($basepath_bracp == '/')
+                    $$basepath_bracp = '';
+
                 $scss = new Compiler;
                 $scss->setVariables([
                     'data_path'     => implode('/', [
-                        '/' . basename(BRACP_DIR_INSTALL_URL),
+                        $basepath_bracp,
                         'data'
                     ]),
                     'theme_path'    => implode('/',[
-                        '/' . basename(BRACP_DIR_INSTALL_URL),
+                        $basepath_bracp,
                         'themes',
                         $app->getSession()->BRACP_THEME
                     ])
