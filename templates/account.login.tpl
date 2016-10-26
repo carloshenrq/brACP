@@ -19,22 +19,22 @@
 <input type="checkbox" class="modal-trigger-check" id="modal-login"/>
 <div class="modal" ng-controller="account.login">
     <div class="modal-title">
-        @@LOGIN(TITLE)
+        {translate}@LOGIN_TITLE@{/translate}
         <label for="modal-login" class="modal-close" ng-if="stage == 0">&times;</label>
     </div>
 
     <div class="modal-body" ng-if="stage == 0">
         
         <div ng-if="loginError" class="message error">
-            @@LOGIN,ERROR(MISMATCH)
+            {translate}@LOGIN_ERROR_MISMATCH@{/translate}
         </div>
 
-        @@LOGIN,MESSAGE(HEADER)
+        {translate}@LOGIN_MESSAGE_HEADER@{/translate}
 
         <form class="modal-form" ng-submit="submitLogin()">
 
-            <input type="text" ng-model="userid" placeholder="@@LOGIN,HOLDER(USERID)" size="32" pattern="{$smarty.const.BRACP_REGEXP_USERNAME}" required title="@@WARNING,PATTERN({$userNameFormat})"/>
-            <input type="password" ng-model="user_pass" placeholder="@@LOGIN,HOLDER(PASSWD)" size="32" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required title="@@WARNING,PATTERN({$passWordFormat})"/>
+            <input type="text" ng-model="userid" placeholder="{translate}@LOGIN_HOLDER_USERID@{/translate}" size="32" pattern="{$smarty.const.BRACP_REGEXP_USERNAME}" required title="{translate}@WARNING_PATTERN_{$userNameFormat}@{/translate}"/>
+            <input type="password" ng-model="user_pass" placeholder="{translate}@LOGIN_HOLDER_PASSWD@{/translate}" size="32" pattern="{$smarty.const.BRACP_REGEXP_PASSWORD}" required title="{translate}@WARNING_PATTERN_{$passWordFormat}@{/translate}"/>
 
             <input id="_submitLogin" type="submit"/>
 
@@ -44,11 +44,11 @@
         </form>
 
         {if $smarty.const.BRACP_ALLOW_CREATE_ACCOUNT eq true}
-            <p class="link">@@LOGIN,MESSAGE(CREATE)</p>
+            <p class="link">{translate}@LOGIN_MESSAGE_CREATE@{/translate}</p>
         {/if}
 
         {if $smarty.const.BRACP_ALLOW_RECOVER}
-            <p class="link">@@LOGIN,MESSAGE(RECOVER)</p>
+            <p class="link">{translate}@LOGIN_MESSAGE_RECOVER@{/translate}</p>
         {/if}
 
     </div>
@@ -63,12 +63,12 @@
         </div>
 
         <div class="message success" ng-if="loginSuccess">
-            @@LOGIN(SUCCESS)
+            {translate}@LOGIN_SUCCESS@{/translate}
         </div>
     </div>
 
     <div class="modal-footer" ng-if="stage == 0">
-        <label class="button success icon" for="_submitLogin">@@LOGIN,BUTTONS(SUBMIT)</label>
-        <label class="button error icon" for="modal-login">@@LOGIN,BUTTONS(CLOSE)</label>
+        <label class="button success icon" for="_submitLogin">{translate}@LOGIN_BUTTONS_SUBMIT@{/translate}</label>
+        <label class="button error icon" for="modal-login">{translate}@LOGIN_BUTTONS_CLOSE@{/translate}</label>
     </div>
 </div>
