@@ -137,7 +137,7 @@ class Format
      */
     public static function status($online)
     {
-        return sprintf(self::$online[$online], '@@STATUS('.$online.')');
+        return sprintf(self::$online[$online], brACPApp::getInstance()->getLanguage()->getTranslate('@STATUS_'.$online.'@'));
     }
 
     /**
@@ -149,7 +149,7 @@ class Format
      */
     public static function job($job_class)
     {
-        return '@@JOBS(' .$job_class.')';
+        return brACPApp::getInstance()->getLanguage()->getTranslate('@JOBS_' .$job_class.'@');
     }
 
     /**
