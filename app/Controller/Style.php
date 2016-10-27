@@ -61,7 +61,8 @@ class Style extends Caller
 
                 // Caminho padrão para o bracp.
                 $basepath_bracp = basename(BRACP_DIR_INSTALL_URL);
-                $basepath_bracp = ($basepath_bracp == '/' ? '' : '/') . $basepath_bracp;
+                if(!empty($basepath_bracp))
+                    $basepath_bracp = '/' . $basepath_bracp;
 
                 $scss = new Compiler;
                 $scss->setVariables([
