@@ -190,8 +190,8 @@ return
             'USED'      => 'O Código de confirmação já foi utilizado ou é inválido.',
         ],
         'MAIL'      => [
-            'TITLE_CONFIRM'     => 'Confirme seu Registro',
-            'TITLE_CONFIRMED'   => 'Conta Confirmada',
+            'TITLE.CONFIRM'     => 'Confirme seu Registro',
+            'TITLE.CONFIRMED'   => 'Conta Confirmada',
         ],
         'SUCCESS'   => 'Código de confirmação enviado com sucesso para o e-mail cadastrado.',
         'CONFIRMED' => 'Sua conta foi ativada. Você já pode realizar login.',

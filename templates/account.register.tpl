@@ -57,7 +57,7 @@
                 </select>
                 <input type="text" ng-model="email" placeholder="{translate}@CREATE_HOLDER_EMAIL@{/translate}" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
                 <input type="text" ng-model="email_conf" placeholder="{translate}@CREATE_HOLDER_EMAIL.CONFIRM@{/translate}" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
-                <input type="text" ng-model="birthdate" datetime="{translate}@CREATE_FORMAT_BIRTHDATE@{/translate}" placeholder="{translate}@CREATE_HOLDER_BIRTHDATE@{/translate}" required/>
+                <input type="text" ng-model="birthdate" datetime="{translate}@CREATE_FORMAT_BIRTHDATE@{/translate}" datetime-model="yyyy-MM-dd" placeholder="{translate}@CREATE_HOLDER_BIRTHDATE@{/translate}" required/>
 
                 <input id="_submitRegister" type="submit"/>
 

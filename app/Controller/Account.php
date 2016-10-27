@@ -542,53 +542,6 @@ class Account extends Caller
     // }
 
     // /**
-    //  * Método para cadastrar uma nova conta.
-    //  *
-    //  * @param ServerRequestInterface $request
-    //  * @param ResponseInterface $response
-    //  * @param array $args
-    //  */
-    // public static function register(ServerRequestInterface $request, ResponseInterface $response, $args)
-    // {
-    //     // Dados recebidos pelo post para criação de contas.
-    //     $data = $request->getParsedBody();
-
-    //     // Inicializa vetor de retorno.
-    //     $return = ['error_state' => 0, 'success_state' => false];
-
-    //     // Obtém os dados para caso o usuário precise realizar as requisições do captcha.
-    //     $needRecaptcha = self::getApp()->getSession()->BRACP_RECAPTCHA_ERROR_REQUEST >= 3;
-
-    //     // Adicionado teste para recaptcha para segurança das requisições enviadas ao forms.
-    //     if($needRecaptcha && BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['recaptcha']))
-    //     {
-    //         $return['error_state'] = 6;
-    //     }
-    //     else
-    //     {
-    //         // Executa a tentativa de criar a conta do usuário no banco de dados.
-    //         $i_create = self::registerAccount(
-    //             $data['userid'], $data['user_pass'] , $data['user_pass_conf'],
-    //             $data['email'] , $data['email_conf'], $data['sex'],
-    //             false, 0
-    //         );
-
-    //         // Em caso de erro, atualiza as necessidades de chamar o reCaptcha
-    //         if($i_create != 0 && BRACP_RECAPTCHA_ENABLED)
-    //             self::getApp()->getSession()->BRACP_RECAPTCHA_ERROR_REQUEST++;
-
-    //         // Realiza os testes para saber o retorno do registro.
-    //         if($i_create != 0)
-    //             $return['error_state']      = $i_create;
-    //         else
-    //             $return['success_state']    = true;
-    //     }
-
-    //     // Responde com um objeto json informando o estado do cadastro.
-    //     $response->withJson($return);
-    // }
-
-    // /**
     //  * Solicitação de alteração de e-mail pelo usuário.
     //  *
     //  * @param string $userid
@@ -1275,6 +1228,253 @@ class Account extends Caller
     //                                 ]);
     //     return 0;
     // }
+
+    /**
+     * Rota definida para realizar um novo registro de conta.
+     *
+     * @param array $get
+     * @param array $post
+     * @param object $response
+     *
+     * @return object
+     */
+    public function register_POST($get, $post, $response)
+    {
+        // Inicializa o vetor de retorno.
+        $return = ['error_state' => 0, 'success_state' => false];
+
+        // Verifica se o recaptcha foi validado com sucesso.
+        if(!$this->getApp()->testRecaptcha($post))
+        {
+            $return['error_state'] = 6;
+        }
+        else
+        {
+            // Obtém o retorno de informações de registro para a conta.
+            $register_return = $this->register(
+                $post['userid'],
+                $post['user_pass'],
+                $post['user_pass_conf'],
+                $post['sex'],
+                $post['email'],
+                $post['email_conf'],
+                $post['birthdate']
+            );
+
+            // Informa os dados de retorno para a
+            $return = [
+                'error_state'   => ($register_return != 0 ? $register_return : 0),
+                'success_state' => ($register_return == 0)
+            ];
+        }
+
+
+        return $response->withJson($return);
+    }
+
+    /**
+     * Método utilizado para criar uma conta para o jogador.
+     *
+     * @param string $userid
+     * @param string $user_pass
+     * @param string $user_pass_conf
+     * @param string $sex
+     * @param string $email
+     * @param string $email_conf
+     * @param string $birthdate
+     * @param int $group_id
+     * @param bool $admin
+     *
+     * @return int
+     *   -> -1: Criação de contas desabilitada no cadastro.
+     *   ->  0: Conta criada com sucesso
+     *   ->  1: Usuário em uso.
+     *   ->  2: Senhas digitadas não conferem.
+     *   ->  3: E-mails digitados não conferem.
+     *   ->  4: A Criação deste tipo de conta somente é possivel em modo administrador.
+     *   ->  5: Falha na restrição de pattern
+     */
+    public function register($userid,
+                            $user_pass, $user_pass_conf,
+                            $sex,
+                            $email, $email_conf,
+                            $birthdate,
+                            $group_id = 0, $admin = false)
+    {
+        // Registro de contas está desabilitado.
+        // -> Somente permite nova conta em caso de ser cadastro com modo administrador.
+        if(!$admin && !BRACP_ALLOW_CREATE_ACCOUNT)
+            return -1;
+
+        // Valida as expressões regulares para os campos informados no cadastro.
+        if(!$this->validate($userid, BRACP_REGEXP_USERNAME)
+            || !$this->validate($user_pass, BRACP_REGEXP_PASSWORD)
+            || !$this->validate($email, BRACP_REGEXP_EMAIL)
+            || !preg_match('/^(M|F)$/i', $sex))
+            return 5;
+
+        // Verifica se as senhas digitadas são iguais.
+        if(hash('md5', $user_pass) !== hash('md5', $user_pass_conf))
+            return 2;
+
+        // Verifica se os e-mails digitados são iguais.
+        if(hash('md5', $email) !== hash('md5', $email_conf))
+            return 3;
+
+        // Se não estiver em modo administrador, não pode
+        // criar contas acima de lv 0.
+        if(!$admin && $group_id > 0)
+            return 4;
+
+        // Inicializa a variavel da conta.
+        $account = null;
+
+        // Verifica se está configurado para não deixar contas com e-mail duplicado
+        // -> Somente permite em modo administrador.
+        if(!$admin && BRACP_MAIL_REGISTER_ONCE)
+            $account = $this->getApp()
+                            ->getSvrDftEm()
+                            ->getRepository('Model\Login')
+                            ->findOneBy(['email' => $email]);
+
+        // Se ainda não encontrou uma conta, então
+        // Refaz o teste procurando pelo nome de usuário
+        // -> Restrição de banco, administradores não podem ultrapassar essa regra.
+        if(is_null($account))
+            $account = $this->getApp()
+                            ->getSvrDftEm()
+                            ->getRepository('Model\Login')
+                            ->findOneBy(['userid' => $userid]);
+
+        // Se a conta existir (userid ou email, caso configurado e não administrador)
+        if(!is_null($account))
+            return 1;
+
+        // Está configurado para usar senhas em modo md5?
+        if(BRACP_MD5_PASSWORD_HASH)
+            $user_pass = hash('md5', $user_pass);
+
+        // Realiza a instância da classe para realizar o registro no banco de dados.
+        $account =  new Login;
+        $account->setUserid($userid);
+        $account->setUser_pass($user_pass);
+        $account->setEmail($email);
+        $account->setSex($sex);
+        $account->setGroup_id($group_id);
+        $account->setBirthdate($birthdate);
+        $account->setState(0);
+
+        // Se estiver habilitado a confirmação de contas e também estiver
+        // habilitado o envio de e-mails, será utilizado o status 11 para
+        // confirmação de contas.
+        // -> Contas criadas em modo administrador não precisam de confirmar as contas.
+        // NOTA.: NÃO USAR state=5 PARA CONTAS EM CONFIRMAÇÃO,
+        //          O STATE 5 É DEFINIDO PARA USUÁRIO QUANDO FOR BANIDO COM @BLOCK
+        if(!$admin && BRACP_CONFIRM_ACCOUNT && BRACP_ALLOW_MAIL_SEND)
+            $account->setState(11);
+
+        // Salva a conta de usuário no banco de dados.
+        $this->getApp()->getSvrDftEm()->persist($account);
+        $this->getApp()->getSvrDftEm()->flush();
+
+        // Verifica a necessidade do envio de e-mails.
+        if(BRACP_ALLOW_MAIL_SEND)
+        {
+            // Se estiver em modo administrador ou se estiver
+            // configurado para não confirmar contas.
+            if(!$admin && BRACP_CONFIRM_ACCOUNT)
+            {
+                // Envia a confirmação de conta para o endereço de e-mail
+                // Da nova conta cadastrada.
+                $this->sendConfirmationById($account->getAccount_id());
+            }
+            // Envia o e-mail de boas vindas.
+            else if($admin || !BRACP_CONFIRM_ACCOUNT)
+            {
+                $this->getApp()->sendMail(
+                    '@CREATE_MAIL_TITLE@',
+                    [$account->getEmail()],
+                    'mail.create', [
+                        'userid'    => $account->getUserid()
+                    ]);
+            }
+        }
+
+        return 0;
+    }
+
+    /**
+     * Envia a confirmação de usuário por código da conta.
+     *
+     * @param string $account_id
+     *
+     * @return int
+     * -1: Configuração não permite confirmação de contas.
+     *  0: Código gerado/re-enviado
+     *  1: Conta informada não espera confirmação.
+     */
+    public function sendConfirmationById($account_id)
+    {
+        // Se não for permitido enviar e-mails ou a configuração
+        // Estiver desabilitando a confirmação de contas.
+        if(!BRACP_ALLOW_MAIL_SEND || !BRACP_CONFIRM_ACCOUNT)
+            return -1;
+
+        // Obtém a conta que será enviado o código de confirmação.
+        $account = $this->getApp()
+                        ->getSvrDftEm()
+                        ->getRepository('Model\Login')
+                        ->findOneBy(['account_id' => $account_id, 'state' => 11]);
+
+        // Conta inexistente ou já confirmada.
+        if(is_null($account))
+            return 1;
+
+        // Obtém ultimo código de confirmação para a conta.
+        // -> Desnecessário ficar gerando um novo código toda hora... certo?
+        $confirmation = $this->getApp()
+                            ->getCpEm()
+                            ->createQuery('
+                                SELECT
+                                    confirmation
+                                FROM
+                                    Model\Confirmation confirmation
+                                WHERE
+                                    confirmation.account_id = :account_id AND
+                                    confirmation.used = false AND
+                                    :CURDATETIME BETWEEN confirmation.date AND confirmation.expire
+                           ')
+                            ->setParameter('account_id', $account->getAccount_id())
+                            ->setParameter('CURDATETIME', date('Y-m-d H:i:s'))
+                            ->getOneOrNullResult();
+
+        // Se não houver código de confirmação da conta já criado/válido
+        // Então, recria o código de confirmação.
+        if(is_null($confirmation))
+        {
+            $confirmation = new Confirmation;
+            $confirmation->setAccount_id($account->getAccount_id());
+            $confirmation->setCode(hash('md5', uniqid(rand() . microtime(true), true)));
+            $confirmation->setDate(date('Y-m-d H:i:s'));
+            $confirmation->setExpire(date('Y-m-d H:i:s', time() + (60*BRACP_RECOVER_CODE_EXPIRE)));
+            $confirmation->setUsed(false);
+
+            $this->getApp()->getCpEm()->persist($confirmation);
+            $this->getApp()->getCpEm()->flush();
+        }
+
+        // Envia o e-mail para o jogador com o código de confirmação e o link
+        // Para confirmação da conta.
+        $this->getApp()->sendMail('@RESEND_MAIL_TITLE.CONFIRM@',
+                                    [$account->getEmail()],
+                                    'mail.create.code',[
+                                        'userid'    => $account->getUserid(),
+                                        'code'      => $confirmation->getCode(),
+                                        'expire'    => $confirmation->getExpire()
+                                    ]);
+        // Enviado com sucesso.
+        return 0;
+    }
 
     /**
      * Rota definida para realizar login do usuário.
