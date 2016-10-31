@@ -29,37 +29,30 @@
 
         <link rel="shortcut icon" href="{$smarty.const.BRACP_DIR_INSTALL_URL}fav.ico">
         <!-- Here loads all CSS files. -->
-        <link rel="stylesheet" type="text/css" href="{$smarty.const.BRACP_DIR_INSTALL_URL}style/css/?file=default"/>
-        <link rel="stylesheet" type="text/css" href="{$smarty.const.BRACP_DIR_INSTALL_URL}style/css/?file=message"/>
-        <link rel="stylesheet" type="text/css" href="{$smarty.const.BRACP_DIR_INSTALL_URL}style/css/?file=button"/>
-        <link rel="stylesheet" type="text/css" href="{$smarty.const.BRACP_DIR_INSTALL_URL}style/css/?file=modal"/>
+        <link rel="stylesheet" type="text/css" href="{$smarty.const.BRACP_DIR_INSTALL_URL}asset/css/?file=default"/>
+        <link rel="stylesheet" type="text/css" href="{$smarty.const.BRACP_DIR_INSTALL_URL}asset/css/?file=message"/>
+        <link rel="stylesheet" type="text/css" href="{$smarty.const.BRACP_DIR_INSTALL_URL}asset/css/?file=button"/>
+        <link rel="stylesheet" type="text/css" href="{$smarty.const.BRACP_DIR_INSTALL_URL}asset/css/?file=modal"/>
         <style>
         {block name="brACP_StyleCss"}
         {/block}
         </style>
 
-        <!-- Here loads all JAVASCRIPTS files -->
-        {if $smarty.const.BRACP_DEVELOP_MODE eq true}
-            <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/Chart.bundle.js"></script>
-            <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/jquery-2.1.4.js"></script>
-            <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/angular.js"></script>
-        {else}
-            <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/Chart.bundle.min.js"></script>
-            <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/jquery-2.1.4.min.js"></script>
-            <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/angular.min.js"></script>
-        {/if}
+        <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}asset/js/?file=Chart.bundle"></script>
+        <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}asset/js/?file=jquery-2.1.4"></script>
+        <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}asset/js/?file=angular"></script>
 
         {if $smarty.const.BRACP_RECAPTCHA_ENABLED eq true}
-            <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/angular-recaptcha.js"></script>
+            <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}asset/js/?file=angular-recaptcha"></script>
             <script src="https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&render=explicit" async defer></script>
             <script>var vRecaptchaIsLoaded = true;</script>
         {else}
             <script>var vRecaptchaIsLoaded = false;</script>
         {/if}
 
-        <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/jquery.bracp.js"></script>
-        <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/angular-datetime.js"></script>
-        <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}js/bracp.angular.js"></script>
+        <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}asset/js/?file=jquery.bracp"></script>
+        <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}asset/js/?file=angular-datetime"></script>
+        <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}asset/js/?file=bracp.angular"></script>
 
         <script>
         {if $smarty.const.BRACP_DEVELOP_MODE eq true}

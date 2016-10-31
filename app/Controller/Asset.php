@@ -20,6 +20,7 @@
 namespace Controller;
 
 use Leafo\ScssPhp\Compiler;
+use MatthiasMullie\Minify;
 
 use \Cache;
 
@@ -28,7 +29,7 @@ use \Cache;
  *
  * @static
  */
-class Style extends Caller
+class Asset extends Caller
 {
     public function __construct(\brACPApp $app)
     {
@@ -37,7 +38,88 @@ class Style extends Caller
     }
 
     /**
+     * Método para retornar os javascripts.
+     *
+     * @param array $get
+     * @param array $post
+     * @param object $response
+     *
+     * @return object Response com cabeçalhos para js
+     */
+    public function js_GET($get, $post, $response)
+    {
+        // Nome do arquivo solicitado para retorno.
+        $basefile = $get['file'];
+
+        $app = \brACPApp::getInstance();
+
+        // // Obtém o conteúdo para o arquivo javascript solicitado.
+        $js_content = Cache::get('BRACP_JS_' . strtoupper(hash('md5', $basefile)), function() use ($basefile) {
+             $app = \brACPApp::getInstance();
+
+            // Constroi o caminho correto para os arquivos do brACP serem compilados e servidos.
+            $js_path = implode(DIRECTORY_SEPARATOR, [
+                realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..'),
+                'js']);
+
+            // Caminho para o arquivo ser compilado.
+            $pathfile = $js_path . DIRECTORY_SEPARATOR . $basefile . '.js';
+
+            // Caminho padrão para o bracp.
+            $basepath_bracp = basename(BRACP_DIR_INSTALL_URL);
+            if(!empty($basepath_bracp))
+                $basepath_bracp = '/' . $basepath_bracp;
+
+            $js_files = [$pathfile];
+
+            // Verifica se está habilitado para aplicação de mods.
+            if(BRACP_ALLOW_MODS)
+            {
+                // Inicializa o loading dos mods para a linguagem em questão.
+                $jsMods = array_filter(scandir($js_path), function($file) use ($basefile) {
+                    return preg_match('/^'.preg_quote($basefile).'\.([^\.]+)\.mod\.js$/i', $file);
+                });
+                sort($jsMods);
+
+                // Adiciona os arquivos scss para compilação.
+                foreach($jsMods as $jsFile)
+                    $js_files[] = $js_path . DIRECTORY_SEPARATOR . $jsFile;
+            }
+
+            // Obtém os dados de javascript.
+            $js_data = [];
+            foreach($js_files as $js_file)
+                $js_data[] = file_get_contents($js_file);
+
+            $js_content = implode(' ', $js_data);
+
+            // Se não estiver em modo desenvolvedor.
+            if(!BRACP_DEVELOP_MODE)
+            {
+                $js_minify = new Minify\JS;
+                $js_minify->add($js_content);
+                $js_content = $js_minify->minify();
+            }
+
+            return $js_content;
+        });
+
+        // Exibe o conteudo do javascript.
+        echo $js_content;
+
+        // Reponde a requisição com os arquivos javascript.
+        return $response
+                ->withHeader('Content-Type', 'application/javascript');
+    }
+
+    /**
      * Método para compilar os scss dos temas.
+     *
+     * @param array $get
+     * @param array $post
+     * @param object $response
+     *
+     * @return object Response com cabeçalhos para css
      */
     public function css_GET($get, $post, $response)
     {
@@ -99,11 +181,23 @@ class Style extends Caller
                 foreach($scss_files as $scss_file)
                     $scss_compiled[] = $scss->compile(file_get_contents($scss_file));
 
+                $css_compiled = implode(' ', $scss_compiled);
+
+                // Se não estiver em modo desenvolvimento, então
+                // Retorna os dados minificados.
+                if(!BRACP_DEVELOP_MODE)
+                {
+                    // Classe para minificação do css.
+                    $css_minify = new Minify\CSS;
+                    $css_minify->add(implode(' ', $scss_compiled));
+
+                    $css_compiled = $css_minify->minify();
+                }
+
                 // Escreve todos os dados do scss compilado (incluindo arquivos de mod)
-                return implode(' ', $scss_compiled);
+                return $css_compiled;
             });
 
-        // Escreve o css_compilado.
         echo $css_compiled;
 
         // Responde a requisição com os dados compilados.
