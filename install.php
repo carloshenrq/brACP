@@ -331,6 +331,31 @@ if(extension_loaded('openssl'))
 // Obtém todos os temas e linguagens que estão na pasta.
 $themes = Themes::readAll();
 $langs = Language::readAll();
+
+// Carrega os dados de SCSS
+$scss = new \Leafo\ScssPhp\Compiler;
+$scss->setVariables([
+    'data_path'     => $_SERVER['REQUEST_URI'] . 'data',
+    'theme_path'    => $_SERVER['REQUEST_URI'] . 'themes/classic'
+]);
+$scss->addImportPath('themes/classic');
+
+$scss_message = file_get_contents('themes/classic/message.scss');
+$scss_install = file_get_contents('themes/classic/install.scss');
+$scss_button = file_get_contents('themes/classic/button.scss');
+
+$css_message = $scss->compile($scss_message);
+$css_install = $scss->compile($scss_install);
+$css_button = $scss->compile($scss_button);
+
+
+// Carrega o minifier do css.
+$css_minify = new MatthiasMullie\Minify\CSS;
+$css_minify->add($css_message);
+$css_minify->add($css_install);
+$css_minify->add($css_button);
+
+$css_style = $css_minify->minify();
 ?>
 <!DOCTYPE html>
 <html>
@@ -343,12 +368,10 @@ $langs = Language::readAll();
         -->
         <meta charset="UTF-8">
 
-        <link rel="stylesheet" type="text/css" href="themes/classic/css/message.css"/>
-        <link rel="stylesheet" type="text/css" href="themes/classic/css/install.css"/>
-        <link rel="stylesheet" type="text/css" href="themes/classic/css/button.css"/>
+        <style><?php echo $css_style; ?></style>
 
-        <script src="js/angular.min.js"></script>
-        <script src="js/jquery-2.1.4.min.js"></script>
+        <script src="js/angular.js"></script>
+        <script src="js/jquery-2.1.4.js"></script>
         <script>
             var install = angular.module('brACP', []);
 
