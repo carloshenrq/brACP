@@ -23,6 +23,16 @@
 if(file_exists(__DIR__ . DIRECTORY_SEPARATOR . 'config.php'))
     exit;
 
+// Verify if the dependencies from composer are installed.
+if(!is_dir(__DIR__ . DIRECTORY_SEPARATOR . 'vendor'))
+{
+    echo 'Dependencies not found. (Run \'composer install\')';
+    exit;
+}
+
+// Carrega as informações do APP
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+
 if(!defined('PHP_VERSION'))
     define('PHP_VERSION', phpversion(), false);
 
