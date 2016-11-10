@@ -66,9 +66,16 @@ class Asset extends Caller
             $pathfile = $js_path . DIRECTORY_SEPARATOR . $basefile . '.js';
 
             // Caminho padrão para o bracp.
-            $basepath_bracp = basename(BRACP_DIR_INSTALL_URL);
+            $basepath_bracp = BRACP_DIR_INSTALL_URL;
+
             if(!empty($basepath_bracp))
                 $basepath_bracp = '/' . $basepath_bracp;
+
+            if(substr($basepath_bracp, -1, 1) == '/')
+                $basepath_bracp = substr($basepath_bracp, 0, strlen($basepath_bracp) - 1);
+
+            if(substr($basepath_bracp, 0, 2) == '//')
+                $basepath_bracp = substr($basepath_bracp, 1, strlen($basepath_bracp));
 
             $js_files = [$pathfile];
 
@@ -142,9 +149,16 @@ class Asset extends Caller
                 $pathfile = $scss_path . DIRECTORY_SEPARATOR . $basefile . '.scss';
 
                 // Caminho padrão para o bracp.
-                $basepath_bracp = basename(BRACP_DIR_INSTALL_URL);
+                $basepath_bracp = BRACP_DIR_INSTALL_URL;
+
                 if(!empty($basepath_bracp))
                     $basepath_bracp = '/' . $basepath_bracp;
+
+                if(substr($basepath_bracp, -1, 1) == '/')
+                    $basepath_bracp = substr($basepath_bracp, 0, strlen($basepath_bracp) - 1);
+
+                if(substr($basepath_bracp, 0, 2) == '//')
+                    $basepath_bracp = substr($basepath_bracp, 1, strlen($basepath_bracp));
 
                 $scss = new Compiler;
                 $scss->setVariables([
