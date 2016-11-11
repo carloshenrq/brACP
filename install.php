@@ -30,6 +30,13 @@ if(!is_dir(__DIR__ . DIRECTORY_SEPARATOR . 'vendor'))
     exit;
 }
 
+// Verifica se está chamando via arquivo, permite apenas pelo URL sem informar o arquivo.
+if(preg_match('/\.([^$]+)$/i', $_SERVER['REQUEST_URI']))
+{
+    header('Location: '.dirname($_SERVER['REQUEST_URI']));
+    exit;
+}
+
 // Carrega as informações do APP
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 
