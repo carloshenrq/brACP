@@ -30,10 +30,13 @@ if(!is_dir(__DIR__ . DIRECTORY_SEPARATOR . 'vendor'))
     exit;
 }
 
-// Verifica se está chamando via arquivo, permite apenas pelo URL sem informar o arquivo.
-if(preg_match('/\.([^$]+)$/i', $_SERVER['REQUEST_URI']))
+$root = $_SERVER['DOCUMENT_ROOT'];
+$dirc = str_replace('\\', '/', __DIR__) . '/';
+$BRACP_INSTALL_URL = substr($dirc, strlen($root));
+
+if(hash('md5', $_SERVER['REQUEST_URI']) != hash('md5', $BRACP_INSTALL_URL))
 {
-    header('Location: '.dirname($_SERVER['REQUEST_URI']));
+    header('Location: '.$BRACP_INSTALL_URL);
     exit;
 }
 
@@ -73,8 +76,8 @@ $_CONFIG_DATA = array(
     'BRACP_VERSION'                         => '0.2.2-beta',
 
     // Endereços (STEP=3)
-    'BRACP_URL'                             =>  'http' . ((isset($_SERVER['HTTPS'])) ? 's':'') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'],
-    'BRACP_DIR_INSTALL_URL'                 =>  $_SERVER['REQUEST_URI'],
+    'BRACP_URL'                             =>  'http' . ((isset($_SERVER['HTTPS'])) ? 's':'') . '://' . $_SERVER['HTTP_HOST'] . $BRACP_INSTALL_URL,
+    'BRACP_DIR_INSTALL_URL'                 =>  $BRACP_INSTALL_URL,
     'BRACP_TEMPLATE_DIR'                    =>  dirname(__FILE__) . DIRECTORY_SEPARATOR . 'templates',
     'BRACP_ENTITY_DIR'                      =>  dirname(__FILE__) . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'Model',
     'BRACP_DEFAULT_TIMEZONE'                =>  @date_default_timezone_get(),
