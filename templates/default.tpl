@@ -139,10 +139,10 @@
                 {/block}
             </div>
 
-            <div class="footer">
+            <div class="footer" ng-controller="footer" ng-init="init('{$session->BRACP_LANGUAGE}', '{$session->BRACP_THEME}')">
                 <label>
                     {translate}@FOOTER_LANGUAGE@{/translate}:
-                    <select id="BRACP_LANG_SELECTED">
+                    <select ng-model="BRACP_LANGUAGE" ng-change="language()">
                         {foreach from=$langs item=lang}
                             <option>{$lang}</option>
                         {/foreach}
@@ -152,7 +152,7 @@
                 {if $smarty.const.BRACP_ALLOW_CHOOSE_THEME}
                     <label>
                         {translate}@FOOTER_THEME@{/translate}:
-                        <select id="BRACP_THEME_SELECTED">
+                        <select ng-model="BRACP_THEME" ng-change="theme()">
                             {foreach from=$themes item=theme}
                                 <option value="{$theme->getFolder()}">{$theme->getName()} ({$theme->getVersion()})</option>
                             {/foreach}

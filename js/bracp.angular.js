@@ -540,3 +540,64 @@ brACPApp.controller('vending.list', ['$scope', '$http', function($scope, $http) 
     };
 
 }]);
+
+brACPApp.controller('footer', ['$scope', '$http', function($scope, $http) {
+
+    $scope.BRACP_LANGUAGE = 'pt_BR';
+    $scope.BRACP_THEME = 'classic';
+
+    $scope.init     = function(lang, theme)
+    {
+        $scope.BRACP_LANGUAGE = lang;
+        $scope.BRACP_THEME = theme;
+    };
+
+    /**
+     * Realiza a alteração do tema do jogador.
+     */
+    $scope.theme        = function()
+    {
+        var urlTheme = document.querySelector('#_BRACP_URL').value + 'home/theme/';
+        var params = $.param({
+            'BRACP_THEME'    : this.BRACP_THEME,
+        });
+
+        $http({
+            'method'    : 'post',
+            'url'       : urlTheme,
+            'data'      : params,
+            'headers'   : {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        }).then(function(response) {
+            window.location.reload();
+        }, function(response) {
+            console.log(response.data);
+        });
+    }
+
+    /**
+     * Realiza a alteração do idioma do jogador.
+     */
+    $scope.language     = function()
+    {
+        var urlLang = document.querySelector('#_BRACP_URL').value + 'home/language/';
+        var params = $.param({
+            'BRACP_LANGUAGE'    : this.BRACP_LANGUAGE,
+        });
+
+        $http({
+            'method'    : 'post',
+            'url'       : urlLang,
+            'data'      : params,
+            'headers'   : {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        }).then(function(response) {
+            window.location.reload();
+        }, function(response) {
+            console.log(response.data);
+        });
+    };
+
+}]);
