@@ -452,7 +452,7 @@ $css_style = $css_minify->minify();
                             return;
                         }
 
-                        console.log(data);
+                        window.location.reload();
 
                     }, function(response) {
                         console.error(response);
@@ -1079,7 +1079,7 @@ $css_style = $css_minify->minify();
                         <label for="BRACP_DEVELOP_MODE_CHK" class="input-checkbox" data-warning="Define se o brACP irá executar em modo desenvolvimento.">Habilitar modo desenvolvedor</label>
 
                         <input id="BRACP_MAINTENCE_CHK" ng-model="INSTALL_VARS.BRACP_MAINTENCE" class="input-checkbox" type="checkbox">
-                        <label for="BRACP_MAINTENCE_CHK" class="input-checkbox" data-warning="Define se o brACP irá executar em modo manutenção.">Habilitar modo desenvolvedor</label>
+                        <label for="BRACP_MAINTENCE_CHK" class="input-checkbox" data-warning="Define se o brACP irá executar em modo manutenção.">Habilitar manutenção</label>
 
                         <input id="BRACP_ALLOW_ADMIN_CHK" ng-model="INSTALL_VARS.BRACP_ALLOW_ADMIN" class="input-checkbox" type="checkbox">
                         <label for="BRACP_ALLOW_ADMIN_CHK" class="input-checkbox" data-warning="Define se irá permitir o brACP operar com o modo administrador (AdminCP).">Habilitar modo administrador</label>
