@@ -43,7 +43,7 @@ class Home extends Caller
      * @param array $get
      * @param array $post
      */
-    public function index_GET($get, $post, $response)
+    private function index_GET($get, $post, $response)
     {
         $this->getApp()->display('home');
         return $response;
@@ -55,7 +55,7 @@ class Home extends Caller
      * @param array $get
      * @param array $post
      */
-    public function language_POST($get, $post, $response)
+    private function language_POST($get, $post, $response)
     {
         if(isset($post['BRACP_LANGUAGE']))
             $this->getApp()->getSession()->BRACP_LANGUAGE = $post['BRACP_LANGUAGE'];
@@ -68,7 +68,7 @@ class Home extends Caller
      * @param array $get
      * @param array $post
      */
-    public function theme_POST($get, $post, $response)
+    private function theme_POST($get, $post, $response)
     {
         if(isset($post['BRACP_THEME']))
             $this->getApp()->getSession()->BRACP_THEME = $post['BRACP_THEME'];
@@ -82,7 +82,7 @@ class Home extends Caller
      * @param array $get
      * @param array $post
      */
-    public function server_POST($get, $post, $response)
+    private function server_POST($get, $post, $response)
     {
         // Realiza a alteração de tema se for necessário.
         if(isset($post['BRACP_SRV_SELECTED']))

@@ -51,6 +51,9 @@ class Route
             });
 
             // Adicionado mapa para todas as rotas 
+            $app->any('/{controller}/', ['Controller\Caller', 'parseRoute']);
+
+            // Adicionado mapa para todas as rotas 
             $app->any('/{controller}/{action}/[{sub_action}/]', ['Controller\Caller', 'parseRoute']);
 
             /*

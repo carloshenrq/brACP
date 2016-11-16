@@ -30,52 +30,13 @@ use \Closure;
  */
 class Caller
 {
+    // Usa informações da classe para carregar os mods.
+    use \TMod;
+
     /**
      * @var \brACPApp
      */
     private $app;
-
-    /**
-     * Define as restrições de rota para cada action chamada.
-     *
-     * @var array
-     */
-    private $routeRestrictions;
-
-    /**
-     * Obtém todos os mods carregados em memória.
-     *
-     * @var array
-     */
-    private $modsLoaded;
-
-    /**
-     * Define as rotas custons e para o Controller.
-     *
-     * @var array
-     */
-    private $routeModded;
-
-    /**
-     * Restrições para as rotas custons relacionadas aos mods.
-     *
-     * @var array
-     */
-    private $routeModdedRestrictions;
-
-    /**
-     * Define o array de novas funções com mods aplicados.
-     *
-     * @var array
-     */
-    private $funcModded;
-
-    /**
-     * Define o array para os atributos com mods aplicados.
-     *
-     * @var array
-     */
-    private $attrModded;
 
     /**
      * Define as restrições de rota para os actions informados.
@@ -86,28 +47,9 @@ class Caller
     {
         $this->routeRestrictions = $routeRestrictions;
         $this->app = $app;
-        $this->routeModded = [];
-        $this->routeModdedRestrictions = [];
-        $this->funcModded = [];
-        $this->attrModded = [];
-        $this->modsLoaded = [];
 
         // Carrega todos os mods para serem aplicados neste controller.
         $this->loadMods();
-    }
-
-    /**
-     * Carrega todos os mods para o controller informado.
-     *
-     * @return void
-     */
-    private function loadMods()
-    {
-        // // Desabilita o uso de mods para o brACP?
-        // if(!BRACP_ALLOW_MODS)
-            // return;
-
-        return;
     }
 
     /**
@@ -118,136 +60,6 @@ class Caller
     protected function getApp()
     {
         return $this->app;
-    }
-
-    /**
-     * Verifica se a action pode ser chamada.
-     *
-     * @param string $action
-     *
-     * @return boolean
-     */
-    public function canCall($action)
-    {
-        // Verifica se a rota está com o mod aplicado,
-        //  Se estiver, faz a chamada de restrições por rota com mod.
-        if(isset($this->routeModded[$action]))
-        {
-            if(isset($this->routeModdedRestrictions[$action]))
-            {
-                $clFunc = Closure::bind($this->routeModdedRestrictions[$action], $this);
-                return $clFunc();
-            }
-
-            return true;
-        }
-        // Se a rota não possuir mod aplicado, então
-        // Verifica se o método existe no objeto atual.
-        else if(method_exists($this, $action))
-        {
-            if(isset($this->routeRestrictions[$action]))
-            {
-                $clFunc = Closure::bind($this->routeRestrictions[$action], $this);
-                return $clFunc();
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /** 
-     * Verifica se action informada está com mod aplicado.
-     *
-     * @param string $action
-     *
-     * @return boolean
-     */
-    public function isModdedRoute($action)
-    {
-        return isset($this->routeModded[$action]);
-    }
-
-    /**
-     * Normalmente é chamado para mods aplicados.
-     *
-     * @param string $name
-     * @param array $arguments
-     */
-    public function __call($name, $arguments)
-    {
-        // Inicializa o objeto de chamada.
-        $clFunc = null;
-
-        // Verifica se a rota está com mod aplicado
-        // Se possuir, então, realiza as chamadas necssárias para trazer a rota
-        // A Execução.
-        if($this->isModdedRoute($name))
-            $clFunc = Closure::bind($this->routeModded[$name], $this);
-        else if(isset($this->funcModded[$name]))
-            $clFunc = Closure::bind($this->funcModded[$name], $this);
-
-        if(!is_null($clFunc) && is_callable($clFunc))
-            return call_user_func_array($clFunc, $arguments);
-        else
-            throw new \Exception('Call to undefined method ' . get_class($this) . '::' . $name);
-    }
-
-    /**
-     * Verifica se o atributo está definido como existente.
-     *
-     * @param string $name
-     *
-     * @return boolean
-     */
-    public function __isset($name)
-    {
-        return isset($this->attrModded[$name]);
-    }
-
-    /**
-     * Remove a definição do atributo.
-     *
-     * @param string $name
-     */
-    public function __unset($name)
-    {
-        if($this->__isset($name))
-            unset($this->attrModded[$name]);
-        else
-            throw new \Exception('Undefined property ' . get_class($this) . '::$' . $name);
-    }
-
-    /**
-     * Obtém acesso as propriedades com mods aplicados.
-     *
-     * @param string $name
-     *
-     * @return mixed
-     */
-    public function __get($name)
-    {
-        if($this->__isset($name))
-            return $this->attrModded[$name];
-        else
-            throw new \Exception('Undefined property ' . get_class($this) . '::$' . $name);
-    }
-
-    /**
-     * Define acesso as propriedades com mods.
-     *
-     * @param string $name
-     * @param mixed $value
-     *
-     * @return void
-     */
-    public function __set($name, $value)
-    {
-        if($this->__isset($name))
-            $this->attrModded[$name] = $value;
-        else
-            throw new \Exception('Undefined property ' . get_class($this) . '::$' . $name);
     }
 
     /**
@@ -273,7 +85,7 @@ class Caller
         // Obtém o tipo de requisição que está sendo realizada.
         $method             = strtoupper($request->getMethod());
         // Obtém a action que está sendo chamada.
-        $action             = strtolower($args['action']);
+        $action             = (isset($args['action']) ? strtolower($args['action']) : 'index');
         // Se houver sub-action, também a declara.
         $sub_action         = (isset($args['sub-action']) ? strtolower($args['sub-action']) : null);
         // Obtém todos os parametros enviados por GET.
@@ -287,19 +99,15 @@ class Caller
         // Cria uma nova instância do controller solicitado.
         $instance = new $controller(\brACPApp::getInstance());
 
-        // Verifica se é possível chamar o método informado
-        // Se for possível, envia os parâmetros para tratamento.
-        if($instance->canCall($callMethod))
+        try
         {
-            // Caso a rota esteja com mod aplicado e seja um método padrão
-            // Do Controller, então, faz a chamada do mod e não da padrão.
-            if($instance->isModdedRoute($callMethod) && method_exists($instance, $callMethod))
-                return $instance->__call($callMethod, [$get_params, $data_params, $response]);
-            else
-                return $instance->{$callMethod}($get_params, $data_params, $response);
+            // Realiza a chamada da rota informando os parametros.
+            return $instance->{$callMethod}($get_params, $data_params, $response);
         }
-        else
+        catch(\Exception $ex)
+        {
             throw new \Slim\Exception\NotFoundException($request, $response);
+        }
     }
 }
 

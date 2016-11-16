@@ -1238,7 +1238,7 @@ class Account extends Caller
      *
      * @return object
      */
-    public function register_POST($get, $post, $response)
+    private function register_POST($get, $post, $response)
     {
         // Inicializa o vetor de retorno.
         $return = ['error_state' => 0, 'success_state' => false];
@@ -1294,7 +1294,7 @@ class Account extends Caller
      *   ->  4: A Criação deste tipo de conta somente é possivel em modo administrador.
      *   ->  5: Falha na restrição de pattern
      */
-    public function register($userid,
+    private function register($userid,
                             $user_pass, $user_pass_conf,
                             $sex,
                             $email, $email_conf,
@@ -1413,7 +1413,7 @@ class Account extends Caller
      *  0: Código gerado/re-enviado
      *  1: Conta informada não espera confirmação.
      */
-    public function sendConfirmationById($account_id)
+    private function sendConfirmationById($account_id)
     {
         // Se não for permitido enviar e-mails ou a configuração
         // Estiver desabilitando a confirmação de contas.
@@ -1485,7 +1485,7 @@ class Account extends Caller
      *
      * @return object
      */
-    public function login_POST($get, $post, $response)
+    private function login_POST($get, $post, $response)
     {
         // Vetor para retorno.
         $return = [
@@ -1555,7 +1555,7 @@ class Account extends Caller
      *
      * @return object
      */
-    public function logout_GET($get, $post, $response)
+    private function logout_GET($get, $post, $response)
     {
         // Apaga da sessão dados do usuário.
         unset($this->getApp()->getSession()->BRACP_ISLOGGEDIN,

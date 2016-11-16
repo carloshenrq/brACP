@@ -31,6 +31,8 @@ use \Cache;
  */
 class Asset extends Caller
 {
+    use \TMod;
+
     public function __construct(\brACPApp $app)
     {
         parent::__construct($app, [
@@ -83,6 +85,9 @@ class Asset extends Caller
             $js_data = [];
             foreach($js_files as $js_file)
                 $js_data[] = file_get_contents($js_file);
+
+            // Carrega e aplica os mods ao arquivo.
+            $js_data = array_merge($js_data, $this->loadMods($basefile, 1));
 
             $js_content = implode(' ', $js_data);
 
@@ -176,15 +181,18 @@ class Asset extends Caller
                         $scss_files[] = $pathfile . DIRECTORY_SEPARATOR . $sccsFile;
                 }
 
-                // Obtém todos os dados para compilação do css.
-                $scss_compiled = [];
+                $scss_content = [];
                 foreach($scss_files as $scss_file)
-                    $scss_compiled[] = $scss->compile(file_get_contents($scss_file));
+                    $scss_content[] = file_get_contents($scss_file);
 
-                $css_compiled = implode(' ', $scss_compiled);
+                $scss_content = array_merge($scss_content, $this->loadMods($basefile, 1));
+
+                $scss_compiled = [];
+                foreach($scss_content as $content)
+                    $scss_compiled[] = $scss->compile($content);
 
                 // Escreve todos os dados do scss compilado (incluindo arquivos de mod)
-                return $css_compiled;
+                return implode(' ', $scss_compiled);
             });
 
         echo $css_compiled;

@@ -24,6 +24,8 @@
  */
 class Language
 {
+    use \TMod;
+
     /**
      * Array contendo os dados de tradução para o brACP.
      *
@@ -45,6 +47,9 @@ class Language
         $this->translate = Cache::get('BRACP_LANG_' . $lang, function() use ($lang_dir, $lang) {
             return (include_once $lang_dir . DIRECTORY_SEPARATOR . $lang . '.php');
         });
+
+        // Carrega os mods para a lingua informada.
+        $this->translate = array_merge($this->translate, $this->loadMods($lang, 1));
     }
 
     /**
