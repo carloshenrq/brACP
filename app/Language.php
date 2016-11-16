@@ -45,26 +45,6 @@ class Language
         $this->translate = Cache::get('BRACP_LANG_' . $lang, function() use ($lang_dir, $lang) {
             return (include_once $lang_dir . DIRECTORY_SEPARATOR . $lang . '.php');
         });
-
-        // Veririca se o brACP está permitindo mods
-        // Se estiver, verifica a pasta em busca de mods para tradução
-        // do brACP.
-        if(BRACP_ALLOW_MODS)
-        {
-            // Inicializa o loading dos mods para a linguagem em questão.
-            $langMods = array_filter(scandir($lang_dir), function($file) use ($lang) {
-                return preg_match('/^'.$lang.'\.([^\.]+)\.mod\.php$/i', $file);
-            });
-            sort($langMods);
-
-            // Carrega os strings de tradução com mods aplicados.
-            foreach($langMods as $langMod)
-            {
-                $this->translate = array_merge($this->translate,
-                    (include_once $lang_dir . DIRECTORY_SEPARATOR . $langMod )
-                );
-            }
-        }
     }
 
     /**

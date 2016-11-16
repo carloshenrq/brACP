@@ -79,20 +79,6 @@ class Asset extends Caller
 
             $js_files = [$pathfile];
 
-            // Verifica se está habilitado para aplicação de mods.
-            if(BRACP_ALLOW_MODS)
-            {
-                // Inicializa o loading dos mods para a linguagem em questão.
-                $jsMods = array_filter(scandir($js_path), function($file) use ($basefile) {
-                    return preg_match('/^'.preg_quote($basefile).'\.([^\.]+)\.mod\.js$/i', $file);
-                });
-                sort($jsMods);
-
-                // Adiciona os arquivos scss para compilação.
-                foreach($jsMods as $jsFile)
-                    $js_files[] = $js_path . DIRECTORY_SEPARATOR . $jsFile;
-            }
-
             // Obtém os dados de javascript.
             $js_data = [];
             foreach($js_files as $js_file)
@@ -196,17 +182,6 @@ class Asset extends Caller
                     $scss_compiled[] = $scss->compile(file_get_contents($scss_file));
 
                 $css_compiled = implode(' ', $scss_compiled);
-
-                // Se não estiver em modo desenvolvimento, então
-                // Retorna os dados minificados.
-                if(!BRACP_DEVELOP_MODE)
-                {
-                    // Classe para minificação do css.
-                    $css_minify = new Minify\CSS;
-                    $css_minify->add(implode(' ', $scss_compiled));
-
-                    $css_compiled = $css_minify->minify();
-                }
 
                 // Escreve todos os dados do scss compilado (incluindo arquivos de mod)
                 return $css_compiled;
