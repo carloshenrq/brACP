@@ -22,7 +22,35 @@ use Psr\Http\Message\ResponseInterface;
 
 class Route
 {
-    use TApplication;
+    private $app;
+
+    /**
+     *
+     */
+    public function __construct(brACPApp $app)
+    {
+        $this->setApp($app);
+    }
+
+    /**
+     * Obtém o App da rota informada.
+     *
+     * @return brACPApp
+     */
+    public function getApp()
+    {
+        return $this->app;
+    }
+    
+    /**
+     * Define o app para o middleware de rota.
+     *
+     * @param brACPApp $app
+     */
+    public function setApp(brACPApp $app)
+    {
+        return $this->app = $app;
+    }
 
     /**
      * Middleware para definição das rotas.
@@ -43,7 +71,7 @@ class Route
             if(!file_exists( __DIR__ . '/../theme.cache'))
                 Themes::cacheAll();
 
-            $app = self::getApp();
+            $app = $this->getApp();
 
             // Redireciona a rota para o home-index
             $app->any('/', function($request, $response, $args) {

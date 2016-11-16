@@ -24,7 +24,35 @@ use Doctrine\ORM\EntityManager;
 
 class Database
 {
-    use TApplication;
+    private $app;
+
+    /**
+     *
+     */
+    public function __construct(brACPApp $app)
+    {
+        $this->setApp($app);
+    }
+
+    /**
+     * Obtém o App da rota informada.
+     *
+     * @return brACPApp
+     */
+    public function getApp()
+    {
+        return $this->app;
+    }
+    
+    /**
+     * Define o app para o middleware de rota.
+     *
+     * @param brACPApp $app
+     */
+    public function setApp(brACPApp $app)
+    {
+        return $this->app = $app;
+    }
 
     /**
      * Middleware para definição das rotas.
@@ -39,11 +67,11 @@ class Database
     {
         try
         {
-            self::loadConnection();
+            $this->loadConnection();
         }
         catch(\Exception $ex)
         {
-            self::getApp()->display('error.405', [
+            $this->getApp()->display('error.405', [
                 'exception' => $ex
             ]);
             return $response;
@@ -56,10 +84,10 @@ class Database
     /**
      * Carrega a conexão com o banco de dados
      */
-    public static function loadConnection()
+    private function loadConnection()
     {
         // Conexão com o painel de controle. (BRACP)
-        if(is_null(self::getApp()->getEm('cp', false)))
+        if(is_null($this->getApp()->getEm('cp', false)))
         {
             // Define o entitymanager para o servidor.
             $cpEm = EntityManager::create([
@@ -70,11 +98,11 @@ class Database
                 'dbname'    => BRACP_SQL_CP_DBNAME,
             ], Setup::createAnnotationMetadataConfiguration([ BRACP_ENTITY_DIR ], true));
 
-            self::getApp()->setEm($cpEm, 'cp');
+            $this->getApp()->setEm($cpEm, 'cp');
         }
 
         // Conexão com o banco de dados do jogo. (item_db, mob_db, etc..)
-        if(is_null(self::getApp()->getEm('db', false)))
+        if(is_null($this->getApp()->getEm('db', false)))
         {
             // Define o entitymanager para o servidor.
             $dbEm = EntityManager::create([
@@ -85,11 +113,11 @@ class Database
                 'dbname'    => BRACP_SQL_DB_DBNAME,
             ], Setup::createAnnotationMetadataConfiguration([ BRACP_ENTITY_DIR ], true));
 
-            self::getApp()->setEm($dbEm, 'db');
+            $this->getApp()->setEm($dbEm, 'db');
         }
 
         // Conexão com o banco de dados padrão para as contas (login)
-        if(is_null(self::getApp()->getEm('SV' . BRACP_SRV_DEFAULT, false)))
+        if(is_null($this->getApp()->getEm('SV' . BRACP_SRV_DEFAULT, false)))
         {
             // Define o entitymanager para o servidor.
             $dfEm = EntityManager::create([
@@ -100,18 +128,17 @@ class Database
                 'dbname'    => constant('BRACP_SRV_' . BRACP_SRV_DEFAULT . '_SQL_DBNAME'),
             ], Setup::createAnnotationMetadataConfiguration([ BRACP_ENTITY_DIR ], true));
 
-            // $dfEm->getConnection()->connect();
-            self::getApp()->setEm($dfEm, 'SV' . BRACP_SRV_DEFAULT);
+            $this->getApp()->setEm($dfEm, 'SV' . BRACP_SRV_DEFAULT);
         }
 
         // Caso o usuário tenha selecionado um banco de dados para ser utilizado (que não seja o default)
         // Abre a conexão com o outro servidor para realizar os selects.
         // (char, inventory, storage)
-        if(self::getApp()->getSession()->BRACP_SVR_SELECTED !== BRACP_SRV_DEFAULT)
+        if($this->getApp()->getSession()->BRACP_SVR_SELECTED !== BRACP_SRV_DEFAULT)
         {
-            $index = self::getApp()->getSession()->BRACP_SVR_SELECTED;
+            $index = $this->getApp()->getSession()->BRACP_SVR_SELECTED;
 
-            if(is_null(self::getApp()->getEm('SV' . $index, false)))
+            if(is_null($this->getApp()->getEm('SV' . $index, false)))
             {
                 // Define o entitymanager para o servidor.
                 $svEm = EntityManager::create([
@@ -122,7 +149,7 @@ class Database
                     'dbname'    => constant('BRACP_SRV_' . $index . '_SQL_DBNAME'),
                 ], Setup::createAnnotationMetadataConfiguration([ BRACP_ENTITY_DIR ], true));
 
-                self::getApp()->setEm($svEm, 'SV' . $index);
+                $this->getApp()->setEm($svEm, 'SV' . $index);
             }
         }
     }

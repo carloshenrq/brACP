@@ -122,9 +122,9 @@ class brACPApp extends Slim\App
         parent::__construct($configs);
 
         // Adiciona os middlewares na rota para serem executados.
-        $this->add(new Route());
-        $this->add(new ServerPing());
-        $this->add(new Database());
+        $this->add(new Route($this));
+        $this->add(new ServerPing($this));
+        $this->add(new Database($this));
 
         // Define a instância global como sendo o proprio.
         self::$app = $this;
