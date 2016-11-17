@@ -48,8 +48,8 @@ class Language
             return (include_once $lang_dir . DIRECTORY_SEPARATOR . $lang . '.php');
         });
 
-        // Carrega os mods para a lingua informada.
-        $this->translate = array_merge($this->translate, $this->loadMods($lang, 1));
+        // Carrega os mods para a classe/lingua informada.
+        $this->translate = array_merge($this->translate, $this->loadMods($lang));
     }
 
     /**

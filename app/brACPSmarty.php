@@ -24,6 +24,8 @@
  */
 class brACPSmarty extends Smarty
 {
+    use \TMod;
+
     /**
      * Construtor para os dados de template do brACP.
      */
@@ -42,5 +44,8 @@ class brACPSmarty extends Smarty
             brACPApp::getInstance()->getLanguage(),
             '__translate'
         ], false, null);
+
+        // Carrega os módulos para aplicação de alteração do objeto atual.
+        $this->loadMods(null, 0);
     }
 }
