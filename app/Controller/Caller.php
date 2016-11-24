@@ -45,8 +45,11 @@ class Caller
      */
     public function __construct(\brACPApp $app, array $routeRestrictions)
     {
-        $this->routeRestrictions = $routeRestrictions;
+        // $this->routeRestrictions = $routeRestrictions;
         $this->app = $app;
+
+        // Define as restrições de rota.
+        $this->setDefaultRestrictions($routeRestrictions);
 
         // Carrega todos os mods para serem aplicados neste controller.
         $this->loadMods();

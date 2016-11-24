@@ -409,51 +409,6 @@ class Account extends Caller
     // }
 
     // /**
-    //  * Método para realizar a alteração de senha de usuários.
-    //  *
-    //  * @param ServerRequestInterface $request
-    //  * @param ResponseInterface $response
-    //  * @param array $args
-    //  */
-    // public static function password(ServerRequestInterface $request, ResponseInterface $response, $args)
-    // {
-    //     // Dados recebidos pelo post para confirmação de contas.
-    //     $data = $request->getParsedBody();
-
-    //     // Dados de retorno para informações de erro.
-    //     $return = ['error_state' => 0, 'success_state' => false];
-
-    //     // Obtém os dados para caso o usuário precise realizar as requisições do captcha.
-    //     $needRecaptcha = self::getApp()->getSession()->BRACP_RECAPTCHA_ERROR_REQUEST >= 3;
-
-    //     // Adicionado teste para recaptcha para segurança das requisições enviadas ao forms.
-    //     if($needRecaptcha && BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['recaptcha']))
-    //     {
-    //         $return['error_state'] = 5;
-    //     }
-    //     else
-    //     {
-    //         // Define informaçõs de erro. (Caso exista)
-    //         $return['error_state']      = self::accountChangePass(
-    //             self::loggedUser()->getUserid(),
-    //             $data['user_pass'],
-    //             $data['user_pass_new'],
-    //             $data['user_pass_conf']
-    //         );
-
-    //         // Em caso de erro, atualiza as necessidades de chamar o reCaptcha
-    //         if($return['error_state'] != 0 && BRACP_RECAPTCHA_ENABLED)
-    //             self::getApp()->getSession()->BRACP_RECAPTCHA_ERROR_REQUEST++;
-            
-    //         // userid, $old_pass, $new_pass, $new_pass_conf
-    //         $return['success_state']    = $return['error_state'] == 0;
-    //     }
-
-    //     // Responde com um objeto json informando o estado do cadastro.
-    //     $response->withJson($return);
-    // }
-
-    // /**
     //  * Método para realizar a confirmação de contas recebido via post.
     //  *
     //  * @param ServerRequestInterface $request
@@ -692,112 +647,6 @@ class Account extends Caller
     // }
 
     // /**
-    //  * Método para alteração de senha de um usuário utilizando senha antiga,
-    //  *  senha nova + confirmação
-    //  *
-    //  * @param string $userid
-    //  * @param string $old_pass
-    //  * @param string $new_pass
-    //  * @param string $new_pass_conf
-    //  *
-    //  * @return int
-    //  *  -1: Administradores não podem alterar senha por aqui.
-    //  *   1: Senha atual digitada não confere.
-    //  *   2: Senhas digitadas não conferem.
-    //  *   3: Nova senha não pode ser igual a anterior.
-    //  *   4: Falha de restrição de pattern.
-    //  */
-    // public static function accountChangePass($userid, $old_pass, $new_pass, $new_pass_conf)
-    // {
-    //     // 4: Falha de restrição de pattern
-    //     if(!preg_match('/^'.BRACP_REGEXP_PASSWORD.'$/', $old_pass) ||
-    //         !preg_match('/^'.BRACP_REGEXP_PASSWORD.'$/', $new_pass) ||
-    //         !preg_match('/^'.BRACP_REGEXP_PASSWORD.'$/', $new_pass_conf))
-    //         return 4;
-
-    //     // 2: Senhas digitadas não são iguais.
-    //     if(hash('md5', $new_pass) !== hash('md5', $new_pass_conf))
-    //         return 2;
-
-    //     // Se configurado para usar md5, então, aplica md5 para
-    //     //  realizar os testes.
-    //     if(BRACP_MD5_PASSWORD_HASH)
-    //         $old_pass = hash('md5', $old_pass);
-
-    //     $account = self::getSvrDftEm()
-    //                         ->getRepository('Model\Login')
-    //                         ->findOneBy(['userid' => $userid, 'user_pass' => $old_pass]);
-
-    //     // Normalmente é senha incorreta para dar este status.
-    //     // Não há problemas alterar senhas via recuperação de contas com state != 0
-    //     // 1: Senha atual digitada não confere.
-    //     if(is_null($account))
-    //         return 1;
-
-    //     // -1: Administradores não podem alterar senha por aqui.
-    //     if($account->getGroup_id() >= BRACP_ALLOW_ADMIN_GMLEVEL && !BRACP_ALLOW_ADMIN_CHANGE_PASSWORD)
-    //         return -1;
-
-    //     // 3: Nova senha não pode ser igual a anterior.
-    //     if(BRACP_MD5_PASSWORD_HASH && $old_pass === hash('md5', $new_pass) ||
-    //         hash('md5', $old_pass) === hash('md5', $new_pass))
-    //         return 3;
-
-    //     // Realiza a alteração da senha do jogador
-    //     //  e se configurado, notifica por e-mail (caso configuração ok)
-    //     return self::accountSetPass($account->getAccount_id(), $new_pass);
-    // }
-
-    // /**
-    //  * Aplica alteração de senhas na conta informada.
-    //  *
-    //  * @param int $account_id
-    //  * @param string $password
-    //  * @param boolean $admin (Padrão: false)
-    //  *
-    //  * @return int
-    //  *     -1: Conta não encontrada/Administrador não pode alterar senha
-    //  *      0: Senha alterada com sucesso.
-    //  *      4: Falha de restrição de pattern
-    //  */
-    // public static function accountSetPass($account_id, $password, $admin = false)
-    // {
-    //     // Retorna 2 para restrição de pattern
-    //     if(!preg_match('/^'.BRACP_REGEXP_PASSWORD.'$/', $password))
-    //         return 4;
-
-    //     // Realiza a busca da conta para poder realizar a alteração de senha.
-    //     $account = self::getSvrDftEm()
-    //                         ->getRepository('Model\Login')
-    //                         ->findOneBy(['account_id' => $account_id]);
-
-    //     // Não permite que a senha de administradores sejam alteradas
-    //     // se o painel de controle não permitir. (Somente em modo administrador)
-    //     if(is_null($account) || (!$admin && $account->getGroup_id() >= BRACP_ALLOW_ADMIN_GMLEVEL
-    //                 && !BRACP_ALLOW_ADMIN_CHANGE_PASSWORD))
-    //         return -1;
-
-    //     if(BRACP_MD5_PASSWORD_HASH)
-    //         $password = hash('md5', $password);
-
-    //     // Salva a nova senha aplicada.
-    //     $account->setUser_pass($password);
-    //     self::getSvrDftEm()->merge($account);
-    //     self::getSvrDftEm()->flush();
-
-    //     // Envia e-mail de notificação se não estiver em modo administrador.
-    //     if(!$admin && BRACP_NOTIFY_CHANGE_PASSWORD)
-    //         self::getApp()->sendMail('@@CHANGEPASS,MAIL(TITLE)',
-    //             [$account->getEmail()],
-    //             'mail.change.password', [
-    //             'userid' => $account->getUserid()
-    //         ]);
-
-    //     // Status de sucesso.
-    //     return 0;
-    // }
-
-    // /**
     //  * Confirma o código digitado e se ainda não estiver expirado,
     //  *  gera a nova senha e recupera os dados de usuário.
     //  *
@@ -955,100 +804,6 @@ class Account extends Caller
     //     }
 
     //     // Recuperação aconteceu com sucesso, retorna 0
-    //     return 0;
-    // }
-
-    // /**
-    //  * Método utilizado para criar uma conta com as informações dadas.
-    //  *
-    //  * @param string $userid
-    //  * @param string $user_pass
-    //  * @param string $user_pass_conf
-    //  * @param string $email
-    //  * @param string $email_conf
-    //  * @param boolean Indica se foi criada em modo administrador. (Não testa configuração de criação de contas.)
-    //  * @param int $group_id
-    //  *
-    //  * @return int
-    //  *   -> -1: Criação de contas desabilitada no cadastro.
-    //  *   ->  0: Conta criada com sucesso
-    //  *   ->  1: Usuário em uso.
-    //  *   ->  2: Senhas digitadas não conferem.
-    //  *   ->  3: E-mails digitados não conferem.
-    //  *   ->  4: A Criação deste tipo de conta somente é possivel em modo administrador.
-    //  *   ->  5: Falha na restrição de pattern
-    //  */
-    // public static function registerAccount($userid, $user_pass, $user_pass_conf, $email,
-    //                                         $email_conf, $sex, $admin = false, $group_id = 0)
-    // {
-    //     if(!$admin && !BRACP_ALLOW_CREATE_ACCOUNT)
-    //         return -1;
-
-    //     if(!preg_match('/^'.BRACP_REGEXP_USERNAME.'$/', $userid) ||
-    //         !preg_match('/^'.BRACP_REGEXP_PASSWORD.'$/', $user_pass) ||
-    //         !preg_match('/^'.BRACP_REGEXP_EMAIL.'$/', $email) ||
-    //         !preg_match('/^(M|F)$/', $sex))
-    //         return 5;
-
-    //     if(hash('md5', $user_pass) !== hash('md5', $user_pass_conf))
-    //         return 2;
-
-    //     if(hash('md5', $email) !== hash('md5', $email_conf))
-    //         return 3;
-
-    //     if(!$admin && $group_id >= BRACP_ALLOW_ADMIN_GMLEVEL)
-    //         return 4;
-
-    //     $account = null;
-    //     if(BRACP_MAIL_REGISTER_ONCE)
-    //         $account = self::getSvrDftEm()
-    //                         ->getRepository('Model\Login')
-    //                         ->findOneBy(['email' => $email]);
-
-    //     if(is_null($account))
-    //         $account = self::getSvrDftEm()
-    //                         ->getRepository('Model\Login')
-    //                         ->findOneBy(['userid' => $userid]);
-
-    //     // Se a conta foi encontrada nos registros de email ou login
-    //     //  então, retorna usuário em uso.
-    //     if(!is_null($account))
-    //         return 1;
-
-    //     if(BRACP_MD5_PASSWORD_HASH)
-    //         $user_pass = hash('md5', $user_pass);
-
-    //     // Cria o registro da conta no banco de dados.
-    //     $account = new Login;
-    //     $account->setUserid($userid);
-    //     $account->setUser_pass($user_pass);
-    //     $account->setEmail($email);
-    //     $account->setGroup_id($group_id);
-    //     $account->setSex($sex);
-    //     // NOTA.: NÃO USAR state=5 PARA CONTAS EM CONFIRMAÇÃO,
-    //     //        O STATE=5 É DEFINIDO PARA O USUÁRIO
-    //     //        QUANDO FOR UTILIZADO O COMANDO @BLOCK POR UM GM DENTRO DO JOGO.
-    //     // NOTA².: Modo administrador deve estar definido como falso. Se for verdadeiro, a conta não precisa ser confirmada.
-    //     $account->setState(((!$admin && BRACP_ALLOW_MAIL_SEND && BRACP_CONFIRM_ACCOUNT) ? 11 : 0));
-
-    //     self::getSvrDftEm()->persist($account);
-    //     self::getSvrDftEm()->flush();
-
-    //     if(BRACP_ALLOW_MAIL_SEND)
-    //     {
-    //         // Envia notificação de criação de contas.
-    //         if($admin || !BRACP_CONFIRM_ACCOUNT)
-    //             self::getApp()->sendMail('@@CREATE,MAIL(TITLE)',
-    //                 [$account->getEmail()],
-    //                 'mail.create', [
-    //                 'userid' => $account->getUserid()
-    //             ]);
-
-    //         // Cria e envia o código de ativação do usuário, caso a configuração esteja habilitada.
-    //         if(!$admin && BRACP_CONFIRM_ACCOUNT)
-    //             self::registerConfirmSend($account->getAccount_id());
-    //     }
-
     //     return 0;
     // }
 
@@ -1228,6 +983,123 @@ class Account extends Caller
     //                                 ]);
     //     return 0;
     // }
+
+    /**
+     * Rota definida para alteração de senhas.
+     *
+     * @param array $get
+     * @param array $post
+     * @param object $response
+     *
+     * @return object
+     */
+    private function password_POST($get, $post, $response)
+    {
+        $return = ['error_state' => 0, 'success_state' => false];
+
+        if(!$this->getApp()->testRecaptcha($post))
+        {
+            $return['error_state'] = 5;
+        }
+        else
+        {
+            // Tenta realizar a alteração de senha e obtém o retorno
+            // Para a tentativa.
+            $return['error_state'] = $this->changePass(
+                Account::loggedUser()->getUserid(),
+                $post['user_pass'],
+                $post['user_pass_new'],
+                $post['user_pass_conf'],
+                false
+            );
+
+            // Erro de requisição?
+            if(BRACP_RECAPTCHA_ENABLED && $return['error_state'] != 0)
+                $this->getApp()->getSession()->BRACP_RECAPTCHA_ERROR_REQUEST++;
+        }
+
+        // Responde com o retorno.
+        return $response->withJson($return);
+    }
+
+    /**
+     * Realiza a alteração de senha na conta do jogador.
+     *
+     * @param string $userid
+     * @param string $user_pass
+     * @param string $user_pass_new
+     * @param string $user_pass_new_conf
+     * @param bool $admin
+     *
+     * @return
+     *      4: Falha na restrição de pattern
+     */
+    private function changePass($userid, $user_pass, $user_pass_new, $user_pass_new_conf, $admin = false)
+    {
+        // Valida os dados contra a expressão regular.
+        if(!$this->validate($userid, BRACP_REGEXP_USERNAME)
+            || !$this->validate($user_pass, BRACP_REGEXP_PASSWORD)
+            || !$this->validate($user_pass_new, BRACP_REGEXP_PASSWORD))
+            return 4;
+
+        // Modo administrador não irá verificar informações de senhas digitadas.
+        if(!$admin)
+        {
+            // Calcula o hash de dados das informações enviadas.
+            if(hash('md5', $user_pass_new) !== hash('md5', $user_pass_new_conf))
+                return 2;
+            
+            // Verifica se a senha antiga é igual a nova.
+            if(hash('md5', $user_pass) !== hash('md5', $user_pass_new))
+                return 3;
+        }
+
+        // Usando senha md5? Aplica para verificação correta.
+        if(BRACP_MD5_PASSWORD_HASH)
+            $user_pass = hash('md5', $user_pass);
+
+        // Obtém a conta do jogador.
+        $account = $this->getApp()
+                        ->getSvrDftEm()
+                        ->getRepository('Model\Login')
+                        ->findOneBy(['userid' => $userid]);
+        
+        // Se a conta não existe, então, retorna senha atual inválida.
+        if(is_null($account) || (!$admin && $user_pass !== $account->getUser_pass()))
+            return 1;
+
+        // Verifica os dados de administrador.
+        if(!BRACP_ALLOW_ADMIN_CHANGE_PASSWORD
+            && $account->getGroup_id() >= BRACP_ALLOW_ADMIN_GMLEVEL)
+            return -1;
+
+        if(BRACP_MD5_PASSWORD_HASH)
+            $user_pass_new = hash('md5', $user_pass_new);
+        
+        // Define a nova senha para a conta.
+        $account->setUser_pass($user_pass_new);
+
+        // Salvou as alterações no banco de dados.
+        $this->getApp()->getSvrDftEm()->merge($account);
+        $this->getApp()->getSvrDftEm()->flush();
+
+        // Verifica se o painel está habilitado para notificar o usuário sobre
+        // As alterações de senha em sua conta.
+        if(BRACP_ALLOW_MAIL_SEND && BRACP_NOTIFY_CHANGE_PASSWORD)
+        {
+            // Envia e-mail de notificação para o jogador.
+            // Irá notificar mesmo se estiver em modo administrador.
+            $this->getApp()
+                    ->sendMail('@CHANGEPASS_MAIL_TITLE@',
+                                [$account->getEmail()],
+                                'mail.change.password', [
+                                    'userid' => $account->getUserid()
+                                ]);
+        }
+
+        // Ocorreu tudo com sucesso.
+        return 0;
+    }
 
     /**
      * Rota definida para realizar um novo registro de conta.

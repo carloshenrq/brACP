@@ -227,6 +227,16 @@ trait TMod
     }
 
     /**
+     * Define as restrições padrões para as rotas que serão chamadas.
+     *
+     * @param array $restrictions
+     */
+    protected function setDefaultRestrictions($restrictions)
+    {
+        $this->default_restriction = $restrictions;
+    }
+
+    /**
      * Verifica se a rota está restrita e não pode ser chamada.
      *
      * @param string $route

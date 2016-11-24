@@ -31,6 +31,7 @@
                 <div ng-switch-when="3">{translate}@CHANGEPASS_ERROR_EQUALS@{/translate}</div>
                 <div ng-switch-when="4">{translate}@ERRORS_REGEXP@{/translate}</div>
                 <div ng-switch-when="5">{translate}@ERRORS_RECAPTCHA@{/translate}</div>
+                <div ng-switch-when="6">{translate}@CHANGEPASS_ERROR_OTHER@{/translate}</div>
             </div>
         </div>
 
