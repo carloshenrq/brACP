@@ -365,50 +365,6 @@ class Account extends Caller
     // }
 
     // /**
-    //  * Método para realizar a alteração de senha de usuários.
-    //  *
-    //  * @param ServerRequestInterface $request
-    //  * @param ResponseInterface $response
-    //  * @param array $args
-    //  */
-    // public static function email(ServerRequestInterface $request, ResponseInterface $response, $args)
-    // {
-    //     // Dados recebidos pelo post para confirmação de contas.
-    //     $data = $request->getParsedBody();
-
-    //     // Dados de retorno para informações de erro.
-    //     $return = ['error_state' => 0, 'success_state' => false];
-
-    //     // Obtém os dados para caso o usuário precise realizar as requisições do captcha.
-    //     $needRecaptcha = self::getApp()->getSession()->BRACP_RECAPTCHA_ERROR_REQUEST >= 3;
-
-    //     // Adicionado teste para recaptcha para segurança das requisições enviadas ao forms.
-    //     if($needRecaptcha && BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['recaptcha']))
-    //     {
-    //         $return['error_state'] = 8;
-    //     }
-    //     else
-    //     {
-    //         // Define informaçõs de erro. (Caso exista)
-    //         $return['error_state']      = self::accountChangeEmail(
-    //             self::loggedUser()->getUserid(),
-    //             $data['email'],
-    //             $data['email_new'],
-    //             $data['email_conf']
-    //         );
-
-    //         // Em caso de erro, atualiza as necessidades de chamar o reCaptcha
-    //         if($return['error_state'] != 0 && BRACP_RECAPTCHA_ENABLED)
-    //             self::getApp()->getSession()->BRACP_RECAPTCHA_ERROR_REQUEST++;
-
-    //         $return['success_state']    = $return['error_state'] == 0;
-    //     }
-
-    //     // Responde com um objeto json informando o estado do cadastro.
-    //     $response->withJson($return);
-    // }
-
-    // /**
     //  * Método para realizar a confirmação de contas recebido via post.
     //  *
     //  * @param ServerRequestInterface $request
@@ -494,156 +450,6 @@ class Account extends Caller
 
     //     // Responde com um objeto json informando o estado do cadastro.
     //     $response->withJson($return);
-    // }
-
-    // /**
-    //  * Solicitação de alteração de e-mail pelo usuário.
-    //  *
-    //  * @param string $userid
-    //  * @param string $email
-    //  * @param string $email_new
-    //  * @param string $email_conf
-    //  *
-    //  * @return int
-    //  */
-    // public static function accountChangeEmail($userid, $email, $email_new, $email_conf)
-    // {
-    //     // Falha em restrição pattern para alteração do endereço de e-mail
-    //     if(!preg_match('/^'.BRACP_REGEXP_EMAIL.'$/', $email) ||
-    //         !preg_match('/^'.BRACP_REGEXP_EMAIL.'$/', $email_new) ||
-    //         !preg_match('/^'.BRACP_REGEXP_EMAIL.'$/', $email_conf))
-    //         return 6;
-
-    //     // 3: Novos e-mails digitados não conferem.
-    //     if(hash('md5', $email_new) !== hash('md5', $email_conf))
-    //         return 3;
-
-    //     // 4: Novo e-mail não pode ser igual ao anterior.
-    //     if(hash('md5', $email) === hash('md5', $email_new))
-    //         return 4;
-
-    //     $account = self::getSvrDftEm()
-    //                     ->getRepository('Model\Login')
-    //                     ->findOneBy(['userid' => $userid, 'email' => $email]);
-
-    //     // 2: Conta não encontrada para alteração do endereço de e-mail.
-    //     if(is_null($account))
-    //         return 2;
-
-    //     // Tenta realizar a alteração do endereço de e-mail.
-    //     return self::accountSetEmail($account->getAccount_id(), $email_new);
-    // }
-
-    // /**
-    //  * Define o endereço de e-mail do jogador.
-    //  *
-    //  * @param int $account_id
-    //  * @param string $email
-    //  * @param boolean $admin
-    //  *
-    //  * @return int
-    //  */
-    // public static function accountSetEmail($account_id, $email, $admin = false)
-    // {
-    //     // Somente é possível forçar uma alteração de e-mail se for realizada em
-    //     //  modo administrador.
-    //     if(!$admin && !BRACP_ALLOW_CHANGE_MAIL)
-    //         return -1;
-
-    //     // Falha em restrição pattern para alteração do endereço de e-mail
-    //     if(!preg_match('/^'.BRACP_REGEXP_EMAIL.'$/', $email))
-    //         return 6;
-
-    //     // Encontra a conta do usuário via código de contas.
-    //     $account = self::getSvrDftEm()
-    //                         ->getRepository('Model\Login')
-    //                         ->findOneBy(['account_id' => $account_id]);
-
-    //     // Conta não encontrada.
-    //     if(is_null($account))
-    //         return 2;
-
-    //     // Somente modo administrador pode alterar e-mail de contas
-    //     //  em modo administrador.
-    //     if(!$admin && $account->getGroup_id() >= BRACP_ALLOW_ADMIN_GMLEVEL)
-    //         return 1;
-
-    //     // Verifica o delay de alteração de e-mail. (Somente administradores podem ignorar esse teste)
-    //     if(!$admin)
-    //     {
-    //         // Se houver delay para alteração de endereço de e-mail
-    //         //  então, realiza os testes de delay.
-    //         if(BRACP_CHANGE_MAIL_DELAY > 0)
-    //         {
-    //             // Obtém a ultima modificação dentro do tempo de delay
-    //             //  informado.
-    //             $lastChange = self::getCpEm()
-    //                                     ->createQuery('
-    //                                         SELECT
-    //                                             log
-    //                                         FROM
-    //                                             Model\EmailLog log
-    //                                         WHERE
-    //                                             log.account_id = :account_id AND
-    //                                             log.date >= :DELAYDATETIME
-    //                                     ')
-    //                                     ->setParameter('account_id', $account->getAccount_id())
-    //                                     ->setParameter('DELAYDATETIME',
-    //                                         date('Y-m-d H:i:s', time() - (BRACP_CHANGE_MAIL_DELAY*60)))
-    //                                     ->getResult();
-
-    //             // Verifica se existe alteração dentro do delay configurado
-    //             //  Caso exista, não permite alteração até o fim do delay.
-    //             if(count($lastChange) > 0)
-    //                 return 5;
-    //         }
-
-    //         // Verifica se o e-mail já está registrado em outra conta,
-    //         //  caso a configuração não permita essa configuração, será negada a alteração
-    //         //  de e-mail.
-    //         if(BRACP_MAIL_REGISTER_ONCE)
-    //         {
-    //             $lstAcc = self::getSvrDftEm()
-    //                             ->getRepository('Model\Login')
-    //                             ->findOneBy(['email' => $email]);
-
-    //             // Caso encontre uma conta com esse endereço de e-mail,
-    //             //  Retorna o status para alteração de e-mail inválida.
-    //             if(!is_null($lstAcc))
-    //                 return 7;
-    //         }
-
-    //         // Notifica alteração do endereço do e-mail para o e-mail novo
-    //         //  e o e-mail antigo.
-    //         if(BRACP_ALLOW_MAIL_SEND && BRACP_NOTIFY_CHANGE_MAIL)
-    //         {
-    //             self::getApp()->sendMail('@@CHANGEMAIL,MAIL(TITLE)',
-    //                 [$account->getEmail(), $email],
-    //                 'mail.change.mail', [
-    //                 'userid' => $account->getUserid(),
-    //                 'mailOld' => $account->getEmail(),
-    //                 'mailNew' => $email,
-    //             ]);
-    //         }
-    //     }
-
-    //     // Grava a mudança de e-mail na tabela de logs.
-    //     $log = new EmailLog;
-    //     $log->setAccount_id($account->getAccount_id());
-    //     $log->setFrom($account->getEmail());
-    //     $log->setTo($email);
-    //     $log->setDate(date('Y-m-d H:i:s'));
-
-    //     self::getCpEm()->persist($log);
-    //     self::getCpEm()->flush();
-
-    //     // Realiza alteração do endereço de e-mail.
-    //     $account->setEmail($email);
-    //     self::getSvrDftEm()->merge($account);
-    //     self::getSvrDftEm()->flush();
-
-    //     return 0;
-
     // }
 
     // /**
@@ -985,6 +791,138 @@ class Account extends Caller
     // }
 
     /**
+     * Realiza a alteração de e-mail da conta do jogador.
+     * 
+     * @param string $userid
+     * @param string $old_email
+     * @param string $new_email
+     * @param string $new_email_conf
+     * @param bool $admin
+     *
+     * @return
+     */
+    private function changeMail($userid, $old_email, $new_email, $new_email_conf, $admin = false)
+    {
+        // Alteração de e-mail desabilitado?
+        if(!BRACP_ALLOW_CHANGE_MAIL)
+            return -1;
+        
+        // Não validou os dados com as expressões regulares...
+        if(!$this->validate($userid, BRACP_REGEXP_USERID) ||
+            !$this->validate($old_email, BRACP_REGEXP_EMAIL) ||
+            !$this->validate($new_email, BRACP_REGEXP_EMAIL))
+            return 6;
+
+        // Modo administrador não necessita verificar
+        // Os dados de e-mail digitados.
+        if(!$admin)
+        {
+            // E-mail antigo não pode ser igual ao anterior.
+            if(hash('md5', $old_email) === hash('md5', $new_email))
+                return 4;
+
+            // Os e-mails digitados não conferem.
+            if(hash('md5', $new_email) !== hash('md5', $new_email_conf))
+                return 3;
+        }
+
+        // Objeto da conta informada.
+        $account = $this->getApp()
+                        ->getSvrDftEm()
+                        ->getRepository('Model\Login')
+                        ->findOneBy(['userid' => $userid]);
+        
+        // Se a conta não existir ou se os endereços de e-mail
+        // antigos digitados não coincidirem.
+        if(is_null($account) || (!$admin && hash('md5', $old_email) !== hash('md5', $account->getEmail())))
+            return 2;
+
+        // Outras verificações quando não está em modo administrador.
+        if(!$admin)
+        {
+            // Contas do tipo administrador não podem alterar seu endereço de e-mail 
+            // Por vias normais, somente via painel adminsitrativo.
+            if(BRACP_ALLOW_ADMIN && $account->getGroup_id() >= BRACP_ALLOW_ADMIN_GMLEVEL)
+                return 1;
+
+            // Se está realizando a alteração de e-mail sem o modo administrador
+            if(BRACP_CHANGE_MAIL_DELAY > 0)
+            {
+                // Obtém todas as ultimas alterações de e-mail
+                // dentro do periodo de delay configurado.
+                $emailLastChange = $this->getApp()
+                                        ->getCpEm()
+                                        ->createQuery('
+                                            SELECT
+                                                log
+                                            FROM
+                                                Model\EmailLog log
+                                            WHERE
+                                                log.account_id = :account_id AND
+                                                log.date >= DELAYDATETIME
+                                        ')
+                                        ->setParameter('account_id', $account->getAccount_id())
+                                        ->setParameter('DELAYDATETIME',
+                                            date('Y-m-d H:i:s', time() - (BRACP_CHANGE_MAIL_DELAY*60)))
+                                        ->getResult();
+
+                // Caso possua alterações de e-mail dentro do periodo informado
+                // Não permite que a alteração continue e bloqueia a alteração
+                // Do endereço de e-mail.
+                if(count($emailLastChange) > 0)
+                    return 5;
+            }
+
+            // Verifica se é possível cadastrar somente um endereço de e-mail
+            // Por conta.
+            if(BRACP_MAIL_REGISTER_ONCE)
+            {
+                $lstAccount = $this->getApp()
+                                    ->getSvrDftEm()
+                                    ->getRepository('Model\Login')
+                                    ->findOneBy(['email' => $new_email]);
+                
+                // Se o endereço de e-mail já estiver registrado
+                // Bloqueia a alteração atual de e-mail.
+                if(!is_null($lstAccount))
+                    return 7;
+            }
+        }
+
+        $account->setEmail($new_email);
+ 
+        // Realiza a alteração do e-mail na conta do jogador.
+        $this->getApp()->getSvrDftEm()->merge($account);
+        $this->getApp()->getSvrDftEm()->flush();
+
+        // Grava o log de alterações de e-mail.
+        $log = new EmailLog;
+        $log->setAccount_id($account->getAccount_id());
+        $log->setFrom($old_email);
+        $log->setTo($new_email);
+        $log->setDate(date('Y-m-d H:i:s'));
+        $this->getApp()->getCpEm()->persist($log);
+        $this->getApp()->getCpEm()->flush();
+
+        // Verifica a possibilidade de notificar o notificar
+        // ambos os e-mails por conta da alteração.
+        if(BRACP_ALLOW_MAIL_SEND && BRACP_NOTIFY_CHANGE_MAIL)
+        {
+            $this->getApp()
+                ->sendMail('@CHANGEMAIL_MAIL_TITLE@',
+                [$old_email, $new_email],
+                'mail.change.mail', [
+                    'userid'    => $account->getUserid(),
+                    'mailOld'   => $old_email,
+                    'mailNew'   => $new_email
+                ]);
+        }
+
+        // Retornou 0, tudo certo.
+        return 0;
+    }
+
+    /**
      * Rota definida para alteração de senhas.
      *
      * @param array $get
@@ -1140,7 +1078,6 @@ class Account extends Caller
                 'success_state' => ($register_return == 0)
             ];
         }
-
 
         return $response->withJson($return);
     }
