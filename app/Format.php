@@ -24,16 +24,32 @@
  */
 class Format
 {
-    public static function bytes($bytes)
+    /**
+     * Transforma os bytes enviados em formatação de texto legivel como:
+     * 1048576 -> 1 MB (1048576 bytes)
+     *
+     * @static
+     * @param int $bytes
+     *
+     * @return string Valor tratado para exibição dos bytes.
+     */
+    public static function bytes($bytes, $byteLimit = 1024)
     {
-        $format = ['B', 'KB', 'MB', 'GB'];
+        // Formatos aceitos
+        $format = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+        $count = count($format);
+        $totalBytes = $bytes;
 
-        $bytes = $totalBytes = max(0, $bytes);
-        $pow = floor(log($bytes)/log(1024));
+        // Não usar bytes negativos...
+        $bytes = max(0, $bytes);
 
-        $bytes /= pow(1024, $pow);
+        // Indice do vetor.
+        $index = min($count - 1, floor(log($bytes) / log($byteLimit)));
 
-        return sprintf('%.2f %s (%d bytes)', $bytes, $format[$pow], $totalBytes);
+        // Bytes finais para retorno em tela.
+        $bytes /= pow($byteLimit, $index);
+
+        return sprintf('%.2f %s (%s bytes)', $bytes, $format[$index], $totalBytes);
     }
 
     /**
