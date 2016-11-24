@@ -1012,9 +1012,10 @@ class Account extends Caller
                 $post['user_pass_conf'],
                 false
             );
+            $return['success_state'] = ($return['error_state'] == 0);
 
             // Erro de requisição?
-            if(BRACP_RECAPTCHA_ENABLED && $return['error_state'] != 0)
+            if(BRACP_RECAPTCHA_ENABLED && !$return['success_state'])
                 $this->getApp()->getSession()->BRACP_RECAPTCHA_ERROR_REQUEST++;
         }
 
@@ -1050,7 +1051,7 @@ class Account extends Caller
                 return 2;
             
             // Verifica se a senha antiga é igual a nova.
-            if(hash('md5', $user_pass) !== hash('md5', $user_pass_new))
+            if(hash('md5', $user_pass) === hash('md5', $user_pass_new))
                 return 3;
         }
 
