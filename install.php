@@ -47,6 +47,7 @@ if(!defined('PHP_VERSION'))
     define('PHP_VERSION', phpversion(), false);
 
 // Adicionado leitura da classe principal para teste dos temas.
+require_once __DIR__ . '/app/TMod.php';
 require_once __DIR__ . '/app/Themes.php';
 require_once __DIR__ . '/app/Language.php';
 require_once __DIR__ . '/app/Cache.php';
