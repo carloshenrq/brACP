@@ -38,124 +38,66 @@ class Item extends Caller
         parent::__construct($app, []);
     }
 
-    // use \TApplication;
+    /**
+     * Obtém informações do item.
+     *
+     * @param array $get
+     * @param array $post
+     * @param object $response
+     *
+     * @return object
+     */
+    private function info_GET($get, $post, $response)
+    {
+        $nameid = $get['id'];
 
-    // private static $itemsCache = [];
-    // private static $loaded = false;
+        // Obtém os dados do item em cache.
+        $item_data = Cache::get('BRACP_ITEM_' . $nameid, function() use ($nameid) {
+            // Obtém os caminhos para os arquivos de imagem do item.
+            $icon = BRACP_DIR_INSTALL_URL . 'asset/icon/?id=' . $nameid;
+            $images = BRACP_DIR_INSTALL_URL . 'asset/images/?id=' . $nameid;
 
-    // /**
-    //  * Método para incializar os itens em cache.
-    //  */
-    // public static function cacheLoad()
-    // {
-    //     if(self::$loaded)
-    //         return;
+            // Obtém o objeto do item.
+            $item = $this->getApp()->getDbEm()
+                                    ->getRepository('Model\Item')
+                                    ->findOneBy(['id' => $nameid]);
 
-    //     self::$itemsCache = Cache::get('BRACP_ITEMDB', function() {
-    //         return [];
-    //     }, false, -1);
+            // Verifica se o item existe, se não existe, então
+            // retorna null.
+            if(is_null($item))
+                return null;
 
-    //     self::$loaded = true;
-    // }
+            // Retorna o objeto do item em forma de json.
+            return [
+                'id'        => $nameid,
+                'icon'      => $icon,
+                'image'     => $images,
+                'name'      => $item->getName_japanese(),
+                'weight'    => $item->getWeight(),
+                'type'      => $item->getType(),
+                'price'     => [
+                    'buy'   => $item->getPrice_buy(),
+                    'sell'  => $item->getPrice_sell(),
+                ],
+                'battle'    => [
+                    'atk'           => $item->getAtk(),
+                    'matk'          => $item->getMatk(),
+                    'defence'       => $item->getDefence(),
+                    'range'         => $item->getRange(),
+                    'jobs'          => $item->getEquip_jobs(),
+                    'upper'         => $item->getEquip_upper(),
+                    'genders'       => $item->getEquip_genders(),
+                    'locations'     => $item->getEquip_locations(),
+                    'weapon_level'  => $item->getWeapon_level(),
+                ],
+                'refineable'    => $item->getRefineable(),
+                'view'          => $item->getView(),
+                'slots'         => $item->getSlots(),
+            ];
+        });
 
-    // /**
-    //  * Obtém dados do item por Id
-    //  *
-    //  * @param integer $id
-    //  *
-    //  * @return object
-    //  */
-    // public static function get($id)
-    // {
-    //     return self::getFromCacheId($id);
-    // }
-
-    // /**
-    //  * Obtém o item do cache.
-    //  *
-    //  * @param integer $id
-    //  */
-    // public static function getFromCacheId($id)
-    // {
-    //     self::cacheLoad();
-
-    //     $items = self::$itemsCache;
-    //     self::$itemsCache = null;
-
-    //     if(!isset($items[$id]))
-    //     {
-    //         $item = self::getFromId($id);
-    //         $item->cache_expire = time() + BRACP_CACHE_EXPIRE;
-    //         $items[$id] = $item;
-
-    //         Cache::delete('BRACP_ITEMDB');
-
-    //        self::$itemsCache = Cache::get('BRACP_ITEMDB', function() use ($items) {
-    //             return $items;
-    //         }, false, -1);
-    //     }
-
-    //     self::$itemsCache = $items;
-    //     $item = self::$itemsCache[$id];
-
-    //     if($item->cache_expire <= time())
-    //     {
-    //         unset(self::$itemsCache[$id]);
-    //         return self::getFromCacheId($id);
-    //     }
-
-    //     return self::$itemsCache[$id];
-    // }
-
-    // *
-    //  * Obtém os dados do item por id, direto na conexão com o banco
-    //  *
-    //  * @param integer $id
-    //  *
-    //  * @return object
-     
-    // private static function getFromId($id)
-    // {
-    //     self::cacheLoad();
-
-    //     $item = self::getDbEm()
-    //                 ->createQuery('
-    //                     SELECT
-    //                         item
-    //                     FROM
-    //                         Model\Item item
-    //                     WHERE
-    //                         item.id = :id
-    //                 ')
-    //                 ->setParameter('id', $id)
-    //                 ->getOneOrNullResult();
-
-    //     if(is_null($item))
-    //     {
-    //         $item = new \Model\Item;
-    //         $item->setId($id);
-    //         $item->setName_japanese('Unknow');
-    //         $item->setType(0);
-    //         $item->setSlots(0);
-    //     }
-
-    //     $obj = (object)[
-    //         // Informações do item (Direto do banco)
-    //         'id'            => $item->getId(),
-    //         'name'          => utf8_encode($item->getName_japanese()),
-    //         'type'          => $item->getType(),
-    //         'slots'         => $item->getSlots(),
-
-    //         // Dados para exibição do item
-    //         'icon'          => BRACP_DIR_INSTALL_URL . 'data/items/icons/' . $item->getId() . '.png',
-    //         'image'         => BRACP_DIR_INSTALL_URL . 'data/items/images/' . $item->getId() . '.png',
-
-    //         // Informações de cache.
-    //         'cache'         => time(),
-    //         'cache_expire'  => time()
-    //     ];
-
-    //     return $obj;
-    // }
+        // Retorna os dados em formato json.
+        return $response->withJson($item_data);
+    }
 }
 

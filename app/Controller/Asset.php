@@ -40,6 +40,90 @@ class Asset extends Caller
     }
 
     /**
+     * Obtém a imagem de um item solicitado.
+     *
+     * @param array $get
+     * @param array $post
+     * @param object $response
+     *
+     * @return object Response com cabeçalhos para js
+     */
+    private function job_GET($get, $post, $response)
+    {
+        // Obtém o arquivo de imagem para o item.
+        $nameid = realpath(BRACP_TEMPLATE_DIR . '..'
+                . DIRECTORY_SEPARATOR . '..'
+                . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'jobs'
+                . DIRECTORY_SEPARATOR . 'images') . DIRECTORY_SEPARATOR . $get['sex'] . DIRECTORY_SEPARATOR . $get['id'] . '.gif';
+
+        readfile($nameid);
+        return $response->withHeader('Content-Type', 'image/gif');
+    }
+
+    /**
+     * Obtém a imagem de um item solicitado.
+     *
+     * @param array $get
+     * @param array $post
+     * @param object $response
+     *
+     * @return object Response com cabeçalhos para js
+     */
+    private function monster_GET($get, $post, $response)
+    {
+        // Obtém o arquivo de imagem para o item.
+        $nameid = realpath(BRACP_TEMPLATE_DIR . '..'
+                . DIRECTORY_SEPARATOR . '..'
+                . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'monsters'
+        ) . DIRECTORY_SEPARATOR . $get['id'] . '.gif';
+
+        readfile($nameid);
+        return $response->withHeader('Content-Type', 'image/gif');
+    }
+
+    /**
+     * Obtém a imagem de um item solicitado.
+     *
+     * @param array $get
+     * @param array $post
+     * @param object $response
+     *
+     * @return object Response com cabeçalhos para js
+     */
+    private function images_GET($get, $post, $response)
+    {
+        // Obtém o arquivo de imagem para o item.
+        $nameid = realpath(BRACP_TEMPLATE_DIR . '..'
+                . DIRECTORY_SEPARATOR . '..'
+                . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'items'
+                . DIRECTORY_SEPARATOR . 'images') . DIRECTORY_SEPARATOR . $get['id'] . '.png';
+
+        readfile($nameid);
+        return $response->withHeader('Content-Type', 'image/png');
+    }
+
+    /**
+     * Obtém a imagem de um item solicitado.
+     *
+     * @param array $get
+     * @param array $post
+     * @param object $response
+     *
+     * @return object Response com cabeçalhos para js
+     */
+    private function icon_GET($get, $post, $response)
+    {
+        // Obtém o arquivo de imagem para o item.
+        $nameid = realpath(BRACP_TEMPLATE_DIR . '..'
+                . DIRECTORY_SEPARATOR . '..'
+                . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'items'
+                . DIRECTORY_SEPARATOR . 'icons') . DIRECTORY_SEPARATOR . $get['id'] . '.png';
+
+        readfile($nameid);
+        return $response->withHeader('Content-Type', 'image/png');
+    }
+
+    /**
      * Método para retornar os javascripts.
      *
      * @param array $get
@@ -48,7 +132,7 @@ class Asset extends Caller
      *
      * @return object Response com cabeçalhos para js
      */
-    public function js_GET($get, $post, $response)
+    private function js_GET($get, $post, $response)
     {
         // Nome do arquivo solicitado para retorno.
         $basefile = $get['file'];
@@ -119,7 +203,7 @@ class Asset extends Caller
      *
      * @return object Response com cabeçalhos para css
      */
-    public function css_GET($get, $post, $response)
+    private function css_GET($get, $post, $response)
     {
         // Obtém o nome do arquivo base que será compilado.
         $basefile = $get['file'];
