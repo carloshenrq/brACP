@@ -18,36 +18,37 @@
 <input type="checkbox" class="modal-trigger-check" id="modal-mail"/>
 <div class="modal" ng-controller="account.email">
     <div class="modal-title">
-        @@CHANGEMAIL(TITLE)
+        {translate}@CHANGEMAIL_TITLE@{/translate}
         <label for="modal-mail" class="modal-close" ng-if="stage == 0">&times;</label>
     </div>
 
     <div class="modal-body" ng-if="stage == 0">
         <div ng-if="$parent.error_state != 0" class="message error">
             <div ng-switch="$parent.error_state">
-                <div ng-switch-when="-1">@@CHANGEMAIL,ERROR(DISABLED)</div>
-                <div ng-switch-when="1">@@CHANGEMAIL,ERROR(NOADMIN)</div>
-                <div ng-switch-when="2">@@CHANGEMAIL,ERROR(MISMATCH1)</div>
-                <div ng-switch-when="3">@@CHANGEMAIL,ERROR(MISMATCH2)</div>
-                <div ng-switch-when="4">@@CHANGEMAIL,ERROR(EQUALS)</div>
-                <div ng-switch-when="5">@@CHANGEMAIL,ERROR(DELAY)</div>
-                <div ng-switch-when="6">@@ERRORS(REGEXP)</div>
-                <div ng-switch-when="7">@@CHANGEMAIL,ERROR(TAKEN)</div>
-                <div ng-switch-when="8">@@ERRORS(RECAPTCHA)</div>
+                <div ng-switch-when="-1">{translate}@CHANGEMAIL_ERROR_DISABLED@{/translate}</div>
+                <div ng-switch-when="1">{translate}@CHANGEMAIL_ERROR_NOADMIN@{/translate}</div>
+                <div ng-switch-when="2">{translate}@CHANGEMAIL_ERROR_MISMATCH1@{/translate}</div>
+                <div ng-switch-when="3">{translate}@CHANGEMAIL_ERROR_MISMATCH2@{/translate}</div>
+                <div ng-switch-when="4">{translate}@CHANGEMAIL_ERROR_EQUALS@{/translate}</div>
+                <div ng-switch-when="5">{translate}@CHANGEMAIL_ERROR_DELAY@{/translate}</div>
+                <div ng-switch-when="6">{translate}@ERRORS_REGEXP@{/translate}</div>
+                <div ng-switch-when="7">{translate}@CHANGEMAIL_ERROR_TAKEN@{/translate}</div>
+                <div ng-switch-when="8">{translate}@ERRORS_RECAPTCHA@{/translate}</div>
+                <div ng-switch-default>{literal}{{$parent.error_state}}{/literal}</div>
             </div>
         </div>
 
         <div ng-if="success_state" class="message success" style="max-width: 380px;">
-            @@CHANGEMAIL(SUCCESS)
+            {translate}@CHANGEMAIL_SUCCESS@{/translate}
         </div>
 
-        <div style="max-width: 380px;">@@CHANGEMAIL,MESSAGE(HEADER)</div>
+        <div style="max-width: 380px;">{translate}@CHANGEMAIL_MESSAGE_HEADER@{/translate}</div>
 
         <form class="modal-form" ng-submit="submitMail()">
 
-            <input type="text" ng-model="email" placeholder="@@CHANGEMAIL,HOLDER(EMAIL)" size="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
-            <input type="text" ng-model="email_new" placeholder="@@CHANGEMAIL,HOLDER(NEW_EMAIL)" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
-            <input type="text" ng-model="email_conf" placeholder="@@CHANGEMAIL,HOLDER(CONFIRM)" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
+            <input type="text" ng-model="email" placeholder="{translate}@CHANGEMAIL_HOLDER_EMAIL@{/translate}" size="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
+            <input type="text" ng-model="email_new" placeholder="{translate}@CHANGEMAIL_HOLDER_NEWEMAIL@{/translate}" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
+            <input type="text" ng-model="email_conf" placeholder="{translate}@CHANGEMAIL_HOLDER_CONFIRM@{/translate}" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
 
             <input id="_submitMail" type="submit"/>
 
@@ -69,8 +70,8 @@
     </div>
 
     <div class="modal-footer" ng-if="stage == 0">
-        <label class="button success icon" for="_submitMail">@@CHANGEMAIL,BUTTONS(SUBMIT)</label>
-        <label class="button error icon" for="modal-mail">@@CHANGEMAIL,BUTTONS(CLOSE)</label>
+        <label class="button success icon" for="_submitMail">{translate}@CHANGEMAIL_BUTTONS_SUBMIT@{/translate}</label>
+        <label class="button error icon" for="modal-mail">{translate}@CHANGEMAIL_BUTTONS_CLOSE@{/translate}</label>
     </div>
 </div>
 

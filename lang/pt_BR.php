@@ -403,7 +403,7 @@ return
 
         'HOLDER'    => [
             'EMAIL'     => 'Email atual',
-            'NEW_EMAIL' => 'Novo email',
+            'NEWEMAIL' => 'Novo email',
             'CONFIRM'   => 'Confirme seu novo email',
         ],
 

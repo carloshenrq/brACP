@@ -791,6 +791,46 @@ class Account extends Caller
     // }
 
     /**
+     * Rota para realizar alteração de endereço de e-mail.
+     *
+     * @param array $get
+     * @param array $post
+     * @param object $response
+     *
+     * @return object
+     */
+    private function email_POST($get, $post, $response)
+    {
+        $return = ['error_state' => 0, 'success_state' => false];
+
+        if(!$this->getApp()->testRecaptcha($post))
+        {
+            $return['error_state'] = 8;
+        }
+        else
+        {
+            // Tenta realizar a alteração de senha.
+            $return['error_state'] = $this->changeMail(
+                self::loggedUser()->getUserid(),
+                $post['email'],
+                $post['email_new'],
+                $post['email_conf'],
+                false
+            );
+
+            // Devolve informações de suscesso. (0 -> Sucesso, sempre)
+            $return['success_state'] = ($return['error_state'] == 0);
+
+            // Erro de requisição?
+            if(BRACP_RECAPTCHA_ENABLED && !$return['success_state'])
+                $this->getApp()->getSession()->BRACP_RECAPTCHA_ERROR_REQUEST++;
+        }
+
+        // exit;
+        return $response->withJson($return);
+    }
+
+    /**
      * Realiza a alteração de e-mail da conta do jogador.
      * 
      * @param string $userid
@@ -808,7 +848,7 @@ class Account extends Caller
             return -1;
         
         // Não validou os dados com as expressões regulares...
-        if(!$this->validate($userid, BRACP_REGEXP_USERID) ||
+        if(!$this->validate($userid, BRACP_REGEXP_USERNAME) ||
             !$this->validate($old_email, BRACP_REGEXP_EMAIL) ||
             !$this->validate($new_email, BRACP_REGEXP_EMAIL))
             return 6;
@@ -859,7 +899,7 @@ class Account extends Caller
                                                 Model\EmailLog log
                                             WHERE
                                                 log.account_id = :account_id AND
-                                                log.date >= DELAYDATETIME
+                                                log.date >= :DELAYDATETIME
                                         ')
                                         ->setParameter('account_id', $account->getAccount_id())
                                         ->setParameter('DELAYDATETIME',

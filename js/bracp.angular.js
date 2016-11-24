@@ -339,6 +339,7 @@ brACPApp.controller('account.email', ['$scope', '$http', function($scope, $http)
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
         }).then(function(response) {
+            console.log(response);
             $scope.stage            = 0;
             $scope.error_state      = response.data.error_state;
             $scope.success_state    = response.data.success_state;
