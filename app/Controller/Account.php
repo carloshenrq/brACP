@@ -409,50 +409,6 @@ class Account extends Caller
     // }
 
     // /**
-    //  * Método para realizar a confirmação de contas recebido via post.
-    //  *
-    //  * @param ServerRequestInterface $request
-    //  * @param ResponseInterface $response
-    //  * @param array $args
-    //  */
-    // public static function confirmation(ServerRequestInterface $request, ResponseInterface $response, $args)
-    // {
-    //     // Dados recebidos pelo post para confirmação de contas.
-    //     $data = $request->getParsedBody();
-
-    //     // Dados de retorno para informações de erro.
-    //     $return = ['error_state' => 0, 'success_state' => false];
-
-    //     // Obtém os dados para caso o usuário precise realizar as requisições do captcha.
-    //     $needRecaptcha = self::getApp()->getSession()->BRACP_RECAPTCHA_ERROR_REQUEST >= 3;
-
-    //     // Adicionado teste para recaptcha para segurança das requisições enviadas ao forms.
-    //     if($needRecaptcha && BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['recaptcha']))
-    //     {
-    //         $return['error_state'] = 2;
-    //     }
-    //     else
-    //     {
-    //         // Se ambos estão definidos, a requisição é para re-envio dos dados de confirmação.
-    //         if(isset($data['userid']) && isset($data['email']))
-    //             $return['error_state']      = self::registerConfirmResend($data['userid'], $data['email']);
-    //         // Se código está definido, a requisição é para confirmação da conta.
-    //         else if(isset($data['code']))
-    //             $return['error_state']      = self::registerConfirmCode($data['code']);
-
-    //         // Em caso de erro, atualiza as necessidades de chamar o reCaptcha
-    //         if($return['error_state'] != 0 && BRACP_RECAPTCHA_ENABLED)
-    //             self::getApp()->getSession()->BRACP_RECAPTCHA_ERROR_REQUEST++;
-
-    //         // Define informaçõs de erro. (Caso exista)
-    //         $return['success_state']    = $return['error_state'] == 0;
-    //     }
-
-    //     // Responde com um objeto json informando o estado do cadastro.
-    //     $response->withJson($return);
-    // }
-
-    // /**
     //  * Confirma o código digitado e se ainda não estiver expirado,
     //  *  gera a nova senha e recupera os dados de usuário.
     //  *
@@ -613,182 +569,74 @@ class Account extends Caller
     //     return 0;
     // }
 
-    // /**
-    //  * Realiza a confirmação da conta do usuário com o código que o usuário digitou.
-    //  *
-    //  * @param string $code
-    //  *
-    //  * @return int
-    //  * -1: Configuração não permite confirmação de contas.
-    //  *  0: Código gerado/re-enviado
-    //  *  1: Código de ativação não encontrado.
-    //  */
-    // public static function registerConfirmCode($code)
-    // {
-    //     if(!BRACP_ALLOW_MAIL_SEND || !BRACP_CONFIRM_ACCOUNT)
-    //         return -1;
+    /**
+     * Realiza a confirmação do código enviado por requisição get. 
+     *
+     * @param array $get
+     * @param array $post
+     * @param object $response
+     *
+     * @return object
+     */
+    private function confirmation_GET($get, $post, $response)
+    {
+        
+        // Dados de retorno para informações de erro.
+        $return = ['error_state' => 0, 'success_state' => false];
 
-    //     // O Código de ativação não é valido pela formatação do md5,
-    //     //  então, ignora o código e nem verifica o banco de dados.
-    //     if(!preg_match('/^([0-9a-f]{32})$/', $code))
-    //         return 1;
+        // Verifica os dados de recaptcha
+        if(!$this->getApp()->testRecaptcha($post))
+        {
+            $return['error_state'] = 2;
+        }
+        else
+        {
+            $return['error_state'] = $this->confirmAccountCode($get['code']);
+            $return['success_state'] = ($return['error_state'] != 0);
 
-    //     // Verifica se existe o código de confirmação para a conta informada
-    //     $confirmation = self::getCpEm()
-    //                     ->createQuery('
-    //                         SELECT
-    //                             confirmation
-    //                         FROM
-    //                             Model\Confirmation confirmation
-    //                         WHERE
-    //                             confirmation.code = :code AND
-    //                             confirmation.used = false AND
-    //                             :CURDATETIME BETWEEN confirmation.date AND confirmation.expire
-    //                     ')
-    //                     ->setParameter('code', $code)
-    //                     ->setParameter('CURDATETIME', date('Y-m-d H:i:s'))
-    //                     ->getOneOrNullResult();
+            // Erro de requisição?
+            if(BRACP_RECAPTCHA_ENABLED && !$return['success_state'])
+                $this->getApp()->getSession()->BRACP_RECAPTCHA_ERROR_REQUEST++;
+        }
 
-    //     // Código de ativação não encontrado ou é inválido porque expirou ou já foi utilizado.
-    //     if(is_null($confirmation))
-    //         return 1;
+        return $response->withJson($return);
+    }
 
-    //     // Informa que o código de ativação foi utilizado e o estado da conta
-    //     //  passa a ser 0 (ok)
-    //     $account = self::getSvrDftEm()
-    //                 ->getRepository('Model\Login')
-    //                 ->findOneBy(['account_id' => $confirmation->getAccount_id()]);
-    //     $account->setState(0);
-    //     $confirmation->setUsed(true);
+    /**
+     * Realiza o re-envio do código de confirmação do jogador.
+     *
+     * @param array $get
+     * @param array $post
+     * @param object $response
+     *
+     * @return object
+     */
+    private function confirmation_POST($get, $post, $response)
+    {
+        // Dados de retorno para informações de erro.
+        $return = ['error_state' => 0, 'success_state' => false];
 
-    //     self::getSvrDftEm()->merge($account);
-    //     self::getSvrDftEm()->flush();
+        // Verifica os dados de recaptcha
+        if(!$this->getApp()->testRecaptcha($post))
+        {
+            $return['error_state'] = 2;
+        }
+        else
+        {
+            // Tenta fazer o re-envio do código de confirmação para o usuário.
+            $return['error_state'] = $this->sendConfirmationByUser(
+                $post['userid'],
+                $post['email']
+            );
+            $return['success_state'] = ($return['error_state'] != 0);
 
-    //     self::getCpEm()->merge($confirmation);
-    //     self::getCpEm()->flush();
+            // Erro de requisição?
+            if(BRACP_RECAPTCHA_ENABLED && !$return['success_state'])
+                $this->getApp()->getSession()->BRACP_RECAPTCHA_ERROR_REQUEST++;
+        }
 
-    //     // Envia um e-mail para o usuário informando que a conta foi ativada
-    //     //  com sucesso.
-    //     self::getApp()->sendMail('@@RESEND,MAIL(TITLE_CONFIRMED)',
-    //                                 [$account->getEmail()],
-    //                                 'mail.create.code.success',
-    //                                 [
-    //                                     'userid' => $account->getUserid()
-    //                                 ]);
-
-    //     return 0;
-    // }
-
-    // /**
-    //  * Reenvia o código de ativação para o usuário pelas informações
-    //  *  de usuário e email indicado.
-    //  *
-    //  * @param string $userid
-    //  * @param string $email
-    //  *
-    //  * @return int
-    //  * -1: Configuração não permite confirmação de contas.
-    //  *  0: Código gerado/re-enviado
-    //  *  1: Conta informada não espera confirmação.
-    //  */
-    // public static function registerConfirmResend($userid, $email)
-    // {
-    //     if(!BRACP_ALLOW_MAIL_SEND || !BRACP_CONFIRM_ACCOUNT)
-    //         return -1;
-
-    //     // Realiza validação servidor dos patterns de usuário e senha
-    //     //  digitados.
-    //     if(!preg_match('/^'.BRACP_REGEXP_USERNAME.'$/', $userid) ||
-    //         !preg_match('/^'.BRACP_REGEXP_EMAIL.'$/', $email))
-    //         return 1;
-
-    //     // Obtém a conta informada.
-    //     $account = self::getSvrDftEm()
-    //                     ->getRepository('Model\Login')
-    //                     ->findOneBy(['userid' => $userid, 'email' => $email, 'state' => 11]);
-
-    //     // Dados não encontrados para confirmação de usuário.
-    //     // state == 11, é uma conta aguardando confirmação.
-    //     if(is_null($account))
-    //         return 1;
-
-    //     // Realiza o envio padrão com o código da conta informada.
-    //     return self::registerConfirmSend($account->getAccount_id());
-    // }
-
-    // /**
-    //  * Método para enviar o código de confirmação para a conta.
-    //  * Se já existir um código de confirmação, ele será reenviado.
-    //  * Se não existir, será riado um novo código e enviado ao jogador.
-    //  *
-    //  * -> Somente serão enviados os códigos de ativação para contas com state = 11
-    //  *
-    //  * @param integer $account_id
-    //  *
-    //  * @return int
-    //  * -1: Configuração não permite confirmação de contas.
-    //  *  0: Código gerado/re-enviado
-    //  *  1: Conta informada não espera confirmação.
-    //  */
-    // public static function registerConfirmSend($account_id)
-    // {
-    //     if(!BRACP_ALLOW_MAIL_SEND || !BRACP_CONFIRM_ACCOUNT)
-    //         return -1;
-
-    //     $account = self::getSvrDftEm()
-    //                     ->getRepository('Model\Login')
-    //                     ->findOneBy(['account_id' => $account_id, 'state' => 11]);
-
-    //     // Dados não encontrados para confirmação de usuário.
-    //     // state == 11, é uma conta aguardando confirmação.
-    //     if(is_null($account))
-    //         return 1;
-
-    //     // Verifica se existe o código de confirmação para a conta informada
-    //     $confirmation = self::getCpEm()
-    //                         ->createQuery('
-    //                             SELECT
-    //                                 confirmation
-    //                             FROM
-    //                                 Model\Confirmation confirmation
-    //                             WHERE
-    //                                 confirmation.account_id = :account_id AND
-    //                                 confirmation.used = false AND
-    //                                 :CURDATETIME BETWEEN confirmation.date AND confirmation.expire
-    //                         ')
-    //                         ->setParameter('account_id', $account->getAccount_id())
-    //                         ->setParameter('CURDATETIME', date('Y-m-d H:i:s'))
-    //                         ->getOneOrNullResult();
-
-    //     // Se não houver código de confirmação com os dados informados,
-    //     //  então cria o registro no banco de dados.
-    //     if(is_null($confirmation))
-    //     {
-    //         $confirmation = new Confirmation;
-    //         $confirmation->setAccount_id($account->getAccount_id());
-    //         $confirmation->setCode(hash( 'md5', uniqid(rand() . microtime(true), true)));
-    //         $confirmation->setDate(date('Y-m-d H:i:s'));
-    //         $confirmation->setExpire(date('Y-m-d H:i:s', time() + (60*BRACP_RECOVER_CODE_EXPIRE)));
-    //         $confirmation->setUsed(false);
-
-    //         self::getCpEm()->persist($confirmation);
-    //         self::getCpEm()->flush();
-    //     }
-
-    //     // Envia o e-mail de confirmação para o usuário com o código
-    //     //  de ativação e o link para ativação dos dados.
-    //     // Envia o e-mail para usuário caso o painel de controle esteja com as configurações
-    //     //  de envio ativas.
-    //     self::getApp()->sendMail('@@RESEND,MAIL(TITLE_CONFIRM)',
-    //                                 [$account->getEmail()],
-    //                                 'mail.create.code',
-    //                                 [
-    //                                     'userid' => $account->getUserid(),
-    //                                     'code' => $confirmation->getCode(),
-    //                                     'expire' => $confirmation->getExpire(),
-    //                                 ]);
-    //     return 0;
-    // }
+        return $response->withJson($return);
+    }
 
     /**
      * Rota para realizar alteração de endereço de e-mail.
@@ -1251,6 +1099,124 @@ class Account extends Caller
         }
 
         return 0;
+    }
+
+    /**
+     * Realiza a confirmação do código recebido.
+     *
+     * @param string $code
+     *
+     * @return 
+     * -1: Configuração não permite confirmação de contas.
+     *  0: Código gerado/re-enviado
+     *  1: Código de ativação não encontrado.
+     */
+    private function confirmAccountCode($code)
+    {
+        // Configurações desabilitadas não permitem
+        // Que o código seja habilitado.
+        if(!BRACP_ALLOW_MAIL_SEND || !BRACP_CONFIRM_ACCOUNT)
+            return -1;
+
+        if(!$this->validate($code, '/^([0-9a-f]{32})$/'))
+            return 1;
+
+        // Verifica se existe o código de confirmação para a conta informada
+        $confirmation = $this->getApp()
+                            ->getCpEm()
+                            ->createQuery('
+                                SELECT
+                                    confirmation
+                                FROM
+                                    Model\Confirmation confirmation
+                                WHERE
+                                    confirmation.code = :code AND
+                                    confirmation.used = false AND
+                                    :CURDATETIME BETWEEN confirmation.date AND confirmation.expire
+                            ')
+                            ->setParameter('code', $code)
+                            ->setParameter('CURDATETIME', date('Y-m-d H:i:s'))
+                            ->getOneOrNullResult();
+
+        // Código de ativação não encontrado ou é inválido porque expirou ou já foi utilizado.
+        if(is_null($confirmation))
+            return 1;
+        
+        // Define o código de ativação como já utilizado.
+        $confirmation->setUsed(true);
+        $this->getApp()->getCpEm()->merge($confirmation);
+        $this->getApp()->getCpEm()->flush;
+
+        // Obtém a conta vinculada para realizar a ativação da conta.
+        $account = $this->getApp()
+                        ->getSvrDftEm()
+                        ->getRepository('Model\Login')
+                        ->findOneBy([
+                            'account_id'    => $confirmation->getAccount_id(),
+                            'state'         => 11 
+                        ]);
+        
+        // Se a conta vinculada existir, então
+        // Faz as atribuições corretas.
+        if(!is_null($account))
+        {
+            // Remove a conta do estado de validação.
+            $account->setState(0);
+            $this->getApp()->getSvrDftEm()->merge($account);
+            $this->getApp()->getSvrDftEm()->flush();
+
+            // Envia um e-mail para o usuário informando que a conta foi ativada
+            //  com sucesso.
+            $this->getApp()->sendMail('@RESEND_MAIL_TITLE.CONFIRMED@',
+                [$account->getEmail()],
+                'mail.create.code.success',
+                [
+                    'userid' => $account->getUserid()
+                ]);
+        }
+
+        return 0;
+    }
+
+    /**
+     * Envia a confirmação de usuário.
+     *
+     * @param string $userid
+     * @param string $email
+     *
+     * @return int
+     * -1: Configuração não permite confirmação de contas.
+     *  0: Código gerado/re-enviado
+     *  1: Conta informada não espera confirmação.
+     */ 
+    private function sendConfirmationByUser($userid, $email)
+    {
+        // Se não for permitido enviar e-mails ou a configuração
+        // Estiver desabilitando a confirmação de contas.
+        if(!BRACP_ALLOW_MAIL_SEND || !BRACP_CONFIRM_ACCOUNT)
+            return -1;
+        
+        // Valida por expressões regulares os dados enviados
+        if(!$this->validate($userid, BRACP_REGEXP_USERNAME) ||
+           !$this->validate($email, BRACP_REGEXP_EMAIL))
+           return 1;
+        
+        // Tenta obter a conta do jogador da tabela.
+        $account = $this->getApp()
+                        ->getSvrDftEm()
+                        ->getRepository('Model\Login')
+                        ->findOneBy([
+                            'userid'    => $userid,
+                            'email'     => $email,
+                            'state'     => 11,
+                        ]);
+
+        // Conta não encontrada para envio do código.
+        if(is_null($account))
+            return 1;
+
+        // Re-envia o código de confirmação para o jogador.
+        return $this->sendConfirmationById($account->getAccount_id());
     }
 
     /**
