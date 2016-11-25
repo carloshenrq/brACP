@@ -865,7 +865,8 @@ class Account extends Caller
     {
         // Valida os dados contra a expressão regular.
         if(!$this->validate($userid, BRACP_REGEXP_USERNAME)
-            || !$this->validate($user_pass, BRACP_REGEXP_PASSWORD)
+            || (!$admin && !$this->validate($user_pass, BRACP_REGEXP_PASSWORD)) // Quando for modo administrador, não é necessário
+                                                                                // fazer o teste de senha anterior
             || !$this->validate($user_pass_new, BRACP_REGEXP_PASSWORD))
             return 4;
 

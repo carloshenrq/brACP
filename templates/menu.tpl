@@ -49,7 +49,9 @@
         </ul>
     </li>
 
-    <li class="url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}vending/index/">{translate}@MENU_MERCHANTS@{/translate}</li>
+    {if $smarty.const.BRACP_ALLOW_VENDING}
+        <li class="url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}vending/index/">{translate}@MENU_MERCHANTS@{/translate}</li>
+    {/if}
 
     {if $smarty.const.BRACP_ALLOW_RANKING}
         {* @TODO *}

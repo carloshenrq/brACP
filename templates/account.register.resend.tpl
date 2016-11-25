@@ -19,7 +19,7 @@
 <input type="checkbox" class="modal-trigger-check" id="modal-create-resend"/>
 <div class="modal" ng-controller="account.register.resend">
     <div class="modal-title">
-        @@RESEND(TITLE)
+        {translate}@RESEND_TITLE@{/translate}
         <label for="modal-create-resend" class="modal-close" ng-if="stage == 0">&times;</label>
     </div>
 
@@ -29,22 +29,22 @@
 
             <div ng-if="$parent.error_state != 0" class="message error">
                 <div ng-switch="$parent.error_state">
-                    <div ng-switch-when="-1">@@RESEND,ERROR(DISABLED)</div>
-                    <div ng-switch-when="1">@@RESEND,ERROR(NOACC)</div>
-                    <div ng-switch-when="2">@@ERRORS(RECAPTCHA)</div>
+                    <div ng-switch-when="-1">{translate}@RESEND_ERROR_DISABLED@{/translate}</div>
+                    <div ng-switch-when="1">{translate}@RESEND_ERROR_NOACC@{/translate}</div>
+                    <div ng-switch-when="2">{translate}@ERRORS_RECAPTCHA@{/translate}</div>
                 </div>
             </div>
 
             <div ng-if="success_state" class="message success">
-                @@RESEND(SUCCESS)
+                {translate}@RESEND_SUCCESS@{/translate}
             </div>
 
-            @@RESEND,MESSAGE(HEADER_NO_CODE)
+            @@RESEND,MESSAGE(HEADER.NO.CODE@{/translate}
 
             <form class="modal-form" ng-submit="submitResend()">
 
-                <input type="text" ng-model="userid" placeholder="@@RESEND,HOLDER(USERID)" size="32" pattern="{$smarty.const.BRACP_REGEXP_USERNAME}" required title="@@WARNING,PATTERN({$userNameFormat})"/>
-                <input type="text" ng-model="email" placeholder="@@RESEND,HOLDER(EMAIL)" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
+                <input type="text" ng-model="userid" placeholder="{translate}@RESEND_HOLDER_USERID@{/translate}" size="32" pattern="{$smarty.const.BRACP_REGEXP_USERNAME}" required title="{translate}@WARNING_PATTERN_{$userNameFormat}@{/translate}"/>
+                <input type="text" ng-model="email" placeholder="{translate}@RESEND_HOLDER_EMAIL@{/translate}" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
 
                 <input id="_submitResend" type="submit"/>
 
@@ -57,21 +57,21 @@
         <div style='max-width: 380px' ng-if="has_code">
             <div ng-if="$parent.error_state != 0" class="message error">
                 <div ng-switch="$parent.error_state">
-                    <div ng-switch-when="-1">@@RESEND,ERROR(DISABLED)</div>
-                    <div ng-switch-when="1">@@RESEND,ERROR(USED)</div>
-                    <div ng-switch-when="2">@@ERRORS(RECAPTCHA)</div>
+                    <div ng-switch-when="-1">{translate}@RESEND_ERROR_DISABLED@{/translate}</div>
+                    <div ng-switch-when="1">{translate}@RESEND_ERROR_USED@{/translate}</div>
+                    <div ng-switch-when="2">{translate}@ERRORS_RECAPTCHA@{/translate}</div>
                 </div>
             </div>
 
             <div ng-if="success_state" class="message success">
-                @@RESEND(CONFIRMED)
+                {translate}@RESEND_CONFIRMED@{/translate}
             </div>
 
-            @@RESEND,MESSAGE(HEADER_HAS_CODE)
+            {translate}@RESEND_MESSAGE_HEADER.HAS.CODE@{/translate}
 
             <form class="modal-form" ng-submit="submitConfirm()">
 
-                <input type="text" ng-model="code" placeholder="@@RESEND,HOLDER(CODE)" maxlength="32" required/>
+                <input type="text" ng-model="code" placeholder="{translate}@RESEND_HOLDER_CODE@{/translate}" maxlength="32" required/>
 
                 <input id="_submitConfirm" type="submit"/>
 
@@ -83,7 +83,7 @@
 
         <label class="input-checkbox">
             <input type="checkbox" ng-model="$parent.has_code" ng-click="$parent.error_state = 0; $parent.success_state = false;"/>
-            @@RESEND,HOLDER(HAS_CODE)
+            {translate}@RESEND_HOLDER_HAS.CODE@{/translate}
         </label>
 
     </div>
@@ -100,8 +100,8 @@
     </div>
 
     <div class="modal-footer" ng-if="stage == 0">
-        <label class="button success icon" for="_submitResend" ng-if="!has_code">@@RESEND,BUTTONS(SUBMIT)</label>
-        <label class="button success icon" for="_submitConfirm" ng-if="has_code">@@RESEND,BUTTONS(CONFIRM)</label>
-        <label class="button error icon" for="modal-create-resend">@@RESEND,BUTTONS(CLOSE)</label>
+        <label class="button success icon" for="_submitResend" ng-if="!has_code">{translate}@RESEND_BUTTONS_SUBMIT@{/translate}</label>
+        <label class="button success icon" for="_submitConfirm" ng-if="has_code">{translate}@RESEND_BUTTONS_CONFIRM@{/translate}</label>
+        <label class="button error icon" for="modal-create-resend">{translate}@RESEND_BUTTONS_CLOSE@{/translate}</label>
     </div>
 </div>
