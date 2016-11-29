@@ -127,6 +127,7 @@ class Vending extends Caller
                         'y'         => $merchant->getMerchant()->getChar()->getLast_y(),
                         'items'     => []
                     ];
+                    $i++;
                 }
 
                 // Define os dados de index para inserir.
