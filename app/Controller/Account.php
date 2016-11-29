@@ -50,19 +50,29 @@ class Account extends Caller
 
     public function __construct(\brACPApp $app)
     {
+        // Funções para teste de permissão.
+        $needLogin = function() {
+            return Account::isLoggedIn();
+        };
+
+        // Funções para teste de permissão.
+        $needLogout = function() {
+            return !Account::isLoggedIn();
+        };
+
         parent::__construct($app, [
             // Rota de login é necessário estar deslogado para logar.
             // Caso contrario, irá retornar 404.
-            'login_POST'    => function()
-            {
-                return !Account::isLoggedIn();
-            },
+            'login_POST'            => $needLogout,
+            'recover_POST'          => $needLogout,
+            'register_POST'         => $needLogout,
+            'confirmation_GET'      => $needLogout,
+            'confirmation_POST'     => $needLogout,
             // Rota para logout, é necessário estar logado para
             //  para acessar, irá retornar 404.
-            'logout_GET'    => function()
-            {
-                return Account::isLoggedIn();
-            }
+            'logout_GET'            => $needLogin,
+            'email_POST'            => $needLogin,
+            'password_POST'         => $needLogin,
         ]);
     }
 
@@ -364,49 +374,41 @@ class Account extends Caller
     //             ->findOneBy($params);
     // }
 
-    // /**
-    //  * Método para realizar a confirmação de contas recebido via post.
-    //  *
-    //  * @param ServerRequestInterface $request
-    //  * @param ResponseInterface $response
-    //  * @param array $args
-    //  */
-    // public static function recover(ServerRequestInterface $request, ResponseInterface $response, $args)
-    // {
-    //     // Dados recebidos pelo post para confirmação de contas.
-    //     $data = $request->getParsedBody();
+    /**
+     * Método utilizado para enviar o código de recuperação de contas.
+     *
+     * @param array $get
+     * @param array $post
+     * @param object $request
+     *
+     * @return object
+     */
+    private function recover_POST($get, $post, $request)
+    {
+        $return = ['error_state' => 0, 'success_state' => false];
 
-    //     // Dados de retorno para informações de erro.
-    //     $return = ['error_state' => 0, 'success_state' => false];
+        if(!$this->getApp()->testRecaptcha($post))
+        {
+            $return['error_state'] = 3;
+        }
+        else
+        {
+            // Tenta realizar o envio recuperação de senha e obtém o retorno
+            if(isset($post['code']))
+                $return['error_state'] = $this->recoverCode($post['code']);
+            else
+                $return['error_state'] = $this->recoverSend($post['userid'], $post['email']);
 
-    //     // Obtém os dados para caso o usuário precise realizar as requisições do captcha.
-    //     $needRecaptcha = self::getApp()->getSession()->BRACP_RECAPTCHA_ERROR_REQUEST >= 3;
+            $return['success_state'] = ($return['error_state'] == 0);
 
-    //     // Adicionado teste para recaptcha para segurança das requisições enviadas ao forms.
-    //     if($needRecaptcha && BRACP_RECAPTCHA_ENABLED && !self::getApp()->checkReCaptcha($data['recaptcha']))
-    //     {
-    //         $return['error_state'] = 3;
-    //     }
-    //     else
-    //     {
-    //         // Se ambos estão definidos, a requisição é para re-envio dos dados de confirmação.
-    //         if(isset($data['userid']) && isset($data['email']))
-    //             $return['error_state']      = self::registerRecover($data['userid'], $data['email']);
-    //         // Se código está definido, a requisição é para confirmação da conta.
-    //         else if(isset($data['code']))
-    //             $return['error_state']      = self::registerRecoverCode($data['code']);
+            // Erro de requisição?
+            if(BRACP_RECAPTCHA_ENABLED && !$return['success_state'])
+                $this->getApp()->getSession()->BRACP_RECAPTCHA_ERROR_REQUEST++;
+        }
 
-    //         // Em caso de erro, atualiza as necessidades de chamar o reCaptcha
-    //         if($return['error_state'] != 0 && BRACP_RECAPTCHA_ENABLED)
-    //             self::getApp()->getSession()->BRACP_RECAPTCHA_ERROR_REQUEST++;
-
-    //         // Define informaçõs de erro. (Caso exista)
-    //         $return['success_state']    = $return['error_state'] == 0;
-    //     }
-
-    //     // Responde com um objeto json informando o estado do cadastro.
-    //     $response->withJson($return);
-    // }
+        // Responde com o retorno.
+        return $response->withJson($return);
+    }
 
     /**
      * Realiza a recuperação da conta do jogador com o código informado.
