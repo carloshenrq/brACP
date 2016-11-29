@@ -52,15 +52,30 @@ class Item extends Caller
         $nameid = $get['id'];
 
         // Obtém os dados do item em cache.
-        $item_data = Cache::get('BRACP_ITEM_' . $nameid, function() use ($nameid) {
+        $item_data = $this->getItem($nameid);
+
+        // Retorna os dados em formato json.
+        return $response->withJson($item_data);
+    }
+
+    /**
+     * Obtém o Item
+     *
+     * @param string $nameid
+     *
+     * @return object Alteração de dados para item.
+     */
+    public function getItem($nameid)
+    {
+        return Cache::get('BRACP_ITEM_' . $nameid, function() use ($nameid) {
             // Obtém os caminhos para os arquivos de imagem do item.
             $icon = BRACP_DIR_INSTALL_URL . 'asset/icon/?id=' . $nameid;
             $images = BRACP_DIR_INSTALL_URL . 'asset/images/?id=' . $nameid;
 
             // Obtém o objeto do item.
-            $item = $this->getApp()->getDbEm()
-                                    ->getRepository('Model\Item')
-                                    ->findOneBy(['id' => $nameid]);
+            $item = \brACPApp::getInstance()->getDbEm()
+                                        ->getRepository('Model\Item')
+                                        ->findOneBy(['id' => $nameid]);
 
             // Verifica se o item existe, se não existe, então
             // retorna null.
@@ -95,9 +110,6 @@ class Item extends Caller
                 'slots'         => $item->getSlots(),
             ];
         });
-
-        // Retorna os dados em formato json.
-        return $response->withJson($item_data);
     }
 }
 

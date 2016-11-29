@@ -532,12 +532,48 @@ brACPApp.controller('account.chars', ['$scope', '$http', function($scope, $http)
 brACPApp.controller('vending.list', ['$scope', '$http', function($scope, $http) {
 
     $scope.list = [];
+    $scope.state = 0;
 
+    $scope.map = '';
+    $scope.nameid = 0;
 
-    $scope.init     = function(list)
+    $scope.init     = function()
     {
-        $scope.list = list;
+        this.refreshList();
     };
+
+    /**
+     *  Atualiza a lista de itens.
+     */
+    $scope.refreshList  = function()
+    {
+        var nameid = $scope.nameid,
+            map = $scope.map;
+
+        if(!nameid || map.length == 0)
+            nameid = -1;
+
+        if(!map || map.length == 0)
+            map = -1;
+
+        var urlMerchants = document.querySelector('#_BRACP_URL').value + 'vending/list/';
+
+        $scope.state = 1;
+
+        $http({
+            'method'    : 'get',
+            'url'       : urlMerchants,
+            'headers'   : {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        }).then(function(response) {
+            $scope.list = response.data;
+            $scope.state = 0;
+        }, function(response) {
+            console.error(response);
+        });
+
+    }
 
 }]);
 

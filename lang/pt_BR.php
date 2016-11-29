@@ -478,7 +478,7 @@ return
      * Mensagens de alerta.
      */
     'WARNING'   => [
-        'CACHE_ON'  => 'As informações contidas nesta página, podem demorar alguns instantes para serem atualizadas!',
+        'CACHE.ON'  => 'As informações contidas nesta página, podem demorar alguns instantes para serem atualizadas!',
 
         // issue #11 - Informativos de Formatação de Campos
         'PATTERN'   => [
@@ -519,7 +519,12 @@ return
         'TITLE'     => 'Mercadores Online',
         'MESSAGE'   => 'Segue abaixo a lista de todos os mercadores online dentro do jogo e os itens que estes estão vendendo.',
 
-        'NO_VENDING'    => 'Nenhum mercador com venda aberta online para exibir.',
+        'NO.VENDING'    => 'Nenhum mercador com venda aberta online para exibir.',
+
+
+        'BUTTONS'   =>  [
+            'REFRESH'   => 'Atualizar Lista'
+        ],
     ],
 
     /**
