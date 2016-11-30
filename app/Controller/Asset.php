@@ -40,6 +40,27 @@ class Asset extends Caller
     }
 
     /**
+     * Obtém a imagem de um arquivo do tema em memória.
+     *
+     * @param array $get
+     * @param array $post
+     * @param object $response
+     *
+     * @return object Response com cabeçalhos para js
+     */
+    private function timg_GET($get, $post, $response)
+    {
+        // Obtém o arquivo de imagem para o item.
+        $filenm = realpath(BRACP_TEMPLATE_DIR . '..'
+                . DIRECTORY_SEPARATOR . '..'
+                . DIRECTORY_SEPARATOR . 'themes' . DIRECTORY_SEPARATOR . $this->getApp()->getSession()->BRACP_THEME
+                . DIRECTORY_SEPARATOR . 'img') . DIRECTORY_SEPARATOR . $get['file'] . '.png';
+        
+        readfile($filenm);
+        return $response->withHeader('Content-Type', 'image/png');
+    }
+
+    /**
      * Obtém a imagem de um item solicitado.
      *
      * @param array $get
@@ -239,13 +260,14 @@ class Asset extends Caller
                 $scss->setVariables([
                     'data_path'     => implode('/', [
                         $basepath_bracp,
-                        'data'
+                        'asset',
+                        'icon'
                     ]),
-                    'theme_path'    => implode('/',[
+                    'asset_path'    => implode('/', [
                         $basepath_bracp,
-                        'themes',
-                        $app->getSession()->BRACP_THEME
-                    ])
+                        'asset',
+                        'timg'
+                    ]),
                 ]);
                 $scss->addImportPath($scss_path);   // Caminho para os mixins
 

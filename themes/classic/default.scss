@@ -15,7 +15,7 @@ html, body
 {
     .header
     {
-        background-image: url(#{$theme_path}/img/background-header.png);
+        background-image: url(#{$asset_path}/?file=background-header);
         background-repeat: no-repeat;
         background-position: center;
 
@@ -86,7 +86,7 @@ html, body
             {
                 @include size(420px, 200px);
                 margin: auto;
-                background-image: url(#{$theme_path}/img/logo.png);
+                background-image: url(#{$asset_path}/?file=logo);
                 background-repeat: no-repeat;
                 background-color: transparent;
                 cursor: pointer;
@@ -133,47 +133,47 @@ html, body
 
                             &.icon-home:before
                             {
-                                background-image: url(#{$data_path}/items/icons/501.png);
+                                background-image: url(#{$data_path}/?id=501);
                             }
 
                             &.icon-myacc:before
                             {
-                                background-image: url(#{$data_path}/items/icons/5372.png);
+                                background-image: url(#{$data_path}/?id=5372);
                             }
 
                             &.icon-rankings:before
                             {
-                                background-image: url(#{$data_path}/items/icons/7228.png);
+                                background-image: url(#{$data_path}/?id=7228);
                             }
 
                             &.icon-players:before
                             {
-                                background-image: url(#{$data_path}/items/icons/2735.png);
+                                background-image: url(#{$data_path}/?id=2735);
                             }
 
                             &.icon-chars:before
                             {
-                                background-image: url(#{$data_path}/items/icons/2734.png);
+                                background-image: url(#{$data_path}/?id=2734);
                             }
 
                             &.icon-zeny:before
                             {
-                                background-image: url(#{$data_path}/items/icons/670.png);
+                                background-image: url(#{$data_path}/?id=670);
                             }
 
                             &.icon-woe:before
                             {
-                                background-image: url(#{$data_path}/items/icons/714.png);
+                                background-image: url(#{$data_path}/?id=714);
                             }
 
                             &.icon-guild:before
                             {
-                                background-image: url(#{$data_path}/items/icons/2105.png);
+                                background-image: url(#{$data_path}/?id=2105);
                             }
 
                             &.icon-castle:before
                             {
-                                background-image: url(#{$data_path}/items/icons/2383.png);
+                                background-image: url(#{$data_path}/?id=2383);
                             }
                         }
 
@@ -379,27 +379,27 @@ html, body
 
                 &.nav-chrome:before
                 {
-                    background-image: url(#{$theme_path}/img/chrome.png);
+                    background-image: url(#{$asset_path}/?file=chrome);
                 }
 
                 &.nav-firefox:before
                 {
-                    background-image: url(#{$theme_path}/img/firefox.png);
+                    background-image: url(#{$asset_path}/?file=firefox);
                 }
 
                 &.nav-ie:before
                 {
-                    background-image: url(#{$theme_path}/img/ie.png);
+                    background-image: url(#{$asset_path}/?file=ie);
                 }
 
                 &.nav-safari:before
                 {
-                    background-image: url(#{$theme_path}/img/safari.png);
+                    background-image: url(#{$asset_path}/?file=safari);
                 }
 
                 &.nav-opera:before
                 {
-                    background-image: url(#{$theme_path}/img/opera.png);
+                    background-image: url(#{$asset_path}/?file=opera);
                 }
             }
 
