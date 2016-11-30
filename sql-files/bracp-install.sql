@@ -13,8 +13,8 @@ CREATE TABLE IF NOT EXISTS `bracp_server_status` (
     `MapStatus` BOOLEAN NOT NULL DEFAULT false,
     `CharStatus` BOOLEAN NOT NULL DEFAULT false,
     `LoginStatus` BOOLEAN NOT NULL DEFAULT false,
-    `StatusTime` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-    `StatusExpire` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `StatusTime` DATETIME NOT NULL DEFAULT '1000-01-01 00:00:00',
+    `StatusExpire` DATETIME NOT NULL DEFAULT '1000-01-01 00:00:00',
     `PlayerCount` INTEGER NOT NULL DEFAULT 0,
     INDEX (`ServerIndex`, `StatusExpire`)
 ) ENGINE=MyISAM COLLATE='utf8_swedish_ci';
@@ -24,8 +24,8 @@ CREATE TABLE IF NOT EXISTS `bracp_recover` (
     `RecoverID` INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `AccountID` INTEGER NOT NULL,
     `RecoverCode` VARCHAR(32) NOT NULL,
-    `RecoverDate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-    `RecoverExpire` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `RecoverDate` DATETIME NOT NULL DEFAULT '1000-01-01 00:00:00',
+    `RecoverExpire` DATETIME NOT NULL DEFAULT '1000-01-01 00:00:00',
     `RecoverUsed` BOOLEAN NOT NULL DEFAULT FALSE,
     UNIQUE INDEX (`RecoverCode`),
     INDEX (`AccountID`)
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `bracp_change_mail_log` (
     `AccountID` INTEGER NOT NULL,
     `EmailFrom` VARCHAR(39) NOT NULL,
     `EmailTo` VARCHAR(39) NOT NULL,
-    `EmailLogDate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00', 
+    `EmailLogDate` DATETIME NOT NULL DEFAULT '1000-01-01 00:00:00', 
     INDEX (`AccountID`)
 ) ENGINE=InnoDB COLLATE='utf8_swedish_ci';
 
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `bracp_themes` (
     `Name` VARCHAR(20) NOT NULL DEFAULT '',
     `Version` VARCHAR(10) NOT NULL DEFAULT '',
     `Folder` VARCHAR(100) NOT NULL DEFAULT '',
-    `ImportTime` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00', 
+    `ImportTime` DATETIME NOT NULL DEFAULT '1000-01-01 00:00:00', 
     UNIQUE INDEX (`Folder`)
 ) ENGINE=MyISAM COLLATE='utf8_swedish_ci';
 
@@ -56,8 +56,8 @@ CREATE TABLE IF NOT EXISTS `bracp_account_confirm` (
     `ConfirmationID` INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
     `AccountID` INTEGER NOT NULL,
     `ConfirmationCode` VARCHAR(32) NOT NULL,
-    `ConfirmationDate` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-    `ConfirmationExpire` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `ConfirmationDate` DATETIME NOT NULL DEFAULT '1000-01-01 00:00:00',
+    `ConfirmationExpire` DATETIME NOT NULL DEFAULT '1000-01-01 00:00:00',
     `ConfirmationUsed` BOOLEAN NOT NULL DEFAULT FALSE,
     UNIQUE INDEX (`ConfirmationCode`),
     INDEX (`AccountID`)
