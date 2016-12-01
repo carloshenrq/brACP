@@ -21,6 +21,7 @@ namespace Controller;
 
 use \ServerPing;
 use \Cache;
+use \Format;
 
 /**
  * Controlador para dados de conta.
@@ -84,15 +85,16 @@ class Item extends Caller
 
             // Retorna o objeto do item em forma de json.
             return [
-                'id'        => $nameid,
-                'icon'      => $icon,
-                'image'     => $images,
-                'name'      => $item->getName_japanese(),
-                'weight'    => $item->getWeight(),
-                'type'      => $item->getType(),
-                'price'     => [
-                    'buy'   => $item->getPrice_buy(),
-                    'sell'  => $item->getPrice_sell(),
+                'id'            => $nameid,
+                'icon'          => $icon,
+                'image'         => $images,
+                'name'          => $item->getName_japanese(),
+                'description'   => '@TODO_ITEM_DESCRIPTION',
+                'weight'        => $item->getWeight(),
+                'type'          => $item->getType(),
+                'price'         => [
+                    'buy'       => Format::zeny($item->getPrice_buy()),
+                    'sell'      => Format::zeny($item->getPrice_sell()),
                 ],
                 'battle'    => [
                     'atk'           => $item->getAtk(),

@@ -133,14 +133,24 @@ class Vending extends Caller
                 // Define os dados de index para inserir.
                 $index = array_search($char_id, $_tmpChar);
 
-                // Atualiza indices de mercadores.
-                $merchants_data[$index]->items[]    = (object)[
+                // Objeto temporario.
+                $_tmp =  (object)[
                     'item'      => $item->getItem($merchant->getCart()->getNameid()),
                     'amount'    => Format::zeny($merchant->getAmount()),
                     'price'     => Format::zeny($merchant->getPrice()),
                     'refine'    => $merchant->getCart()->getRefine(),
                     'unique_id' => $merchant->getCart()->getUnique_id(),
+                    'cards'     => []
                 ];
+
+                // Adiciona as cartas ao objeto informado.
+                if(!empty($merchant->getCart()->getCard0())) $_tmp->cards[] = $item->getItem($merchant->getCart()->getCard0());
+                if(!empty($merchant->getCart()->getCard1())) $_tmp->cards[] = $item->getItem($merchant->getCart()->getCard1());
+                if(!empty($merchant->getCart()->getCard2())) $_tmp->cards[] = $item->getItem($merchant->getCart()->getCard2());
+                if(!empty($merchant->getCart()->getCard3())) $_tmp->cards[] = $item->getItem($merchant->getCart()->getCard3());
+
+                // Atualiza indices de mercadores.
+                $merchants_data[$index]->items[]    = $_tmp;
             }
 
             return $merchants_data;
