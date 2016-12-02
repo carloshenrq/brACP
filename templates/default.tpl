@@ -113,12 +113,16 @@
 
                     <div class="user-access">
                         {if isset($account) eq false}
-                            <label for="modal-login" class="button small link">{translate}@MENU_MYACC_UNAUTHENTICATED_LOGIN@{/translate}</label>
+                            <label for="modal-login" class="button link">{translate}@MENU_MYACC_UNAUTHENTICATED_LOGIN@{/translate}</label>
                             {if $smarty.const.BRACP_ALLOW_CREATE_ACCOUNT eq true}
-                                <label for="modal-register" class="button small success">{translate}@MENU_MYACC_UNAUTHENTICATED_CREATE@{/translate}</label>
+                                <label for="modal-register" class="button success">{translate}@MENU_MYACC_UNAUTHENTICATED_CREATE@{/translate}</label>
                             {/if}
                         {else}
-                            <div class="url-link button small error" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}account/logout/">{translate}@MENU_MYACC_AUTHENTICATED_LOGOUT@{/translate}</div>
+                            <div class="profile-container">
+                                <div class="profile-button url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}account/logout/" style="background-image: url({$gravatar});">
+                                    {$account->getUserid()} ({translate}@MENU_MYACC_AUTHENTICATED_LOGOUT@{/translate})
+                                </div>
+                            </div>
                         {/if}
                     </div>
 

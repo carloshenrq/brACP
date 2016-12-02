@@ -1350,7 +1350,7 @@ class Account extends Caller
             }
 
             // Caso a conta não seja encontrada no banco de dados.
-            if(is_null($account))
+            if(is_null($account) || $account->getSex() == 'S') // Contas do tipo servidor não podem logar.
             {
                 if(BRACP_RECAPTCHA_ENABLED)
                     $this->getApp()->getSession()->BRACP_RECAPTCHA_ERROR_REQUEST++;

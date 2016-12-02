@@ -50,7 +50,7 @@ return
                 ],
                 'STORAGE'   => 'Armazém',
                 'CHARS'     => 'Personagens',
-                'LOGOUT'    => 'Encerrar',
+                'LOGOUT'    => 'Sair',
             ],
         ],
         'MERCHANTS' =>  'Mercadores',

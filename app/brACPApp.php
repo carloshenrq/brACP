@@ -253,8 +253,15 @@ class brACPApp extends Slim\App
         {
             // Verifica se o usuário está logado no sistema.
             if(Account::isLoggedIn())
-                $data = array_merge(['userid' => Account::loggedUser()->getUserId(),
-                                     'account' => Account::loggedUser()], $data);
+            {
+                // obtém o objeto da conta do jogador.
+                $account = Account::loggedUser();
+
+                // Envia os dados padrões caso o usuário esteja logado.
+                $data = array_merge(['userid' => $account->getUserId(),
+                                     'account' => $account,
+                                     'gravatar' => 'https://www.gravatar.com/avatar/' . hash('md5', strtolower(trim($account->getEmail()))) ], $data);
+            }
         }
         catch(\Exception $ex)
         {

@@ -711,3 +711,37 @@ span.info-status
         margin-left: 1.5em;
     }
 }
+
+.profile-container
+{
+    position: relative;
+    height: 32px;
+
+    .profile-button
+    {
+        display: inline-block;
+        color: white;
+        height: 32px; line-height: 32px;
+
+        padding-left: 3em;
+        padding-right: .6em;
+
+        background-size: contain;
+        background-position: left center;
+        background-repeat: no-repeat;
+        box-sizing: border-box;
+
+        cursor: pointer;
+
+        font-weight: bold;
+        @include border-radius(.2em);
+
+        @include transition('background-color .2s ease-in-out, color .2s ease-in-out');
+
+        &:hover
+        {
+            background-color: white;
+            color: inherit;
+        }
+    }
+}
