@@ -105,7 +105,15 @@ class Caller
         try
         {
             // Realiza a chamada da rota informando os parametros.
-            return $instance->{$callMethod}($get_params, $data_params, $response);
+            $response = $instance->{$callMethod}($get_params, $data_params, $response);
+
+            // Verifica se está permitindo realizar a requisição de hosts externos
+            if(BRACP_ALLOW_EXTERNAL_REQUEST)
+                $response = $response->withHeader('Access-Control-Allow-Origin', '*')
+                                    ->withHeader('Access-Control-Allow-Headers', 'Content-Type, X-Requested-With, X-authentication, X-client')
+                                    ->withHeader('GET, POST, PUT, DELETE, OPTIONS');
+
+            return $response;
         }
         catch(\Exception $ex)
         {

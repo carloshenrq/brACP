@@ -157,6 +157,8 @@ $_CONFIG_DATA = array(
     'BRACP_SRV_PING_DELAY'                  => 300,
     'BRACP_ALLOW_VENDING'                   => false,
     'BRACP_ALLOW_MODS'                      => false,
+    'BRACP_MODS_DIR'                        => dirname(__FILE__) . DIRECTORY_SEPARATOR . 'mods',
+    'BRACP_ALLOW_EXTERNAL_REQUEST'          => false,
 );
 
 
@@ -377,6 +379,16 @@ $css_minify->add($css_install);
 $css_minify->add($css_button);
 
 $css_style = $css_minify->minify();
+
+$js_angular = file_get_contents('js/angular.js');
+$js_jquery = file_get_contents('js/jquery-2.1.4.js');
+
+$js_minify = new MatthiasMullie\Minify\JS;
+$js_minify->add($js_angular);
+$js_minify->add($js_jquery);
+
+$js_content = $js_minify->minify();
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -387,12 +399,12 @@ $css_style = $css_minify->minify();
             2016-04-14, CHLFZ: Problemas de CHARSET identificado por pelo Sir Will e postado no fórum.
                                 -> @issue 7
         -->
-        <meta charset="UTF-8">
+        <meta charset="UTF-8"/>
 
         <style><?php echo $css_style; ?></style>
 
-        <script src="js/angular.js"></script>
-        <script src="js/jquery-2.1.4.js"></script>
+        <script><?php echo $js_content; ?></script>
+
         <script>
             var install = angular.module('brACP', []);
 
@@ -731,6 +743,9 @@ $css_style = $css_minify->minify();
                         <label data-info="Caminho dos arquivos de entidade" data-warning="Caminho completo para onde os arquivos de banco de dados. Necessário para realizar os acessos a banco.">
                             <input type="text" ng-model="INSTALL_VARS.BRACP_ENTITY_DIR"/>
                         </label>
+
+                        <input id="BRACP_ALLOW_EXTERNAL_REQUEST_CHK" ng-model="INSTALL_VARS.BRACP_ALLOW_EXTERNAL_REQUEST" class="input-checkbox" type="checkbox">
+                        <label for="BRACP_ALLOW_EXTERNAL_REQUEST_CHK" class="input-checkbox" data-warning="Habilita requisições externas ao brACP? Por segurança, fica desabilitado!">Habilitar acesso de requisições externas?</label>
 
                         <label data-info="Fuso Horário" data-warning="Fuso horário para gravar informações corretas de data e hora.">
                             <select ng-model="INSTALL_VARS.BRACP_DEFAULT_TIMEZONE">
@@ -1134,7 +1149,11 @@ $css_style = $css_minify->minify();
                         <label for="BRACP_ALLOW_VENDING_CHK" class="input-checkbox" data-warning="Define se irá habilitar a exibição de mercadores online no brACP">Habilitar vendas do servidor online</label>
 
                         <input id="BRACP_ALLOW_MODS_CHK" ng-model="INSTALL_VARS.BRACP_ALLOW_MODS" class="input-checkbox" type="checkbox">
-                        <label for="BRACP_ALLOW_MODS_CHK" ng-show="INSTALL_VARS.BRACP_ALLOW_ADMIN" class="input-checkbox" data-warning="Define se irá habilitar a aplicação de mods (AdminCP).">Habilitar aplicador de mods</label>
+                        <label for="BRACP_ALLOW_MODS_CHK" class="input-checkbox" data-warning="Define se irá habilitar a aplicação de mods (AdminCP).">Habilitar aplicador de mods</label>
+                        
+                        <label ng-show="INSTALL_VARS.BRACP_ALLOW_MODS" data-info="Caminho dos arquivos de entidade" data-warning="Caminho completo para os arquivos de modificações">
+                            <input type="text" ng-model="INSTALL_VARS.BRACP_MODS_DIR"/>
+                        </label>
                     </div>
 
             </div>
