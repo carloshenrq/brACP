@@ -532,14 +532,28 @@ brACPApp.controller('account.chars', ['$scope', '$http', function($scope, $http)
 brACPApp.controller('vending.list', ['$scope', '$http', function($scope, $http) {
 
     $scope.list = [];
+    $scope.filter_list = [];
     $scope.state = 0;
 
-    $scope.map = '';
-    $scope.nameid = 0;
+    $scope.map = "";
+    // $scope.nameid = 0; <- Será usado futuramente durante processamento
+
+    // Rotina para filtrar os mercadores por mapa.
+    $scope.mapChange    = function()
+    {
+        if(this.map.length == 0)
+            $scope.filter_list = $scope.list.merchants;
+        else
+            $scope.filter_list = $scope.list.maps[this.map];
+        
+
+        console.log($scope.filter_list);
+    }
 
     $scope.init     = function()
     {
         this.refreshList();
+        this.map = "";
     };
 
     /**
@@ -547,18 +561,10 @@ brACPApp.controller('vending.list', ['$scope', '$http', function($scope, $http) 
      */
     $scope.refreshList  = function()
     {
-        var nameid = $scope.nameid,
-            map = $scope.map;
-
-        if(!nameid || map.length == 0)
-            nameid = -1;
-
-        if(!map || map.length == 0)
-            map = -1;
-
         var urlMerchants = document.querySelector('#_BRACP_URL').value + 'vending/list/';
 
         $scope.state = 1;
+        $scope.map = '';
 
         $http({
             'method'    : 'get',
@@ -568,6 +574,7 @@ brACPApp.controller('vending.list', ['$scope', '$http', function($scope, $http) 
             }
         }).then(function(response) {
             $scope.list = response.data;
+            $scope.mapChange();
             $scope.state = 0;
         }, function(response) {
             console.error(response);

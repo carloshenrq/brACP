@@ -44,13 +44,36 @@
         <div class="loading-bar loading-bar-4"></div>
     </div>
 
-    <div ng-if="state == 0 && list.length == 0" class="message info icon">
+    <div ng-if="state == 0 && list.merchants.length == 0" class="message info icon">
         {translate}@VENDING_NO.VENDING@{/translate}
     </div>
 
     {literal}
-        <div ng-if="state == 0 && list.length > 0" style='width: 100%;'>
-            // @TODO: Mostrar os mercadores online
+        <div ng-if="state == 0 && list.merchants.length > 0" style='width: 100%;'>
+            <div>Mapa:
+                <select ng-model="map" ng-change="mapChange()">
+                    <option value="">- Todos os Mapas</option>
+                    <option ng-repeat="map in list.map_keys" value="{{map}}">{{map}}</option>
+                </select>
+            </div>
+
+            <div class="merchant-data">
+                <div class="merchant-shop" ng-repeat="merchant in filter_list">
+                    <div class="merchant-title" data-map="{{merchant.map}} ({{merchant.x}},{{merchant.y}})">{{merchant.title}}</div>
+                    <div class="merchant-items-table">
+                        <div class="merchant-items-row" ng-repeat="item in merchant.items">
+                            <div class="merchant-items-cell" style="text-align: right;">{{item.amount}}x</div>
+                            <div class="merchant-items-cell">
+                                <div class="item-info" ng-attr-data-slot="{{item.item.slots > 0 ? item.item.slots : undefined}}" ng-attr-data-refine="{{item.refine > 0 ? item.refine : undefined}}" style="background-image: url({{item.item.icon}})">
+                                    {{item.item.name}}
+                                </div>
+                            </div>
+                            <div class="merchant-items-cell" style="text-align: right;">{{item.price}}z</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     {/literal}
 

@@ -59,7 +59,22 @@ class Vending extends Caller
      */
     private function list_GET($get, $post, $response)
     {
-        return $response->withJson($this->getAllMerchants());
+        $merchants  = $this->getAllMerchants();
+        $maps       = [];
+
+        // Varre os dados informados para retorno.
+        foreach($merchants as $merchant)
+        {
+            if(!in_array($merchant->map, array_keys($maps)))
+                $maps[$merchant->map][] = $merchant;
+        }
+
+        // Retorna um vetor com todos os mercadores e mapas (para filtro).
+        return $response->withJson([
+            'merchants' => $merchants,
+            'maps'      => $maps,
+            'map_keys'  => array_keys($maps),
+        ]);
     }
 
     /**

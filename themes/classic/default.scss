@@ -745,3 +745,155 @@ span.info-status
         }
     }
 }
+
+.merchant-data
+{
+    display: block;
+    width: 100%;
+    text-align: center;
+
+    .merchant-shop
+    {
+        display: inline-block;
+        margin: .2em;
+        min-width: 20em;
+        @include box-shadow('0 0 .2em rgba(0, 0, 0, .5)');
+
+        .merchant-title
+        {
+            display: block;
+            padding: .6em;
+
+            font-size: 1em;
+            font-weight: bold;
+            color: white;
+            
+            background-color: #004400;
+
+            &[data-map]::after
+            {
+                content: attr(data-map);
+                font-weight: normal;
+                font-style: italic;
+
+                margin-left: 1em;
+            }
+        }
+
+        .merchant-items-table
+        {
+            display: table;
+            width: 100%;
+            box-sizing: border-box;
+            text-align: left;
+
+            .merchant-items-row
+            {
+                display: table-row;
+
+                &:nth-child(even)
+                {
+                    background-color: rgba(13, 255, 3, .1);
+                }
+
+                .merchant-items-cell
+                {
+                    display: table-cell;
+                    z-index: 0;
+                    padding: .4em;
+
+                    vertical-align: middle;
+                    text-align: left;
+                }
+            }
+
+        }
+    }
+}
+
+.item-info
+{
+    position: relative;
+
+    font-family: Verdana, Tahoma, Arial;
+    vertical-align: bottom;
+    display: inline-block;
+    line-height: 24px;
+
+    padding-left: 28px;
+
+    background-repeat: no-repeat;
+    background-position: left center;
+
+    z-index: 0;
+
+    cursor: pointer;
+
+    &[data-slot]:after
+    {
+        display: inline-block;
+        content: '[' attr(data-slot) ']';
+    }
+
+    &[data-refine]:before
+    {
+        display: inline-block;
+        content: '+' attr(data-refine);
+    }
+
+    .item-description
+    {
+        position: absolute;
+        left: 110%;
+        top: 0;
+
+        opacity: 0; visibility: hidden;
+
+        padding: 1.4em;
+        min-width: 400px;
+        background-color: white;
+
+        z-index: 999;
+
+        @include border-radius(',4em');
+        @include box-shadow('0px 0px 3px rgb(13, 30, 3)');
+        @include transition('opacity .2s ease-in-out, visibility .2s ease-in-out');
+
+        .item-text
+        {
+            line-height: normal;
+            font-size: 1em;
+
+            min-height: 100px;
+
+            background-repeat: no-repeat;
+            background-position: left center;
+
+            padding: 1em 1em 1em 90px;
+
+            text-align: justify;
+            color: rgba(0, 0, 0, 1);
+        }
+
+        .item-other
+        {
+            padding: 1em 0em 0em 0em;
+            color: #5a5a5a;
+            font-style: italic;
+            font-weight: bold;
+            font-size: .8em;
+
+            .item-data[data-info]:after
+            {
+                content: ' ' attr(data-info);
+                font-weight: normal;
+            }
+        }
+    }
+
+    &:hover .item-description
+    {
+        opacity: 1; visibility: visible;
+        cursor: default;
+    }
+}
