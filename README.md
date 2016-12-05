@@ -125,6 +125,31 @@ Remova o \# onde está o `#LoadModule rewrite_module modules/mod_rewrite.so` fic
 
 Agora salve e reinicie o apache.
 
+###2- Instalando o Composer
+Para instalar o composer, você deve possuir o PHP já instalado. Se tiver dúvidas de como instalar o PHP no windows, [clique aqui](http://php.net/manual/pt_BR/install.windows.php).
+
+####2.1 - Se você usa Linux...
+
+Para realizar a instalação de acordo, recomendo instalar o composer da seguinte forma:
+
+    php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+    php composer-setup.php --install-dir=/bin --filename=composer
+    php -r "unlink('composer-setup.php');"
+
+####2.2 - Se você usa Windows...
+
+Visite [este link](https://getcomposer.org/download/) e siga as instruções que o próprio site da...
+
+###3- Instalando as dependências do composer
+Após instalado o composer, navegue até a pasta do brACP e:
+
+####3.1 - Se você usa Linux...
+Digite:
+    composer install
+
+####3.2 - Se você usa Windows...
+Ao entrar na pasta, clique no botão direito do mouse no arquivo 'composer.json' e depois clique em 'Composer Install' no menu que irá abrir, aguarde a finalização e pronto. :3
+
 ##Agradecimentos
 
 [Protimus](http://forum.brathena.org/index.php/user/1-protimus/) : Por fornecer dicas de segurança.
