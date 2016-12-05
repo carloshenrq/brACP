@@ -66,7 +66,9 @@ class Vending extends Caller
         foreach($merchants as $merchant)
         {
             if(!in_array($merchant->map, array_keys($maps)))
-                $maps[$merchant->map][] = $merchant;
+                $maps[$merchant->map] = [];
+
+            $maps[$merchant->map][] = $merchant;
         }
 
         // Retorna um vetor com todos os mercadores e mapas (para filtro).
