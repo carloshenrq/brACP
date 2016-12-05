@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * Exemplo de mod para adição de novos métodos sem o uso de inicializador.
+ *
+ * brACPSmarty.test.mod.php
+ */
+return [
+    'type'  => 0,
+
+    'initialize'    => function() {
+        $this->registerPlugin('block', 'test', [$this, '__test']); 
+    },
+
+    'methods'       => [
+        '__test'    => function($params, $content, $template, &$repeat) {
+            // Verifica se o string não encaixa nos dados de tradução.
+            if(empty($content))
+                return "";
+            
+            return "TESTING_DATA!!!!";
+        }
+    ],
+];
