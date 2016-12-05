@@ -104,6 +104,12 @@ trait TMod
                 continue;
             }
 
+            // Método utilizado para inicializar o mod após o arquivo ser carregado.
+            // Funciona como um construtor para o método.
+            $_initialize = null;
+            if(isset($modData['initialize']))
+                $_initialize = $modData['initialize'];
+
             // Varre todos os atributos para vincular ao objeto.
             foreach($modData['attributes'] as $attribute => $defaultValue)
                 $this->attributes[$attribute]           = $defaultValue;
@@ -119,6 +125,10 @@ trait TMod
             // Varre todas as restrictions para vincular ao objeto.
             foreach($modData['routes_restriction'] as $routeName => $restrictionClosure)
                 $this->routes_restriction[$routeName]   = $restrictionClosure;
+            
+            // Aqui, carregou o arquivo mod informado. É possível inicializar o mod por aqui.
+            if(!is_null($_initialize) && is_callable($_initialize))
+                $_initialize();
         }
 
         // Retorna o conteúdo do mod.
