@@ -128,7 +128,10 @@ trait TMod
             
             // Aqui, carregou o arquivo mod informado. É possível inicializar o mod por aqui.
             if(!is_null($_initialize) && is_callable($_initialize))
-                $_initialize();
+            {
+                $closure = Closure::bind($_initialize, $this);
+                $closure();
+            }
         }
 
         // Retorna o conteúdo do mod.
