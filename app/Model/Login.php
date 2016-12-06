@@ -109,6 +109,11 @@ class Login
      */
     protected $pincode_change = 0;
 
+    /**
+     * @Column(name="last_password_change", type="integer", options={"default":0})
+     */
+    protected $last_password_change = 0;
+
     public function getAccount_id()
     {
         return $this->account_id;
@@ -267,6 +272,16 @@ class Login
     public function setPincode_change($pincode_change)
     {
         return $this->pincode_change = $pincode_change;
+    }
+
+    public function getLast_password_change()
+    {
+        return $this->last_password_change;
+    }
+    
+    public function setLast_password_change($last_password_change)
+    {
+        return $this->last_password_change = $last_password_change;
     }
 }
 

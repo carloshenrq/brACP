@@ -137,7 +137,37 @@
 
             </div>
 
+            {if $smarty.const.BRACP_DEVELOP_MODE}
+                <div class="message info icon">
+                    <h1>{translate}@DEFAULT_DEVELOP_TITLE@{/translate}</h1>
+                    {translate}@DEFAULT_DEVELOP_MESSAGE@{/translate}
+                </div>
+            {/if}
+
+            {if isset($session->BRACP_ISLOGGEDIN)
+                && $session->BRACP_ISLOGGEDIN}
+
+                {if $account->getGroup_id() >= $smarty.const.BRACP_ALLOW_ADMIN_GMLEVEL}
+                    <div class="message error icon">
+                        <h1>{translate}@DEFAULT_ADMIN_TITLE@{/translate}</h1>
+                        {translate}@DEFAULT_ADMIN_MESSAGE@{/translate}
+                    </div>
+                {/if}
+
+                {if $smarty.const.BRACP_PASS_CHANGE_ALERT > 0
+                    && ceil((($password_change/60)/60)/24) >= BRACP_PASS_CHANGE_ALERT}
+
+                    <div class="message warning icon">
+                        <h1>{translate}@WARNING_PASSWORD_TITLE@{/translate}</h1>
+                        {translate}@WARNING_PASSWORD_MESSAGE@{/translate}
+                    </div>
+
+                {/if}
+
+            {/if}
+
             <div class="body">
+                
                 {block name="brACP_Body"}
                     Layout em construção.
                 {/block}
@@ -167,6 +197,11 @@
                 <label>
                     {translate}@FOOTER_ADDRESS@{/translate}:
                     <span>{$ipAddress}</span>
+                </label>
+
+                <label>
+                    {translate}@FOOTER_VERSION@{/translate}:
+                    <span>{$smarty.const.BRACP_VERSION}{if $smarty.const.BRACP_DEVELOP_MODE}(dev){/if}</span>
                 </label>
 
                 <label>

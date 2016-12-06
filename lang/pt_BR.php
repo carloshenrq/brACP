@@ -74,10 +74,6 @@ return
             'TITLE'     => 'Lembrete, o modo de desenvolvimento está ativado!',
             'MESSAGE'   => 'O Sistema está sendo executado em modo desenvolvimento! Algumas configurações podem não responder ao esperado.',
         ],
-        'BETA'      => [
-            'TITLE'     => 'Você está executando uma versão beta! <i>(%s)</i>',
-            'MESSAGE'   => 'A Versão do sistema que está em execução não é estavel e ainda está em fase de testes! Por favor, fique atento as atualizações pois muitos erros podem ser corrigidos.',
-        ],
         'ADMIN'     => [
             'TITLE'     => 'Lembrete aos adminsitradores!',
             'MESSAGE'   => 'Algumas opções podem não estar habilitadas para administradores devido a questões de segurança.',
@@ -485,7 +481,13 @@ return
             'NORMAL'    => 'Somente letras e números. Entre 4 e 32 caracteres',
             'SPECIAL'   => 'Letras, números, espaços e caracteres especiais (@ $ # &#37; & * !). Entre 4 e 32 caracteres',
             'ALL'       => 'Sem restrições. Entre 4 e 32 caracteres',
-        ]
+        ],
+
+        // issue #22 - Configuração - Alteração de Senha por Periodo
+        'PASSWORD'  => [
+            'TITLE'     => 'Sua conta pode estar em risco!',
+            'MESSAGE'   => 'Você não altera a sua senha há alguns dias. É recompendado que você realize a alteração de sua senha para manter sua conta segura.',
+        ],
     ],
 
     /**
@@ -644,6 +646,7 @@ return
         'THEME'     => 'Tema',
         'ADDRESS'   => 'IP',
         'NAVIGATOR' => 'Navegador',
+        'VERSION'   => 'Versão',
     ],
 
     /**

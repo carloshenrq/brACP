@@ -257,10 +257,14 @@ class brACPApp extends Slim\App
                 // obtém o objeto da conta do jogador.
                 $account = Account::loggedUser();
 
+                // Obtém o tempo que o jogador está sem realizar a alteração de senha.
+                $password_change = time() - $account->getLast_password_change();
+
                 // Envia os dados padrões caso o usuário esteja logado.
                 $data = array_merge(['userid' => $account->getUserId(),
                                      'account' => $account,
-                                     'gravatar' => 'https://www.gravatar.com/avatar/' . hash('md5', strtolower(trim($account->getEmail()))) ], $data);
+                                     'gravatar' => 'https://www.gravatar.com/avatar/' . hash('md5', strtolower(trim($account->getEmail()))),
+                                     'password_change' => $password_change ], $data);
             }
         }
         catch(\Exception $ex)

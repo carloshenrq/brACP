@@ -1338,7 +1338,8 @@ class Account extends Caller
                                 ->getRepository('Model\Login')
                                 ->findOneBy([
                                     'userid'        => $userid,
-                                    'user_pass'     => $user_pass
+                                    'user_pass'     => $user_pass,
+                                    'state'         => 0,
                                 ]);
             }
             catch(Exception $ex)
@@ -1350,7 +1351,8 @@ class Account extends Caller
             }
 
             // Caso a conta não seja encontrada no banco de dados.
-            if(is_null($account) || $account->getSex() == 'S') // Contas do tipo servidor não podem logar.
+            if(is_null($account) || $account->getSex() == 'S' // Contas do tipo servidor não podem logar.
+                || (BRACP_ALLOW_LOGIN_GMLEVEL > 0 && $account->getGroup_id() < BRACP_ALLOW_LOGIN_GMLEVEL)) // Contas com lv de gm inferior configuração não podem logar
             {
                 if(BRACP_RECAPTCHA_ENABLED)
                     $this->getApp()->getSession()->BRACP_RECAPTCHA_ERROR_REQUEST++;
