@@ -159,6 +159,7 @@ $_CONFIG_DATA = array(
     'BRACP_ALLOW_MODS'                      => false,
     'BRACP_MODS_DIR'                        => dirname(__FILE__) . DIRECTORY_SEPARATOR . 'mods',
     'BRACP_ALLOW_EXTERNAL_REQUEST'          => false,
+    'BRACP_PASS_CHANGE_ALERT'               => 30,
 );
 
 
@@ -1154,7 +1155,12 @@ $js_content = $js_minify->minify();
                         <label ng-show="INSTALL_VARS.BRACP_ALLOW_MODS" data-info="Caminho dos arquivos de entidade" data-warning="Caminho completo para os arquivos de modificações">
                             <input type="text" ng-model="INSTALL_VARS.BRACP_MODS_DIR"/>
                         </label>
+
+                        <label data-info="Tempo em dias para alerta de senha não alterada" data-warning="Tempo em dias, do alerta que irá surgir ao usuário se ficar muito tempo sem alterar sua senha. (0: Desabilita)">
+                            <input type="text" ng-model="INSTALL_VARS.BRACP_PASS_CHANGE_ALERT"/>
+                        </label>
                     </div>
+
 
             </div>
 
