@@ -321,6 +321,15 @@ class brACPApp extends Slim\App
     }
 
     /**
+     * Método para criar os logs necessários para informações do IP como:
+     * -> Cidade, pais, etc...
+     */
+    public function logIpDetails()
+    {
+        // @Todo: Tratamento dos ips...
+    }
+
+    /**
      * Recebe o endereço IP do cliente que está realizando a requisição.
      *
      * @return string

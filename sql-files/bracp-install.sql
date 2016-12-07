@@ -63,4 +63,18 @@ CREATE TABLE IF NOT EXISTS `bracp_account_confirm` (
     INDEX (`AccountID`)
 ) ENGINE=MyISAM COLLATE='utf8_swedish_ci';
 
+DROP TABLE IF EXISTS `bracp_ip_data`;
+CREATE TABLE IF NOT EXISTS `bracp_ip_data` (
+
+    `IpAddress` VARCHAR(15) NOT NULL DEFAULT '000.000.000.000',
+    `Hostname` VARCHAR(200) NOT NULL DEFAULT '',
+    `City` VARCHAR(100) NOT NULL DEFAULT '',
+    `Region` VARCHAR(100) NOT NULL DEFAULT '',
+    `Country` VARCHAR(10) NOT NULL DEFAULT '',
+    `Location` VARCHAR(100) NOT NULL DEFAULT '',
+    `Origin` VARCHAR(200) NOT NULL DEFAULT '',
+
+    PRIMARY KEY (`IpAddress`, `Hostname`)
+) ENGINE=MyISAM COLLATE='utf8_swedish_ci';
+
 SET FOREIGN_KEY_CHECKS = 1;

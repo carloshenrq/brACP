@@ -99,8 +99,15 @@ class Caller
         // Controi o nome do método a ser invocado.
         $callMethod         = $action . (!is_null($sub_action) ? '_' . $sub_action : '') . '_' . $method;
 
+        // Obtém o application que está sendo executado.
+        $app = \brACPApp::getInstance();
+
+        // Trata os dados estatisticos de ip que estão sendo utilizados.
+        if(BRACP_LOG_IP_DETAILS)
+            $app->logIpDetails();
+
         // Cria uma nova instância do controller solicitado.
-        $instance = new $controller(\brACPApp::getInstance());
+        $instance = new $controller($app);
 
         try
         {
