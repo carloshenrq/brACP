@@ -300,7 +300,7 @@ class brACPApp extends Slim\App
             'themes' => $themes,
             'langs' => Language::readAll(),
             'session' => $this->getSession(),
-            'navigator' => Navigator::getBrowser($this->getContainer()->get('request')->getHeader('user-agent')[0]),
+            'navigator' => Navigator::getBrowser($this->getUserAgent()),
             'ipAddress' => $this->getIpAddress(),
 
             'userNameFormat' => (((BRACP_REGEXP_FORMAT&0x10) == 0x10) ? 'NORMAL' : (((BRACP_REGEXP_FORMAT&0x20) == 0x20) ? 'SPECIAL':'ALL')),
@@ -322,11 +322,74 @@ class brACPApp extends Slim\App
 
     /**
      * Método para criar os logs necessários para informações do IP como:
-     * -> Cidade, pais, etc...
+     * -> Cidade, pais, etc... (Os dados podem não ser completamente precisos, é mais para estatistica de regiões e etc...)
      */
     public function logIpDetails()
     {
-        // @Todo: Tratamento dos ips...
+        // Configuração desativada, não é necessário finalizar informações de log.
+        if(!BRACP_LOG_IP_DETAILS)
+            return;
+
+        // Obtém o endereço ip do jogador.
+        $ipAddress = $this->getIpAddress();
+        $userAgent = $this->getUserAgent();
+
+        // Verifica no banco de dados se o ip já foi cadastrado e se já é maior que
+        // 1 dia para realizar o log novamente.
+        $log = $this->getCpEm()
+                    ->createQuery('
+                        SELECT
+                            log 
+                        FROM
+                            Model\IpAddress log
+                        WHERE
+                            log.ipAddress = :ipAddress
+                                AND
+                            log.userAgent = :userAgent
+                                AND
+                            DATE_DIFF(CURRENT_DATE(), log.dtLog) = 0
+                    ')
+                    ->setParameter(':ipAddress', $ipAddress)
+                    ->setParameter(':userAgent', $userAgent)
+                    ->getOneOrNullResult();
+        
+        // Se está NULL (não foi encontrado ou o prazo de 1 dia já passou..., então é necessário criar o registro do
+        // ip no banco de dados...
+        if(is_null($log))
+        {
+            // Obtém os dados do webservice para gravar no banco de dados.
+            $ipDetails = json_decode(Request::create('http://ipinfo.io/')
+                ->get($ipAddress)->getBody()->getContents());
+
+            $log = new \Model\IpAddress;
+
+            $log->setIpAddress($ipDetails->ip);
+            $log->setUserAgent($userAgent);
+            if(!isset($ipDetails->bogon))
+            {
+                $log->setHostname($ipDetails->hostname);
+                $log->setCity($ipDetails->city);
+                $log->setRegion($ipDetails->region);
+                $log->setCountry($ipDetails->country);
+                $log->setLocation($ipDetails->loc);
+                $log->setOrigin($ipDetails->org);
+            }
+            else
+            {
+                $log->setHostname($ipDetails->ip);
+                $log->setCity('intranet');
+                $log->setRegion('intranet');
+                $log->setCountry('??');
+                $log->setLocation('intranet');
+                $log->setOrigin('intranet');
+            }
+            $log->setDtLog(date('Y-m-d H:i:s'));
+
+            $this->getCpEm()->persist($log);
+            $this->getCpEm()->flush();
+        }
+
+        return;
     }
 
     /**
@@ -350,6 +413,16 @@ class brACPApp extends Slim\App
 
         // Devolve o endereço ip do cliente.
         return '?.?.?.?';
+    }
+
+    /**
+     * Obtém o user agent para a requisição atual.
+     *
+     * @return string
+     */
+    private function getUserAgent()
+    {
+        return $this->getContainer()->get('request')->getHeader('user-agent')[0];
     }
 
     /**

@@ -103,8 +103,7 @@ class Caller
         $app = \brACPApp::getInstance();
 
         // Trata os dados estatisticos de ip que estão sendo utilizados.
-        if(BRACP_LOG_IP_DETAILS)
-            $app->logIpDetails();
+        $app->logIpDetails();
 
         // Cria uma nova instância do controller solicitado.
         $instance = new $controller($app);
