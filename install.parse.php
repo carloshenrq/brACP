@@ -101,6 +101,8 @@ if(!empty($post))
                 {
                     if(preg_match('/^([0-9]+)$/', $data) || preg_match('/^(true|false)$/i', $data))
                         $_config[]   = "DEFINE('{$k}', {$data}, false);";
+                    else if(empty($data))
+                        $_config[]   = "DEFINE('{$k}', false, false);";
                     else
                         $_config[]   = "DEFINE('{$k}', '" . addslashes($data) . "', false);";
                 }
