@@ -110,6 +110,12 @@ trait TMod
             if(isset($modData['initialize']))
                 $_initialize = $modData['initialize'];
 
+            // Indices as extensões que devem
+            if(isset($modData['extensions']))
+                foreach($modData['extensions'] as $extension)
+                    if(!extension_loaded($extension)) // Extensão não carregou? Então pula o mod.
+                        continue;
+
             // Varre todos os atributos para vincular ao objeto.
             foreach($modData['attributes'] as $attribute => $defaultValue)
                 $this->attributes[$attribute]           = $defaultValue;
