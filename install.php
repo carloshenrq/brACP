@@ -160,171 +160,8 @@ $_CONFIG_DATA = array(
     'BRACP_MODS_DIR'                        => dirname(__FILE__) . DIRECTORY_SEPARATOR . 'mods',
     'BRACP_ALLOW_EXTERNAL_REQUEST'          => false,
     'BRACP_PASS_CHANGE_ALERT'               => 30,
+    'BRACP_LOG_IP_DETAILS'                  => false,
 );
-
-
-// Verifica se foram enviados dados de instalação
-if($PRE_REQUISITES['is_writable'] && isset($_POST) && !empty($_POST))
-{
-    try
-    {
-        // Realiza um teste de conexão com as informações de instalação
-        // para a conexão com o banco de dados do brACP.
-        $dsn = 'mysql:dbname=' . $_POST['BRACP_SQL_CP_DBNAME'] . ';host=' . $_POST['BRACP_SQL_CP_HOST'];
-        $uid = $_POST['BRACP_SQL_CP_USER'];
-        $pid = $_POST['BRACP_SQL_CP_PASS'];
-
-        $pdo = new PDO($dsn, $uid, $pid, [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-        ]);
-
-        $pdo = null;
-        unset($dsn, $uid, $pid, $pdo);
-    }
-    catch(Exception $ex)
-    {
-        echo json_encode([
-            'status'    => '1',
-            'local'     => 'SQL - brACP',
-            'message'   => $ex->getMessage(),
-        ]);
-        exit;
-    }
-
-    try
-    {
-        // Realiza um teste de conexão com as informações de instalação
-        // para a conexão com o banco de dados de monstros e itens...
-        $dsn = 'mysql:dbname=' . $_POST['BRACP_SQL_DB_DBNAME'] . ';host=' . $_POST['BRACP_SQL_DB_HOST'];
-        $uid = $_POST['BRACP_SQL_DB_USER'];
-        $pid = $_POST['BRACP_SQL_DB_PASS'];
-
-        $pdo = new PDO($dsn, $uid, $pid, [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-        ]);
-
-        $pdo = null;
-        unset($dsn, $uid, $pid, $pdo);
-    }
-    catch(Exception $ex)
-    {
-        echo json_encode([
-            'status'    => '1',
-            'local'     => 'SQL - Database',
-            'message'   => $ex->getMessage(),
-        ]);
-        exit;
-    }
-
-    // Varre todos os servidores para testar a conexão com o banco de dados
-    // Verificando se está tudo certo.
-    foreach($_POST['BRACP_SERVERS'] as $i => $server)
-    {
-        try
-        {
-            // Realiza um teste em todos os sub-servidores para saber se a conexão com o banco
-            // está ok e pode ser utilizada sem problemas.
-            $sql = $server['sql'];
-            $dsn = 'mysql:dbname=' . $sql['dbname'] . ';host=' . $sql['host'];
-            $uid = $sql['user'];
-            $pid = $sql['pass'];
-
-            $pdo = new PDO($dsn, $uid, $pid, [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-            ]);
-
-            $pdo = null;
-            unset($dsn, $uid, $pid, $pdo);
-        }
-        catch(Exception $ex)
-        {
-            echo json_encode([
-                'status'    => '1',
-                'local'     => 'SQL - Servidores (' . $server['name'] . ')',
-                'message'   => $ex->getMessage(),
-            ]);
-            exit;
-        }
-    }
-
-    // Inicializa o arquivo de instalação do brACP.
-    // Realizar gravação dos arquivos.
-    $configData = [];
-
-    $configData[] = '<?php';
-    $configData[] = '/**';
-    $configData[] = ' * Este arquivo de instalação foi gerado pelo programa de instalação do brACP ';
-    $configData[] = ' * Esta cópia do brACP foi instalada em ' . date( 'Y-m-d H:i:s' );
-    $configData[] = ' * ---- Versão do brACP:   ' . $_POST['BRACP_VERSION'];
-    $configData[] = ' * ---- URL de Instalação: ' . $_POST['BRACP_URL'];
-    $configData[] = ' */';
-    $configData[] = '';
-
-    $_tmpServerDefault = 0;
-    $_tmpServerCount = 0;
-
-    foreach($_POST as $k => $data)
-    {
-        // Se a variavel de instalação não for do brACP, então
-        // Ignora o indice.
-        // if(!preg_match('/^BRACP_', $k))
-        //     continue;
-
-        if(!is_array($data))
-        {
-            if(preg_match('/^([0-9]+)$/', $data) || preg_match('/^(true|false)$/i', $data))
-                $configData[]   = "DEFINE('{$k}', {$data}, false);";
-            else
-                $configData[]   = "DEFINE('{$k}', '" . addslashes($data) . "', false);";
-        }
-        else
-        {
-            // @Todo: Gravação de dados de array como por exemplo o BRACP_SERVERS.
-            if($k == 'BRACP_SERVERS')
-            {
-                foreach($data as $i => $server)
-                {
-                    $sql = $server['sql'];
-                    $sub = $server['servers'];
-
-                    $configData[] = "DEFINE('BRACP_SRV_{$i}_NAME', '" .         addslashes($server['name']) . "', false);";
-                    $configData[] = "DEFINE('BRACP_SRV_{$i}_LOGIN_IP', '" .     addslashes($sub['login']['address']) . "', false);";
-                    $configData[] = "DEFINE('BRACP_SRV_{$i}_LOGIN_PORT', '" .   addslashes($sub['login']['port']) . "', false);";
-                    $configData[] = "DEFINE('BRACP_SRV_{$i}_CHAR_IP', '" .      addslashes($sub['char']['address']) . "', false);";
-                    $configData[] = "DEFINE('BRACP_SRV_{$i}_CHAR_PORT', '" .    addslashes($sub['char']['port']) . "', false);";
-                    $configData[] = "DEFINE('BRACP_SRV_{$i}_MAP_IP', '" .       addslashes($sub['map']['address']) . "', false);";
-                    $configData[] = "DEFINE('BRACP_SRV_{$i}_MAP_PORT', '" .     addslashes($sub['map']['port']) . "', false);";
-                    $configData[] = "DEFINE('BRACP_SRV_{$i}_SQL_DRIVER', '" .   addslashes($sql['driver']) . "', false);";
-                    $configData[] = "DEFINE('BRACP_SRV_{$i}_SQL_HOST', '" .     addslashes($sql['host']) . "', false);";
-                    $configData[] = "DEFINE('BRACP_SRV_{$i}_SQL_USER', '" .     addslashes($sql['user']) . "', false);";
-                    $configData[] = "DEFINE('BRACP_SRV_{$i}_SQL_PASS', '" .     addslashes($sql['pass']) . "', false);";
-                    $configData[] = "DEFINE('BRACP_SRV_{$i}_SQL_DBNAME', '" .   addslashes($sql['dbname']) . "', false);";
-
-                    if(intval($server['default']) == 1)
-                        $_tmpServerDefault = $i;
-
-                    $_tmpServerCount++;
-                }
-            }
-        }
-    }
-
-
-    $configData[] = '';
-    $configData[] = "DEFINE('BRACP_SRV_DEFAULT', {$_tmpServerDefault}, false);";
-    $configData[] = "DEFINE('BRACP_SRV_COUNT', {$_tmpServerCount}, false);";
-    $configData[] = '';
-    $configData[] = '// Fim da instalação do brACP.';
-    $configData[] = '';
-
-    file_put_contents('config.php', implode("\n", $configData));
-
-    echo json_encode([
-        'status'    => 0,
-        'message'   => 'Instalação realizada com sucesso! Seu navegador será atualizado.'
-    ]);
-    exit;
-}
 
 // Informações sobre criptografia de sessão.
 $_CONFIG_CIPHER = array();
@@ -367,17 +204,19 @@ $scss->addImportPath('themes/classic');
 $scss_message = file_get_contents('themes/classic/message.scss');
 $scss_install = file_get_contents('themes/classic/install.scss');
 $scss_button = file_get_contents('themes/classic/button.scss');
+$scss_modal = file_get_contents('themes/classic/modal.scss');
 
 $css_message = $scss->compile($scss_message);
 $css_install = $scss->compile($scss_install);
 $css_button = $scss->compile($scss_button);
-
+$css_modal = $scss->compile($scss_modal);
 
 // Carrega o minifier do css.
 $css_minify = new MatthiasMullie\Minify\CSS;
 $css_minify->add($css_message);
 $css_minify->add($css_install);
 $css_minify->add($css_button);
+$css_minify->add($css_modal);
 
 $css_style = $css_minify->minify();
 
@@ -409,7 +248,11 @@ $js_content = $js_minify->minify();
         <script>
             var install = angular.module('brACP', []);
 
-            install.controller('install', ['$scope', '$http', function($scope, $http) {
+            install.controller('install', ['$scope', '$http', '$sce', function($scope, $http, $sce) {
+
+                // Status da instalação.
+                $scope.INSTALL_STATE = 0;
+                $scope.INSTALL_MESSAGE = '';
 
                 $scope.STEP = 1;
                 $scope.STEP_ERROR   = [];
@@ -449,7 +292,7 @@ $js_content = $js_minify->minify();
                     var _password = _tmp&0x01 ? '[a-zA-Z0-9]{4,32}' :
                                     _tmp&0x02 ? '[a-zA-Z0-9\\s@\\$#%&\\*!]{4,32}' : '.{4,32}';
 
-                    var installData = $.param(angular.merge(
+                    var installData = angular.merge(
                         $scope.INSTALL_VARS,
                         {
                             'BRACP_SERVERS'         : $scope.BRACP_SERVERS,
@@ -457,11 +300,39 @@ $js_content = $js_minify->minify();
                             'BRACP_REGEXP_USERNAME' : _username,
                             'BRACP_REGEXP_PASSWORD' : _password,
                         }
-                    ));
+                    );
+
                     // $scope.config.BRACP_REGEXP_FORMAT = parseInt('0x' + (parseInt($scope.BRACP_REGEXP_FORMAT_USER) + parseInt($scope.BRACP_REGEXP_FORMAT_PASS)));
-                    $http({
+                    // Inicializar proteção da tela para status e tratamento de instalação
+                    $scope.INSTALL_STATE = 1;
+
+                   $http.post('install.parse.php', installData, {
+                        'Content-Type' : 'application/x-www-form-urlencoded'
+                    }).then(function(response) {
+
+                        var data = response.data;
+
+                        if(data.status == 0)
+                        {
+                            $scope.INSTALL_STATE = 2;
+                        }
+                        else
+                        {
+                            $scope.INSTALL_STATE = 0;
+                            $scope.INSTALL_MESSAGE = data.message;
+                        }
+
+                        // console.info(response);
+
+                    }, function(response) {
+
+                        console.error(response);
+
+                    });
+                    
+                    /*$http({
                         'method'    : 'post',
-                        'url'       : 'install.php',
+                        'url'       : 'install.parse.php',
                         'data'      : installData,
                         'headers'   : {
                             'Content-Type': 'application/x-www-form-urlencoded'
@@ -480,7 +351,7 @@ $js_content = $js_minify->minify();
 
                     }, function(response) {
                         console.error(response);
-                    });
+                    });*/
                 }
 
                 $scope.sessionAlgoChange    = function()
@@ -573,7 +444,21 @@ $js_content = $js_minify->minify();
     </head>
     <body ng-app="brACP" ng-controller="install">
 
-        <div class="install">
+        <div class="message success icon" ng-show="INSTALL_STATE == 2">
+            <h1>Instalação realizada com sucesso!</h1>
+
+            <p>A Instalação do brACP foi realizada com sucesso! Lembre-se, salve o conteúdo abaixo para futuras informações.<br>
+            Para acessar o brACP, pressione F5 para atualizar a página.</p>
+        </div>
+
+        <div class="loading-ajax" ng-show="INSTALL_STATE == 1">
+            <div class="loading-bar loading-bar-1"></div>
+            <div class="loading-bar loading-bar-2"></div>
+            <div class="loading-bar loading-bar-3"></div>
+            <div class="loading-bar loading-bar-4"></div>
+        </div>
+
+        <div class="install" ng-show="!INSTALL_STATE">
 
             <div class="title">
                 Guia de instalação do brACP - Passo {{STEP}} de 13
@@ -1159,9 +1044,20 @@ $js_content = $js_minify->minify();
                         <label data-info="Tempo em dias para alerta de senha não alterada" data-warning="Tempo em dias, do alerta que irá surgir ao usuário se ficar muito tempo sem alterar sua senha. (0: Desabilita)">
                             <input type="text" ng-model="INSTALL_VARS.BRACP_PASS_CHANGE_ALERT"/>
                         </label>
+
+                        <input id="BRACP_LOG_IP_DETAILS_CHK" ng-model="INSTALL_VARS.BRACP_LOG_IP_DETAILS" class="input-checkbox" type="checkbox">
+                        <label for="BRACP_LOG_IP_DETAILS_CHK" class="input-checkbox" data-warning="Define se irá habilitar os logs de localização para endereços de ips.">Habilitar logs para ips</label>
                     </div>
 
 
+            </div>
+
+            <div class="message error icon" ng-show="INSTALL_STATE == 0 && INSTALL_MESSAGE.length > 0">
+                <h1>Ocorreu um erro durante a instalação!</h1>
+
+                <p>A Mensagem do erro pode ser verificada abaixo</p>
+
+                {{INSTALL_MESSAGE}}
             </div>
 
             <div class="footer">
