@@ -33,10 +33,6 @@
         <link rel="stylesheet" type="text/css" href="{$smarty.const.BRACP_DIR_INSTALL_URL}asset/css/?file=message"/>
         <link rel="stylesheet" type="text/css" href="{$smarty.const.BRACP_DIR_INSTALL_URL}asset/css/?file=button"/>
         <link rel="stylesheet" type="text/css" href="{$smarty.const.BRACP_DIR_INSTALL_URL}asset/css/?file=modal"/>
-        <style>
-        {block name="brACP_StyleCss"}
-        {/block}
-        </style>
 
         <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}asset/js/?file=Chart.bundle"></script>
         <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}asset/js/?file=jquery-2.1.4"></script>
@@ -54,18 +50,15 @@
         <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}asset/js/?file=angular-datetime"></script>
         <script src="{$smarty.const.BRACP_DIR_INSTALL_URL}asset/js/?file=bracp.angular"></script>
 
-        <script>
         {if $smarty.const.BRACP_DEVELOP_MODE eq true}
+        <script>
             console.info("---------------------------------------\n" +
                             "brACP - Developer Mode ON!!!!\n" +
                             "---------------------------------------\n" +
                             "BRACP_TEMPLATE_DIR: {$smarty.const.BRACP_TEMPLATE_DIR} \n" + 
                             "BRACP_DEFAULT_TIMEZONE: {$smarty.const.BRACP_DEFAULT_TIMEZONE} \n");
-        {/if}
-
-        {block name="brACP_JavaScript"}
-        {/block}
         </script>
+        {/if}
     </head>
     <body ng-app="brACP">
     {block name="brACP_HtmlBody"}
