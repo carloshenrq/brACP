@@ -66,7 +66,7 @@
             <div class="header">
                 <div class="menu-top access">
 
-                    <div class="server-status" ng-controller="serverStatus" ng-init="statusInit('SRV_{$serverStatus->index}', {(($serverStatus->login) ? 'true':'false')}, {(($serverStatus->char) ? 'true':'false')}, {(($serverStatus->map) ? 'true':'false')});">
+                    <div class="server-status" ng-controller="serverStatus" ng-init="statusInit('SRV_{$serverStatus->index}', {(($serverStatus->login) ? 'true':'false')}, {(($serverStatus->char) ? 'true':'false')}, {(($serverStatus->map) ? 'true':'false')}, {$serverStatus->playerCount});">
 
                         <div ng-if="state == 0">
                             {if $smarty.const.BRACP_SRV_COUNT > 1}
