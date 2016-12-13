@@ -19,5 +19,5 @@
 {extends file="mail.default.tpl"}
 
 {block name="mail_body"}
-	@@MAIL,CHANGEPASS(MESSAGE)
+	{translate}@MAIL_CHANGEPASS_MESSAGE@{/translate}
 {/block}

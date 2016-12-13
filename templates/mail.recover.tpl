@@ -20,6 +20,6 @@
 
 {block name="mail_body"}
 
-    @@MAIL,RECOVER(MESSAGE, {$password})
+    {translate p0="{$password}"}@MAIL_RECOVER_MESSAGE@{/translate}
 
 {/block}

@@ -20,6 +20,6 @@
 
 {block name="mail_body"}
 
-    @@MAIL,CREATE(CODE, {$code}, {Format::date($expire)})
+    {translate p0="{$code}" p1="{Format::date($expire)}"}@MAIL_CREATE_CODE@{/translate}
 
 {/block}

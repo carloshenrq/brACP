@@ -20,6 +20,6 @@
 
 {block name="mail_body"}
 
-    @@MAIL,CREATE(ACTIVATED)
+    {translate}@MAIL_CREATE_ACTIVATED@{/translate}
 
 {/block}

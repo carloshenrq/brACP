@@ -44,7 +44,7 @@
 
                 <li class="url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}account/chars/"><label>{translate}@MENU_MYACC_AUTHENTICATED_CHARS@{/translate}</label></li>
 
-                <li class="url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}account/logout/"><label>{translate}@MENU_MYACC_AUTHENTICATED_LOGOUT@{/translate}</label></li>
+                <li class="url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}account/logout/"><label>{translate p0="{$account->getUserid()}"}@MENU_MYACC_AUTHENTICATED_LOGOUT@{/translate}</label></li>
             {/if}
         </ul>
     </li>

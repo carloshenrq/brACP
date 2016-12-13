@@ -62,7 +62,7 @@ class Language
             return "";
 
         // Tenta realizar a tradução.
-        return $this->getTranslate($content);
+        return $this->getTranslate($content, array_values($params));
     }
 
     /**
@@ -72,7 +72,7 @@ class Language
      *
      * @return string Index com a tradução ou se não encontrar o proprio index.
      */
-    public function getTranslate($index)
+    public function getTranslate($index, $params = [])
     {
         // Verifica se é o formato para ser uma string de tradução.
         // Inicia-se com @
@@ -105,7 +105,11 @@ class Language
         // Se for encontrado o indice, então retorna a tradução para
         // o indice informado.
         if(!is_null($_tmp) && !is_array($_tmp) && is_string($_tmp))
+        {
             $_translate = $_tmp;
+            if(count($params) > 0)
+                $_translate = vsprintf($_translate, $params);
+        }
 
         // Retorna o dado de tradução.
         return $_translate;

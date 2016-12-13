@@ -20,6 +20,6 @@
 
 {block name="mail_body"}
 
-    @@MAIL,CHANGEMAIL(MESSAGE, {$mailOld}, {$mailNew})
+    {translate p0="{$mailOld}" p1="{$mailNew}"}@MAIL_CHANGEMAIL_MESSAGE@{/translate}
 
 {/block}

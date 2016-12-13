@@ -19,5 +19,5 @@
 {extends file="mail.default.tpl"}
 
 {block name="mail_body"}
-    @@MAIL,CREATE(MESSAGE)
+    {translate}@MAIL_CREATE_MESSAGE{/translate}
 {/block}

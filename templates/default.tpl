@@ -120,7 +120,7 @@
                         {else}
                             <div class="profile-container">
                                 <div class="profile-button url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}account/logout/" style="background-image: url({$gravatar});">
-                                    {$account->getUserid()} ({translate}@MENU_MYACC_AUTHENTICATED_LOGOUT@{/translate})
+                                    {translate p0="{$account->getUserid()}"}@MENU_MYACC_AUTHENTICATED_LOGOUT@{/translate}
                                 </div>
                             </div>
                         {/if}

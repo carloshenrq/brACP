@@ -30,7 +30,7 @@
 	</head>
 
 	<body>
-		@@MAIL(TITLE, {$userid})
+		{translate p0="{$userid}"}@MAIL_TITLE@{/translate}
 		--------------------------------------------------------------------------------<br>
 		<br>
         {block name="mail_body"}
@@ -38,7 +38,7 @@
 		<br>
 		<br>
 		--------------------------------------------------------------------------------<br>
-		@@MAIL,MESSAGE(FOOTER, {$smarty.const.BRACP_MAIL_FROM}, {$ipAddress}, {date('Y-m-d H:i:s')})
+		{translate p0="{$smarty.const.BRACP_MAIL_FROM}" p1="{$ipAddress}" p2="{date('Y-m-d H:i:s')}"}@MAIL_MESSAGE_FOOTER@{/translate}
 	</body>
 
 </html>

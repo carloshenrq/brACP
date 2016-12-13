@@ -20,6 +20,6 @@
 
 {block name="mail_body"}
 
-    @@MAIL,RECOVER(CODE, {$code}, {Format::date($expire)})
+    {translate p0="{$code}" p1="{Format::date($expire)}"}@MAIL_RECOVER_CODE@{/translate}
 
 {/block}
