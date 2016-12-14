@@ -351,23 +351,28 @@ brACPApp.controller('account.email', ['$scope', '$http', function($scope, $http)
 /**
  * Controlador para alteração de email.
  */
-brACPApp.controller('serverStatus', ['$scope', '$http', function($scope, $http) {
+brACPApp.controller('serverStatus', ['$scope', '$http', '$timeout', function($scope, $http, $timeout) {
 
     $scope.state = 0;
 
-    $scope.statusInit   = function(srvSelected, loginServer, charServer, mapServer)
+    $scope.statusInit   = function(srvSelected, loginServer, charServer, mapServer, playerCount)
     {
         $scope.BRACP_SRV_SELECTED = srvSelected;
-
 
         $scope.BRACP_SRV_LOGIN          = loginServer;
         $scope.BRACP_SRV_CHAR           = charServer;
         $scope.BRACP_SRV_MAP            = mapServer;
-        $scope.BRACP_SRV_PLAYERCOUNT    = 0;
+        $scope.BRACP_SRV_PLAYERCOUNT    = playerCount;
+
+        $timeout(function() {
+            $scope.serverChange(true);
+        }, 60000);
     };
 
-    $scope.serverChange = function()
+    $scope.serverChange = function(timer)
     {
+        if(!timer) timer = false;
+
         var urlServer = document.querySelector('#_BRACP_URL').value + 'home/server/';
         var params = $.param({
             'BRACP_SRV_SELECTED'         : $scope.BRACP_SRV_SELECTED.match(/^SRV_([0-9]+)$/)[1]
@@ -390,6 +395,13 @@ brACPApp.controller('serverStatus', ['$scope', '$http', function($scope, $http) 
             $scope.BRACP_SRV_CHAR = response.data.char;
             $scope.BRACP_SRV_MAP = response.data.map;
             $scope.BRACP_SRV_PLAYERCOUNT = response.data.playerCount;
+
+            if(timer)
+            {
+                $timeout(function() {
+                    $scope.serverChange(true);
+                }, 60000);
+            }
 
         }, function(response) {
 
