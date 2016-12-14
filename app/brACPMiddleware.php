@@ -20,10 +20,29 @@
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-class Route extends brACPMiddleware
+/**
+ * Trait para tratamento dos mods
+ */
+abstract class brACPMiddleware
 {
+
+    private $app;
+
+    public final function __construct(brACPApp $app)
+    {
+        $this->setApp($app);
+    }
+
     /**
-     * Middleware para definição das rotas.
+     * Método para inicializar as funções do middleware
+     */
+    protected function init()
+    {
+
+    }
+
+    /**
+     * Chamada do middleware.
      *
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
@@ -33,29 +52,30 @@ class Route extends brACPMiddleware
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, $next)
     {
-        // Se o painel de controle não estiver em manutenção, então define as rotas corretas para
-        //  cada endereço.
-        if(!BRACP_MAINTENCE)
-        {
-            // Se o arquivo cache não existe, então, realiza o cache global
-            if(!file_exists( __DIR__ . '/../theme.cache'))
-                Themes::cacheAll();
-
-            $app = $this->getApp();
-
-            // Redireciona a rota para o home-index
-            $app->any('/', function($request, $response, $args) {
-                return $response->withRedirect(BRACP_DIR_INSTALL_URL . 'home/index/');
-            });
-
-            // Adicionado mapa para todas as rotas 
-            $app->any('/{controller}/', ['Controller\Caller', 'parseRoute']);
-
-            // Adicionado mapa para todas as rotas 
-            $app->any('/{controller}/{action}/[{sub_action}/]', ['Controller\Caller', 'parseRoute']);
-        }
-
         // Chama o próximo middleware.
         return $next($request, $response);
     }
+
+    /**
+     * Método para retornar a aplicação que fez a chamada.
+     *
+     * @return brACPApp
+     */
+    public function getApp()
+    {
+        return $this->app;
+    }
+    
+    /**
+     * Define a aplicação que está fazendo a chamada.
+     *
+     * @param brACPApp $app
+     *
+     * @return brACPApp
+     */
+    public function setApp(brACPApp $app)
+    {
+        return $this->app = $app;
+    }
+
 }

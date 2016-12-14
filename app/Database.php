@@ -22,38 +22,8 @@ use Psr\Http\Message\ResponseInterface;
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
 
-class Database
+class Database extends brACPMiddleware
 {
-    private $app;
-
-    /**
-     *
-     */
-    public function __construct(brACPApp $app)
-    {
-        $this->setApp($app);
-    }
-
-    /**
-     * Obtém o App da rota informada.
-     *
-     * @return brACPApp
-     */
-    public function getApp()
-    {
-        return $this->app;
-    }
-    
-    /**
-     * Define o app para o middleware de rota.
-     *
-     * @param brACPApp $app
-     */
-    public function setApp(brACPApp $app)
-    {
-        return $this->app = $app;
-    }
-
     /**
      * Middleware para definição das rotas.
      *

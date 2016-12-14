@@ -20,54 +20,6 @@
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-class Firewall
+class Firewall extends brACPMiddleware
 {
-    private $app;
-
-    /**
-     *
-     */
-    public function __construct(brACPApp $app)
-    {
-        $this->setApp($app);
-    }
-
-    /**
-     * Obtém o App da rota informada.
-     *
-     * @return brACPApp
-     */
-    public function getApp()
-    {
-        return $this->app;
-    }
-    
-    /**
-     * Define o app para o middleware de rota.
-     *
-     * @param brACPApp $app
-     */
-    public function setApp(brACPApp $app)
-    {
-        return $this->app = $app;
-    }
-
-    /**
-     * Middleware para definição das rotas.
-     *
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     * @param callback $next
-     *
-     * @return
-     */
-    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, $next)
-    {
-
-        // @TODO:   Código para tratamento de informações relacionados ao bloqueio de endereços
-        //          Ips externos.
-
-        // Chama o próximo middleware.
-        return $next($request, $response);
-    }
 }
