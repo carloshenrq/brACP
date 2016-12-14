@@ -51,7 +51,7 @@ abstract class brACPMiddleware
      *
      * @return
      */
-    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, $next)
+    public function __invoke($request, $response, $next)
     {
         // Chama o próximo middleware.
         return $next($request, $response);

@@ -17,8 +17,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\ResponseInterface;
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
 
@@ -33,7 +31,7 @@ class Database extends brACPMiddleware
      *
      * @return
      */
-    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, $next)
+    public function __invoke($request, $response, $next)
     {
         try
         {
@@ -48,7 +46,7 @@ class Database extends brACPMiddleware
         }
 
         // Chama o próximo middleware.
-        return $next($request, $response);
+        return parent::__invoke($request, $response, $next);
     }
 
     /**

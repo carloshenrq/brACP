@@ -17,9 +17,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\ResponseInterface;
-
 class Route extends brACPMiddleware
 {
     /**
@@ -31,7 +28,7 @@ class Route extends brACPMiddleware
      *
      * @return
      */
-    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, $next)
+    public function __invoke($request, $response, $next)
     {
         // Se o painel de controle não estiver em manutenção, então define as rotas corretas para
         //  cada endereço.
@@ -56,6 +53,6 @@ class Route extends brACPMiddleware
         }
 
         // Chama o próximo middleware.
-        return $next($request, $response);
+        return parent::__invoke($request, $response, $next);
     }
 }

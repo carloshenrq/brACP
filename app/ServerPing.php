@@ -17,8 +17,6 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\ResponseInterface;
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
 
@@ -35,7 +33,7 @@ class ServerPing extends brACPMiddleware
      *
      * @return
      */
-    public function __invoke(ServerRequestInterface $request, ResponseInterface $response, $next)
+    public function __invoke($request, $response, $next)
     {
         // Indice do servidor selcionado para realizar o ping nas portas
         //  para ver se realmente está funcionando.
@@ -50,8 +48,7 @@ class ServerPing extends brACPMiddleware
         // Define o status do server conectado a aplicação.
         $this->getApp()->setServerStatus($status);
 
-        // Chama o próximo middleware.
-        return $next($request, $response);
+        return parent::__invoke($request, $response, $next);
     }
 
     /**

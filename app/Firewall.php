@@ -17,9 +17,16 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\ResponseInterface;
-
+/**
+ * Classe para tratamento de informações relacionadas ao firewall.
+ */
 class Firewall extends brACPMiddleware
 {
+    /**
+     * @see brACPMiddleware::__invoke()
+     */
+    public function __invoke($request, $response, $next)
+    {
+        return parent::__invoke($request, $response, $next);
+    }
 }

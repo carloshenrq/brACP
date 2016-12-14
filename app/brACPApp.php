@@ -66,6 +66,13 @@ class brACPApp extends Slim\App
     private $server_status;
 
     /**
+     * Endereço ip do jogador.
+     *
+     * @var string
+     */
+    private $ipAddress = null;
+
+    /**
      * Construtor e inicializador para o painel de controle.
      */
     public function __construct()
@@ -398,8 +405,15 @@ class brACPApp extends Slim\App
      *
      * @return string
      */
-    private function getIpAddress()
+    public function getIpAddress()
     {
+        // Se já tiver obtido o endereço ip uma vez, não é necessário
+        // Ficar obtendo a cada chamada.
+        if(!is_null($this->ipAddress))
+            return $this->ipAddress;
+
+        $ipAddress = '?.?.?.?';
+
         // Possiveis variaveis para se obter o endereço ip do cliente.
         // issue #10: HTTP_CF_CONNECTING_IP-> Usuário usando proteção do cloudfire.
         $_vars = ['HTTP_CF_CONNECTING_IP', 'HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED',
@@ -409,11 +423,13 @@ class brACPApp extends Slim\App
         foreach( $_vars as $ip )
         {
             if(getenv($ip) !== false)
-                return getenv($ip);
+                $ipAddress = getenv($ip);
         }
 
+        $this->ipAddress = $ipAddress;
+
         // Devolve o endereço ip do cliente.
-        return '?.?.?.?';
+        return $this->getIpAddress();
     }
 
     /**
