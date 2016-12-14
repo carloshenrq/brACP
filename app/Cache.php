@@ -37,7 +37,7 @@ class Cache
     {
         // Se existir a biblioteca de memcache e a mesma estiver habilitada
         // [2016-08-02, CHLFZ] Adicionado teste porque quando o brACP não está instado a variável não está definida.
-        if(defined('BRACP_CACHE') && BRACP_CACHE)
+        if(defined('BRACP_CACHE') && BRACP_CACHE && !BRACP_DEVELOP_MODE)
             self::$cache = new LocalCache(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'cache');
     }
 
@@ -57,7 +57,7 @@ class Cache
             $cache = (defined('BRACP_CACHE_EXPIRE') ? BRACP_CACHE_EXPIRE : 600);
 
         // [2016-08-02, CHLFZ] Adicionado teste porque quando o brACP não está instado a variável não está definida.
-        if(!defined('BRACP_CACHE') || !BRACP_CACHE)
+        if(!defined('BRACP_CACHE') || !BRACP_CACHE || BRACP_DEVELOP_MODE)
             return ((is_callable($defaultValue)) ? $defaultValue() : $defaultValue);
 
         return self::$cache->parse($index, $defaultValue, $cache, $force);
@@ -71,7 +71,7 @@ class Cache
     public static function delete($index)
     {
         // [2016-08-02, CHLFZ] Adicionado teste porque quando o brACP não está instado a variável não está definida.
-        if(!defined('BRACP_CACHE') || !BRACP_CACHE)
+        if(!defined('BRACP_CACHE') || !BRACP_CACHE|| BRACP_DEVELOP_MODE)
             return;
 
         return self::$cache->erase($index);

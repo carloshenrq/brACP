@@ -35,6 +35,7 @@ class brACPSmarty extends Smarty
         parent::__construct();
 
         $this->setTemplateDir(BRACP_TEMPLATE_DIR);
+
         // Em modo desenvolvedor, desliga a geração de cache.
         if(BRACP_DEVELOP_MODE)
             $this->setCaching(Smarty::CACHING_OFF);
