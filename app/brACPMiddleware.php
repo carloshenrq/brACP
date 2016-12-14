@@ -31,6 +31,7 @@ abstract class brACPMiddleware
     public final function __construct(brACPApp $app)
     {
         $this->setApp($app);
+        $this->init();
     }
 
     /**
