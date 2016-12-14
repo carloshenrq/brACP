@@ -123,6 +123,7 @@ class brACPApp extends Slim\App
 
         // Adiciona os middlewares na rota para serem executados.
         $this->add(new Route($this));
+        $this->add(new Firewall($this));
         $this->add(new ServerPing($this));
         $this->add(new Database($this));
 
