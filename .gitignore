@@ -5,3 +5,4 @@ mods
 /config.php
 /*.cache
 /cache
+/*.db
