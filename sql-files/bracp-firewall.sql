@@ -17,17 +17,20 @@ CREATE TABLE request (
     UserAgent   VARCHAR (200) NOT NULL,
     RequestTime INTEGER       DEFAULT (0) 
                               NOT NULL,
-    ServerTime  INTEGER       DEFAULT (0)
+    ServerTime  DECIMAL (16, 4) DEFAULT (0) 
                               NOT NULL,
     Method      VARCHAR (10)  NOT NULL,
     Scheme      VARCHAR (20)  NOT NULL,
     URI         VARCHAR (200) NOT NULL,
-    Filename    VARCHAR (200) NOT NULL
+    Filename    VARCHAR (200) NOT NULL,
+    UseForBlock BOOLEAN DEFAULT false
+                              NOT NULL
 );
 
 CREATE INDEX request_i01 ON request (
     Address,
-    RequestTime
+    ServerTime,
+    UseForBlock
 );
 
 CREATE TABLE ip_data (
