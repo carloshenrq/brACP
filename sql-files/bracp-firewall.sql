@@ -4,8 +4,8 @@ CREATE TABLE blacklist (
     Address     VARCHAR (15) DEFAULT ('0.0.0.0') 
                              NOT NULL,
     Reason      STRING       NOT NULL,
-    DtHrBlocked DATETIME     NOT NULL,
-    DtHrExpire  DATETIME     NOT NULL,
+    TimeBlocked INTEGER      DEFAULT (0) NOT NULL,
+    TimeExpire  INTEGER      DEFAULT (0) NOT NULL,
     Permanent   BOOLEAN      DEFAULT false
                              NOT NULL
 );

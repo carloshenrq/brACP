@@ -58,7 +58,9 @@ class Firewall extends brACPMiddleware
             $needImport = !file_exists('firewall.db'); // Verifica se é necessário importar as tabelas.
 
             // Inicializa a conexão com o banco de dados local do sqlite.
-            $this->sqlite = new \PDO('sqlite:firewall.db');
+            $this->sqlite = new \PDO('sqlite:firewall.db', null, null, [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+            ]);
 
             // Verifica se é necessarío importar os dados.
             if($needImport)
@@ -81,10 +83,75 @@ class Firewall extends brACPMiddleware
             }
         }
 
-        // Salva os detalhamentos do endereço ip no banco de dados.
-        $this->logIpDetails();
+        return;
+    }
 
-        // @Todo: Verificações de blacklist
+    /**
+     * Adiciona um endereço ip a lista negra do painel de controle.
+     *
+     * @param string $ipAddress Endereço ip para adicionar na lista negra.
+     * @param string $reason Motivo para entrar na lista negra.
+     * @param int $expire Tempo para expirar. (-1 para eterno)
+     *
+     * @return void
+     */
+    public function addBlackList($ipAddress, $reason, $expire = 3600)
+    {
+        if(is_null($this->sqlite)) // Não carregou a conexão com o sqlite? Então não salva nada.
+            return;
+
+        // Executa a query para inserir um endereço ip na lista negra.
+        $stmt_blacklist = $this->sqlite->prepare('
+            INSERT INTO
+                blacklist
+            (Address, Reason, TimeBlocked, TimeExpire, Permanent)
+                VALUES
+            (:Address, :Reason, :TimeBlocked, :TimeExpire, :Permanent)
+        ');
+        $stmt_blacklist->execute([
+            ':Address'      => $ipAddress,
+            ':Reason'       => $reason,
+            ':TimeBlocked'  => time(),
+            ':TimeExpire'   => (($expire == -1) ? 0 : time() + $expire),
+            ':Permanent'    => ($expire == -1)
+        ]);
+
+        return;
+    }
+
+    /**
+     * Verifica se o ip do cliente está em lista negra.
+     *
+     * @param string $ipAddress
+     *
+     * @return bool Verdadeiro se estiver em lista negra.
+     */
+    public function isBlackListed($ipAddress)
+    {
+        if(is_null($this->sqlite)) // Se não está definido, não pode barrar.
+            return false;
+
+        // Select para verificar o endereço ip do jogador.
+        $stmt_blacklist = $this->sqlite->prepare('
+            SELECT
+                COUNT(AddressID) as IsListed
+            FROM
+                blacklist
+            WHERE
+                Address = :Address
+                    AND
+                ((TimeExpire > 0 AND TimeExpire < :TimeExpire)
+                    OR 
+                (Permanent = 1))
+        ');
+        $stmt_blacklist->execute([
+            ':Address'      => $ipAddress,
+            ':TimeExpire'   => time()
+        ]);
+        $obj_blacklist = $stmt_blacklist->fetchObject();
+
+        // Retorna informações se o endereço ip está listado no banco de dados.
+        return ($obj_blacklist->IsListed == 1);
     }
 
     /**
@@ -136,7 +203,7 @@ class Firewall extends brACPMiddleware
      * Método para criar os logs necessários para informações do IP como:
      * -> Cidade, pais, etc... (Os dados podem não ser completamente precisos, é mais para estatistica de regiões e etc...)
      */
-    public function logIpDetails()
+    private function logIpDetails()
     {
         // Configuração desativada, não é necessário finalizar informações de log.
         if(!BRACP_LOG_IP_DETAILS || is_null($this->sqlite))
@@ -156,6 +223,16 @@ class Firewall extends brACPMiddleware
      */
     public function __invoke($request, $response, $next)
     {
+        // Se o endereço de ip está na lista negra, retorna mensagem de erro
+        // Informando que não se pode conectar devido a restrição.
+        if($this->isBlackListed($this->getIpAddress()))
+        {
+            $this->getApp()->display('error.403');
+            return $response;
+        }
+
+        // @Todo: Verificar informações de requisição e tratar caso necessário.
+
         return parent::__invoke($request, $response, $next);
     }
 }

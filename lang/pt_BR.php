@@ -506,6 +506,11 @@ return
                                 'Você pode voltar a página principal clicando <span class="url-link" data-href="'.BRACP_DIR_INSTALL_URL.'">aqui</span>.',
         ],
 
+        'FORBIDDEN' => [
+            'TITLE'         => 'Acesso Proibido',
+            'MESSAGE'       => 'Seu acesso está proibido. Tente novamente mais tarde.',
+        ],
+
         'ACCESS'    => [
             'TITLE'         => 'Acesso negado',
             'DENIED'        => 'Você não possui direito de acesso a este local ou a página solicitada não existe!',
