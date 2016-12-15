@@ -68,6 +68,7 @@ $PRE_REQUISITES = array(
     'pdo_mysql_ext'     => extension_loaded('pdo_mysql'),
     'sockets_ext'       => extension_loaded('sockets'),
     'zip_ext'           => extension_loaded('zip'),
+    'sqlite_ext'        => extension_loaded('pdo_sqlite'),
 );
 
 // Teste para as variaveis de configuração do painel de controle.
@@ -580,6 +581,12 @@ $js_content = $js_minify->minify();
                                 <div class="cell">Extensão Zip:</div>
                                 <div class="cell" ng-class="(PRE_REQUISITES.zip_ext ? 'cell-success' : 'cell-error')">
                                     {{(PRE_REQUISITES.zip_ext ? 'OK':'Por favor, habilite a extensão "zip".')}}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="cell">Extensão SQLite:</div>
+                                <div class="cell" ng-class="(PRE_REQUISITES.sqlite_ext ? 'cell-success' : 'cell-error')">
+                                    {{(PRE_REQUISITES.sqlite_ext ? 'OK':'Por favor, habilite a extensão "sqlite_ext".')}}
                                 </div>
                             </div>
                         </div>

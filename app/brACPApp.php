@@ -66,11 +66,11 @@ class brACPApp extends Slim\App
     private $server_status;
 
     /**
-     * Endereço ip do jogador.
+     * Objeto de firewall para o brACP.
      *
-     * @var string
+     * @var Firewall
      */
-    private $ipAddress = null;
+    private $firewall;
 
     /**
      * Construtor e inicializador para o painel de controle.
@@ -131,8 +131,8 @@ class brACPApp extends Slim\App
         // Adiciona os middlewares na rota para serem executados.
         $this->add(new Route($this));
         $this->add(new ServerPing($this));
-        $this->add(new Firewall($this));
         $this->add(new Database($this));
+        $this->add(new Firewall($this));
 
         // Define a instância global como sendo o proprio.
         self::$app = $this;
@@ -308,8 +308,8 @@ class brACPApp extends Slim\App
             'themes' => $themes,
             'langs' => Language::readAll(),
             'session' => $this->getSession(),
-            'navigator' => Navigator::getBrowser($this->getUserAgent()),
-            'ipAddress' => $this->getIpAddress(),
+            'navigator' => Navigator::getBrowser($this->getFirewall()->getUserAgent()),
+            'ipAddress' => $this->getFirewall()->getIpAddress(),
 
             'userNameFormat' => (((BRACP_REGEXP_FORMAT&0x10) == 0x10) ? 'NORMAL' : (((BRACP_REGEXP_FORMAT&0x20) == 0x20) ? 'SPECIAL':'ALL')),
             'passWordFormat' => (((BRACP_REGEXP_FORMAT&0x01) == 0x01) ? 'NORMAL' : (((BRACP_REGEXP_FORMAT&0x02) == 0x02) ? 'SPECIAL':'ALL')),
@@ -329,117 +329,25 @@ class brACPApp extends Slim\App
     }
 
     /**
-     * Método para criar os logs necessários para informações do IP como:
-     * -> Cidade, pais, etc... (Os dados podem não ser completamente precisos, é mais para estatistica de regiões e etc...)
+     * Obtém o objeto de firewall definido.
+     *
+     * @return Firewall
      */
-    public function logIpDetails()
+    public function getFirewall()
     {
-        // Configuração desativada, não é necessário finalizar informações de log.
-        if(!BRACP_LOG_IP_DETAILS)
-            return;
-
-        // Obtém o endereço ip do jogador.
-        $ipAddress = $this->getIpAddress();
-        $userAgent = $this->getUserAgent();
-
-        // Verifica no banco de dados se o ip já foi cadastrado e se já é maior que
-        // 1 dia para realizar o log novamente.
-        $log = $this->getCpEm()
-                    ->createQuery('
-                        SELECT
-                            log 
-                        FROM
-                            Model\IpAddress log
-                        WHERE
-                            log.ipAddress = :ipAddress
-                                AND
-                            log.userAgent = :userAgent
-                                AND
-                            DATE_DIFF(CURRENT_DATE(), log.dtLog) = 0
-                    ')
-                    ->setParameter(':ipAddress', $ipAddress)
-                    ->setParameter(':userAgent', $userAgent)
-                    ->getOneOrNullResult();
-        
-        // Se está NULL (não foi encontrado ou o prazo de 1 dia já passou..., então é necessário criar o registro do
-        // ip no banco de dados...
-        if(is_null($log))
-        {
-            // Obtém os dados do webservice para gravar no banco de dados.
-            $ipDetails = json_decode(Request::create('http://ipinfo.io/')
-                ->get($ipAddress)->getBody()->getContents());
-
-            $log = new \Model\IpAddress;
-
-            $log->setIpAddress($ipDetails->ip);
-            $log->setUserAgent($userAgent);
-            if(!isset($ipDetails->bogon))
-            {
-                $log->setHostname($ipDetails->hostname);
-                $log->setCity($ipDetails->city);
-                $log->setRegion($ipDetails->region);
-                $log->setCountry($ipDetails->country);
-                $log->setLocation($ipDetails->loc);
-                $log->setOrigin($ipDetails->org);
-            }
-            else
-            {
-                $log->setHostname($ipDetails->ip);
-                $log->setCity('intranet');
-                $log->setRegion('intranet');
-                $log->setCountry('??');
-                $log->setLocation('intranet');
-                $log->setOrigin('intranet');
-            }
-            $log->setDtLog(date('Y-m-d H:i:s'));
-
-            $this->getCpEm()->persist($log);
-            $this->getCpEm()->flush();
-        }
-
-        return;
+        return $this->firewall;
     }
 
     /**
-     * Recebe o endereço IP do cliente que está realizando a requisição.
+     * Define informações do firewall para a aplicação.
      *
-     * @return string
-     */
-    public function getIpAddress()
-    {
-        // Se já tiver obtido o endereço ip uma vez, não é necessário
-        // Ficar obtendo a cada chamada.
-        if(!is_null($this->ipAddress))
-            return $this->ipAddress;
-
-        $ipAddress = '?.?.?.?';
-
-        // Possiveis variaveis para se obter o endereço ip do cliente.
-        // issue #10: HTTP_CF_CONNECTING_IP-> Usuário usando proteção do cloudfire.
-        $_vars = ['HTTP_CF_CONNECTING_IP', 'HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED',
-                  'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR'];
-
-        // Varre as opções para retornar os dados ao painel de controle.
-        foreach( $_vars as $ip )
-        {
-            if(getenv($ip) !== false)
-                $ipAddress = getenv($ip);
-        }
-
-        $this->ipAddress = $ipAddress;
-
-        // Devolve o endereço ip do cliente.
-        return $this->getIpAddress();
-    }
-
-    /**
-     * Obtém o user agent para a requisição atual.
+     * @param Firewall $firewall
      *
-     * @return string
+     * @return Firewall
      */
-    private function getUserAgent()
+    public function setFirewall($firewall)
     {
-        return $this->getContainer()->get('request')->getHeader('user-agent')[0];
+        return $this->firewall = $firewall;
     }
 
     /**

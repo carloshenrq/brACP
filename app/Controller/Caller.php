@@ -102,9 +102,6 @@ class Caller
         // Obtém o application que está sendo executado.
         $app = \brACPApp::getInstance();
 
-        // Trata os dados estatisticos de ip que estão sendo utilizados.
-        $app->logIpDetails();
-
         // Cria uma nova instância do controller solicitado.
         $instance = new $controller($app);
 
