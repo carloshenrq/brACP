@@ -51,36 +51,31 @@ class Firewall extends brACPMiddleware
         // Define o objeto de firewall da aplicação.
         $this->getApp()->setFirewall($this);
 
-        // Caso a extensão esteja carregada, então inicializa a conexão com a base local
-        // Para realizar os testes necessários.
-        if(extension_loaded('pdo_sqlite'))
+        $needImport = !file_exists('firewall.db'); // Verifica se é necessário importar as tabelas.
+
+        // Inicializa a conexão com o banco de dados local do sqlite.
+        $this->sqlite = new \PDO('sqlite:firewall.db', null, null, [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+        ]);
+
+        // Verifica se é necessarío importar os dados.
+        if($needImport)
         {
-            $needImport = !file_exists('firewall.db'); // Verifica se é necessário importar as tabelas.
+            // Inicializa as transações.
+            $this->sqlite->beginTransaction();
 
-            // Inicializa a conexão com o banco de dados local do sqlite.
-            $this->sqlite = new \PDO('sqlite:firewall.db', null, null, [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-            ]);
+            // Dados de firewall
+            $sqlite_db = file_get_contents(__DIR__ . '/../sql-files/bracp-firewall.sql');
+            $sqlite_queries = explode(';', $sqlite_db);
 
-            // Verifica se é necessarío importar os dados.
-            if($needImport)
+            // Varre as querys e cria o banco de dados necessário.
+            foreach($sqlite_queries as $query)
             {
-                // Inicializa as transações.
-                $this->sqlite->beginTransaction();
-
-                // Dados de firewall
-                $sqlite_db = file_get_contents(__DIR__ . '/../sql-files/bracp-firewall.sql');
-                $sqlite_queries = explode(';', $sqlite_db);
-
-                // Varre as querys e cria o banco de dados necessário.
-                foreach($sqlite_queries as $query)
-                {
-                    $this->sqlite->query($query);
-                }
-
-                // Salva as alterações no banco de dados.
-                $this->sqlite->commit();
+                $this->sqlite->query($query);
             }
+
+            // Salva as alterações no banco de dados.
+            $this->sqlite->commit();
         }
 
         return;
@@ -97,9 +92,6 @@ class Firewall extends brACPMiddleware
      */
     public function addBlackList($ipAddress, $reason, $expire = 3600)
     {
-        if(is_null($this->sqlite)) // Não carregou a conexão com o sqlite? Então não salva nada.
-            return;
-
         // Executa a query para inserir um endereço ip na lista negra.
         $stmt_blacklist = $this->sqlite->prepare('
             INSERT INTO
@@ -128,9 +120,6 @@ class Firewall extends brACPMiddleware
      */
     public function isBlackListed($ipAddress)
     {
-        if(is_null($this->sqlite)) // Se não está definido, não pode barrar.
-            return false;
-
         // Select para verificar o endereço ip do jogador.
         $stmt_blacklist = $this->sqlite->prepare('
             SELECT
@@ -206,7 +195,7 @@ class Firewall extends brACPMiddleware
     private function logIpDetails()
     {
         // Configuração desativada, não é necessário finalizar informações de log.
-        if(!BRACP_LOG_IP_DETAILS || is_null($this->sqlite))
+        if(!BRACP_LOG_IP_DETAILS)
             return;
 
         // Obtém o endereço ip do jogador.
@@ -237,58 +226,55 @@ class Firewall extends brACPMiddleware
         // Realiza uma verificação para saber se o endereço ip da requisição está
         // Fazendo requisições com tempo inferior a 5s, neste caso, ao passar de
         // 30 Requisições na contagem, o ip será adicionado a lista de banidos.
-        if(!is_null($this->sqlite))
+        $serverTime     = microtime(true);
+        $serverCompare  = $serverTime - 5;
+
+        // Query para verificar a quantidade de requisições executadas.
+        $stmt_request = $this->sqlite->prepare('
+            SELECT
+                COUNT(RequestID) as CountRequest
+            FROM
+                request
+            WHERE
+                Address = :Address
+                    AND
+                ServerTime >= :ServerTimeLess
+                    AND
+                UseForBlock = 1
+        ');
+        $stmt_request->execute([
+            ':Address'          => $ipAddress,
+            ':ServerTimeLess'   => $serverCompare,
+        ]);
+        $obj_request = $stmt_request->fetchObject();
+
+        // Se o count estiver acima de 40, então, adiciona o ip a lista negra.
+        if($obj_request->CountRequest >= 40)
         {
-            $serverTime     = microtime(true);
-            $serverCompare  = $serverTime - 5;
-
-            // Query para verificar a quantidade de requisições executadas.
-            $stmt_request = $this->sqlite->prepare('
-                SELECT
-                    COUNT(RequestID) as CountRequest
-                FROM
-                    request
-                WHERE
-                    Address = :Address
-                        AND
-                    ServerTime >= :ServerTimeLess
-                        AND
-                    UseForBlock = 1
-            ');
-            $stmt_request->execute([
-                ':Address'          => $ipAddress,
-                ':ServerTimeLess'   => $serverCompare,
-            ]);
-            $obj_request = $stmt_request->fetchObject();
-
-            // Se o count estiver acima de 40, então, adiciona o ip a lista negra.
-            if($obj_request->CountRequest >= 40)
-            {
-                $this->addBlackList($ipAddress, 'Too many requests for to short time.');
-                $this->getApp()->display('error.403');
-                return $response;
-            }
-
-            // Salva a requisição atual na tabela de requisições.
-            $stmt = $this->sqlite->prepare('
-                INSERT INTO
-                    request
-                (Address, UserAgent, RequestTime, ServerTime, Method, Scheme, URI, Filename, UseForBlock)
-                    VALUES
-                (:Address, :UserAgent, :RequestTime, :ServerTime, :Method, :Scheme, :URI, :Filename, :UseForBlock)
-            ');
-            $stmt->execute([
-                ':Address'      => $ipAddress,
-                ':UserAgent'    => $userAgent,
-                ':RequestTime'  => $_SERVER['REQUEST_TIME'],
-                ':ServerTime'   => $serverTime,
-                ':Method'       => $_SERVER['REQUEST_METHOD'],
-                ':Scheme'       => $_SERVER['REQUEST_SCHEME'],
-                ':URI'          => $_SERVER['REQUEST_URI'],
-                ':Filename'     => $_SERVER['SCRIPT_FILENAME'],
-                ':UseForBlock'  => preg_match('/asset/i', $_SERVER['REQUEST_URI']) == 0,
-            ]);
+            $this->addBlackList($ipAddress, 'Too many requests for to short time.');
+            $this->getApp()->display('error.403');
+            return $response;
         }
+
+        // Salva a requisição atual na tabela de requisições.
+        $stmt = $this->sqlite->prepare('
+            INSERT INTO
+                request
+            (Address, UserAgent, RequestTime, ServerTime, Method, Scheme, URI, Filename, UseForBlock)
+                VALUES
+            (:Address, :UserAgent, :RequestTime, :ServerTime, :Method, :Scheme, :URI, :Filename, :UseForBlock)
+        ');
+        $stmt->execute([
+            ':Address'      => $ipAddress,
+            ':UserAgent'    => $userAgent,
+            ':RequestTime'  => $_SERVER['REQUEST_TIME'],
+            ':ServerTime'   => $serverTime,
+            ':Method'       => $_SERVER['REQUEST_METHOD'],
+            ':Scheme'       => $_SERVER['REQUEST_SCHEME'],
+            ':URI'          => $_SERVER['REQUEST_URI'],
+            ':Filename'     => $_SERVER['SCRIPT_FILENAME'],
+            ':UseForBlock'  => preg_match('/asset/i', $_SERVER['REQUEST_URI']) == 0,
+        ]);
 
         // Grava os detalhamentos de endereço ip.
         $this->logIpDetails();
