@@ -261,10 +261,10 @@ class Firewall extends brACPMiddleware
             ]);
             $obj_request = $stmt_request->fetchObject();
 
-            // Se o count estiver acima de 60, então, adiciona o ip a lista negra.
+            // Se o count estiver acima de 40, então, adiciona o ip a lista negra.
             if($obj_request->CountRequest >= 40)
             {
-                $this->addBlackList($ipAddress, 'Too many requests for little time.');
+                $this->addBlackList($ipAddress, 'Too many requests for to short time.');
                 $this->getApp()->display('error.403');
                 return $response;
             }
