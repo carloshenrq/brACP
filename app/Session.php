@@ -37,6 +37,16 @@ class Session implements ArrayAccess
     }
 
     /**
+     * Obtém o ID da sessão que o jogador está.
+     *
+     * @return string
+     */
+    public function getId()
+    {
+        return session_id();
+    }
+
+    /**
      * Obtém o atributo de acordo com a sessão do usuário.
      *
      * @param string $name

@@ -54,8 +54,10 @@ class Firewall extends brACPMiddleware
         $needImport = !file_exists('firewall.db'); // Verifica se é necessário importar as tabelas.
 
         // Inicializa a conexão com o banco de dados local do sqlite.
+        // -> Conexão é persistente (gerenciado pelo apache, apenas e abertura do arquivo)
         $this->sqlite = new \PDO('sqlite:firewall.db', null, null, [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+            PDO::ATTR_ERRMODE       => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_PERSISTENT    => true,
         ]);
 
         // Verifica se é necessarío importar os dados.
@@ -70,9 +72,7 @@ class Firewall extends brACPMiddleware
 
             // Varre as querys e cria o banco de dados necessário.
             foreach($sqlite_queries as $query)
-            {
                 $this->sqlite->query($query);
-            }
 
             // Salva as alterações no banco de dados.
             $this->sqlite->commit();
@@ -274,7 +274,7 @@ class Firewall extends brACPMiddleware
                 ':Scheme'       => $_SERVER['REQUEST_SCHEME'],
                 ':URI'          => $_SERVER['REQUEST_URI'],
                 ':Filename'     => $_SERVER['SCRIPT_FILENAME'],
-                ':PHPSession'   => session_id(),
+                ':PHPSession'   => $this->getApp()->getSession()->getId(),
             ]);
         }
 
