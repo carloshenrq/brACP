@@ -89,7 +89,7 @@ class Home extends Caller
             $this->getApp()->getSession()->BRACP_SVR_SELECTED = $post['BRACP_SRV_SELECTED'];
 
         // Obtém o status do servidor selecionado.
-        $serverStatus = ServerPing::pingServer($this->getApp()->getSession()->BRACP_SVR_SELECTED, true);
+        $serverStatus = $this->getApp()->getServerPing()->pingServer($this->getApp()->getSession()->BRACP_SVR_SELECTED, true);
 
         // Responde ao client que foi alterado com sucesso.
         return $response->withJson([

@@ -65,7 +65,7 @@ class Firewall extends brACPMiddleware
             $this->sqlite->beginTransaction();
 
             // Dados de firewall
-            $sqlite_db = file_get_contents(__DIR__ . '/../sql-files/bracp-firewall.sql');
+            $sqlite_db = file_get_contents(__DIR__ . '/../sql-files/bracp-firewall-sqlite.sql');
             $sqlite_queries = explode(';', $sqlite_db);
 
             // Varre as querys e cria o banco de dados necessário.
@@ -239,8 +239,6 @@ class Firewall extends brACPMiddleware
                 Address = :Address
                     AND
                 ServerTime >= :ServerTimeLess
-                    AND
-                UseForBlock = 1
         ');
         $stmt_request->execute([
             ':Address'          => $ipAddress,
@@ -256,25 +254,29 @@ class Firewall extends brACPMiddleware
             return $response;
         }
 
-        // Salva a requisição atual na tabela de requisições.
-        $stmt = $this->sqlite->prepare('
-            INSERT INTO
-                request
-            (Address, UserAgent, RequestTime, ServerTime, Method, Scheme, URI, Filename, UseForBlock)
-                VALUES
-            (:Address, :UserAgent, :RequestTime, :ServerTime, :Method, :Scheme, :URI, :Filename, :UseForBlock)
-        ');
-        $stmt->execute([
-            ':Address'      => $ipAddress,
-            ':UserAgent'    => $userAgent,
-            ':RequestTime'  => $_SERVER['REQUEST_TIME'],
-            ':ServerTime'   => $serverTime,
-            ':Method'       => $_SERVER['REQUEST_METHOD'],
-            ':Scheme'       => $_SERVER['REQUEST_SCHEME'],
-            ':URI'          => $_SERVER['REQUEST_URI'],
-            ':Filename'     => $_SERVER['SCRIPT_FILENAME'],
-            ':UseForBlock'  => preg_match('/asset/i', $_SERVER['REQUEST_URI']) == 0,
-        ]);
+        // Requisições enviadas aos assets não serão gravadas.
+        if(!preg_match('/asset/i', $_SERVER['REQUEST_URI']))
+        {
+            // Salva a requisição atual na tabela de requisições.
+            $stmt = $this->sqlite->prepare('
+                INSERT INTO
+                    request
+                (Address, UserAgent, RequestTime, ServerTime, Method, Scheme, URI, Filename, PHPSession)
+                    VALUES
+                (:Address, :UserAgent, :RequestTime, :ServerTime, :Method, :Scheme, :URI, :Filename, :PHPSession)
+            ');
+            $stmt->execute([
+                ':Address'      => $ipAddress,
+                ':UserAgent'    => $userAgent,
+                ':RequestTime'  => $_SERVER['REQUEST_TIME'],
+                ':ServerTime'   => $serverTime,
+                ':Method'       => $_SERVER['REQUEST_METHOD'],
+                ':Scheme'       => $_SERVER['REQUEST_SCHEME'],
+                ':URI'          => $_SERVER['REQUEST_URI'],
+                ':Filename'     => $_SERVER['SCRIPT_FILENAME'],
+                ':PHPSession'   => session_id(),
+            ]);
+        }
 
         // Grava os detalhamentos de endereço ip.
         $this->logIpDetails();

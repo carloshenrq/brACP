@@ -23,14 +23,12 @@ CREATE TABLE request (
     Scheme      VARCHAR (20)  NOT NULL,
     URI         VARCHAR (200) NOT NULL,
     Filename    VARCHAR (200) NOT NULL,
-    UseForBlock BOOLEAN DEFAULT false
-                              NOT NULL
+    PHPSession  VARCHAR (200) NOT NULL
 );
 
 CREATE INDEX request_i01 ON request (
     Address,
-    ServerTime,
-    UseForBlock
+    ServerTime
 );
 
 CREATE TABLE ip_data (

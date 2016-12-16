@@ -25,6 +25,14 @@ use Model\ServerStatus;
 class ServerPing extends brACPMiddleware
 {
     /**
+     * @see brACPMiddleware::init()
+     */
+    protected function init()
+    {
+        $this->getApp()->setServerPing($this);
+    }
+
+    /**
      * Middleware para definição das rotas.
      *
      * @param ServerRequestInterface $request
@@ -54,22 +62,18 @@ class ServerPing extends brACPMiddleware
     /**
      * Realiza um ping no servidor atual.
      */
-    public static function pingServer($index, $reloadConnection = false)
+    public function pingServer($index, $reloadConnection = false)
     {
-        return Cache::get('BRACP_SRV_'.$index.'_STATUS_CACHE', function() use ($reloadConnection) {
-            // Indice do servidor selcionado para realizar o ping nas portas
-            //  para ver se realmente está funcionando.
-            $index = BRACP_SRV_DEFAULT;
+        return Cache::get('BRACP_SRV_'.$index.'_STATUS_CACHE', function() use ($index, $reloadConnection) {
 
-            if(isset(brACPApp::getInstance()->getSession()->BRACP_SVR_SELECTED))
-                $index = brACPApp::getInstance()->getSession()->BRACP_SVR_SELECTED;
+            $app = brACPApp::getInstance();
 
             // Carrega as conexões com o banco de dados.
             if($reloadConnection)
-                Database::loadConnection();
+                $app->getDatabase()->loadConnection();
 
             // Obtém o status do servidor.
-            $status = brACPApp::getInstance()->getCpEm()->createQuery('
+            $status = $app->getCpEm()->createQuery('
                 SELECT
                     status
                 FROM
@@ -101,11 +105,11 @@ class ServerPing extends brACPMiddleware
                 $status->setPlayerCount(0);
 
                 // Grava o registro zerado no banco de dados.
-                brACPApp::getInstance()->getCpEm()->persist($status);
-                brACPApp::getInstance()->getCpEm()->flush();
+                $app->getCpEm()->persist($status);
+                $app->getCpEm()->flush();
 
                 // Conta quantos jogadores estão online no servidor
-                $playerCount = brACPApp::getInstance()->getSvrEm()->createQuery('
+                $playerCount = $app->getSvrEm()->createQuery('
                     SELECT COUNT(c.char_id) FROM Model\Char c WHERE c.online = true
                 ')
                 ->getSingleScalarResult();
@@ -122,8 +126,8 @@ class ServerPing extends brACPMiddleware
                 $status->setPlayerCount($playerCount);
 
                 // Salva o status real no banco de dados.
-                brACPApp::getInstance()->getCpEm()->merge($status);
-                brACPApp::getInstance()->getCpEm()->flush();
+                $app->getCpEm()->merge($status);
+                $app->getCpEm()->flush();
             }
 
             // Retorna o status via cache.

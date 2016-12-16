@@ -73,6 +73,20 @@ class brACPApp extends Slim\App
     private $firewall;
 
     /**
+     * Objeto de middleware do database.
+     *
+     * @var Database
+     */
+    private $database;
+
+    /**
+     * Objeto de middleware do ServerPing.
+     *
+     * @var ServerPing
+     */
+    private $serverPing;
+
+    /**
      * Construtor e inicializador para o painel de controle.
      */
     public function __construct()
@@ -348,6 +362,50 @@ class brACPApp extends Slim\App
     public function setFirewall($firewall)
     {
         return $this->firewall = $firewall;
+    }
+
+    /**
+     * Obtém o objeto de database definido.
+     *
+     * @return Database
+     */
+    public function getDatabase()
+    {
+        return $this->database;
+    }
+
+    /**
+     * Define informações do database para a aplicação.
+     *
+     * @param Database $database
+     *
+     * @return Database
+     */
+    public function setDatabase(Database $database)
+    {
+        return ($this->database = $database);
+    }
+
+    /**
+     * Obtém o objeto de ServerPing definido.
+     *
+     * @return ServerPing
+     */
+    public function getServerPing()
+    {
+        return $this->serverPing;
+    }
+
+    /**
+     * Define informações do ServerPing para a aplicação.
+     *
+     * @param ServerPing $serverPing
+     *
+     * @return ServerPing
+     */
+    public function setServerPing(ServerPing $serverPing)
+    {
+        return ($this->serverPing = $serverPing);
     }
 
     /**

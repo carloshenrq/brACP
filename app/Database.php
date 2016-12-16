@@ -23,6 +23,14 @@ use Doctrine\ORM\EntityManager;
 class Database extends brACPMiddleware
 {
     /**
+     * @see brACPMiddleware::init()
+     */
+    protected function init()
+    {
+        $this->getApp()->setDatabase($this);
+    }
+
+    /**
      * Middleware para definição das rotas.
      *
      * @param ServerRequestInterface $request
@@ -52,7 +60,7 @@ class Database extends brACPMiddleware
     /**
      * Carrega a conexão com o banco de dados
      */
-    private function loadConnection()
+    public function loadConnection()
     {
         // Conexão com o painel de controle. (BRACP)
         if(is_null($this->getApp()->getEm('cp', false)))
