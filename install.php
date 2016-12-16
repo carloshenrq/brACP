@@ -71,6 +71,8 @@ $PRE_REQUISITES = array(
     'sqlite_ext'        => extension_loaded('pdo_sqlite'),
 );
 
+$PRE_MemCached = extension_loaded('memcache');
+
 // Teste para as variaveis de configuração do painel de controle.
 $_CONFIG_DATA = array(
 
@@ -135,8 +137,10 @@ $_CONFIG_DATA = array(
     'BRACP_SQL_DB_DBNAME'                   => 'ragnarok',
 
     // Configurações de geração de cache. (STEP=11)
-    'BRACP_CACHE'                           => true,
-    'BRACP_CACHE_EXPIRE'                    => 600,
+    'BRACP_MEMCACHE'                        => extension_loaded('memcache'),
+    'BRACP_MEMCACHE_HOST'                   => '127.0.0.1',
+    'BRACP_MEMCACHE_PORT'                   => 11211,
+    'BRACP_MEMCACHE_EXPIRE'                 => 600,
 
     // Configurações de sessão e segurança de sessão  (STEP=12)
     'BRACP_SESSION_SECURE'                  => true,
@@ -262,6 +266,7 @@ $js_content = $js_minify->minify();
 
                 $scope.PRE_REQUISITES = <?php echo json_encode($PRE_REQUISITES); ?>;
                 $scope.ACCEPT_TERMS = false;
+                $scope.MEMCACHE_LOADED = <?php echo (($PRE_MemCached == true) ? 'true' : 'false'); ?>;
 
                 // Variaveis de configuração inicial.
                 $scope.INSTALL_VARS = <?php echo json_encode($_CONFIG_DATA); ?>;
@@ -953,16 +958,31 @@ $js_content = $js_minify->minify();
                         
                         <h1>Cache</h1>
 
-                        <p class="message info icon">
-                            O Serviço de cache permite que algumas respostas ficam mais rápidas como o caso de classificações e tradução do painel de controle.
+                        <p class="message error icon" ng-show="!MEMCACHE_LOADED">
+                            A Biblioteca MEMCACHE não está habilitada.<br>
+                            Para utilizar os serviços de cache, verifique as extensões carregadas.
                         </p>
 
-                        <input id="BRACP_CACHE_CHK" ng-model="INSTALL_VARS.BRACP_CACHE" class="input-checkbox" type="checkbox">
-                        <label for="BRACP_CACHE_CHK" class="input-checkbox" data-warning="Define se o serviço de cache será habilitado para o brACP.">Habilitar cache</label>
+                        <div ng-show="MEMCACHE_LOADED">
+                            <p class="message info icon">
+                                O Serviço de cache permite que algumas respostas ficam mais rápidas como o caso de classificações e tradução do painel de controle.
+                            </p>
 
-                        <label ng-show="INSTALL_VARS.BRACP_CACHE" data-info="Tempo (em segundos) de duração" data-warning="Tempo que o cache será mantido antes de ser excluído">
-                            <input type="text" ng-model="INSTALL_VARS.BRACP_CACHE_EXPIRE"/>
-                        </label>
+                            <input id="BRACP_MEMCACHE_CHK" ng-model="INSTALL_VARS.BRACP_MEMCACHE" class="input-checkbox" type="checkbox">
+                            <label for="BRACP_MEMCACHE_CHK" class="input-checkbox" data-warning="Define se o serviço de cache será habilitado para o brACP.">Habilitar cache</label>
+
+                            <label ng-show="INSTALL_VARS.BRACP_MEMCACHE" data-info="Endereço do Servidor" data-warning="Endereço de conexão com o servidor de cache.">
+                                <input type="text" ng-model="INSTALL_VARS.BRACP_MEMCACHE_HOST"/>
+                            </label>
+
+                            <label ng-show="INSTALL_VARS.BRACP_MEMCACHE" data-info="Porta do Servidor" data-warning="Porta para conexão com o servidor de cache.">
+                                <input type="text" ng-model="INSTALL_VARS.BRACP_MEMCACHE_PORT"/>
+                            </label>
+
+                            <label ng-show="INSTALL_VARS.BRACP_MEMCACHE" data-info="Tempo (em segundos) de duração" data-warning="Tempo que o cache será mantido antes de ser excluído">
+                                <input type="text" ng-model="INSTALL_VARS.BRACP_MEMCACHE_EXPIRE"/>
+                            </label>
+                        </div>
                     </div>
 
                     <div ng-if="STEP == 12" class="body">

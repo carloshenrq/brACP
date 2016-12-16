@@ -37,8 +37,8 @@ class Cache
     {
         // Se existir a biblioteca de memcache e a mesma estiver habilitada
         // [2016-08-02, CHLFZ] Adicionado teste porque quando o brACP não está instado a variável não está definida.
-        if(defined('BRACP_CACHE') && BRACP_CACHE && !BRACP_DEVELOP_MODE)
-            self::$cache = new LocalCache(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'cache');
+        if(defined('BRACP_MEMCACHE') && BRACP_MEMCACHE && !BRACP_DEVELOP_MODE && extension_loaded('memcache'))
+            self::$cache = new MemCache(BRACP_MEMCACHE_HOST, BRACP_MEMCACHE_PORT);
     }
 
     /**
@@ -54,10 +54,10 @@ class Cache
         // [2016-10-10, CHLFZ] Problemas durante a instalação, leitura das pastas sem a definição
         //                     estava causando um pequeno problema durante a execução.
         if(is_null($cache))
-            $cache = (defined('BRACP_CACHE_EXPIRE') ? BRACP_CACHE_EXPIRE : 600);
+            $cache = (defined('BRACP_MEMCACHE_EXPIRE') ? BRACP_MEMCACHE_EXPIRE : 600);
 
         // [2016-08-02, CHLFZ] Adicionado teste porque quando o brACP não está instado a variável não está definida.
-        if(!defined('BRACP_CACHE') || !BRACP_CACHE || BRACP_DEVELOP_MODE)
+        if(!defined('BRACP_MEMCACHE') || !BRACP_MEMCACHE || BRACP_DEVELOP_MODE || !extension_loaded('memcache'))
             return ((is_callable($defaultValue)) ? $defaultValue() : $defaultValue);
 
         return self::$cache->parse($index, $defaultValue, $cache, $force);
@@ -71,7 +71,7 @@ class Cache
     public static function delete($index)
     {
         // [2016-08-02, CHLFZ] Adicionado teste porque quando o brACP não está instado a variável não está definida.
-        if(!defined('BRACP_CACHE') || !BRACP_CACHE|| BRACP_DEVELOP_MODE)
+        if(!defined('BRACP_MEMCACHE') || !BRACP_MEMCACHE || BRACP_DEVELOP_MODE || !extension_loaded('memcache'))
             return;
 
         return self::$cache->erase($index);
