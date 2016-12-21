@@ -76,303 +76,151 @@ class Account extends Caller
         ]);
     }
 
-    // /**
-    //  * Método para retornar os dados de personagem.
-    //  *
-    //  * @param ServerRequestInterface $request
-    //  * @param ResponseInterface $response
-    //  * @param array $args
-    //  */
-    // public static function charReset(ServerRequestInterface $request, ResponseInterface $response, $args)
-    // {
-    //     // Dados recebidos pelo post para resetar os dados.
-    //     $data = $request->getParsedBody();
-    //     $char_id = $data['char_id'];
+    /**
+     * Método utilizado para realizar os resets de personagem.
+     *
+     * @param int $type (1: Reset de Posição, 2: Reset de Aparência, 4: Reset de Equip)
+     * @param int $char_id Código do personagem que será resetado.
+     * @param int $account_id (default: null) Se null, obtém o da conta logada.
+     *
+     * @return int
+     *   0: Resetada foi aplicado com sucesso.
+     *   1: Usuário não está logado.
+     *   2: Personagem não encontrado. (Online, Inexistente, não vinculado)
+     *   3: Erro em uma das operações de reset.
+     */
+    public function charReset($type, $char_id, $account_id = null)
+    {
+        // Se não foi enviado o parametro da conta, então
+        // Tenta obter os dados do usuário logado.
+        if(is_null($account_id))
+        {
+            if(!self::isLoggedIn()) // Não está logado -> Error.
+                return 1;
 
-    //     // Dados de retorno para informações de erro.
-    //     $return = ['error_state' => 0, 'success_state' => false];
+            // Obtém o código da conta que está logada.
+            $account_id = self::loggedUser()->getAccount_id();
+        }
 
-    //     // Tipos de reset.
-    //     switch($args)
-    //     {
-    //         // Reset de local
-    //         case 'posit': $return['error_state'] = self::charResetPosit($char_id); break;
-    //         // Reset de visual
-    //         case 'appear': $return['error_state'] = self::charResetAppear($char_id); break;
-    //         // Reset de equipamento
-    //         case 'equip': $return['error_state'] = self::charResetEquip($char_id); break;
+        // Obtém o personagem para a conta informada.
+        // Personagem online e vinculado a conta informada somente.
+        $char = $this->getApp()
+                    ->getSvrEm()
+                    ->getRepository('Model\Char')
+                    ->findOneBy([
+                        'account_id'    => $account_id,
+                        'char_id'       => $char_id,
+                        'online'        => 0
+                    ]);
+        
+        // Somente irá retornar isso caso:
+        // 1. Personagem está online. (Para resetar, nao pode estar online)
+        // 2. Personagem inexistente. (Apagou e ainda estava em cache [?])
+        // 3. Personagem não vinculado a conta. (Hm... Tentando zoar o CP?)
+        if(is_null($char))
+            return 2;
 
-    //         // ????
-    //         default:
-    //             break;
-    //     }
+        // Dados de reset para o personagem sempre verdadeiro.
+        $resetInfo = [true, true, true];
 
-    //     $return['success_state']    = $return['error_state'] == 0;
+        // Envia os dados de reset para os métodos informados.
+        if(($type&1) == 1) $resetInfo[0] = $this->charResetPosit($char);
+        if(($type&2) == 2) $resetInfo[1] = $this->charResetAppear($char);
+        if(($type&4) == 4) $resetInfo[2] = $this->charResetEquip($char);
 
-    //     // Responde com um objeto json informando o estado do cadastro.
-    //     $response->withJson($return);
-    // }
+        // Apaga o cache dos personagems
+        Cache::delete('BRACP_CHARS_' . $account_id);
 
-    // /**
-    //  * Reseta os equipamentos do personagem informado. (Desequipa)
-    //  *
-    //  * @param int $char_id Código do personagem a ser resetado.
-    //  * @param boolean $admin Modo adminsitrador.
-    //  *
-    //  * @return int
-    //  *    -1: Reset de posição desativado.
-    //  *     0: Reset realizado com sucesso.
-    //  *     1: Personagem online ou não encontrado.
-    //  */
-    // public static function charResetEquip($char_id, $admin = false)
-    // {
-    //     // Retorna -1 caos não esteja habilitado para resetar equipamentos.
-    //     if(!BRACP_ALLOW_RESET_EQUIP && !$admin)
-    //         return -1;
+        // Reseta informações do personagem.
+        return (array_search(false, $resetInfo) === false ? 0 : 3);
+    }
 
-    //     // Obtém o personagem a ser resetado.
-    //     $char = self::charFetch($char_id, $admin);
+    /**
+     * Método utilizado para resetar a posição do personagem informado.
+     *
+     * @param Char $char Personagem a ser resetado.
+     *
+     * @return bool Verdadeiro se resetado com sucesso.
+     */
+    public function charResetPosit(Char $char)
+    {
+        try
+        {
+            // Define as opções de reset para personagem.
+            $char->setLast_map($char->getSave_map());
+            $char->setLast_x($char->getSave_x());
+            $char->setLast_y($char->getSave_y());
 
-    //     // Personagem não encontrado.
-    //     if(is_null($char))
-    //         return 1;
+            // Salva as alterações no personagem.
+            $this->getApp()->getSvrEm()->merge($char);
+            $this->getApp()->getSvrEm()->flush();
 
-    //     // @Todo: Fazer reset de equipamentos.
+            // Retorna verdadeiro na alteração.
+            return true;
+        }
+        catch(\Exception $ex)
+        {
+            $this->getApp()->logException($ex);
+            return false;
+        }
+    }
 
-    //     Cache::delete('BRACP_CHARS_' . $char->getAccount_id());
+    /**
+     * Método utilizado para realizar o reset de personagem.
+     *
+     * @param Model\Char $char Personagem a ser resetado.
+     *
+     * @return bool Verdadeiro se resetado com sucesso.
+     */
+    public function charResetAppear(Char $char)
+    {
+        try
+        {
+            // Reseta aparência do personagem.
+            $char->setHair(0);
+            $char->setClothes_color(0);
+            $char->setBody(0);
+            $char->setWeapon(0);
+            $char->setShield(0);
+            $char->setHead_top(0);
+            $char->setHead_mid(0);
+            $char->setHead_bottom(0);
+            $char->setRobe(0);
 
-    //     return 0;
-    // }
+            // Salva as alterações no personagem.
+            $this->getApp()->getSvrEm()->merge($char);
+            $this->getApp()->getSvrEm()->flush();
 
-    // /**
-    //  * Reseta a aparência do personagem informado.
-    //  *
-    //  * @param int $char_id Código do personagem a ser resetado.
-    //  * @param boolean $admin Modo adminsitrador.
-    //  *
-    //  * @return int
-    //  *    -1: Reset de posição desativado.
-    //  *     0: Reset realizado com sucesso.
-    //  *     1: Personagem online ou não encontrado.
-    //  */
-    // public static function charResetAppear($char_id, $admin = false)
-    // {
-    //     // Retorna -1 caos não esteja habilitado para resetar aparência.
-    //     if(!BRACP_ALLOW_RESET_APPEAR && !$admin)
-    //         return -1;
+            return true;
+        }
+        catch(\Exception $ex)
+        {
+            $this->getApp()->logException($ex);
+            return false;
+        }
+    }
 
-    //     // Obtém o personagem a ser resetado.
-    //     $char = self::charFetch($char_id, $admin);
-
-    //     // Personagem não encontrado.
-    //     if(is_null($char))
-    //         return 1;
-
-    //     // Reseta aparência do personagem.
-    //     $char->setHair(0);
-    //     $char->setClothes_color(0);
-    //     $char->setBody(0);
-    //     $char->setWeapon(0);
-    //     $char->setShield(0);
-    //     $char->setHead_top(0);
-    //     $char->setHead_mid(0);
-    //     $char->setHead_bottom(0);
-    //     $char->setRobe(0);
-
-    //     self::getSvrEm()->merge($char);
-    //     self::getSvrEm()->flush();
-
-    //     Cache::delete('BRACP_CHARS_' . $char->getAccount_id());
-
-    //     return 0;
-    // }
-
-    // /**
-    //  * Reseta a posição do personagem informado.
-    //  *
-    //  * @param int $char_id Código do personagem a ser resetado.
-    //  * @param boolean $admin Modo adminsitrador.
-    //  *
-    //  * @return int
-    //  *    -1: Reset de posição desativado.
-    //  *     0: Reset realizado com sucesso.
-    //  *     1: Personagem online ou não encontrado.
-    //  */
-    // public static function charResetPosit($char_id, $admin = false)
-    // {
-    //     // Retorna -1 caos não esteja habilitado para resetar posições.
-    //     if(!BRACP_ALLOW_RESET_POSIT && !$admin)
-    //         return -1;
-
-    //     // Obtém o personagem a ser resetado.
-    //     $char = self::charFetch($char_id, $admin);
-
-    //     // Personagem não encontrado.
-    //     if(is_null($char))
-    //         return 1;
-
-    //     $char->setLast_map($char->getSave_map());
-    //     $char->setLast_x($char->getSave_x());
-    //     $char->setLast_y($char->getSave_y());
-
-    //     self::getSvrEm()->merge($char);
-    //     self::getSvrEm()->flush();
-
-    //     Cache::delete('BRACP_CHARS_' . $char->getAccount_id());
-
-    //     return 0;
-    // }
-
-    // /**
-    //  * Método para retornar os dados de personagem.
-    //  *
-    //  * @param ServerRequestInterface $request
-    //  * @param ResponseInterface $response
-    //  * @param array $args
-    //  */
-    // public static function chars(ServerRequestInterface $request, ResponseInterface $response, $args)
-    // {
-    //     $chars = self::charAccount(self::loggedUser()->getAccount_id());
-
-    //     if(!empty($args) && isset($args['type']))
-    //     {
-    //         $response->withJson($chars);
-    //     }
-    //     else
-    //     {
-    //         // Exibe o display para home.
-    //         self::getApp()->display('account.chars', [
-    //             'chars' => self::charAccount(self::loggedUser()->getAccount_id())
-    //         ]);
-    //     }
-    // }
-
-    // /**
-    //  * Encontra todos os personagens da conta de forma detalhada.
-    //  *
-    //  * @param int $account_id
-    //  * @param boolean $admin (Se for administrador, refaz o cache do usuário)
-    //  *
-    //  * @return array
-    //  */
-    // public static function charAccount($account_id, $admin = false)
-    // {
-    //     // Personagens da conta em questão.
-    //     $chars = Account::getSvrEm()
-    //                     ->createQuery('
-    //                         SELECT
-    //                             char, guild, leader
-    //                         FROM
-    //                             Model\Char char
-    //                         LEFT JOIN
-    //                             char.guild guild
-    //                         LEFT JOIN
-    //                             guild.character leader
-    //                         WHERE
-    //                             char.account_id = :account_id
-    //                         ORDER BY
-    //                             char.char_num ASC
-    //                     ')
-    //                     ->setParameter('account_id', $account_id)
-    //                     ->getResult();
-
-    //     // Retorna os dados de personagens tratados.
-    //     return self::charsParse($chars, 1);
-    // }
-
-    // /**
-    //  * Trata os dados de personagens recebidos para exibição.
-    //  *
-    //  * @param array $chars
-    //  * @param int $type (0: Simples, 1: Detalhado)
-    //  *
-    //  * @return array
-    //  */
-    // public static function charsParse($chars, $type = 0)
-    // {
-    //     $tmp = [];
-    //     foreach($chars as $char)
-    //     {
-    //         $tmp[] = self::charParse($char, $type);
-    //     }
-    //     return $tmp;
-    // }
-
-    // /**
-    //  * Transforma os dados do personagem para a resposta que será dada
-    //  *  a requisição.
-    //  *
-    //  * @param Model\Char $char Personagem a ser retornado.
-    //  * @param int $type (0: Simples [nome, classe, level, zeny <BRACP_ALLOW_RANKING_ZENY_SHOW_ZENY>, clã, online], 1: Detalhado (Simples +) [id, mapa, grupo])
-    //  *
-    //  */
-    // private static function charParse(Char $char, $type = 0)
-    // {
-    //     $char_data = [
-    //         'name'          => $char->getName(),
-    //         'classId'       => $char->getClass(),
-    //         'class'         => Format::job($char->getClass()),
-    //         'base_level'    => $char->getBase_level(),
-    //         'job_level'     => $char->getJob_level(),
-    //         'zeny'          => (($type == 0 && !BRACP_ALLOW_RANKING_ZENY_SHOW_ZENY) ? 0 : Format::zeny($char->getZeny())),
-    //         'guild'         => $char->getGuild(),
-    //         'online'        => ((BRACP_ALLOW_SHOW_CHAR_STATUS) ? $char->getOnline() : 0),
-    //     ];
-
-    //     // Se a consulta é tipo detalhada do personagem, então
-    //     //  retorna informações de localização também.
-    //     if($type == 1)
-    //     {
-    //         $char_data = array_merge($char_data, [
-    //             'char_id'   => $char->getChar_id(),
-    //             'num'       => $char->getChar_num(),
-    //             'party'     => null,
-    //             'last_map'  => $char->getLast_map(),
-    //             'last_x'    => $char->getLast_x(),
-    //             'last_y'    => $char->getLast_y(),
-    //             'save_map'  => $char->getSave_map(),
-    //             'save_x'    => $char->getSave_x(),
-    //             'save_y'    => $char->getSave_y(),
-
-    //             'stats'         => [
-    //                 'str'   => $char->getStr(),
-    //                 'agi'   => $char->getAgi(),
-    //                 'vit'   => $char->getVit(),
-    //                 'int'   => $char->getInt(),
-    //                 'dex'   => $char->getDex(),
-    //                 'luk'   => $char->getLuk(),
-    //             ],
-    //         ]);
-    //     }
-
-    //     // Retorna os dados para a requisição.
-    //     return json_decode(Language::parse(json_encode($char_data)));
-    // }
-
-    // /**
-    //  * Encontra o personagem solicitado para realizar algumas operações.
-    //  * -> Se $admin = false, vincula o teste a conta do jogador logado.
-    //  *
-    //  * @param int $char_id
-    //  * @param boolean $admin
-    //  *
-    //  * @return Model\Char
-    //  */
-    // private static function charFetch($char_id, $admin = false)
-    // {
-    //     // Parametros para realizar a busca.
-    //     $params = ['char_id' => $char_id, 'online' => 0];
-
-    //     // Se a requisição não for modo
-    //     //  administrador então vincula a conta do jogador logado.
-    //     if(!$admin)
-    //         $params = array_merge($params, ['account_id' => self::loggedUser()->getAccount_id()]);
-
-    //     // Encontra o personagem com os parametros informados.
-    //     return self::getSvrEm()
-    //             ->getRepository('Model\Char')
-    //             ->findOneBy($params);
-    // }
+    /**
+     * Método utilizado para resetar o equipamento do jogador.
+     *
+     * @param Model\Char $char
+     *
+     * @return bool Verdadeiro se equipamentor resetado com sucesso.
+     */
+    public function charResetEquip(Char $char)
+    {
+        try
+        {
+            // @Todo: Obter inventário do jogador e resetar todos os itens com
+            //        equip != 0
+            return true;
+        }
+        catch(\Exception $ex)
+        {
+            $this->getApp()->logException($ex);
+            return false;
+        }
+    }
 
     /**
      * Método utilizado para enviar o código de recuperação de contas.

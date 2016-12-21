@@ -156,6 +156,17 @@ class brACPApp extends Slim\App
     }
 
     /**
+     * Grava a exception caso o painel esteja configurado em modo
+     *  desenvolvedor.
+     *
+     * @param Exception $ex
+     */
+    public function logException(Exception $ex)
+    {
+        // @Todo: Gravar a exception ocorrida no painel.
+    }
+
+    /**
      * Código re-captcha para a verificação no link de envio.
      *
      * @param string $response Código re-captcha para verificação.
@@ -291,6 +302,8 @@ class brACPApp extends Slim\App
         }
         catch(\Exception $ex)
         {
+            $this->getApp()->logException($ex);
+
             // Irá acontecer quando existir um erro de conexão com o banco de dados.
             if(!isset( $data['exception']))
                 $data['exception'] = $ex;
@@ -313,6 +326,8 @@ class brACPApp extends Slim\App
         }
         catch(\Exception $ex)
         {
+            $this->getApp()->logException($ex);
+
             echo '<span style="color: white">', $ex->getMessage(), '</span>';
             $themes = [];
         }
