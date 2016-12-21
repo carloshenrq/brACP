@@ -235,7 +235,7 @@ class Asset extends Caller
                 // Caminho padrão para o bracp.
                 $basepath_bracp = BRACP_DIR_INSTALL_URL;
 
-                if(!empty($basepath_bracp))
+                if(!empty($basepath_bracp) && $basepath_bracp != '/')
                     $basepath_bracp = '/' . $basepath_bracp;
 
                 if(substr($basepath_bracp, -1, 1) == '/')
@@ -246,11 +246,13 @@ class Asset extends Caller
 
                 $scss = new Compiler;
                 $scss->setVariables([
-                    'data_path'     => $basepath_bracp . implode('/', [
+                    'data_path'     => implode('/', [
+                        $basepath_bracp,
                         'asset',
                         'icon'
                     ]),
-                    'asset_path'    => $basepath_bracp . implode('/', [
+                    'asset_path'    => implode('/', [
+                        $basepath_bracp,
                         'asset',
                         'timg'
                     ]),
