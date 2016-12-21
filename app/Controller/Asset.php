@@ -51,11 +51,8 @@ class Asset extends Caller
     private function timg_GET($get, $post, $response)
     {
         // Obtém o arquivo de imagem para o item.
-        $filenm = realpath(BRACP_TEMPLATE_DIR . '..'
-                . DIRECTORY_SEPARATOR . '..'
-                . DIRECTORY_SEPARATOR . 'themes' . DIRECTORY_SEPARATOR . $this->getApp()->getSession()->BRACP_THEME
-                . DIRECTORY_SEPARATOR . 'img') . DIRECTORY_SEPARATOR . $get['file'] . '.png';
-        
+        $filenm = realpath(__DIR__ .'/../../themes/' . $this->getApp()->getSession()->BRACP_THEME . '/img/') . '/' . $get['file'] . '.png';
+
         readfile($filenm);
         return $response->withHeader('Content-Type', 'image/png');
     }
@@ -93,10 +90,7 @@ class Asset extends Caller
     private function monster_GET($get, $post, $response)
     {
         // Obtém o arquivo de imagem para o item.
-        $nameid = realpath(BRACP_TEMPLATE_DIR . '..'
-                . DIRECTORY_SEPARATOR . '..'
-                . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'monsters'
-        ) . DIRECTORY_SEPARATOR . $get['id'] . '.gif';
+        $nameid = realpath(__DIR__ .'/../../data/monsters/') . '/' . $get['id'] . '.gif';
 
         readfile($nameid);
         return $response->withHeader('Content-Type', 'image/gif');
@@ -114,10 +108,7 @@ class Asset extends Caller
     private function images_GET($get, $post, $response)
     {
         // Obtém o arquivo de imagem para o item.
-        $nameid = realpath(BRACP_TEMPLATE_DIR . '..'
-                . DIRECTORY_SEPARATOR . '..'
-                . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'items'
-                . DIRECTORY_SEPARATOR . 'images') . DIRECTORY_SEPARATOR . $get['id'] . '.png';
+        $nameid = realpath(__DIR__ .'/../../data/items/images/') . '/' . $get['id'] . '.png';
 
         readfile($nameid);
         return $response->withHeader('Content-Type', 'image/png');
@@ -135,10 +126,7 @@ class Asset extends Caller
     private function icon_GET($get, $post, $response)
     {
         // Obtém o arquivo de imagem para o item.
-        $nameid = realpath(BRACP_TEMPLATE_DIR . '..'
-                . DIRECTORY_SEPARATOR . '..'
-                . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'items'
-                . DIRECTORY_SEPARATOR . 'icons') . DIRECTORY_SEPARATOR . $get['id'] . '.png';
+        $nameid = realpath(__DIR__ .'/../../data/items/icons/') . '/' . $get['id'] . '.png';
 
         readfile($nameid);
         return $response->withHeader('Content-Type', 'image/png');
@@ -258,13 +246,11 @@ class Asset extends Caller
 
                 $scss = new Compiler;
                 $scss->setVariables([
-                    'data_path'     => implode('/', [
-                        $basepath_bracp,
+                    'data_path'     => $basepath_bracp . implode('/', [
                         'asset',
                         'icon'
                     ]),
-                    'asset_path'    => implode('/', [
-                        $basepath_bracp,
+                    'asset_path'    => $basepath_bracp . implode('/', [
                         'asset',
                         'timg'
                     ]),
@@ -308,4 +294,3 @@ class Asset extends Caller
                 ->withHeader('Content-Type', 'text/css');
     }
 }
-
