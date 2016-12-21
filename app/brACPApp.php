@@ -101,9 +101,7 @@ class brACPApp extends Slim\App
             ],
             'notFoundHandler' => function($c) {
                 return function($request, $response) {
-
                     brACPApp::getInstance()->display('error.404');
-
                     return $response;
                 };
             }
