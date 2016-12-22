@@ -19,16 +19,21 @@ CREATE TABLE request (
                               NOT NULL,
     ServerTime  DECIMAL (16, 4) DEFAULT (0) 
                               NOT NULL,
+    GMT         VARCHAR (50) NOT NULL,
     Method      VARCHAR (10)  NOT NULL,
     Scheme      VARCHAR (20)  NOT NULL,
     URI         VARCHAR (200) NOT NULL,
     Filename    VARCHAR (200) NOT NULL,
-    PHPSession  VARCHAR (200) NOT NULL
+    PHPSession  VARCHAR (200) NOT NULL,
+    GET         STRING  NOT NULL,
+    POST        STRING  NOT NULL,
+    UseToBan    BOOLEAN DEFAULT false NOT NULL
 );
 
 CREATE INDEX request_i01 ON request (
     Address,
-    ServerTime
+    ServerTime,
+    UseToBan
 );
 
 CREATE TABLE ip_data (
@@ -43,7 +48,9 @@ CREATE TABLE ip_data (
     Country   VARCHAR (10)  NOT NULL,
     Location  VARCHAR (100) NOT NULL,
     Origin    VARCHAR (200) NOT NULL,
-    DtLog     DATETIME      NOT NULL
+    ServerTime  DECIMAL (16, 4) DEFAULT (0) 
+                              NOT NULL,
+    GMT         VARCHAR (50) NOT NULL
 );
 
 CREATE INDEX ip_data_i01 ON ip_data (

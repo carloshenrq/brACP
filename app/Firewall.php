@@ -230,7 +230,64 @@ class Firewall extends brACPMiddleware
         $ipAddress = $this->getIpAddress();
         $userAgent = $this->getUserAgent();
 
-        // @Todo: Salvar informações do endereço ip para o jogador.
+        // Verifica no banco de dados se já existe o registro
+        // Para o dia de hoje.
+        $stmt = $this->sqlite->prepare('
+            SELECT
+                COUNT(LogID) as CountRegister
+            FROM
+                ip_data
+            WHERE
+                IpAddress   = :IpAddress AND
+                UserAgent   = :UserAgent AND
+                (ServerTime - :ServerTime) < 86400
+        ');
+        $stmt->execute([
+            ':IpAddress'    => $ipAddress,
+            ':UserAgent'    => $userAgent,
+            ':ServerTime'   => microtime(true),
+        ]);
+        $obj_ip = $stmt->fetchObject();
+
+        if($obj_ip->CountRegister == 0)
+        {
+            $aParams = [
+                ':IpAddress'    => $ipAddress,
+                ':UserAgent'    => $userAgent,
+                ':Hostname'     => 'intranet',
+                ':City'         => 'intranet',
+                ':Region'       => 'intranet',
+                ':Country'      => 'intranet',
+                ':Location'     => 'intranet',
+                ':Origin'       => 'intranet',
+                ':ServerTime'   => microtime(true),
+                ':GMT'          => date_default_timezone_get(),
+            ];
+
+            // Obtém os dados do webservice para gravar no banco de dados.
+            $ipDetails = json_decode(Request::create('http://ipinfo.io/')
+                ->get($ipAddress)->getBody()->getContents());
+
+            if(!isset($ipDetails->bogon) || $ipDetails->bogon != 1)
+            {
+                $aParams = array_merge($aParams, [
+                    ':Hostname'     => $ipDetails->hostname,
+                    ':City'         => $ipDetails->city,
+                    ':Region'       => $ipDetails->region,
+                    ':Country'      => $ipDetails->country,
+                    ':Location'     => $ipDetails->loc,
+                    ':Origin'       => $ipDetails->org
+                ]);
+            }
+
+            $stmt = $this->sqlite->prepare('
+                INSERT INTO
+                    ip_data
+                VALUES
+                    (NULL, :IpAddress, :UserAgent, :Hostname, :City, :Region, :Country, :Location, :Origin, :ServerTime, :GMT)
+            ');
+            $stmt->execute($aParams);
+        }
 
         return;
     }
@@ -269,6 +326,8 @@ class Firewall extends brACPMiddleware
                     Address = :Address
                         AND
                     ServerTime >= :ServerTimeLess
+                        AND
+                    UseToBan = 1
             ');
             $stmt_request->execute([
                 ':Address'          => $ipAddress,
@@ -291,20 +350,24 @@ class Firewall extends brACPMiddleware
                 $stmt = $this->sqlite->prepare('
                     INSERT INTO
                         request
-                    (Address, UserAgent, RequestTime, ServerTime, Method, Scheme, URI, Filename, PHPSession)
+                    (Address, UserAgent, RequestTime, ServerTime, GMT, Method, Scheme, URI, Filename, PHPSession, GET, POST, UseToBan)
                         VALUES
-                    (:Address, :UserAgent, :RequestTime, :ServerTime, :Method, :Scheme, :URI, :Filename, :PHPSession)
+                    (:Address, :UserAgent, :RequestTime, :ServerTime, :GMT, :Method, :Scheme, :URI, :Filename, :PHPSession, :GET, :POST, :UseToBan)
                 ');
                 $stmt->execute([
                     ':Address'      => $ipAddress,
                     ':UserAgent'    => $userAgent,
                     ':RequestTime'  => $_SERVER['REQUEST_TIME'],
                     ':ServerTime'   => $serverTime,
+                    ':GMT'          => date_default_timezone_get(),
                     ':Method'       => $_SERVER['REQUEST_METHOD'],
                     ':Scheme'       => $_SERVER['REQUEST_SCHEME'],
                     ':URI'          => $_SERVER['REQUEST_URI'],
                     ':Filename'     => $_SERVER['SCRIPT_FILENAME'],
                     ':PHPSession'   => $this->getApp()->getSession()->getId(),
+                    ':GET'          => print_r($_GET, true),
+                    ':POST'         => print_r($_POST, true),
+                    ':UseToBan'     => !preg_match('/asset/i', $_SERVER['REQUEST_URI']),
                 ]);
             }
 
