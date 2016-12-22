@@ -343,33 +343,29 @@ class Firewall extends brACPMiddleware
                 return $response;
             }
 
-            // Requisições enviadas aos assets não serão gravadas.
-            if(!preg_match('/asset/i', $_SERVER['REQUEST_URI']))
-            {
-                // Salva a requisição atual na tabela de requisições.
-                $stmt = $this->sqlite->prepare('
-                    INSERT INTO
-                        request
-                    (Address, UserAgent, RequestTime, ServerTime, GMT, Method, Scheme, URI, Filename, PHPSession, GET, POST, UseToBan)
-                        VALUES
-                    (:Address, :UserAgent, :RequestTime, :ServerTime, :GMT, :Method, :Scheme, :URI, :Filename, :PHPSession, :GET, :POST, :UseToBan)
-                ');
-                $stmt->execute([
-                    ':Address'      => $ipAddress,
-                    ':UserAgent'    => $userAgent,
-                    ':RequestTime'  => $_SERVER['REQUEST_TIME'],
-                    ':ServerTime'   => $serverTime,
-                    ':GMT'          => date_default_timezone_get(),
-                    ':Method'       => $_SERVER['REQUEST_METHOD'],
-                    ':Scheme'       => $_SERVER['REQUEST_SCHEME'],
-                    ':URI'          => $_SERVER['REQUEST_URI'],
-                    ':Filename'     => $_SERVER['SCRIPT_FILENAME'],
-                    ':PHPSession'   => $this->getApp()->getSession()->getId(),
-                    ':GET'          => print_r($_GET, true),
-                    ':POST'         => print_r($_POST, true),
-                    ':UseToBan'     => !preg_match('/asset/i', $_SERVER['REQUEST_URI']),
-                ]);
-            }
+            // Salva a requisição atual na tabela de requisições.
+            $stmt = $this->sqlite->prepare('
+                INSERT INTO
+                    request
+                (Address, UserAgent, RequestTime, ServerTime, GMT, Method, Scheme, URI, Filename, PHPSession, GET, POST, UseToBan)
+                    VALUES
+                (:Address, :UserAgent, :RequestTime, :ServerTime, :GMT, :Method, :Scheme, :URI, :Filename, :PHPSession, :GET, :POST, :UseToBan)
+            ');
+            $stmt->execute([
+                ':Address'      => $ipAddress,
+                ':UserAgent'    => $userAgent,
+                ':RequestTime'  => $_SERVER['REQUEST_TIME'],
+                ':ServerTime'   => $serverTime,
+                ':GMT'          => date_default_timezone_get(),
+                ':Method'       => $_SERVER['REQUEST_METHOD'],
+                ':Scheme'       => $_SERVER['REQUEST_SCHEME'],
+                ':URI'          => $_SERVER['REQUEST_URI'],
+                ':Filename'     => $_SERVER['SCRIPT_FILENAME'],
+                ':PHPSession'   => $this->getApp()->getSession()->getId(),
+                ':GET'          => print_r($_GET, true),
+                ':POST'         => print_r($_POST, true),
+                ':UseToBan'     => !preg_match('/asset/i', $_SERVER['REQUEST_URI']),
+            ]);
 
             // Grava os detalhamentos de endereço ip.
             $this->logIpDetails();
