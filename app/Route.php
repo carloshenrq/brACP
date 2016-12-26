@@ -41,9 +41,7 @@ class Route extends brACPMiddleware
             $app = $this->getApp();
 
             // Redireciona a rota para o home-index
-            $app->any('/', function($request, $response, $args) {
-                return $response->withRedirect(BRACP_DIR_INSTALL_URL . 'home/index/');
-            });
+            $app->any('/', ['Controller\Caller', 'parseRoute']);
 
             // Adicionado mapa para todas as rotas 
             $app->any('/{controller}/', ['Controller\Caller', 'parseRoute']);

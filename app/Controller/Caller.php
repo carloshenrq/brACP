@@ -83,6 +83,10 @@ class Caller
      */
     public static function parseRoute(ServerRequestInterface $request, ResponseInterface $response, $args)
     {
+        // Sempre direciona para home quando não está definido.
+        if(!isset($args['controller']))
+            $args['controller'] = 'home';
+
         // Obtém o controller que está sendo chamado para a ação.
         $controller         = '\\Controller\\' . ucfirst(trim($args['controller']));
         // Obtém o tipo de requisição que está sendo realizada.
