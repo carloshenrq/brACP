@@ -267,22 +267,22 @@ return
         ],
         'CONFIRMED'     => 'Sua nova senha foi enviada para seu endereço de e-mail.',
         'MAIL'      => [
-            'TITLE_CODE'     => 'Código de Recuperação',
-            'TITLE_SEND'     => 'Recuperação de Usuário',
+            'TITLE.CODE'     => 'Código de Recuperação',
+            'TITLE.SEND'     => 'Recuperação de Usuário',
         ],
         'SUCCESS'   => [
             'CODE'  => 'Um código de recuperação foi enviado ao seu endereço de e-mail.',
             'SEND'  => 'Os dados de sua conta foram enviados ao seu endereço de e-mail.',
         ],
         'MESSAGE'   => [
-            'HEADER_NO_CODE'    => 'Para recuperar seu nome de usuário, você deve preencher abaixo as informações corretas para que seja possível realizar esta recuperação.',
-            'HEADER_HAS_CODE'   => 'Se você possuir o código de recuperação digite abaixo para enviarmos sua nova senha.',
+            'HEADER.NO.CODE'    => 'Para recuperar seu nome de usuário, você deve preencher abaixo as informações corretas para que seja possível realizar esta recuperação.',
+            'HEADER.HAS.CODE'   => 'Se você possuir o código de recuperação digite abaixo para enviarmos sua nova senha.',
         ],
         'HOLDER'    => [
             'USERID'    => 'Nome de usuário',
             'EMAIL'     => 'Endereço de e-mail',
             'CODE'      => 'Código de recuperação',
-            'HAS_CODE'  => 'Já possuo o código de recuperação.',
+            'HAS.CODE'  => 'Já possuo o código de recuperação.',
         ],
         'BUTTONS'   => [
             'SUBMIT'    => 'Recuperar',

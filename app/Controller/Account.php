@@ -231,7 +231,7 @@ class Account extends Caller
      *
      * @return object
      */
-    private function recover_POST($get, $post, $request)
+    private function recover_POST($get, $post, $response)
     {
         $return = ['error_state' => 0, 'success_state' => false];
 
@@ -272,7 +272,7 @@ class Account extends Caller
             return -1;
         
         // Código não está no pattern md5 válido...
-        if(!$this->validate($code, '/^([0-9a-f]{32})$/i'))
+        if(!$this->validate($code, '([0-9a-f]{32})'))
             return 2;
 
         // Obtém o código de recuperação no banco de dados.
@@ -298,7 +298,7 @@ class Account extends Caller
 
         // Define o código de recuperação como já utilizado e reenvia
         // Os dados de nova senha para o jogador.
-        $recover->setUsed(true).
+        $recover->setUsed(true);
         $this->getApp()->getCpEm()->merge($recover);
         $this->getApp()->getCpEm()->flush();
 

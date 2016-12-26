@@ -18,7 +18,7 @@
 <input type="checkbox" class="modal-trigger-check" id="modal-recover"/>
 <div class="modal" ng-controller="account.recover">
     <div class="modal-title">
-        @@RECOVER(TITLE)
+        {translate}@RECOVER_TITLE@{/translate}
         <label for="modal-recover" class="modal-close" ng-if="stage == 0">&times;</label>
     </div>
 
@@ -28,27 +28,27 @@
         {/if}
                 <div ng-if="$parent.error_state != 0" class="message error">
                     <div ng-switch="$parent.error_state">
-                        <div ng-switch-when="-1">@@RECOVER,ERROR(DISABLED)</div>
-                        <div ng-switch-when="1">@@RECOVER,ERROR(MISMATCH)</div>
-                        <div ng-switch-when="2">@@ERRORS(REGEXP)</div>
-                        <div ng-switch-when="3">@@ERRORS(RECAPTCHA)</div>
+                        <div ng-switch-when="-1">{translate}@RECOVER_ERROR_DISABLED@{/translate}</div>
+                        <div ng-switch-when="1">{translate}@RECOVER_ERROR_MISMATCH@{/translate}</div>
+                        <div ng-switch-when="2">{translate}@ERRORS_REGEXP@{/translate}</div>
+                        <div ng-switch-when="3">{translate}@ERRORS_RECAPTCHA@{/translate}</div>
                     </div>
                 </div>
 
                 <div ng-if="success_state" class="message success">
                     {if $smarty.const.BRACP_MD5_PASSWORD_HASH or $smarty.const.BRACP_RECOVER_BY_CODE}
-                        @@RECOVER,SUCCESS(CODE)
+                        {translate}@RECOVER_SUCCESS_CODE@{/translate}
                     {else}
-                        @@RECOVER,SUCCESS(SEND)
+                        {translate}@RECOVER_SUCCESS_SEND@{/translate}
                     {/if}
                 </div>
 
-                @@RECOVER,MESSAGE(HEADER_NO_CODE)
+                {translate}@RECOVER_MESSAGE_HEADER.NO.CODE@{/translate}
 
                 <form class="modal-form" ng-submit="submitRecover()">
 
-                    <input type="text" ng-model="userid" placeholder="@@RECOVER,HOLDER(USERID)" size="32" pattern="{$smarty.const.BRACP_REGEXP_USERNAME}" required title="@@WARNING,PATTERN({$userNameFormat})"/>
-                    <input type="text" ng-model="email" placeholder="@@RECOVER,HOLDER(EMAIL)" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
+                    <input type="text" ng-model="userid" placeholder="{translate}@RECOVER_HOLDER_USERID@{/translate}" size="32" pattern="{$smarty.const.BRACP_REGEXP_USERNAME}" required title="{translate}@WARNING_PATTERN_{$userNameFormat}@{/translate}"/>
+                    <input type="text" ng-model="email" placeholder="{translate}@RECOVER_HOLDER_EMAIL@{/translate}" size="39" maxlength="39" pattern="{$smarty.const.BRACP_REGEXP_EMAIL}" required/>
 
                     <input id="_submitRecover" type="submit"/>
 
@@ -64,22 +64,22 @@
             <div style='max-width: 380px' ng-if="has_code">
                 <div ng-if="$parent.error_state != 0" class="message error">
                     <div ng-switch="$parent.error_state">
-                        <div ng-switch-when="-1">@@RECOVER,ERROR(DISABLED)</div>
-                        <div ng-switch-when="1">@@RECOVER,ERROR(USED)</div>
-                        <div ng-switch-when="2">@@ERRORS(REGEXP)</div>
-                        <div ng-switch-when="3">@@ERRORS(RECAPTCHA)</div>
+                        <div ng-switch-when="-1">{translate}@RECOVER_ERROR_DISABLED@{/translate}</div>
+                        <div ng-switch-when="1">{translate}@RECOVER_ERROR_USED@{/translate}</div>
+                        <div ng-switch-when="2">{translate}@ERRORS_REGEXP@{/translate}</div>
+                        <div ng-switch-when="3">{translate}@ERRORS_RECAPTCHA@{/translate}</div>
                     </div>
                 </div>
 
                 <div ng-if="success_state" class="message success">
-                    @@RECOVER(CONFIRMED)
+                    {translate}@RECOVER_CONFIRMED@{/translate}
                 </div>
 
-                @@RECOVER,MESSAGE(HEADER_HAS_CODE)
+                {translate}@RECOVER_MESSAGE_HEADER.HAS.CODE@{/translate}
 
                 <form class="modal-form" ng-submit="submitRecoverConfirm()">
 
-                    <input type="text" ng-model="code" placeholder="@@RECOVER,HOLDER(CODE)" maxlength="32" required/>
+                    <input type="text" ng-model="code" placeholder="{translate}@RECOVER_HOLDER_CODE@{/translate}" maxlength="32" required/>
 
                     <input id="_submitRecoverConfirm" type="submit"/>
 
@@ -91,7 +91,7 @@
 
             <label class="input-checkbox">
                 <input type="checkbox" ng-model="$parent.has_code" ng-click="$parent.error_state = 0; $parent.success_state = false;"/>
-                @@RECOVER,HOLDER(HAS_CODE)
+                {translate}@RECOVER_HOLDER_HAS.CODE@{/translate}
             </label>
         {/if}
     </div>
@@ -108,8 +108,8 @@
     </div>
 
     <div class="modal-footer" ng-if="stage == 0">
-        <label class="button success icon" for="_submitRecover" ng-if="!has_code">@@RECOVER,BUTTONS(SUBMIT)</label>
-        <label class="button success icon" for="_submitRecoverConfirm" ng-if="has_code">@@RECOVER,BUTTONS(CONFIRM)</label>
-        <label class="button error icon" for="modal-recover">@@RECOVER,BUTTONS(CLOSE)</label>
+        <label class="button success icon" for="_submitRecover" ng-if="!has_code">{translate}@RECOVER_BUTTONS_SUBMIT@{/translate}</label>
+        <label class="button success icon" for="_submitRecoverConfirm" ng-if="has_code">{translate}@RECOVER_BUTTONS_CONFIRM@{/translate}</label>
+        <label class="button error icon" for="modal-recover">{translate}@RECOVER_BUTTONS_CLOSE@{/translate}</label>
     </div>
 </div>
