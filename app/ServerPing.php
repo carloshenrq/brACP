@@ -90,6 +90,25 @@ class ServerPing extends brACPMiddleware
             //  executa os pings no servidor.
             if(is_null($status))
             {
+                // Obtém todos os registros para o servidor solicitado e então os exclui.
+                // Não há necessidade de manter tantos registros no histórico.
+                $history = $this->getApp()
+                                ->getCpEm()
+                                ->getRepository('Model\ServerStatus')
+                                ->findBy([
+                                    'index'     => $index
+                                ]);
+                
+                // Se houver dados no histórico, irá remover todas as entradas
+                // Para o servidor selecionado, e logo na sequencia irá criar uma nova.
+                if(count($history) > 0)
+                {
+                    foreach($history as $oldRow)
+                        $this->getApp()->getCpEm()->remove($oldRow);
+
+                    $this->getApp()->getCpEm()->flush();
+                }
+
                 // Cria o registro gerado para que não sejam realizados muitos pings no servidor
                 //  quando for pingar, isso evita que muitos pings sejam enviados enquanto um está esperando
                 //  para responder...
