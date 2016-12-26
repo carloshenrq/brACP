@@ -230,19 +230,30 @@ class brACPApp extends Slim\App
         if(!BRACP_ALLOW_MAIL_SEND)
             return false;
 
+        // Define o assunto para o e-mail.
+        // Movido para cá, pois aparentemente estava causando problemas de timeout com o host.
+        $subject    = $this->getLanguage()->getTranslate($subject);
+        $body       = $this->render($template, $data, false);
+
         // Transporte para o email.
-        $transport = \Swift_SmtpTransport::newInstance(BRACP_MAIL_HOST, BRACP_MAIL_PORT)
+        $transport = Swift_SmtpTransport::newInstance(BRACP_MAIL_HOST, BRACP_MAIL_PORT)
                                             ->setUsername(BRACP_MAIL_USER)
                                             ->setPassword(BRACP_MAIL_PASS);
+        
+        // Se a criptografia for definida, então, adiciona a criptografia selecionada
+        if(BRACP_MAIL_ENCRYPT)
+            $transport->setEncryption(BRACP_MAIL_ENCRYPT);
+
         // Mailer para envio dos dados.
-        $mailer = \Swift_Mailer::newInstance($transport);
+        $mailer = Swift_Mailer::newInstance($transport);
+
         // Mensagem para enviar.
-        $message = \Swift_Message::newInstance($this->getLanguage()->getTranslate($subject))
+        $message = Swift_Message::newInstance($subject)
                                     ->setFrom([BRACP_MAIL_FROM => BRACP_MAIL_FROM_NAME])
                                     ->setTo($to)
-                                    ->setBody($this->render($template, $data, false), 'text/html');
-
-        // Retorna informando que o envio foi realizado com sucesso.
+                                    ->setBody($body, 'text/html');
+        
+        // Envia a mensagem ao dono do endereço e-mail.
         return $mailer->send($message) > 0;
     }
 

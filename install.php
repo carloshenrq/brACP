@@ -103,6 +103,7 @@ $_CONFIG_DATA = array(
     'BRACP_MAIL_PASS'                       => '',
     'BRACP_MAIL_FROM'                       => '',
     'BRACP_MAIL_FROM_NAME'                  => '',
+    'BRACP_MAIL_ENCRYPT'                    => '',
 
     // Configurações de conta. (STEP=7)
     'BRACP_ALLOW_CREATE_ACCOUNT'            => true,
@@ -746,7 +747,11 @@ $js_content = $js_minify->minify();
                         </label>
 
                         <label ng-if="INSTALL_VARS.BRACP_ALLOW_MAIL_SEND" data-info="Nome do Remetente" data-warning="Nome de quem está enviando o e-mail.">
-                            <input type="text" ng-model="INSTALL_VARS.BRACP_MAIL_FROM"/>
+                            <input type="text" ng-model="INSTALL_VARS.BRACP_MAIL_FROM_NAME"/>
+                        </label>
+
+                        <label ng-if="INSTALL_VARS.BRACP_ALLOW_MAIL_SEND" data-info="Tipo de Criptografia" data-warning="Se o seu servidor smtp não fornece, deixe embranco. Normalmente: 'ssl'">
+                            <input type="text" ng-model="INSTALL_VARS.BRACP_MAIL_ENCRYPT"/>
                         </label>
 
                     </div>

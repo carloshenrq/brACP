@@ -39,7 +39,7 @@
                 {translate}@RESEND_SUCCESS@{/translate}
             </div>
 
-            {translate}@RESEND_MESSAGE_HEADER_NO.CODE@{/translate}
+            {translate}@RESEND_MESSAGE_HEADER.NO.CODE@{/translate}
 
             <form class="modal-form" ng-submit="submitResend()">
 

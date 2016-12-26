@@ -192,14 +192,14 @@ return
         'SUCCESS'   => 'Código de confirmação enviado com sucesso para o e-mail cadastrado.',
         'CONFIRMED' => 'Sua conta foi ativada. Você já pode realizar login.',
         'MESSAGE'   => [
-            'HEADER_NO_CODE'    => 'Para reenviar o código de ativação de sua conta, você deve digitar seu nome de usuário e endereço de e-mail cadastrados para que sejam reenviados com sucesso.',
-            'HEADER_HAS_CODE'   => 'Já que você possui o código de ativação, você deve digita-lo abaixo para confirmar sua conta.',
+            'HEADER.NO.CODE'    => 'Para reenviar o código de ativação de sua conta, você deve digitar seu nome de usuário e endereço de e-mail cadastrados para que sejam reenviados com sucesso.',
+            'HEADER.HAS.CODE'   => 'Já que você possui o código de ativação, você deve digita-lo abaixo para confirmar sua conta.',
         ],
         'HOLDER'    => [
             'USERID'    => 'Nome de usuário',
             'EMAIL'     => 'E-mail cadastradado',
             'CODE'      => 'Código de ativação',
-            'HAS_CODE'  => 'Eu já possuo o código de ativação!',
+            'HAS.CODE'  => 'Eu já possuo o código de ativação!',
         ],
         'BUTTONS'   => [
             'SUBMIT'    => 'Reenviar',

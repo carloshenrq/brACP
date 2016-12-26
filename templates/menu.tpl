@@ -26,7 +26,7 @@
                 {/if}
                 {if $smarty.const.BRACP_ALLOW_MAIL_SEND}
                     {if $smarty.const.BRACP_CONFIRM_ACCOUNT}
-                        <li><label for="modal-create-resend">{translate}@MENU_MYACC_UNAUTHENTICATED_CREATE.SEND)@{/translate}</label></li>
+                        <li><label for="modal-create-resend">{translate}@MENU_MYACC_UNAUTHENTICATED_CREATE.SEND@{/translate}</label></li>
                     {/if}
                     {if $smarty.const.BRACP_ALLOW_RECOVER}
                         <li><label for="modal-recover">{translate}@MENU_MYACC_UNAUTHENTICATED_RECOVER@{/translate}</label></li>

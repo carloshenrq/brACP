@@ -426,39 +426,6 @@ class Account extends Caller
     }
 
     /**
-     * Realiza a confirmação do código enviado por requisição get. 
-     *
-     * @param array $get
-     * @param array $post
-     * @param object $response
-     *
-     * @return object
-     */
-    private function confirmation_GET($get, $post, $response)
-    {
-        
-        // Dados de retorno para informações de erro.
-        $return = ['error_state' => 0, 'success_state' => false];
-
-        // Verifica os dados de recaptcha
-        if(!$this->getApp()->testRecaptcha($post))
-        {
-            $return['error_state'] = 2;
-        }
-        else
-        {
-            $return['error_state'] = $this->confirmAccountCode($get['code']);
-            $return['success_state'] = ($return['error_state'] != 0);
-
-            // Erro de requisição?
-            if(BRACP_RECAPTCHA_ENABLED && !$return['success_state'])
-                $this->getApp()->getSession()->BRACP_RECAPTCHA_ERROR_REQUEST++;
-        }
-
-        return $response->withJson($return);
-    }
-
-    /**
      * Realiza o re-envio do código de confirmação do jogador.
      *
      * @param array $get
@@ -479,12 +446,19 @@ class Account extends Caller
         }
         else
         {
-            // Tenta fazer o re-envio do código de confirmação para o usuário.
-            $return['error_state'] = $this->sendConfirmationByUser(
-                $post['userid'],
-                $post['email']
-            );
-            $return['success_state'] = ($return['error_state'] != 0);
+            if(isset($post['code']))
+            {
+                $return['error_state'] = $this->confirmAccountCode($post['code']);
+            }
+            else
+            {
+                // Tenta fazer o re-envio do código de confirmação para o usuário.
+                $return['error_state'] = $this->sendConfirmationByUser(
+                    $post['userid'],
+                    $post['email']
+                );
+            }
+            $return['success_state'] = ($return['error_state'] == 0);
 
             // Erro de requisição?
             if(BRACP_RECAPTCHA_ENABLED && !$return['success_state'])
@@ -975,7 +949,7 @@ class Account extends Caller
         if(!BRACP_ALLOW_MAIL_SEND || !BRACP_CONFIRM_ACCOUNT)
             return -1;
 
-        if(!$this->validate($code, '/^([0-9a-f]{32})$/'))
+        if(!$this->validate($code, '([0-9a-f]{32})'))
             return 1;
 
         // Verifica se existe o código de confirmação para a conta informada
@@ -998,11 +972,11 @@ class Account extends Caller
         // Código de ativação não encontrado ou é inválido porque expirou ou já foi utilizado.
         if(is_null($confirmation))
             return 1;
-        
+
         // Define o código de ativação como já utilizado.
         $confirmation->setUsed(true);
         $this->getApp()->getCpEm()->merge($confirmation);
-        $this->getApp()->getCpEm()->flush;
+        $this->getApp()->getCpEm()->flush();
 
         // Obtém a conta vinculada para realizar a ativação da conta.
         $account = $this->getApp()
@@ -1012,7 +986,7 @@ class Account extends Caller
                             'account_id'    => $confirmation->getAccount_id(),
                             'state'         => 11 
                         ]);
-        
+                
         // Se a conta vinculada existir, então
         // Faz as atribuições corretas.
         if(!is_null($account))
