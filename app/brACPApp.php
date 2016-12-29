@@ -333,11 +333,10 @@ class brACPApp extends Slim\App
                 return brACPApp::getInstance()->getEm('cp')->getRepository('Model\Theme')->findAll();
             });
         }
-        catch(\Exception $ex)
+        catch(Exception $ex)
         {
-            $this->getApp()->logException($ex);
-
-            echo '<span style="color: white">', $ex->getMessage(), '</span>';
+            $this->logException($ex);
+            // echo '<span style="color: white">', $ex->getMessage(), '</span>';
             $themes = [];
         }
 

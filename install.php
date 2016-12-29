@@ -166,7 +166,7 @@ $_CONFIG_DATA = array(
     'BRACP_MODS_DIR'                        => dirname(__FILE__) . DIRECTORY_SEPARATOR . 'mods',
     'BRACP_ALLOW_EXTERNAL_REQUEST'          => false,
     'BRACP_PASS_CHANGE_ALERT'               => 30,
-    'BRACP_LOG_IP_DETAILS'                  => false,
+    'BRACP_FIREWALL_RULEMODE'               => false,
 );
 
 // Informações sobre criptografia de sessão.
@@ -1077,8 +1077,8 @@ $js_content = $js_minify->minify();
                             <input type="text" ng-model="INSTALL_VARS.BRACP_PASS_CHANGE_ALERT"/>
                         </label>
 
-                        <input id="BRACP_LOG_IP_DETAILS_CHK" ng-model="INSTALL_VARS.BRACP_LOG_IP_DETAILS" class="input-checkbox" type="checkbox">
-                        <label for="BRACP_LOG_IP_DETAILS_CHK" class="input-checkbox" data-warning="Define se irá habilitar os logs de localização para endereços de ips.">Habilitar logs para ips</label>
+                        <input id="BRACP_FIREWALL_RULEMODE_CHK" ng-model="INSTALL_VARS.BRACP_FIREWALL_RULEMODE" class="input-checkbox" type="checkbox">
+                        <label for="BRACP_FIREWALL_RULEMODE_CHK" class="input-checkbox" data-warning="Não é recomendado habilitar esta opção. Define que as conexões ao painel de controle, somente poderão ser realizadas, caso seja encontradas nas regras. Se esta opção não é marcada, as regras são usadas para bloqueio.">Habilitar validação de regras do firewall para permitir conexões.</label>
                     </div>
 
 

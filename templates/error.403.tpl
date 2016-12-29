@@ -20,6 +20,10 @@
 {block name="brACP_HtmlBody"}
 
 <h2>{translate}@ERRORS_FORBIDDEN_TITLE@{/translate}</h2>
-{translate}@ERRORS_FORBIDDEN_MESSAGE@{/translate}
+{translate}@ERRORS_FORBIDDEN_MESSAGE@{/translate}<br>
+<br>
+{if isset($reason) eq true}
+    <u><i><strong>{$reason}</strong></i></u>
+{/if}
 
 {/block}

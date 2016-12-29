@@ -59,7 +59,7 @@ class Firewall extends brACPMiddleware
             // -> Conexão é persistente (gerenciado pelo apache, apenas e abertura do arquivo)
             $this->sqlite = new \PDO('sqlite:firewall.db', null, null, [
                 PDO::ATTR_ERRMODE       => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_PERSISTENT    => true,
+                PDO::ATTR_PERSISTENT    => !BRACP_DEVELOP_MODE,
             ]);
 
             // Verifica se é necessarío importar os dados.
@@ -85,6 +85,12 @@ class Firewall extends brACPMiddleware
             $stmt->execute([
                 ':RequestTime' => time() - (60*60*24*7)
             ]);
+
+            // Apaga todas as entradas dentro do safelist que já estão "vencidas"
+            $stmt = $this->sqlite->prepare('DELETE FROM safelist WHERE ExpireTime < :ExpireTime');
+            $stmt->execute([
+                ':ExpireTime' => time()
+            ]);
         }
         catch(Exception $ex)
         {
@@ -92,6 +98,261 @@ class Firewall extends brACPMiddleware
         }
 
         return;
+    }
+
+    /**
+     * Adiciona uma regra ao firewall
+     *
+     * @param int $type (0: Regra para endereço IP, 1: Regra para UserAgent, 2: Regra para Paises)
+     * @param string $rule Dados a serem validados.
+     *                     Se type = 0, enviar endereço ip.
+     *                     Se type = 1, enviar useragent
+     *                     Se type = 2, enviar pais.
+     * @param bool $enabled Define se a regra estará habilitada.
+     */
+    public function ruleAdd($type, $rule)
+    {
+        try
+        {
+            $stmt = $this->sqlite->prepare('
+                INSERT INTO
+                    rules
+                VALUES
+                    (NULL, :Type, 1, :Rule)
+            ');
+            $stmt->execute([
+                ':Type'     => $type,
+                ':Rule'     => preg_quote($rule),
+            ]);
+
+            $this->sqlite->query('DELETE FROM safelist;');
+        }
+        catch(Exception $ex)
+        {
+            $this->getApp()->logException($ex);
+        }
+
+        return;
+    }
+
+    /**
+     * Habilita ou desabilita uma regra no firewall.
+     *
+     * @param int $RuleID
+     */
+    public function ruleEnable($RuleID, $Enable)
+    {
+        try
+        {
+            $stmt = $this->sqlite->prepare('
+                UPDATE
+                    rules
+                SET
+                    Enabled = :Enabled
+                WHERE
+                    RuleID = :RuleID
+            ');
+            $stmt->execute([
+                ':Enabled'      => $Enable,
+                ':RuleID'       => $RuleID
+            ]);
+
+            $this->sqlite->query('DELETE FROM safelist;');
+       }
+        catch(Exception $ex)
+        {
+            $this->getApp()->logException($ex);
+        }
+    }
+
+    /**
+     * Verifica se o endereço está na safelist para não ser necessário
+     * Realizar os testes a toda requisição de regras.
+     *
+     * @param string $ipAddress
+     *
+     * @return bool Se verdadeiro, está na safelist.
+     */
+    public function isSafeList($ipAddress)
+    {
+        $stmt = $this->sqlite->prepare('
+            SELECT COUNT(Address) as IsSafeList FROM safelist WHERE Address = :Address AND ExpireTime > :ExpireTime
+        ');
+        $stmt->execute([
+            ':Address'      => $ipAddress,
+            ':ExpireTime'   => time(),
+        ]);
+        $obj_count = $stmt->fetchObject();
+
+        return ($obj_count->IsSafeList > 0);
+    }
+
+    /**
+     * Adiciona um endereço ip aos endereços seguros por 10 minutos.
+     *
+     * @param string $ipAddress
+     */
+    public function addToSafeList($ipAddress)
+    {
+        $stmt = $this->sqlite->prepare('
+            INSERT INTO
+                safelist
+            VALUES
+                (:Address, :ServerTime, :ExpireTime)
+        ');
+        $stmt->execute([
+            ':Address'      => $ipAddress,
+            ':ServerTime'   => time(),
+            ':ExpireTime'   => time() + (60*10),
+        ]);
+    }
+
+    /**
+     * Verifica se o endereço ip ou useragent ou até mesmo informações
+     * De endereço do jogador estão nas regras do firewall.
+     *
+     * @param string $ipAddress
+     * @param string $userAgent
+     *
+     * @return boolean Retorna verdadeiro se a regra para o endereço/useragent foi encontrada.
+     */
+    public function checkRules($ipAddress, $userAgent)
+    {
+        try
+        {
+            // Seleciona todas as regras presentes no firewall para
+            // Ir testando de acordo com a necessidade.
+            $stmt = $this->sqlite->query('
+                SELECT
+                    RuleID,
+                    Type,
+                    Rule
+                FROM
+                    rules
+                WHERE
+                    Enabled = 1
+            ');
+            $ds_rules = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+            // Obtém todas as regras para testes de endereço ip e useragent.
+            $rulesForIpAg = array_filter($ds_rules, function($obj) {
+                return ($obj->Type == 0 || $obj->Type == 1);
+            });
+            // Obtém todas as regras para testes de endereços.
+            $rulesForAd = array_filter($ds_rules, function($obj) {
+                return ($obj->Type == 2);
+            });
+
+            // Começa realizando os testes para endereço ip do jogador.
+            // Caso o endereço ip seja encontrado na lista, é retornado
+            foreach($rulesForIpAg as $obj)
+            {
+                if(($obj->Type == 0 && preg_match($obj->Rule, $ipAddress))
+                    || ($obj->Type == 1 && preg_match($obj->Rule, $userAgent)))
+                    return $obj->RuleID;
+            }
+
+            // Verifica se existem entradas na tabela de endeçamento para gravar
+            // Os detalhes de endereços do ip solicitado.
+            $stmt = $this->sqlite->prepare('
+                SELECT
+                    *
+                FROM
+                    ip_data
+                WHERE
+                    Address         = :Address AND
+                    ServerTime      > :ServerTime
+            ');
+            $stmt->execute([
+                ':Address'      => $ipAddress,
+                ':ServerTime'   => time() - (60*60*24),
+            ]);
+            $obj_data = $stmt->fetchObject();
+
+            // Não foram encontrados dados para o endereço de ip solictado,
+            // Então, uma requisição é realizada ao ipinfo.io Para salvar na
+            // Tabela os dados do endereço ip.
+            if($obj_data === false)
+            {
+                $aParams = [
+                    ':IpAddress'    => $ipAddress,
+                    ':Hostname'     => 'intranet',
+                    ':City'         => 'intranet',
+                    ':Region'       => 'intranet',
+                    ':Country'      => 'intranet',
+                    ':Location'     => 'intranet',
+                    ':Origin'       => 'intranet',
+                    ':ServerTime'   => time(),
+                    ':GMT'          => date_default_timezone_get(),
+                ];
+
+                // Obtém os dados do webservice para gravar no banco de dados.
+                $ipDetails = json_decode(Request::create('http://ipinfo.io/')
+                    ->get($ipAddress)->getBody()->getContents());
+
+                if(!isset($ipDetails->bogon) || $ipDetails->bogon != 1)
+                {
+                    $aParams = array_merge($aParams, [
+                        ':Hostname'     => $ipDetails->hostname,
+                        ':City'         => $ipDetails->city,
+                        ':Region'       => $ipDetails->region,
+                        ':Country'      => $ipDetails->country,
+                        ':Location'     => $ipDetails->loc,
+                        ':Origin'       => $ipDetails->org
+                    ]);
+                }
+
+                $stmt = $this->sqlite->prepare('
+                    INSERT INTO
+                        ip_data
+                    VALUES
+                        (NULL, :IpAddress, :Hostname, :City, :Region, :Country, :Location, :Origin, :ServerTime, :GMT)
+                ');
+                $stmt->execute($aParams);
+                $LogID = $this->sqlite->lastInsertId();
+
+                // Verifica se existem entradas na tabela de endeçamento para gravar
+                // Os detalhes de endereços do ip solicitado.
+                $stmt = $this->sqlite->prepare('
+                    SELECT
+                        *
+                    FROM
+                        ip_data
+                    WHERE
+                        LogID         = :LogID
+                ');
+                $stmt->execute([
+                    ':LogID'      => $LogID,
+                ]);
+                $obj_data = $stmt->fetchObject();
+            }
+
+            // Se houver registros para teste de endereço, então,
+            // Procura nos dados retornados a regra informada.
+            if(count($rulesForAd) > 0)
+            {
+                foreach($rulesForAd as $rule)
+                {
+                    // Procura a regra informada nos campos:
+                    // Country, Region, City e Hostname
+                    // Se encontrar, retorna como regra validada.
+                    if(preg_match($rule->Rule, $obj_data->Country)
+                        || preg_match($rule->Rule, $obj_data->Region)
+                        || preg_match($rule->Rule, $obj_data->City)
+                        || preg_match($rule->Rule, $obj_data->Hostname))
+                        return true;
+                }
+            }
+
+            return false;
+        }
+        catch(Exception $ex)
+        {
+            $this->getApp()->logException($ex);
+            echo $ex->getMessage();
+            exit;
+            return false;      
+        }
     }
 
     /**
@@ -103,7 +364,7 @@ class Firewall extends brACPMiddleware
      *
      * @return void
      */
-    public function addBlackList($ipAddress, $reason, $expire = 3600)
+    public function addToBlackList($ipAddress, $reason, $expire = 3600, $rule = null)
     {
         try
         {
@@ -111,16 +372,17 @@ class Firewall extends brACPMiddleware
             $stmt_blacklist = $this->sqlite->prepare('
                 INSERT INTO
                     blacklist
-                (Address, Reason, TimeBlocked, TimeExpire, Permanent)
+                (Address, Reason, TimeBlocked, TimeExpire, Permanent, RuleID)
                     VALUES
-                (:Address, :Reason, :TimeBlocked, :TimeExpire, :Permanent)
+                (:Address, :Reason, :TimeBlocked, :TimeExpire, :Permanent, :RuleID)
             ');
             $stmt_blacklist->execute([
                 ':Address'      => $ipAddress,
                 ':Reason'       => $reason,
                 ':TimeBlocked'  => time(),
                 ':TimeExpire'   => (($expire == -1) ? 0 : time() + $expire),
-                ':Permanent'    => ($expire == -1)
+                ':Permanent'    => ($expire == -1),
+                ':RuleID'       => $rule,
             ]);
         }
         catch(Exception $ex)
@@ -129,6 +391,36 @@ class Firewall extends brACPMiddleware
         }
 
         return;
+    }
+
+    /**
+     * Remove uma regra da blacklist apenas se ela não tiver sido adicionada
+     * Através de uma regra.
+     *
+     * @param int $AddressID Código incremento do endereço na blacklist.
+     */
+    public function delFromBlackList($AddressID)
+    {
+        try
+        {
+            $stmt = $this->sqlite->prepare('
+                DELETE FROM
+                    blacklist
+                WHERE
+                    AddressID = :AddressID AND
+                    RuleID IS NULL
+            ');
+            $stmt->execute([
+                ':AddressID'    => $AddressID
+            ]);
+
+            return true;
+        }
+        catch(Exception $ex)
+        {
+            $this->getApp()->logException($ex);
+            return false;
+        }
     }
 
     /**
@@ -222,72 +514,9 @@ class Firewall extends brACPMiddleware
      */
     private function logIpDetails()
     {
-        // Configuração desativada, não é necessário finalizar informações de log.
-        if(!BRACP_LOG_IP_DETAILS)
-            return;
-
         // Obtém o endereço ip do jogador.
         $ipAddress = $this->getIpAddress();
         $userAgent = $this->getUserAgent();
-
-        // Verifica no banco de dados se já existe o registro
-        // Para o dia de hoje.
-        $stmt = $this->sqlite->prepare('
-            SELECT
-                COUNT(LogID) as CountRegister
-            FROM
-                ip_data
-            WHERE
-                IpAddress   = :IpAddress AND
-                UserAgent   = :UserAgent AND
-                (ServerTime - :ServerTime) < 86400
-        ');
-        $stmt->execute([
-            ':IpAddress'    => $ipAddress,
-            ':UserAgent'    => $userAgent,
-            ':ServerTime'   => microtime(true),
-        ]);
-        $obj_ip = $stmt->fetchObject();
-
-        if($obj_ip->CountRegister == 0)
-        {
-            $aParams = [
-                ':IpAddress'    => $ipAddress,
-                ':UserAgent'    => $userAgent,
-                ':Hostname'     => 'intranet',
-                ':City'         => 'intranet',
-                ':Region'       => 'intranet',
-                ':Country'      => 'intranet',
-                ':Location'     => 'intranet',
-                ':Origin'       => 'intranet',
-                ':ServerTime'   => microtime(true),
-                ':GMT'          => date_default_timezone_get(),
-            ];
-
-            // Obtém os dados do webservice para gravar no banco de dados.
-            $ipDetails = json_decode(Request::create('http://ipinfo.io/')
-                ->get($ipAddress)->getBody()->getContents());
-
-            if(!isset($ipDetails->bogon) || $ipDetails->bogon != 1)
-            {
-                $aParams = array_merge($aParams, [
-                    ':Hostname'     => $ipDetails->hostname,
-                    ':City'         => $ipDetails->city,
-                    ':Region'       => $ipDetails->region,
-                    ':Country'      => $ipDetails->country,
-                    ':Location'     => $ipDetails->loc,
-                    ':Origin'       => $ipDetails->org
-                ]);
-            }
-
-            $stmt = $this->sqlite->prepare('
-                INSERT INTO
-                    ip_data
-                VALUES
-                    (NULL, :IpAddress, :UserAgent, :Hostname, :City, :Region, :Country, :Location, :Origin, :ServerTime, :GMT)
-            ');
-            $stmt->execute($aParams);
-        }
 
         return;
     }
@@ -306,73 +535,54 @@ class Firewall extends brACPMiddleware
             // Informando que não se pode conectar devido a restrição.
             if($this->isBlackListed($ipAddress))
             {
-                $this->getApp()->display('error.403');
+                $this->getApp()->display('error.403', [
+                    'reason'    => 'you address (' . $ipAddress . ') is blacklisted here.'
+                ]);
                 return $response;
             }
 
-            // Realiza uma verificação para saber se o endereço ip da requisição está
-            // Fazendo requisições com tempo inferior a 5s, neste caso, ao passar de
-            // 30 Requisições na contagem, o ip será adicionado a lista de banidos.
-            $serverTime     = microtime(true);
-            $serverCompare  = $serverTime - 5;
-
-            // Query para verificar a quantidade de requisições executadas.
-            $stmt_request = $this->sqlite->prepare('
-                SELECT
-                    COUNT(RequestID) as CountRequest
-                FROM
-                    request
-                WHERE
-                    Address = :Address
-                        AND
-                    ServerTime >= :ServerTimeLess
-                        AND
-                    UseToBan = 1
-            ');
-            $stmt_request->execute([
-                ':Address'          => $ipAddress,
-                ':ServerTimeLess'   => $serverCompare,
-            ]);
-            $obj_request = $stmt_request->fetchObject();
-
-            // Se o count estiver acima de 40, então, adiciona o ip a lista negra.
-            if($obj_request->CountRequest >= 40)
+            // Verifica se o endereço ip está numa safelist
+            // Se estiver, não é necessário fazer os testes de regras novamente.
+            // O Safelist somente deve testado a cada 10m ou quando as regras forem alteradas.
+            if(!$this->isSafeList($ipAddress))
             {
-                $this->addBlackList($ipAddress, 'Too many requests for to short time.');
-                $this->getApp()->display('error.403');
-                return $response;
+                // Verifica as regras de firewall para os dados que o jogador
+                // Está acessando.
+                $ruleCheck = $this->checkRules($ipAddress, $userAgent);
+
+                //  -> BRACP_FIREWALL_RULEMODE
+                //  Se a configuração estiver definida em 0:
+                //      Usará as regras somente para bloquear o acesso.
+                //      No caso, quando os dados enviados encontrarem uma regra,
+                //      será usada para bloquear.
+                //   Se a configuração estiver definida em 1:
+                //      Usará as regras somente para permitir o acesso.
+                //      No caso, quando os dados enviados emcpmtrar, uma regra,
+                //      será usada para permitir.
+                if(($ruleCheck && !BRACP_FIREWALL_RULEMODE) || (!$ruleCheck && BRACP_FIREWALL_RULEMODE))
+                {
+                    // Adiciona o endereço ip ao blacklist.
+                    // Na próxima tentativa do endereço ip com o firewall
+                    $this->addToBlackList($ipAddress, (BRACP_FIREWALL_RULEMODE == 0 ? 'Rule mached!' : 'No rules to allow this connection.'), -1, $ruleCheck);
+
+                    $this->getApp()->display('error.403', [
+                        'reason'    => 'you address (' . $ipAddress . ') is blacklisted here.'
+                    ]);
+                    return $response;
+                }
+                else
+                {
+                    $this->addToSafeList($ipAddress);
+                }
             }
 
-            // Salva a requisição atual na tabela de requisições.
-            $stmt = $this->sqlite->prepare('
-                INSERT INTO
-                    request
-                (Address, UserAgent, RequestTime, ServerTime, GMT, Method, Scheme, URI, Filename, PHPSession, GET, POST, UseToBan)
-                    VALUES
-                (:Address, :UserAgent, :RequestTime, :ServerTime, :GMT, :Method, :Scheme, :URI, :Filename, :PHPSession, :GET, :POST, :UseToBan)
-            ');
-            $stmt->execute([
-                ':Address'      => $ipAddress,
-                ':UserAgent'    => $userAgent,
-                ':RequestTime'  => $_SERVER['REQUEST_TIME'],
-                ':ServerTime'   => $serverTime,
-                ':GMT'          => date_default_timezone_get(),
-                ':Method'       => $_SERVER['REQUEST_METHOD'],
-                ':Scheme'       => $_SERVER['REQUEST_SCHEME'],
-                ':URI'          => $_SERVER['REQUEST_URI'],
-                ':Filename'     => $_SERVER['SCRIPT_FILENAME'],
-                ':PHPSession'   => $this->getApp()->getSession()->getId(),
-                ':GET'          => print_r($_GET, true),
-                ':POST'         => print_r($_POST, true),
-                ':UseToBan'     => !preg_match('/asset/i', $_SERVER['REQUEST_URI']),
-            ]);
+            // @Todo: Adicionar os testes necessários para tratamento de requisições.
 
-            // Grava os detalhamentos de endereço ip.
-            $this->logIpDetails();
         }
         catch(Exception $ex)
         {
             $this->getApp()->logException($ex);
+            return $response;
         }
 
         return parent::__invoke($request, $response, $next);
