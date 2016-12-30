@@ -1,0 +1,136 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+    <xs:simpleType name="TUrlLink">
+        <xs:annotation>
+            <xs:documentation>Este tipo de valor, irá servir para tratar todos os tipos de elementos que serão dos tipos de URL Link.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:whiteSpace value="preserve"/>
+            <xs:pattern value="https?://.+"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="TDate">
+        <xs:annotation>
+            <xs:documentation>Este tipo de valor, será utilizado para todos os tipos de elemento para datas do tipo YYYY-mm-dd</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:whiteSpace value="preserve"/>
+            <xs:pattern value="[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="THour">
+        <xs:annotation>
+            <xs:documentation>Este tipo de valor, será utilizado para validar campos do tipo hora. HH:MM:SS</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:whiteSpace value="preserve"/>
+            <xs:pattern value="(([0-1][0-9])|([2][0-3])):([0-5][0-9]):([0-5][0-9])"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="TName">
+        <xs:annotation>
+            <xs:documentation>Este tipo de valor, será utilizado para todos os tipos de elemento para tipos nome.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:whiteSpace value="preserve"/>
+            <xs:minLength value="4"/>
+            <xs:maxLength value="80"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="TTokenHash">
+        <xs:annotation>
+            <xs:documentation>Este tipo de valor, será utilizado para validar campos do tipo código gerados pelo brACP.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:whiteSpace value="preserve"/>
+            <xs:pattern value="[0-9a-f]{32}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="TUserid">
+        <xs:annotation>
+            <xs:documentation>Este tipo de valor, será utilizado para validar campos do tipo usuário.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:whiteSpace value="preserve"/>
+            <xs:minLength value="1"/>
+            <xs:maxLength value="23"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="TPassword">
+        <xs:annotation>
+            <xs:documentation>Este tipo de valor, será utilizado para validar campos do tipo de senhas.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:whiteSpace value="preserve"/>
+            <xs:minLength value="1"/>
+            <xs:maxLength value="32"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="TEmail">
+        <xs:annotation>
+            <xs:documentation>Este tipo de valor, será utilizado para validar campos do tipo e-mail.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:whiteSpace value="preserve"/>
+            <xs:minLength value="1"/>
+            <xs:maxLength value="80"/>
+            <xs:pattern value="[^@]+@[^\.]+\..+"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="TSex">
+        <xs:annotation>
+            <xs:documentation>Este tipo de valor, será utilizado para validar o gênero.</xs:documentation>
+            <xs:documentation>M - Masculino;
+            F - Feminino;</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:whiteSpace value="preserve"/>
+            <xs:enumeration value="M"/>
+            <xs:enumeration value="F"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="TServiceInfo">
+        <xs:annotation>
+            <xs:documentation>Informações de tratamento para os serviços.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="token" type="TTokenHash"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TServiceAccountRegister">
+        <xs:annotation>
+            <xs:documentation>Informações do serviço para criação de contas.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="serviceInfo" type="TServiceInfo"/>
+            <xs:element name="accountRegister">
+                <xs:annotation>
+                    <xs:documentation>Elemento para validar o serviço de criação de contas.</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="userid" type="TUserid"/>
+                        <xs:element name="password" type="TPassword"/>
+                        <xs:element name="password_conf" type="TPassword"/>
+                        <xs:element name="sex" type="TSex"/>
+                        <xs:element name="email" type="TEmail"/>
+                        <xs:element name="email_conf" type="TEmail"/>
+                        <xs:element name="birthdate" type="TDate" minOccurs="0"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>
