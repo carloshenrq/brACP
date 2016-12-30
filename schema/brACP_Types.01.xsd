@@ -105,6 +105,34 @@
         </xs:annotation>
         <xs:sequence>
             <xs:element name="token" type="TTokenHash"/>
+            <xs:element name="app" type="TTokenHash"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TServiceConfiguration">
+        <xs:annotation>
+            <xs:documentation>Xml para requisitar a configuração do brACP</xs:documentation>
+            <xs:documentation>O Serviço irá retornar:
+            1. Configuração para uso de senhas. No caso, com ou sem MD5;
+            2. Configuração se permite a criação de novas contas;
+            3. Configuração para confirmação de contas;
+            4. Configuração de timezone;</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="serviceInfo" type="TServiceInfo"/>
+            <xs:element name="serverConfiguration">
+                <xs:annotation>
+                    <xs:documentation>Para os campos informar true, para qual você deseja que seja retornado.</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="useMD5" type="xs:boolean"/>
+                        <xs:element name="canRegister" type="xs:boolean"/>
+                        <xs:element name="confirmRegister" type="xs:boolean"/>
+                        <xs:element name="timeZone" type="xs:boolean"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
         </xs:sequence>
     </xs:complexType>
 
