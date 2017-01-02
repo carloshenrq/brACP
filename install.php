@@ -51,6 +51,7 @@ require_once __DIR__ . '/app/TMod.php';
 require_once __DIR__ . '/app/Themes.php';
 require_once __DIR__ . '/app/Language.php';
 require_once __DIR__ . '/app/Cache.php';
+require_once __DIR__ . '/app/Format.php';
 
 // Teste de bibliotecas para ver se está ok em salvar os dados.
 $PRE_REQUISITES = array(
@@ -71,7 +72,12 @@ $PRE_REQUISITES = array(
     'sqlite_ext'        => extension_loaded('pdo_sqlite'),
 );
 
-$PRE_MemCached = extension_loaded('memcache');
+$_tmpPHPMinMemory       = '128M';
+$_tmpPHPMemoryLimit     = ini_get("memory_limit");
+
+$PRE_MemCached          = extension_loaded('memcache');
+$PRE_PHPMinMemory       = Format::parseBytes($_tmpPHPMinMemory);
+$PRE_PHPMemoryLimit     = Format::parseBytes($_tmpPHPMemoryLimit);
 
 // Teste para as variaveis de configuração do painel de controle.
 $_CONFIG_DATA = array(
@@ -280,6 +286,14 @@ $js_content = $js_minify->minify();
                 $scope.REGEXP_USERNAME = '10';
                 $scope.REGEXP_PASSWORD = '02';
 
+                // Variaveis para definir o uso de memória para execução do PHP.
+                $scope.PHP_MEMORY_LIMIT_STR     = '<?php echo $_tmpPHPMemoryLimit; ?>';
+                $scope.PHP_MEMORY_LIMIT_BYTE    = <?php echo $PRE_PHPMemoryLimit; ?>;
+                $scope.PHP_MIN_MEMORY_STR       = '<?php echo $_tmpPHPMinMemory; ?>';
+                $scope.PHP_MIN_MEMORY_BYTE      = <?php echo $PRE_PHPMinMemory; ?>;
+                $scope.PHP_MIN_MEMORY_WARNING   = $scope.PHP_MIN_MEMORY_BYTE > $scope.PHP_MEMORY_LIMIT_BYTE;
+                $scope.PHP_MIN_MEMORY_AGREE     = !$scope.PHP_MIN_MEMORY_WARNING;
+
                 // Testa os requisitos do step 1
                 window.jQuery.each($scope.PRE_REQUISITES, function(index, value) {
                     
@@ -361,6 +375,15 @@ $js_content = $js_minify->minify();
                     });*/
                 }
 
+                $scope.acceptMemoryLimit    = function()
+                {
+                    $scope.PHP_MIN_MEMORY_AGREE = true;
+
+                    var ind = $scope.STEP_ERROR.indexOf(1);
+                    if(ind >= 0)
+                        $scope.STEP_ERROR.splice(ind, 1); 
+               };
+
                 $scope.sessionAlgoChange    = function()
                 {
                     var SESSION_ALGO = $scope.INSTALL_VARS.BRACP_SESSION_ALGO;
@@ -408,7 +431,6 @@ $js_content = $js_minify->minify();
 
                 $scope.validateStep     = function(step, foward)
                 {
-
                     switch(step)
                     {
                         case 2:
@@ -419,6 +441,18 @@ $js_content = $js_minify->minify();
                                 var ind = $scope.STEP_ERROR.indexOf(step);
                                 $scope.STEP_ERROR.splice(ind, 1); 
                             }
+
+                            break;
+                        case 1:
+                            var ind = $scope.STEP_ERROR.indexOf(step);
+
+                            if(!$scope.PHP_MIN_MEMORY_AGREE)
+                            {
+                                if(ind == -1)
+                                    $scope.STEP_ERROR.push(step);
+                            }
+                            else if(ind >= 0)
+                                $scope.STEP_ERROR.splice(ind, 1); 
 
                             break;
                     }
@@ -495,106 +529,130 @@ $js_content = $js_minify->minify();
                         
                         <h1>Pré-Requisitos</h1>
 
-                        <p>
-                            Abaixo, segue a lista dos pré-requisitos para execução do brACP,
-                            caso algum deles não esteja conforme, será necessário arrumar antes de continuar.
-                        </p>
+                        <div class="message warning icon" ng-show="!PHP_MIN_MEMORY_AGREE">
+                            A Instalação do PHP que você está usando, possui o mínimo de memória recomendado para execução do brACP.<br>
+                            O Mínimo de memória solicitado é de <strong>{{PHP_MIN_MEMORY_STR}}</strong> e você possui <strong>{{PHP_MEMORY_LIMIT_STR}}</strong> habilitados.<br>
+                            Verifique a diretiva <u><i>memory_limit</i></u> em seu arquivo <i>php.ini</i>. Algumas funcionalidades podem não ser executadas com sucesso, caso o mínimo de memória não esteja dentro do valor mínimo.
 
-                        <p ng-if="STEP_ERROR.indexOf(1) >= 0" class="message error">
-                            Alguns dos prés requisitos não foram cumpridos! Verifique os itens que não estão conformes e atualize a tela.
-                        </p>
+                            <p class="message error" ng-show="STEP_ERROR.indexOf(1) >= 0">
+                                Para avançar com a instalação, você deve clicar em "Ok, eu compreendo!".
+                            </p>
 
-                        <div class="requisites">
-                            <div class="row">
-                                <div class="cell">Versão do PHP:</div>
-                                <div class="cell" ng-class="(PRE_REQUISITES.phpversion ? 'cell-success' : 'cell-error')">
-                                    {{(PRE_REQUISITES.phpversion ? 'OK':'Sua versão <?php echo PHP_VERSION; ?>')}}
+                            <p style="text-align: right;">
+                                <button class="button warning" ng-click="acceptMemoryLimit();">Ok, eu compreendo!</button>
+                            </p>
+                        </div>
+
+                        <div ng-show="PHP_MIN_MEMORY_AGREE">
+                            <p>
+                                Abaixo, segue a lista dos pré-requisitos para execução do brACP,
+                                caso algum deles não esteja conforme, será necessário arrumar antes de continuar.
+                            </p>
+
+                            <div class="message warning icon" ng-show="PHP_MIN_MEMORY_WARNING">
+                                <h1>Lembrete</h1>
+                                Você está realizando está instalação com menos memória que o recomendado.<br>
+                                <strong>Disponível:</strong> {{PHP_MEMORY_LIMIT_STR}} <br>
+                                <strong>Recomendado:</strong> {{PHP_MIN_MEMORY_STR}}
+                            </div>
+
+                            <p ng-if="STEP_ERROR.indexOf(1) >= 0" class="message error">
+                                Alguns dos prés requisitos não foram cumpridos! Verifique os itens que não estão conformes e atualize a tela.
+                            </p>
+
+                            <div class="requisites">
+                                <div class="row">
+                                    <div class="cell">Versão do PHP:</div>
+                                    <div class="cell" ng-class="(PRE_REQUISITES.phpversion ? 'cell-success' : 'cell-error')">
+                                        {{(PRE_REQUISITES.phpversion ? 'OK':'Sua versão <?php echo PHP_VERSION; ?>')}}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="cell">Permissão de escrita:</div>
+                                    <div class="cell" ng-class="(PRE_REQUISITES.is_writable ? 'cell-success' : 'cell-error')">
+                                        {{(PRE_REQUISITES.is_writable ? 'OK':'Ops! Verifique as permissões de escrita.')}}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="cell">Composer:</div>
+                                    <div class="cell" ng-class="(PRE_REQUISITES.composer ? 'cell-success' : 'cell-error')">
+                                        {{(PRE_REQUISITES.composer ? 'OK':'Ops! Verifique a pasta \'vendor/\'')}}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="cell">Extensão cURL:</div>
+                                    <div class="cell" ng-class="(PRE_REQUISITES.curl_ext ? 'cell-success' : 'cell-error')">
+                                        {{(PRE_REQUISITES.curl_ext ? 'OK':'Por favor, habilite a extensão "cURL".')}}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="cell">Extensão Hash:</div>
+                                    <div class="cell" ng-class="(PRE_REQUISITES.hash_ext ? 'cell-success' : 'cell-error')">
+                                        {{(PRE_REQUISITES.hash_ext ? 'OK':'Por favor, habilite a extensão "hash".')}}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="cell">Extensão Json:</div>
+                                    <div class="cell" ng-class="(PRE_REQUISITES.json_ext ? 'cell-success' : 'cell-error')">
+                                        {{(PRE_REQUISITES.json_ext ? 'OK':'Por favor, habilite a extensão "json".')}}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="cell">Extensão Xml:</div>
+                                    <div class="cell" ng-class="(PRE_REQUISITES.xml_ext ? 'cell-success' : 'cell-error')">
+                                        {{(PRE_REQUISITES.xml_ext ? 'OK':'Por favor, habilite a extensão "xml".')}}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="cell">Extensão LibXml:</div>
+                                    <div class="cell" ng-class="(PRE_REQUISITES.libxml_ext ? 'cell-success' : 'cell-error')">
+                                        {{(PRE_REQUISITES.libxml_ext ? 'OK':'Por favor, habilite a extensão "libxml".')}}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="cell">Extensão OpenSSL:</div>
+                                    <div class="cell" ng-class="(PRE_REQUISITES.openssl_ext ? 'cell-success' : 'cell-error')">
+                                        {{(PRE_REQUISITES.openssl_ext ? 'OK':'Por favor, habilite a extensão "openssl".')}}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="cell">Extensão PCRE:</div>
+                                    <div class="cell" ng-class="(PRE_REQUISITES.pcre_ext ? 'cell-success' : 'cell-error')">
+                                        {{(PRE_REQUISITES.pcre_ext ? 'OK':'Por favor, habilite a extensão "pcre".')}}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="cell">Extensão PDO:</div>
+                                    <div class="cell" ng-class="(PRE_REQUISITES.PDO_ext ? 'cell-success' : 'cell-error')">
+                                        {{(PRE_REQUISITES.PDO_ext ? 'OK':'Por favor, habilite a extensão "pdo".')}}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="cell">Extensão PDO MySQL:</div>
+                                    <div class="cell" ng-class="(PRE_REQUISITES.pdo_mysql_ext ? 'cell-success' : 'cell-error')">
+                                        {{(PRE_REQUISITES.pdo_mysql_ext ? 'OK':'Por favor, habilite a extensão "pdo_mysql".')}}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="cell">Extensão Sockets:</div>
+                                    <div class="cell" ng-class="(PRE_REQUISITES.sockets_ext ? 'cell-success' : 'cell-error')">
+                                        {{(PRE_REQUISITES.sockets_ext ? 'OK':'Por favor, habilite a extensão "sockets".')}}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="cell">Extensão Zip:</div>
+                                    <div class="cell" ng-class="(PRE_REQUISITES.zip_ext ? 'cell-success' : 'cell-error')">
+                                        {{(PRE_REQUISITES.zip_ext ? 'OK':'Por favor, habilite a extensão "zip".')}}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="cell">Extensão SQLite:</div>
+                                    <div class="cell" ng-class="(PRE_REQUISITES.sqlite_ext ? 'cell-success' : 'cell-error')">
+                                        {{(PRE_REQUISITES.sqlite_ext ? 'OK':'Por favor, habilite a extensão "sqlite_ext".')}}
+                                    </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="cell">Permissão de escrita:</div>
-                                <div class="cell" ng-class="(PRE_REQUISITES.is_writable ? 'cell-success' : 'cell-error')">
-                                    {{(PRE_REQUISITES.is_writable ? 'OK':'Ops! Verifique as permissões de escrita.')}}
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="cell">Composer:</div>
-                                <div class="cell" ng-class="(PRE_REQUISITES.composer ? 'cell-success' : 'cell-error')">
-                                    {{(PRE_REQUISITES.composer ? 'OK':'Ops! Verifique a pasta \'vendor/\'')}}
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="cell">Extensão cURL:</div>
-                                <div class="cell" ng-class="(PRE_REQUISITES.curl_ext ? 'cell-success' : 'cell-error')">
-                                    {{(PRE_REQUISITES.curl_ext ? 'OK':'Por favor, habilite a extensão "cURL".')}}
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="cell">Extensão Hash:</div>
-                                <div class="cell" ng-class="(PRE_REQUISITES.hash_ext ? 'cell-success' : 'cell-error')">
-                                    {{(PRE_REQUISITES.hash_ext ? 'OK':'Por favor, habilite a extensão "hash".')}}
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="cell">Extensão Json:</div>
-                                <div class="cell" ng-class="(PRE_REQUISITES.json_ext ? 'cell-success' : 'cell-error')">
-                                    {{(PRE_REQUISITES.json_ext ? 'OK':'Por favor, habilite a extensão "json".')}}
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="cell">Extensão Xml:</div>
-                                <div class="cell" ng-class="(PRE_REQUISITES.xml_ext ? 'cell-success' : 'cell-error')">
-                                    {{(PRE_REQUISITES.xml_ext ? 'OK':'Por favor, habilite a extensão "xml".')}}
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="cell">Extensão LibXml:</div>
-                                <div class="cell" ng-class="(PRE_REQUISITES.libxml_ext ? 'cell-success' : 'cell-error')">
-                                    {{(PRE_REQUISITES.libxml_ext ? 'OK':'Por favor, habilite a extensão "libxml".')}}
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="cell">Extensão OpenSSL:</div>
-                                <div class="cell" ng-class="(PRE_REQUISITES.openssl_ext ? 'cell-success' : 'cell-error')">
-                                    {{(PRE_REQUISITES.openssl_ext ? 'OK':'Por favor, habilite a extensão "openssl".')}}
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="cell">Extensão PCRE:</div>
-                                <div class="cell" ng-class="(PRE_REQUISITES.pcre_ext ? 'cell-success' : 'cell-error')">
-                                    {{(PRE_REQUISITES.pcre_ext ? 'OK':'Por favor, habilite a extensão "pcre".')}}
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="cell">Extensão PDO:</div>
-                                <div class="cell" ng-class="(PRE_REQUISITES.PDO_ext ? 'cell-success' : 'cell-error')">
-                                    {{(PRE_REQUISITES.PDO_ext ? 'OK':'Por favor, habilite a extensão "pdo".')}}
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="cell">Extensão PDO MySQL:</div>
-                                <div class="cell" ng-class="(PRE_REQUISITES.pdo_mysql_ext ? 'cell-success' : 'cell-error')">
-                                    {{(PRE_REQUISITES.pdo_mysql_ext ? 'OK':'Por favor, habilite a extensão "pdo_mysql".')}}
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="cell">Extensão Sockets:</div>
-                                <div class="cell" ng-class="(PRE_REQUISITES.sockets_ext ? 'cell-success' : 'cell-error')">
-                                    {{(PRE_REQUISITES.sockets_ext ? 'OK':'Por favor, habilite a extensão "sockets".')}}
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="cell">Extensão Zip:</div>
-                                <div class="cell" ng-class="(PRE_REQUISITES.zip_ext ? 'cell-success' : 'cell-error')">
-                                    {{(PRE_REQUISITES.zip_ext ? 'OK':'Por favor, habilite a extensão "zip".')}}
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="cell">Extensão SQLite:</div>
-                                <div class="cell" ng-class="(PRE_REQUISITES.sqlite_ext ? 'cell-success' : 'cell-error')">
-                                    {{(PRE_REQUISITES.sqlite_ext ? 'OK':'Por favor, habilite a extensão "sqlite_ext".')}}
-                                </div>
-                            </div>
+
                         </div>
 
                     </div>
@@ -608,7 +666,7 @@ $js_content = $js_minify->minify();
                             Todas as alterações aplicadas no brACP, são de inteira responsabilidade sua.
                         </div>
 
-                        <pre class="install-license"><?php include "license"; ?></pre>
+                        <pre class="install-license"><?php include "LICENSE.md"; ?></pre>
 
                         <div ng-if="!$parent.ACCEPT_TERMS" class="message error icon">
                             É necessário aceitar os termos de licença antes de realizar a instalação.
@@ -1099,7 +1157,7 @@ $js_content = $js_minify->minify();
                 </div>
 
                 <div class="next">
-                    <button ng-if="STEP <= 12" ng-click="validateStep(STEP, true)" class="button info">Próximo</button>
+                    <button ng-if="STEP <= 12" ng-click="validateStep(STEP, true)" class="button info">Avançar</button>
                     <button ng-if="STEP == 13" ng-click="install()" class="button success">Instalar</button>
                 </div>
 

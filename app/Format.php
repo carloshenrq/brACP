@@ -25,6 +25,28 @@
 class Format
 {
     /**
+    * Transforma valores como '3M' em 3145728 (do jeito que retorna do ini_get())
+    *
+    * @return int
+    */
+    public static function parseBytes($strSize)
+    {
+        $strSize = trim($strSize);
+        $size = intval(substr($strSize, 0, -1));
+        $unit = strtoupper(substr($strSize, -1));
+
+        switch($unit)
+        {
+            case 'G': $size *= 1024;
+            case 'M': $size *= 1024;
+            case 'K': $size *= 1024; break;
+            default: break;
+        }
+
+        return $size;
+    }
+
+    /**
      * Transforma os bytes enviados em formatação de texto legivel como:
      * 1048576 -> 1 MB (1048576 bytes)
      *
