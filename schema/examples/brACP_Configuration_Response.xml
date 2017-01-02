@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<brACPServiceResponse>
+    <serverConfiguration>
+        <useMD5>true</useMD5>
+        <canRegister>true</canRegister>
+        <confirmRegister>false</confirmRegister>
+        <timeZone>America/Sao_Paulo</timeZone>
+        <devMode>false</devMode>
+    </serverConfiguration>
+</brACPServiceResponse>

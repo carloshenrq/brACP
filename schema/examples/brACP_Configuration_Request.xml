@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<brACPService>
+    <serviceInfo version="0.2.2">
+        <token>c4ca4238a0b923820dcc509a6f75849b</token>
+        <app>e36314e624d2b2ca257e1f1ecb381f93</app>
+    </serviceInfo>
+    <serverConfiguration>
+        <useMD5>true</useMD5>
+        <canRegister>true</canRegister>
+        <confirmRegister>true</confirmRegister>
+        <timeZone>true</timeZone>
+        <devMode>true</devMode>
+    </serverConfiguration>
+</brACPService>

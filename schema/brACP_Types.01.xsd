@@ -99,6 +99,16 @@
         </xs:restriction>
     </xs:simpleType>
 
+    <xs:simpleType name="TVersion">
+        <xs:annotation>
+            <xs:documentation>Validação de campos de tipo versão.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:whiteSpace value="preserve"/>
+            <xs:enumeration value="0.2.2"/>
+        </xs:restriction>
+    </xs:simpleType>
+
     <xs:complexType name="TServiceInfo">
         <xs:annotation>
             <xs:documentation>Informações de tratamento para os serviços.</xs:documentation>
@@ -107,6 +117,7 @@
             <xs:element name="token" type="TTokenHash"/>
             <xs:element name="app" type="TTokenHash"/>
         </xs:sequence>
+        <xs:attribute name="version" use="required" type="TVersion"/>
     </xs:complexType>
 
     <xs:complexType name="TServiceConfiguration">
@@ -116,7 +127,8 @@
             1. Configuração para uso de senhas. No caso, com ou sem MD5;
             2. Configuração se permite a criação de novas contas;
             3. Configuração para confirmação de contas;
-            4. Configuração de timezone;</xs:documentation>
+            4. Configuração de timezone;
+            5. Configuração indicando modo desenvolvedor.</xs:documentation>
         </xs:annotation>
         <xs:sequence>
             <xs:element name="serviceInfo" type="TServiceInfo"/>
@@ -130,6 +142,7 @@
                         <xs:element name="canRegister" type="xs:boolean"/>
                         <xs:element name="confirmRegister" type="xs:boolean"/>
                         <xs:element name="timeZone" type="xs:boolean"/>
+                        <xs:element name="devMode" type="xs:boolean"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -155,6 +168,55 @@
                         <xs:element name="email" type="TEmail"/>
                         <xs:element name="email_conf" type="TEmail"/>
                         <xs:element name="birthdate" type="TDate" minOccurs="0"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TServiceAccountRegisterCode">
+        <xs:annotation>
+            <xs:documentation>Xml para informar o código de ativação de contas.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="serviceInfo" type="TServiceInfo"/>
+            <xs:element name="accountRegisterCode">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="code" type="TTokenHash"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TServiceAccountRecover">
+        <xs:annotation>
+            <xs:documentation>Informações de serviço para recuperação de contas.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="serviceInfo" type="TServiceInfo"/>
+            <xs:element name="accountRecover">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="userid" type="TUserid"/>
+                        <xs:element name="email" type="TEmail"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TServiceAccountRecoverCode">
+        <xs:annotation>
+            <xs:documentation>Informações do serviço para inserir o código de recuperação de contas.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="serviceInfo" type="TServiceInfo"/>
+            <xs:element name="accountRecoverCode">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="code" type="TTokenHash"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
