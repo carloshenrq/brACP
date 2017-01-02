@@ -63,4 +63,17 @@ CREATE TABLE IF NOT EXISTS `bracp_account_confirm` (
     INDEX (`AccountID`)
 ) ENGINE=MyISAM COLLATE='utf8_swedish_ci';
 
+DROP TABLE IF EXISTS `bracp_service_tokens`;
+CREATE TABLE IF NOT EXISTS `bracp_service_tokens` (
+    `TokenID` INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `Application` VARCHAR(100) NOT NULL DEFAULT '',
+    `ApplicationHash` VARCHAR(32) NOT NULL,
+    `Token` VARCHAR(32) NOT NULL,
+    `DtCreated` DATETIME NOT NULL DEFAULT '1000-01-01 00:00:00',
+    `DtExpire` DATETIME NULL DEFAULT NULL,
+    `Enabled` BOOLEAN NOT NULL DEFAULT TRUE,
+
+    UNIQUE INDEX (`Token`, `ApplicationHash`)
+) ENGINE=MyISAM COLLATE='utf8_swedish_ci';
+
 SET FOREIGN_KEY_CHECKS = 1;
