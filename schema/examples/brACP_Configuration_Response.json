@@ -1,0 +1,11 @@
+{
+    "brACPServiceResponse" : {
+        "serverConfiguration" : {
+            "useMD5" : true,
+            "canRegister" : true,
+            "confirmRegister" : false,
+            "timeZone" : "America/Sao_Paulo",
+            "devMode" : false
+        }
+    }
+}
