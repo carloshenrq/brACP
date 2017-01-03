@@ -18,6 +18,50 @@
 
 var grecaptcha_timer = false;
 
+function closeAllModals(callBack)
+{
+    if(!callBack) callBack = function() {};
+
+    +function($)
+    {
+        $(document).find('.modal-trigger-check:checked').each(function() {
+            $(this).prop('checked', false);
+        });
+
+        callBack();
+
+    } (window.jQuery);
+}
+
+function removeAllModalMessages()
+{
+    +function($)
+    {
+        setTimeout(function(){
+            $(document).find('.modal-body').filter(function() {
+                return ($(this).find('.message').length > 0);
+            }).each(function() {
+                $(this).find('.message').filter(function() {
+                    return !$(this).hasClass('message-timeout');
+                }).each(function() {
+                    $(this)
+                        .addClass('message-timeout')
+                        .on('click', function() {
+                            $(this).stop(true, true).fadeOut('fast', function() {
+                                $(this).remove();
+                            });
+                        })
+                        .delay(15000)
+                        .fadeOut('fast', function() {
+                            $(this).remove();
+                        });
+                });
+            });
+        }, 300);
+
+    } (window.jQuery);
+}
+
 +function($)
 {
 
@@ -27,9 +71,7 @@ var grecaptcha_timer = false;
         if(e.which == 27)
         {
             e.preventDefault();
-            $(document).find('.modal-trigger-check:checked').each(function() {
-                $(this).prop('checked', false);
-            });
+            closeAllModals();
         }
     });
 

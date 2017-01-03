@@ -17,6 +17,7 @@
  *}
 <ul>
     <li class="icon icon-home url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}home/index/">{translate}@MENU_HOME@{/translate}</li>
+
     <li class="icon icon-myacc sub-menu">{translate}@MENU_MYACC_TITLE@{/translate}
         <ul>
             {if isset($account) eq false}
@@ -49,8 +50,30 @@
         </ul>
     </li>
 
+    {if $smarty.const.BRACP_ALLOW_ADMIN && isset($account) eq true && $account->getGroup_id() >= BRACP_ALLOW_ADMIN_GMLEVEL}
+        <li class="icon icon-admin sub-menu">
+            {translate}@MENU_ADMIN_TITLE@{/translate}
+
+            <ul>
+                <li class="url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}admin/themes/"><label>{translate}@MENU_ADMIN_THEMES@{/translate}</label></li>
+                <li class="url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}admin/langs/"><label>{translate}@MENU_ADMIN_LANGS@{/translate}</label></li>
+
+                {if $smarty.const.BRACP_ALLOW_MODS eq true}
+                    <li class="url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}admin/mods/"><label>{translate}@MENU_ADMIN_MODS@{/translate}</label></li>
+                {/if}
+
+                <li class="url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}admin/backup/"><label>{translate}@MENU_ADMIN_BACKUP@{/translate}</label></li>
+                <li class="url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}admin/cache/"><label>{translate}@MENU_ADMIN_CACHE@{/translate}</label></li>
+                <li class="url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}admin/players/"><label>{translate}@MENU_ADMIN_ACCOUNTS@{/translate}</label></li>
+                <li class="url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}admin/webservice/"><label>{translate}@MENU_ADMIN_WEBSERVICE@{/translate}</label></li>
+                <li class="url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}admin/firewall/"><label>{translate}@MENU_ADMIN_FIREWALL@{/translate}</label></li>
+            </ul>
+
+        </li>
+    {/if}
+
     {if $smarty.const.BRACP_ALLOW_VENDING}
-        <li class="url-link" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}vending/index/">{translate}@MENU_MERCHANTS@{/translate}</li>
+        <li class="url-link icon icon-vending" data-href="{$smarty.const.BRACP_DIR_INSTALL_URL}vending/index/">{translate}@MENU_MERCHANTS@{/translate}</li>
     {/if}
 
     {if $smarty.const.BRACP_ALLOW_RANKING}

@@ -113,6 +113,7 @@ html, body
                         cursor: pointer;
                         @include transition('text-shadow .2s ease-in-out');
                         z-index: 1;
+                        padding: .4em;
 
                         label
                         {
@@ -136,44 +137,26 @@ html, body
                                 background-image: url(#{$data_path}/?id=501);
                             }
 
+                            &.icon-admin
+                            {
+                                font-weight: bold;
+                                background-color:rgba(255, 0, 0, .7);
+                                @include border-radius(.3em);
+
+                                &:before
+                                {
+                                    background-image: url(#{$data_path}/?id=5334);
+                                }
+                            }
+
                             &.icon-myacc:before
                             {
                                 background-image: url(#{$data_path}/?id=5372);
                             }
 
-                            &.icon-rankings:before
+                            &.icon-vending:before
                             {
-                                background-image: url(#{$data_path}/?id=7228);
-                            }
-
-                            &.icon-players:before
-                            {
-                                background-image: url(#{$data_path}/?id=2735);
-                            }
-
-                            &.icon-chars:before
-                            {
-                                background-image: url(#{$data_path}/?id=2734);
-                            }
-
-                            &.icon-zeny:before
-                            {
-                                background-image: url(#{$data_path}/?id=670);
-                            }
-
-                            &.icon-woe:before
-                            {
-                                background-image: url(#{$data_path}/?id=714);
-                            }
-
-                            &.icon-guild:before
-                            {
-                                background-image: url(#{$data_path}/?id=2105);
-                            }
-
-                            &.icon-castle:before
-                            {
-                                background-image: url(#{$data_path}/?id=2383);
+                                background-image: url(#{$data_path}/?id=7871);
                             }
                         }
 
@@ -205,7 +188,7 @@ html, body
 
                         &+ li
                         {
-                            margin-left: 0.8em;
+                            margin-left: .5em;
                         }
                     }
 
@@ -229,6 +212,7 @@ html, body
                             display: block;
                             min-width: 180px;
                             text-shadow: none;
+                            padding: 0;
 
                             label
                             {
