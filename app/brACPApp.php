@@ -87,12 +87,21 @@ class brACPApp extends Slim\App
     private $serverPing;
 
     /**
+     * Objeto para formatação de campos.
+     * @var Format
+     */
+    private $format;
+
+    /**
      * Construtor e inicializador para o painel de controle.
      */
     public function __construct()
     {
         // Initialize session for this app.
         $this->session = new Session();
+
+        // Inicializa o formatador de dados para o app 
+        $this->format = new Format();
 
         // Configurações alternativas.
         $configs = [
@@ -535,6 +544,16 @@ class brACPApp extends Slim\App
     public function getLanguage()
     {
         return $this->language;
+    }
+
+    /**
+     * Obtém o formatador para o app.
+     *
+     * @return Format
+     */
+    public function getFormat()
+    {
+        return $this->format;
     }
 
     /**

@@ -155,8 +155,8 @@ class Vending extends Caller
                     // Objeto temporario.
                     $_tmp =  (object)[
                         'item'      => $item->getItem($merchant->getCart()->getNameid()),
-                        'amount'    => Format::zeny($merchant->getAmount()),
-                        'price'     => Format::zeny($merchant->getPrice()),
+                        'amount'    => $app->getFormat()->zeny($merchant->getAmount()),
+                        'price'     => $app->getFormat()->zeny($merchant->getPrice()),
                         'refine'    => $merchant->getCart()->getRefine(),
                         'unique_id' => $merchant->getCart()->getUnique_id(),
                         'cards'     => []

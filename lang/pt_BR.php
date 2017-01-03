@@ -299,7 +299,7 @@ return
         'TITLE' => 'Minha Conta &raquo; Personagens',
 
         'ERROR' => [
-            'NO_CHAR'   => 'Você não tem personagens para visualizar. Tente realizar login no jogo e criar um novo personagem!'
+            'NO.CHAR'   => 'Você não possui nenhum personagem. Você pode criar seu personagem, fazendo login no jogo.',
         ],
 
         'MESSAGE'   => 'Abaixo, segue a lista dos personagens que você possui no jogo para você realizar algumas ações como resetar posição, equipamentos e apararência...',

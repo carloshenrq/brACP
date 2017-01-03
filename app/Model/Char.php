@@ -316,7 +316,7 @@ class Char
     protected $hotkey_rowshift;
 
     /**
-     * @OneToMany(targetEntity="Inventory", mappedBy="char")
+     * @OneToMany(targetEntity="Inventory", mappedBy="character")
      */
     protected $inventory;
 

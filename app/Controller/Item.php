@@ -21,7 +21,6 @@ namespace Controller;
 
 use \ServerPing;
 use \Cache;
-use \Format;
 
 /**
  * Controlador para dados de conta.
@@ -93,8 +92,8 @@ class Item extends Caller
                 'weight'        => $item->getWeight(),
                 'type'          => $item->getType(),
                 'price'         => [
-                    'buy'       => Format::zeny($item->getPrice_buy()),
-                    'sell'      => Format::zeny($item->getPrice_sell()),
+                    'buy'       => brACPApp::getInstance()->getFormat()->zeny($item->getPrice_buy()),
+                    'sell'      => brACPApp::getInstance()->getFormat()->zeny($item->getPrice_sell()),
                 ],
                 'battle'    => [
                     'atk'           => $item->getAtk(),

@@ -73,7 +73,174 @@ class Account extends Caller
             'logout_GET'            => $needLogin,
             'email_POST'            => $needLogin,
             'password_POST'         => $needLogin,
+            'char_GET'              => $needLogin,
+            'charList_GET'          => $needLogin,
         ]);
+    }
+
+    /**
+     * Rota para os personagens, exibição dos personagens.
+     *
+     * @param array $get
+     * @param array $post
+     * @param array $response
+     *
+     * @return object
+     */
+    private function char_GET($get, $post, $response)
+    {
+        $this->getApp()
+            ->display('account.chars', [
+                'chars' => $this->getChars(),
+            ]);
+        return $response;
+    }
+
+    /**
+     * Rota para obter informações de personagem para a conta informada.
+     *
+     * @param array $get
+     * @param array $post
+     * @param array $response
+     *
+     * @return object
+     */
+    private function charList_GET($get, $post, $response)
+    {
+        return $response->withJson($this->getChars());
+    }
+
+    /**
+     * Obtém todos os personagens para uma determinada conta com detalhes.
+     *
+     * @param int $account_id 
+     *
+     * @return array
+     */
+    public function getChars($account_id = null)
+    {
+        if(is_null($account_id))
+            $account_id = self::loggedUser()->getAccount_id();
+
+        // Tenta obter a lista de personagem para a conta informada.
+        // Nota¹: Depende do servidor selecionado.
+        $_resultChars = $this->getApp()
+                                ->getSvrEm()
+                                ->createQuery('
+                                    SELECT
+                                        chars, inventory, guild
+                                    FROM
+                                        Model\Char chars
+                                    LEFT JOIN
+                                        chars.inventory inventory
+                                    LEFT JOIN
+                                        chars.guild guild
+                                    WHERE
+                                        chars.account_id = :account_id
+                                ')
+                                ->setParameter('account_id', $account_id)
+                                ->getResult();
+
+        $chars = [];
+        // Exibe os detalhes para usuários somente se usuário estiver logado e: 
+        // 1. Se os personagens forem da conta dele
+        // 2. Se a conta que está logada é nivel administrador
+        $details = (self::isLoggedIn() &&
+                    ($account_id == self::loggedUser()->getAccount_id() ||
+                    (BRACP_ALLOW_ADMIN && self::loggedUser()->getGroup_id() >= BRACP_ALLOW_ADMIN_GMLEVEL))
+                   );
+
+        // Trata informações do personagem para serem retornadas.
+        // -> Informa detalhes somente se:
+        //  1. O personagem é o da conta informada
+        //  2. A conta logada é nivel administrador. (O Painel de controle deve estar configurado para aceitar nivel administrador)
+        foreach($_resultChars as $char)
+            $chars[] = $this->parseCharData($char, $details);
+
+        return $chars;
+    }
+
+    /**
+     * Trata os dados do personagem e retorna.
+     *
+     * @param Char $char Personagem a ser devolvido as informações.
+     * @param bool $details Detalhes como inventário do personagem.
+     *
+     * @return object
+     */
+    public function parseCharData(Char $char, $details = false)
+    {
+        $charData = [];
+
+        // Informações normais dos personagens, todos podem saber sobre isso.
+        $charData['account_id']     = $char->getAccount_id();
+        $charData['char_id']        = $char->getChar_id();
+        $charData['char_num']       = $char->getChar_num();
+        $charData['name']           = $char->getName();
+        $charData['class']          = $char->getClass();
+        $charData['className']      = $this->getApp()->getFormat()->jobname($char->getClass());
+        $charData['base_level']     = $char->getBase_level();
+        $charData['job_level']      = $char->getJob_level();
+
+        $charData['guild']          = null;
+        if(!is_null($char->getGuild()))
+        {
+            $charData['guild']      = (object)[
+                'id'        => $char->getGuild()->getId(),
+                'name'      => $char->getGuild()->getName(),
+                'level'     => $char->getGuild()->getGuild_lv(),
+                'emblem'    => $char->getGuild()->getEmblem(),
+            ];
+        }
+
+        // Se for definido os detalhes do char, irá retornar os zenys.
+        // Se for consulta de ranking e estiver definido para obter os rankings e exibi-los
+        // Também será obtido os zenys.
+        if($details || (BRACP_ALLOW_RANKING_ZENY && BRACP_ALLOW_RANKING_ZENY_SHOW_ZENY))
+            $charData['zeny']       = $char->getZeny();
+        
+        // Se for definido os detalhes do char, irá retornar o status online do
+        // Boneco.
+        if($details || BRACP_ALLOW_SHOW_CHAR_STATUS)
+            $charData['online']     = $char->getOnline();
+        
+        // Se for configurado para obter os detalhes do jogador.
+        // Status, Inventário e etc...
+        if($details)
+        {
+            // Obtém os dados de status do jogador.
+            $charData['status'] = (object)[
+                'str'   => $char->getStr(),
+                'agi'   => $char->getAgi(),
+                'vit'   => $char->getVit(),
+                'int'   => $char->getInt(),
+                'dex'   => $char->getDex(),
+                'luk'   => $char->getLuk(),
+                'hp'    => $char->getHp(),
+                // Informações de status do hp
+                'max_hp'=> $char->getMax_hp(),
+                'prc_hp'=> ceil(($char->getHp()/$char->getMax_hp())*100), // Calculo de porcentagem de hp
+                'sp'    => $char->getSp(),
+                'max_sp'=> $char->getMax_sp(),
+                'prc_sp'=> ceil(($char->getSp()/$char->getMax_sp())*100), // Calculo de porcentagem de sp
+            ];
+
+            // Obtém informações de localização do jogador.
+            $charData['location'] = (object)[
+                'save'      => (object)[
+                    'map'   => $char->getSave_map(),
+                    'x'     => $char->getSave_x(),
+                    'y'     => $char->getSave_y(),
+                ],
+                'last'      => (object)[
+                    'map'   => $char->getLast_map(),
+                    'x'     => $char->getLast_x(),
+                    'y'     => $char->getLast_x(),
+                ]
+            ];
+        }
+
+        return (object)$charData;
     }
 
     /**
@@ -531,6 +698,11 @@ class Account extends Caller
             !$this->validate($new_email, BRACP_REGEXP_EMAIL))
             return 6;
 
+        // Se o modo administrador for enviado mas o brACP
+        // Estiver configurado para não poder usar modo administrador, então, desliga o parametro.
+        if($admin && !BRACP_ALLOW_ADMIN)
+            $admin = false;
+
         // Modo administrador não necessita verificar
         // Os dados de e-mail digitados.
         if(!$admin)
@@ -693,6 +865,11 @@ class Account extends Caller
      */
     private function changePass($userid, $user_pass, $user_pass_new, $user_pass_new_conf, $admin = false)
     {
+        // Se o modo administrador for enviado mas o brACP
+        // Estiver configurado para não poder usar modo administrador, então, desliga o parametro.
+        if($admin && !BRACP_ALLOW_ADMIN)
+            $admin = false;
+
         // Valida os dados contra a expressão regular.
         if(!$this->validate($userid, BRACP_REGEXP_USERNAME)
             || (!$admin && !$this->validate($user_pass, BRACP_REGEXP_PASSWORD)) // Quando for modo administrador, não é necessário
@@ -830,6 +1007,11 @@ class Account extends Caller
                             $birthdate,
                             $group_id = 0, $admin = false)
     {
+        // Se o modo administrador for enviado mas o brACP
+        // Estiver configurado para não poder usar modo administrador, então, desliga o parametro.
+        if($admin && !BRACP_ALLOW_ADMIN)
+            $admin = false;
+
         // Registro de contas está desabilitado.
         // -> Somente permite nova conta em caso de ser cadastro com modo administrador.
         if(!$admin && !BRACP_ALLOW_CREATE_ACCOUNT)

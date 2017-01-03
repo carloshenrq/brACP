@@ -53,6 +53,9 @@ require_once __DIR__ . '/app/Language.php';
 require_once __DIR__ . '/app/Cache.php';
 require_once __DIR__ . '/app/Format.php';
 
+// Instância para o objeto de formatação.
+$format = new Format;
+
 // Teste de bibliotecas para ver se está ok em salvar os dados.
 $PRE_REQUISITES = array(
     'phpversion'        => version_compare(PHP_VERSION, '5.5.0') > 0,
@@ -76,8 +79,8 @@ $_tmpPHPMinMemory       = '128M';
 $_tmpPHPMemoryLimit     = ini_get("memory_limit");
 
 $PRE_MemCached          = extension_loaded('memcache');
-$PRE_PHPMinMemory       = Format::parseBytes($_tmpPHPMinMemory);
-$PRE_PHPMemoryLimit     = Format::parseBytes($_tmpPHPMemoryLimit);
+$PRE_PHPMinMemory       = $format->parseBytes($_tmpPHPMinMemory);
+$PRE_PHPMemoryLimit     = $format->parseBytes($_tmpPHPMemoryLimit);
 
 // Teste para as variaveis de configuração do painel de controle.
 $_CONFIG_DATA = array(

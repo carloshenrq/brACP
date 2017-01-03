@@ -25,11 +25,13 @@
 class Format
 {
     /**
-    * Transforma valores como '3M' em 3145728 (do jeito que retorna do ini_get())
-    *
-    * @return int
-    */
-    public static function parseBytes($strSize)
+     * Transforma em bytes o formato presente em php.ini
+     *
+     * @param string $strSize
+     *
+     * @return int Valor em bytes.
+     */
+    public function parseBytes($strSize)
     {
         $strSize = trim($strSize);
         $size = intval(substr($strSize, 0, -1));
@@ -47,15 +49,14 @@ class Format
     }
 
     /**
-     * Transforma os bytes enviados em formatação de texto legivel como:
-     * 1048576 -> 1 MB (1048576 bytes)
+     * Transforma os bytes informados em valores formatados para serem lidos de forma simples.
      *
-     * @static
      * @param int $bytes
+     * @param int $byteLimit
      *
-     * @return string Valor tratado para exibição dos bytes.
+     * @return string Valor formatado em bytes.
      */
-    public static function bytes($bytes, $byteLimit = 1024)
+    public function getBytesFormatted($bytes, $byteLimit = 1024)
     {
         // Formatos aceitos
         $format = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
@@ -75,140 +76,46 @@ class Format
     }
 
     /**
-     * Formata um item para seus dados e informações.
-     */
-    public static function item($id, $amount = 0, $refine = 0, $broken = false)
-    {
-        $item = Controller\Item::get($id);
-
-        return '<div class="item-info '.(($broken) ? 'item-broken':'').'" '.(($refine > 0) ? 'data-refine="'.$refine.'"':'').' '.(($amount > 1) ? 'data-amount="'.$amount.'"':'').' '.(($item->slots > 0) ? 'data-slot="'.$item->slots.'"':'').' style="background-image: url('.$item->icon.');">'.
-                    $item->name . 
-               '</div>';
-    }
-
-    /**
-     * Formata informações de data do formato indicado até o destino.
-     *
-     * @param string $date
-     * @param string $destFormat
-     * @param string $fromFormat
-     *
-     * @return string
-     */
-    public static function date($date, $destFormat = 'd/m/Y H:i:s')
-    {
-        return date($destFormat, strtotime($date));
-    }
-
-    /**
-     * Calcula a diferença de datas e retorna em formato de string.
-     *
-     * @param string $start
-     * @param string $end
-     *
-     * @return string
-     */
-    public static function date_diff($start, $end, $format = 'Y-m-d H:i:s')
-    {
-        $str = '';
-        $interval = date_diff(date_create_from_format($format, $end),
-                        date_create_from_format($format, $start), true);
-
-        $tmp = [];
-
-        if($interval->y > 0) $tmp[] = $interval->y . ' ano'.(($interval->y > 1) ? 's':'');
-        if($interval->m > 0) $tmp[] = $interval->m . ' '.(($interval->m > 1) ? 'meses':'mês');
-        if($interval->d > 0) $tmp[] = $interval->d . ' dia' . (($interval->d > 1) ? 's':'');
-        if($interval->h > 0) $tmp[] = $interval->h . ' hora' . (($interval->h > 1) ? 's':'');
-        if($interval->i > 0) $tmp[] = $interval->i . ' minuto' . (($interval->i > 1) ? 's':'');
-        if($interval->s > 0) $tmp[] = $interval->s . ' segundo' . (($interval->s > 1) ? 's':'');
-
-        for($i = 0; $i < count($tmp); $i++)
-        {
-            $str .= $tmp[$i];
-
-            if(($i + 1) < (count($tmp) - 1))
-                $str .= ', ';
-            else if(($i + 1) == (count($tmp) - 1))
-                $str .= ' e ';
-
-        }
-        return $str;
-    }
-
-    /**
-     * Protege o endereço de e-mail exibindo apenas o primeiro e ultimo caractere antes do @
+     * Método para proteger um endereço de e-mail enviado.
      *
      * @param string $email
      *
-     * @return string
+     * @return string Endereço de e-mail protegido.
      */
-    public static function protectMail($email)
+    public function protectMail($email)
     {
-        preg_match('/^([a-z0-9._%+-])([^\@]+)([a-z0-9._%+-])(.*)/i', $email, $match);
-
+        if(!preg_match('/^([a-z0-9._%+-])([^\@]+)([a-z0-9._%+-])(.*)/i', $email, $match))
+            return '?';
+        
         array_shift($match);
         $match[1] = preg_replace('([a-z0-9._%+-])', '*', $match[1]);
-
         return implode('', $match);
     }
 
     /**
-     * Formata o falor enviado como dinheiro.
+     * Método utilizado para obter o nome da classe já traduzido
+     *
+     * @param int $jobClass Código da classe a ser obtida.
+     *
+     * @return string Nome da classe.
      */
-    public static function money($money, $decimalPlaces = 2, $centsDelimiter = ',', $milharDelimiter = '.')
+    public function jobname($jobClass)
     {
-        $_pow = pow(10, $decimalPlaces);
-        $_money = floor(floatval($money) * $_pow);
-        $_cents = substr(str_pad(strval($_money), ($decimalPlaces + 1), '0', STR_PAD_RIGHT), $decimalPlaces * -1);
-        $money = floor($_money/$_pow);
-
-        return self::zeny($money, $milharDelimiter) . $centsDelimiter . $_cents;
+        return brACPApp::getInstance()
+                        ->getLanguage()
+                        ->getTranslate('@JOBS_' . $jobClass . '@');
     }
 
     /**
-     * Obtém o status do jogador.
+     * Método utilizado para formatação de campos do tipo zeny.
      *
-     * @param int $online
+     * @param int $zeny Valor em zenys a ser formatado.
+     * @param string $delim Delimitador para os zenys.
      *
-     * @return string
+     * @return string Zenys formatadaos.
      */
-    public static function status($online)
+    public function zeny($zeny, $delim = '.')
     {
-        return sprintf(self::$online[$online], brACPApp::getInstance()->getLanguage()->getTranslate('@STATUS_'.$online.'@'));
+        return strrev(implode($delim, str_split(strrev($zeny), 3)));
     }
-
-    /**
-     * Obtém o nome da classe para o personagem.
-     *
-     * @param int $job_class Código da classe.
-     *
-     * @return string
-     */
-    public static function job($job_class)
-    {
-        return brACPApp::getInstance()->getLanguage()->getTranslate('@JOBS_' .$job_class.'@');
-    }
-
-    /**
-     * Formata os zenys.
-     *
-     * @param int $zeny
-     *
-     * @return string
-     */
-    public static function zeny($zeny, $delimiter = '.')
-    {
-        return strrev(implode($delimiter, str_split(strrev($zeny), 3)));
-    }
-
-    /**
-     * Define o status do jogador com o texto formatado.
-     *
-     * @var array
-     */
-    private static $online = [
-        0 => '<span style="color: red;">%s</span>',
-        1 => '<span style="color: green;">%s</span>',
-    ];
 }
