@@ -42,7 +42,8 @@ function removeAllModalMessages()
                 return ($(this).find('.message').length > 0);
             }).each(function() {
                 $(this).find('.message').filter(function() {
-                    return !$(this).hasClass('message-timeout');
+                    return (!$(this).hasClass('message-timeout')
+                    && ($(this).hasClass('error') || $(this).hasClass('success')));
                 }).each(function() {
                     $(this)
                         .addClass('message-timeout')
