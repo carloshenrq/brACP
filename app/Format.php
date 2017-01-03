@@ -118,4 +118,52 @@ class Format
     {
         return strrev(implode($delim, str_split(strrev($zeny), 3)));
     }
+
+    /**
+     * Transforma um json em xml.
+     *
+     * @param object $json
+     *
+     * @return string Array formatado em xml.
+     */
+    public function json2xml($json)
+    {
+        $text = json_encode($json);
+        return $this->array2xml(json_decode($text, true));
+    }
+
+    /**
+     * Transforma json em um arquivo xml.
+     *
+     * @param array $array
+     * @param \SimpleXMLElement $xml
+     *
+     * @return string Array formatado em xml.
+     */
+    public function array2xml($array, $xml = null)
+    {
+        if(is_null($xml))
+        {
+            $root = array_keys($array)[0];
+
+            $xml = new \SimpleXMLElement('<'.$root.'/>');
+            $this->array2xml($array[$root], $xml);
+        }
+        else
+        {
+            foreach($array as $k => $v)
+            {
+                if(preg_match('/^\-/', $k))
+                    $xml->addAttribute(substr($k, 1), $v);
+                else if(is_array($v))
+                    $this->array2xml($v, $xml->addChild($k));
+                else
+                {
+                    $xml->addChild($k, $v);
+                }
+            }
+        }
+
+        return $xml->asXML();
+    }
 }

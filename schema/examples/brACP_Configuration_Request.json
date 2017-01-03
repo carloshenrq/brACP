@@ -1,9 +1,7 @@
 {
     "brACPService" : {
         "serviceInfo" : {
-            "_attr" : [{
-                "version" : "0.2.2"
-            }],
+            "-version" : "0.2.2",
             "token" : "c4ca4238a0b923820dcc509a6f75849b",
             "app" : "e36314e624d2b2ca257e1f1ecb381f93"
         },
