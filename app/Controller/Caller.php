@@ -81,7 +81,7 @@ class Caller
     /**
      * Método utilizado para tratamento de rotas.
      */
-    public static function parseRoute(ServerRequestInterface $request, ResponseInterface $response, $args)
+    public static function parseRoute($request, $response, $args)
     {
         // Sempre direciona para home quando não está definido.
         if(!isset($args['controller']))
@@ -99,6 +99,8 @@ class Caller
         $get_params         = $request->getQueryParams();
         // Obtém todos os parametros enviados por POST/PUT/ETC...
         $data_params        = $request->getParsedBody();
+        // Obtém todos os arquivos enviados.
+        $file_params        = $request->getUploadedFiles();
 
         // Controi o nome do método a ser invocado.
         $callMethod         = $action . (!is_null($sub_action) ? '_' . $sub_action : '') . '_' . $method;
@@ -112,7 +114,7 @@ class Caller
         try
         {
             // Realiza a chamada da rota informando os parametros.
-            $response = $instance->{$callMethod}($get_params, $data_params, $response);
+            $response = $instance->{$callMethod}($get_params, $data_params, $file_params, $response);
 
             // Verifica se está permitindo realizar a requisição de hosts externos
             if(BRACP_ALLOW_EXTERNAL_REQUEST)

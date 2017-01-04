@@ -87,7 +87,7 @@ class Account extends Caller
      *
      * @return object
      */
-    private function char_GET($get, $post, $response)
+    private function char_GET($get, $post, $files, $response)
     {
         $this->getApp()
             ->display('account.chars', [
@@ -105,7 +105,7 @@ class Account extends Caller
      *
      * @return object
      */
-    private function charList_GET($get, $post, $response)
+    private function charList_GET($get, $post, $files, $response)
     {
         return $response->withJson($this->getChars());
     }
@@ -398,7 +398,7 @@ class Account extends Caller
      *
      * @return object
      */
-    private function recover_POST($get, $post, $response)
+    private function recover_POST($get, $post, $files, $response)
     {
         $return = ['error_state' => 0, 'success_state' => false];
 
@@ -601,7 +601,7 @@ class Account extends Caller
      *
      * @return object
      */
-    private function confirmation_POST($get, $post, $response)
+    private function confirmation_POST($get, $post, $files, $response)
     {
         // Dados de retorno para informações de erro.
         $return = ['error_state' => 0, 'success_state' => false];
@@ -644,7 +644,7 @@ class Account extends Caller
      *
      * @return object
      */
-    private function email_POST($get, $post, $response)
+    private function email_POST($get, $post, $files, $response)
     {
         $return = ['error_state' => 0, 'success_state' => false];
 
@@ -821,7 +821,7 @@ class Account extends Caller
      *
      * @return object
      */
-    private function password_POST($get, $post, $response)
+    private function password_POST($get, $post, $files, $response)
     {
         $return = ['error_state' => 0, 'success_state' => false];
 
@@ -945,7 +945,7 @@ class Account extends Caller
      *
      * @return object
      */
-    private function register_POST($get, $post, $response)
+    private function register_POST($get, $post, $files, $response)
     {
         // Inicializa o vetor de retorno.
         $return = ['error_state' => 0, 'success_state' => false];
@@ -1314,7 +1314,7 @@ class Account extends Caller
      *
      * @return object
      */
-    private function login_POST($get, $post, $response)
+    private function login_POST($get, $post, $files, $response)
     {
         // Vetor para retorno.
         $return = [
@@ -1386,7 +1386,7 @@ class Account extends Caller
      *
      * @return object
      */
-    private function logout_GET($get, $post, $response)
+    private function logout_GET($get, $post, $files, $response)
     {
         // Apaga da sessão dados do usuário.
         unset($this->getApp()->getSession()->BRACP_ISLOGGEDIN,

@@ -48,7 +48,7 @@ class Asset extends Caller
      *
      * @return object Response com cabeçalhos para js
      */
-    private function timg_GET($get, $post, $response)
+    private function timg_GET($get, $post, $files, $response)
     {
         // Obtém o arquivo de imagem para o item.
         $filenm = realpath(__DIR__ .'/../../themes/' . $this->getApp()->getSession()->BRACP_THEME . '/img/') . '/' . $get['file'] . '.png';
@@ -66,7 +66,7 @@ class Asset extends Caller
      *
      * @return object Response com cabeçalhos para js
      */
-    private function job_GET($get, $post, $response)
+    private function job_GET($get, $post, $files, $response)
     {
         // Obtém o arquivo de imagem para o item.
         $nameid = realpath(BRACP_TEMPLATE_DIR . '..'
@@ -87,7 +87,7 @@ class Asset extends Caller
      *
      * @return object Response com cabeçalhos para js
      */
-    private function monster_GET($get, $post, $response)
+    private function monster_GET($get, $post, $files, $response)
     {
         // Obtém o arquivo de imagem para o item.
         $nameid = realpath(__DIR__ .'/../../data/monsters/') . '/' . $get['id'] . '.gif';
@@ -105,7 +105,7 @@ class Asset extends Caller
      *
      * @return object Response com cabeçalhos para js
      */
-    private function images_GET($get, $post, $response)
+    private function images_GET($get, $post, $files, $response)
     {
         // Obtém o arquivo de imagem para o item.
         $nameid = realpath(__DIR__ .'/../../data/items/images/') . '/' . $get['id'] . '.png';
@@ -123,7 +123,7 @@ class Asset extends Caller
      *
      * @return object Response com cabeçalhos para js
      */
-    private function icon_GET($get, $post, $response)
+    private function icon_GET($get, $post, $files, $response)
     {
         // Obtém o arquivo de imagem para o item.
         $nameid = realpath(__DIR__ .'/../../data/items/icons/') . '/' . $get['id'] . '.png';
@@ -141,7 +141,7 @@ class Asset extends Caller
      *
      * @return object Response com cabeçalhos para js
      */
-    private function js_GET($get, $post, $response)
+    private function js_GET($get, $post, $files, $response)
     {
         // Nome do arquivo solicitado para retorno.
         $basefile = $get['file'];
@@ -212,7 +212,7 @@ class Asset extends Caller
      *
      * @return object Response com cabeçalhos para css
      */
-    private function css_GET($get, $post, $response)
+    private function css_GET($get, $post, $files, $response)
     {
         // Obtém o nome do arquivo base que será compilado.
         $basefile = $get['file'];

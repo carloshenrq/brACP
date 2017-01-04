@@ -45,7 +45,7 @@ class Vending extends Caller
      * @param array $get
      * @param array $post
      */
-    private function index_GET($get, $post, $response)
+    private function index_GET($get, $post, $files, $response)
     {
         $this->getApp()->display('vending.list');
         return $response;
@@ -57,7 +57,7 @@ class Vending extends Caller
      * @param array $get
      * @param array $post
      */
-    private function list_GET($get, $post, $response)
+    private function list_GET($get, $post, $files, $response)
     {
         $merchants  = $this->getAllMerchants();
         $maps       = [];

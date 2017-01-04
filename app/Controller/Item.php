@@ -47,7 +47,7 @@ class Item extends Caller
      *
      * @return object
      */
-    private function info_GET($get, $post, $response)
+    private function info_GET($get, $post, $files, $response)
     {
         $nameid = $get['id'];
 
