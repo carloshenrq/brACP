@@ -109,6 +109,27 @@
         </xs:restriction>
     </xs:simpleType>
 
+    <xs:simpleType name="TLanguage">
+        <xs:annotation>
+            <xs:documentation>Validação de campos de tipo linguagem.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:whiteSpace value="preserve"/>
+            <xs:pattern value="[a-zA-Z]{2}_[a-zA-Z]{2}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="TDescription">
+        <xs:annotation>
+            <xs:documentation>Campo destinado a tipo descrição.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:whiteSpace value="preserve"/>
+            <xs:minLength value="1"/>
+            <xs:maxLength value="255"/>
+        </xs:restriction>
+    </xs:simpleType>
+
     <xs:complexType name="TServiceInfo">
         <xs:annotation>
             <xs:documentation>Informações de tratamento para os serviços.</xs:documentation>
@@ -222,5 +243,46 @@
             </xs:element>
         </xs:sequence>
     </xs:complexType>
+
+    <xs:complexType name="TInstallLanguage">
+        <xs:annotation>
+            <xs:documentation>Contem pacotes de instalação para idiomas.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="lang" type="TLanguage"/>
+            <xs:element name="hash" type="TTokenHash"/>
+            <xs:element name="data" type="xs:base64Binary"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TInstallMod">
+        <xs:annotation>
+            <xs:documentation>Contém informações de instalação de um mod no sistema.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="mod" type="TName"/>
+            <xs:element name="desc" type="TDescription" minOccurs="0"/>
+            <xs:element name="author" minOccurs="0">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="name" type="TName"/>
+                        <xs:element name="email" type="TEmail" minOccurs="0"/>
+                        <xs:element name="officialLink" type="TUrlLink"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="modFile" minOccurs="1" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="file" type="TDescription"/>
+                        <xs:element name="hash" type="TTokenHash"/>
+                        <xs:element name="data" type="xs:base64Binary"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="brACPMod" type="TInstallMod"/>
 
 </xs:schema>
