@@ -255,34 +255,59 @@
         </xs:sequence>
     </xs:complexType>
 
+    <xs:complexType name="TAuthor">
+        <xs:sequence>
+            <xs:element name="name" type="TName"/>
+            <xs:element name="email" type="TEmail" minOccurs="0"/>
+            <xs:element name="officialLink" type="TUrlLink"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TFileMod">
+        <xs:annotation>
+            <xs:documentation>Contém informações de validação para arquivos de mod.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="file" type="TDescription"/>
+            <xs:element name="hash" type="TTokenHash"/>
+            <xs:element name="data" type="xs:base64Binary"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TFileModList">
+        <xs:annotation>
+            <xs:documentation>Contém informações de todos os arquivos de mod.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="fileInfo" type="TFileMod" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
     <xs:complexType name="TInstallMod">
         <xs:annotation>
             <xs:documentation>Contém informações de instalação de um mod no sistema.</xs:documentation>
+            <xs:documentation>Será extraido na pasta configurada em BRACP_MODS_DIR.</xs:documentation>
         </xs:annotation>
         <xs:sequence>
             <xs:element name="mod" type="TName"/>
             <xs:element name="desc" type="TDescription" minOccurs="0"/>
-            <xs:element name="author" minOccurs="0">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element name="name" type="TName"/>
-                        <xs:element name="email" type="TEmail" minOccurs="0"/>
-                        <xs:element name="officialLink" type="TUrlLink"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="modFile" minOccurs="1" maxOccurs="unbounded">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element name="file" type="TDescription"/>
-                        <xs:element name="hash" type="TTokenHash"/>
-                        <xs:element name="data" type="xs:base64Binary"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
+            <xs:element name="author" type="TAuthor" minOccurs="0"/>
+            <xs:element name="modFiles" type="TFileModList"/>
         </xs:sequence>
     </xs:complexType>
 
-    <xs:element name="brACPMod" type="TInstallMod"/>
+    <xs:complexType name="TInstallTheme">
+        <xs:annotation>
+            <xs:documentation>Contém informações de instalação de temas no sistema.</xs:documentation>
+            <xs:documentation>Será extraido na pasta configurada em 'themes'</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="name" type="TName"/>
+            <xs:element name="version" type="TVersion"/>
+            <xs:element name="folder" type="TDescription"/>
+            <xs:element name="author" type="TAuthor" minOccurs="0"/>
+            <xs:element name="themeFiles" type="TFileModList"/>
+        </xs:sequence>
+    </xs:complexType>
 
 </xs:schema>
