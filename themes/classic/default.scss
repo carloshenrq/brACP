@@ -84,11 +84,12 @@ html, body
 
             &.logo
             {
-                @include size(420px, 200px);
+                @include size(500px, 154px);
                 margin: auto;
                 background-image: url(#{$asset_path}/?file=logo);
                 background-repeat: no-repeat;
                 background-color: transparent;
+                background-size: cover;
                 cursor: pointer;
             }
 

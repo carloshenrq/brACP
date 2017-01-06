@@ -260,6 +260,7 @@
             <xs:element name="name" type="TName"/>
             <xs:element name="email" type="TEmail" minOccurs="0"/>
             <xs:element name="officialLink" type="TUrlLink"/>
+            <xs:element name="description" type="TDescription" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
 

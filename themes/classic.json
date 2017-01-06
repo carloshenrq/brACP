@@ -3,7 +3,12 @@
     "version" : "0.2.1-beta",
     "folder" : "classic",
     "authors" : [{
-        "name" : "CarlosHenrq",
-        "link" : "http://forum.brathena.org/index.php/user/60-carloshenrq/"
+        "name"          : "CarlosHenrq",
+        "officialLink"  : "http://forum.brathena.org/index.php/user/60-carloshenrq/",
+        "description"   : "Desenvolvedor do tema e formatações de tela, mensagens e etc..."
+    }, {
+        "name"          : "iMihael",
+        "officialLink"  : "http://forum.brathena.org/index.php/user/18601-imihael/",
+        "description"   : "Criador do logo para o brACP."
     }]
 }
