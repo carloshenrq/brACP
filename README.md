@@ -51,7 +51,7 @@ Para realizar a instalação destes frameworks quando você baixar o brACP basta
 
 Se você desejar uma outra opção de painel de controle, nós recomendamos o [FluxCP](https://github.com/HerculesWS/FluxCP).
 
-##Instalação
+## Instalação
 A Instalação deve seguir normalmente quando você abrir no seu navegador o caminho de uso do brACP. Leia atentamente todos os campos e como ele irá agir no brACP.
 **_Antes de completar a instalação o brACP irá realizar alguns testes de conexão com o banco de dados e irá lhe retornar os erros encontrados._**
 
