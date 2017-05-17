@@ -149,6 +149,7 @@ Digite:
 
 #### 3.2 - Se você usa Windows...
 Ao entrar na pasta, clique no botão direito do mouse no arquivo 'composer.json' e depois clique em 'Composer Install' no menu que irá abrir, aguarde a finalização e pronto. :3
+Caso não exista a opção do botão direito, entre no CMD e navegue até o diretório do brACP, via CMD, e digite "composer install" e aguarde o processo finalizar.
 
 ## Agradecimentos
 
