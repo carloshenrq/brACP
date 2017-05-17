@@ -12,7 +12,7 @@ Segue abaixo a lista das versões necessárias para execução do painel de cont
   * _OBS.: **mod_rewrite** deve estar ativo!_
 * MySQL 5.6
 
-###Extensões necessárias
+### Extensões necessárias
 
 * [cURL](http://php.net/manual/en/book.curl.php)
 * [Hash](http://php.net/manual/en/book.hash.php)
@@ -26,7 +26,7 @@ Segue abaixo a lista das versões necessárias para execução do painel de cont
 * [Sockets](http://php.net/manual/en/book.sockets.php)
 * [Zip](http://php.net/manual/en/book.zip.php)
 
-###Frameworks utilizados
+### Frameworks utilizados
 
 * [SlimFramwork](http://slimframework.com)
   * Versão: 3.1.0
@@ -47,7 +47,7 @@ Para realizar a instalação destes frameworks quando você baixar o brACP basta
 
 `composer install`
 
-##Recomendações
+## Recomendações
 
 Se você desejar uma outra opção de painel de controle, nós recomendamos o [FluxCP](https://github.com/HerculesWS/FluxCP).
 
@@ -57,10 +57,10 @@ A Instalação deve seguir normalmente quando você abrir no seu navegador o cam
 
     @TODO: Continuar explicação de instalação.
 
-###1- Configurar o Apache
+### 1- Configurar o Apache
 Nas configurações do Apache, você tem que habilitar o **mod_rewrite** e também a leitura de arquivos .htaccess
 
-####1.1- Habilitando a leitura de arquivos .htaccess
+#### 1.1- Habilitando a leitura de arquivos .htaccess
 Primeiro você precisa localizar o arquivo **httpd.conf** exitente dentro da pasta **conf** da sua instalação do Apache.
 
 Procure por este trecho:
@@ -101,7 +101,7 @@ Procure por este trecho:
 
 Troque o `AllowOverride None` para `AllowOverride All` e reinicie o serviço do Apache e prontinho, a leitura dos .htaccess estão habilitadas para você.
 
-####1.2- Habilitando o MOD\_REWRITE
+#### 1.2- Habilitando o MOD\_REWRITE
 
 Ainda no mesmo arquivo de configuração do apache **httpd.conf**, procure este trecho:
 
@@ -125,10 +125,10 @@ Remova o \# onde está o `#LoadModule rewrite_module modules/mod_rewrite.so` fic
 
 Agora salve e reinicie o apache.
 
-###2- Instalando o Composer
+### 2- Instalando o Composer
 Para instalar o composer, você deve possuir o PHP já instalado. Se tiver dúvidas de como instalar o PHP no windows, [clique aqui](http://php.net/manual/pt_BR/install.windows.php).
 
-####2.1 - Se você usa Linux...
+#### 2.1 - Se você usa Linux...
 
 Para realizar a instalação de acordo, recomendo instalar o composer da seguinte forma:
 
@@ -136,21 +136,21 @@ Para realizar a instalação de acordo, recomendo instalar o composer da seguint
     php composer-setup.php --install-dir=/bin --filename=composer
     php -r "unlink('composer-setup.php');"
 
-####2.2 - Se você usa Windows...
+#### 2.2 - Se você usa Windows...
 
 Visite [este link](https://getcomposer.org/download/) e siga as instruções que o próprio site da...
 
-###3- Instalando as dependências do composer
+### 3- Instalando as dependências do composer
 Após instalado o composer, navegue até a pasta do brACP e:
 
-####3.1 - Se você usa Linux...
+#### 3.1 - Se você usa Linux...
 Digite:
     composer install
 
-####3.2 - Se você usa Windows...
+#### 3.2 - Se você usa Windows...
 Ao entrar na pasta, clique no botão direito do mouse no arquivo 'composer.json' e depois clique em 'Composer Install' no menu que irá abrir, aguarde a finalização e pronto. :3
 
-##Agradecimentos
+## Agradecimentos
 
 [Protimus](http://forum.brathena.org/index.php/user/1-protimus/) : Por fornecer dicas de segurança.
 
@@ -170,6 +170,6 @@ Ao entrar na pasta, clique no botão direito do mouse no arquivo 'composer.json'
 
 [Shiraz](http://forum.brathena.org/index.php/user/321-shiraz/) : Ajuda com implementações relacionadas ao [memcached](https://memcached.org/)
 
-##Desenvolvedores
+## Desenvolvedores
 
 [CarlosHenrq](http://forum.brathena.org/index.php/user/60-carloshenrq/)
