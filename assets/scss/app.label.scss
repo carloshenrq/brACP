@@ -1,0 +1,39 @@
+@import '_mixin';
+@import '_options';
+
+
+.label
+{
+    display: inline-block;
+    *display: inline-block;
+
+    font-size: .8em;
+
+    background-color: #51713e;
+    color: white;
+    margin: 0;
+    padding: .2em .6em .2em .6em;
+    border: 1px solid rgba(0, 0, 0, .1);
+
+    @include border-radius(.3em);
+
+    &.success
+    {
+        background-color: #008000;
+    }
+
+    &.error
+    {
+        background-color: #cc0000;
+    }
+
+    &.warning
+    {
+        background-color: #e67e22;
+    }
+
+    &.info
+    {
+        background-color: #4d88ff;
+    }
+}

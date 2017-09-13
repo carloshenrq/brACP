@@ -1,0 +1,248 @@
+
+/**
+ * Define o tamanho para o elemento.
+ *
+ * @param int $width
+ * @param int $height
+ */
+@mixin size($width, $height)
+{
+    width: $width; height: $height;
+}
+
+/**
+ * Define o tamanho minimo para o elemento.
+ *
+ * @param int $width
+ * @param int $height
+ */
+@mixin min-size($width, $height)
+{
+    min-width: $width; min-height: $height;
+}
+
+/**
+ * Define o tamanho máximo para o elemento.
+ *
+ * @param int $width
+ * @param int $height
+ * @param string $overflow (Default: auto)
+ */
+@mixin max-size($width, $height, $overflow : auto)
+{
+    max-width: $width; max-height: $height;
+    overflow: $overflow;
+}
+
+/**
+ * Define a posição do elemento como central.
+ *
+ * @param string $position
+ */
+@mixin position-center($position)
+{
+    @include position-fixed($position, 50%, 50%);
+}
+
+/**
+ * Define a posição do elemento como fixo na posição informada
+ *
+ * @param string $position
+ * @param int $top
+ * @param int $left
+ */
+@mixin position-fixed($position, $top, $left)
+{
+    @include position-left($position, $top, $left);
+    @include transform('translate(#{(-100%+$top)}, #{-100%+$left})');
+}
+
+/**
+ * Define a posição a esquerda de acordo com os parametros informados.
+ *
+ * @param string $position
+ * @param int $top
+ * @param int $left
+ */
+@mixin position-left($position, $top, $left)
+{
+    position: $position;
+    top: $top;
+    left: $left;
+}
+
+/**
+ * Define a posição a direita.
+ *
+ * @param string $position
+ * @param int $top
+ * @param int $right
+ */
+@mixin position-right($position, $top, $right)
+{
+    position: $position;
+    top: $top;
+    right: $right;
+}
+
+/**
+ * Define uma borda sombreada para o elemento.
+ *
+ * @param string $shadow
+ */
+@mixin box-shadow($shadow)
+{
+    box-shadow: #{$shadow};
+    -moz-box-shadow: #{$shadow};
+    -webkit-box-shadow: #{$shadow};
+}
+
+@mixin text-shadow($shadow)
+{
+    text-shadow: #{$shadow};
+}
+
+/**
+ * Define uma borda arredondada para o elemento.
+ *
+ * @param string $radius
+ */
+@mixin border-radius($radius)
+{
+    border-radius: $radius;
+    -moz-border-radius: $radius;
+    -webkit-border-radius: $radius;
+}
+
+/**
+ * Define uma animação para o elemento.
+ *
+ * @param string $animation
+ */
+@mixin animation($animation)
+{
+    animation: #{$animation};
+    -moz-animation: #{$animation};
+    -webkit-animation: #{$animation};
+}
+
+/**
+ * Define informações de transformações para o elemento.
+ *
+ * @param string $transform
+ */
+@mixin transform($transform)
+{
+    transform: #{$transform};
+    -ms-transform: #{$transform};
+    -webkit-transform: #{$transform};
+}
+
+/**
+ * Define o tamanho do background para o elemento.
+ *
+ * @param string $background
+ */
+@mixin background-size($background)
+{
+    background-size: $background;
+    -o-background-size: $background;
+    -moz-background-size: $background;
+    -webkit-background-size: $background;
+}
+
+/**
+ * Define um degrade de background para o elemento.
+ *
+ * @param string $colorStart
+ * @param string $colorEnd
+ */
+@mixin background-gradient($colorStart, $colorEnd)
+{
+    background: $colorStart;
+    background: -moz-linear-gradient(top, $colorStart 0%, $colorEnd 100%);
+    background: -webkit-linear-gradient(top, $colorStart 0%, $colorEnd 100%);
+    background: linear-gradient(to bottom, $colorStart 0%, $colorEnd 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#{$colorStart}', endColorstr='#{$colorEnd}',GradientType=0 );
+    background-repeat: repeat-x;
+}
+
+/**
+ * Define transições para o elemento.
+ *
+ * @param string $transition
+ */
+@mixin transition($transition)
+{
+    transition: #{$transition};
+    -o-transition: #{$transition};
+    -moz-transition: #{$transition};
+    -webkit-transition: #{$transition};
+}
+
+/**
+ * Mixin para overflow de texto.
+ */
+@mixin text-overflow($overflow)
+{
+    text-overflow: #{$overflow};
+    -o-text-overflow: #{$overflow};
+    -ms-text-overflow: #{$overflow};
+}
+
+@mixin word-wrap($wrap)
+{
+    word-wrap: #{$wrap};
+    -ms-word-wrap: #{$wrap};
+}
+
+/**
+ * Define informações de animação.
+ *
+ * @param string $animation
+ * @param string $timing
+ * @param string $iteration
+ * @param string $delay
+ */
+@mixin animation($animation, $timing, $iteration, $delay)
+{
+    animation-name: #{$animation};
+    animation-delay: #{$delay};
+    animation-duration: #{$timing};
+    animation-iteration-count: #{$iteration};
+    -o-animation-name: #{$animation};
+    -o-animation-delay: #{$delay};
+    -o-animation-duration: #{$timing};
+    -o-animation-iteration-count: #{$iteration};
+    -moz-animation-name: #{$animation};
+    -moz-animation-delay: #{$delay};
+    -moz-animation-duration: #{$timing};
+    -moz-animation-iteration-count: #{$iteration};
+    -webkit-animation-name: #{$animation};
+    -webkit-animation-delay: #{$delay};
+    -webkit-animation-duration: #{$timing};
+    -webkit-animation-iteration-count: #{$iteration};
+}
+
+@function pow($number, $exponent)
+{
+    $value: 1;
+
+    @if $exponent > 0 {
+        @for $i from 1 through $exponent {
+            $value: $value * $number;
+        }
+    } @else if $exponent < 0 {
+        @for $i from 1 through -$exponent {
+            $value: $value / $number;
+        }
+    }
+
+    @return $value;
+}
+
+@function roundDecimal($number, $decimal : 2)
+{
+    $base10 : pow(10, $decimal);
+    @return round($number * $base10) / $base10;
+}

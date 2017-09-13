@@ -1,8 +1,9 @@
 templates_c
 vendor
-mods
+vendor/
 /*.lock
 /config.php
 /*.cache
-/cache
-/*.db
+/cache/*
+*.js
+*.css

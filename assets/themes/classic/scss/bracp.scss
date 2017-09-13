@@ -1,0 +1,291 @@
+/**
+ *  brACP - brAthena Control Panel for Ragnarok Emulators
+ *  Copyright (C) 2015  brAthena, CHLFZ
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+@import '_mixin';
+@import '_options';
+
+html, body
+{
+    display: block;
+
+    font-family: $brA-Font-Family;
+    background-color: $brA-Body-Background;
+
+    background-image: url(#{$assetUrl}/img/background.png);
+    background-repeat: no-repeat;
+    background-position: top center;
+    background-size: contain;
+
+    overflow: none;
+
+    @include size(100%, 100%);
+}
+
+body
+{
+    .bracp-container-wrapper
+    {
+        display: block;
+        box-sizing: border-box;
+        width: 80%;
+        margin: 0 auto;
+
+        .bracp-top-wrapper
+        {
+            display: block;
+
+            .bracp-top-buttons
+            {
+                position: relative;
+                padding: 1em;
+                text-align: right;
+
+                .app-box
+                {
+                    width: 20em;
+                    right: 1em;
+
+                    &.app-list
+                    {
+                        padding: 0;
+
+                        .app-menu-list
+                        {
+                            font-size: .8em;
+
+                            .app-menu-item
+                            {
+                                margin: .8em;
+                                padding: .8em;
+
+                                &:first-child
+                                {
+                                    border-radius: .4em .4em 0 0;
+                                }
+
+                                &.app-menu-title
+                                {
+                                    margin: 0; padding: 1em;
+                                    background-color: #ecf0f1;
+                                    color: #7f8c8d;
+                                    font-weight: bold;
+                                }
+
+                                &:not(.app-menu-title)
+                                {
+                                    cursor: pointer;
+                                    border-radius: .4em;
+                                    @include transition('background-color .2s ease-in-out, box-shadow .2s ease-in-out');
+
+                                    &:hover
+                                    {
+                                        background-color: #ecf0f1;
+                                        @include box-shadow('0 0 .2em #bdc3c7');
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    &.app-admin
+                    {
+                        @include box-shadow('0 0 .4em #800000, inset 0 0 .1em #800000');
+                        
+                        .app-menu-list
+                        {
+                            .app-menu-item
+                            {
+                                color: #990000;
+                                &.app-menu-title
+                                {
+                                    background-color: #ffcccc;
+                                    color: #990000;
+                                }
+
+                                &:not(.app-menu-title)
+                                {
+                                    &:hover
+                                    {
+                                        background-color: #ffe6e6;
+                                        @include box-shadow('0 0 .2em #ff8080');
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .bracp-middle-wrapper
+        {
+            .bracp-logo
+            {
+                display: block;
+                margin: 0 auto;
+                width: 100%; height: 116px;
+
+                background-repeat: no-repeat;
+                background-position: center center;
+                background-size: contain;
+                background-image: url(#{$assetUrl}/img/logo.png);
+            }
+
+            .bracp-body-wrapper
+            {
+                display: block;
+                box-sizing: border-box;
+                width: 100%;
+
+                min-height: 300px;
+                background-color: white;
+                color: rgba(62, 80, 44,1.0);
+
+                @include border-radius(.4em);
+                @include box-shadow('0 0 .2em rgba(189, 195, 199,1.0)');
+
+                ul.title
+                {
+                    font-size: .8em;
+                    margin: 0; padding: 1em;
+                    list-style: none;
+                    color: rgba(127, 140, 141, 1.0);
+                    font-style: italic;
+                    background-color: rgba(236, 240, 241,1.0);
+                    border-bottom: .1em solid rgba(189, 195, 199,1.0);
+                    @include border-radius(.4em .4em 0 0);
+
+                    li
+                    {
+                        display: inline-block;
+                        margin: 0; padding: 0;
+
+                        &+ li::before
+                        {
+                            display: inline-block;
+                            content: '\00bb';
+                            margin-left: .4em;
+                            margin-right: .6em;
+                        }
+                    }
+                }
+
+                .bracp-body-content
+                {
+                    padding: 1em;
+
+                    .game-access
+                    {
+                        .game-top-actions
+                        {
+                            margin: .6em 0;
+                        }
+                    }
+
+                    .profile-container
+                    {
+                        width: 70%;
+                        display: block;
+                        margin: 0 auto;
+                        font-size: .8em;
+
+                        .profile
+                        {
+                            margin: 1em;
+                            display: block;
+
+                            .profile-info
+                            {
+                                display: block;
+                                width: 60%;
+                                margin: 0 auto;
+
+                                .profile-actions-top
+                                {
+                                    text-align: left;
+                                    margin-bottom: 1em;
+                                }
+
+                                .profile-actions-bottom
+                                {
+                                    text-align: right;
+                                    margin-top: 1em;
+                                }
+
+                                .profile-image
+                                {
+                                    display: block;
+                                    margin: 0 auto;
+
+                                    background-repeat: no-repeat;
+                                    background-size: cover;
+                                    background-position: center center;
+
+                                    @include size(96px, 96px);
+                                    @include border-radius(50% 50%);
+                                    @include box-shadow('0 0 .4em rgba(0, 0, 0, .6)');
+                                }
+
+                                .profile-name
+                                {
+                                    margin: .4em 0;
+                                    font-weight: bold;
+                                    text-align: center;
+                                }
+
+                                .profile-about
+                                {
+                                    margin: 0 auto;
+                                    font-style: italic;
+                                    text-align: justify;
+                                }
+
+                                .profile-other
+                                {
+                                    margin: .6em 0;
+
+                                    label
+                                    {
+                                        font-size: 1em;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                }
+
+            }
+        }
+    }
+}
+
+form
+{
+    .recaptcha
+    {
+        display: block;
+        margin: 1em auto;
+    }
+}
+
+.app-facebook
+{
+    margin: .5em;
+}

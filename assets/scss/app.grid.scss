@@ -1,0 +1,29 @@
+@import '_mixin';
+@import '_options';
+
+.app-grid
+{
+    display: block;
+    width: 100%;
+
+    .app-grid-row
+    {
+        display: block;
+
+        [class*="app-grid-column"]
+        {
+            box-sizing: border-box;
+            display: inline-block;
+            margin: 0 -4px 0 0; padding: 0;
+        }
+
+        @for $i from 1 through $gridCols
+        {
+            .app-grid-column-#{$i}
+            {
+                width: roundDecimal(percentage(1/$gridCols)*$i);
+            }
+        }
+    }
+}
+

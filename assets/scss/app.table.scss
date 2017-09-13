@@ -1,0 +1,39 @@
+@import '_mixin';
+@import '_options';
+
+table
+{
+    width: 100%;
+    box-sizing: border-box;
+    border-collapse: collapse;
+    font-size: .7em;
+    border-color: $App-Default-Strong;
+
+    thead tr th, tbody tr td
+    {
+        padding: .5em;
+        border-color: $App-Default-Strong;
+    }
+
+    caption
+    {
+        padding: .7em;
+    }
+
+    thead tr
+    {
+        color: $App-Bg-Color;
+        background-color: $App-Default-Strong;
+    }
+
+    tbody tr 
+    {
+        color: $App-Default-Strong;
+
+        &:nth-child(even)
+        {
+            background-color: #e6f2ff;
+        }
+    }
+}
+

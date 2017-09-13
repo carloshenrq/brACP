@@ -17,5 +17,23 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'bootstrap.php';
+// Arquivos padrões para serem incluidos durante a execução do brACP.
+$_filesInclude = [
+    join(DIRECTORY_SEPARATOR, [__DIR__, 'config.php']),
+    join(DIRECTORY_SEPARATOR, [__DIR__, 'vendor', 'autoload.php']),
+    join(DIRECTORY_SEPARATOR, [__DIR__, 'application', 'autoload.php']),
+];
 
+foreach($_filesInclude as $_fileInclude)
+{
+    if(!file_exists($_fileInclude))
+        exit('Arquivo de configuração do sistema não encontrado. Verifique sua instalação.');
+    
+    require_once $_fileInclude;
+}
+
+setlocale(LC_ALL, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
+date_default_timezone_set(APP_DEFAULT_TIMEZONE);
+
+$app = new App;
+$app->run();

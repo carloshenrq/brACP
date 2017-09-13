@@ -1,5 +1,0 @@
-<?xml version="1.0"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
-    <xs:include schemaLocation="brACP_Types.01.xsd"/>
-    <xs:element name="brACPService" type="TServiceAccountRegisterCode"/>
-</xs:schema>

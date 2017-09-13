@@ -1,0 +1,56 @@
+@import '_mixin';
+@import '_options';
+
+input[type="text"], input[type="password"], textarea, select
+{
+    &.input
+    {
+        display: block;
+        *display: block;
+        padding: .6em;
+        font-family: $App-Input-Font;
+
+        border: .1em solid #d4d4d4;
+        color: #555555;
+        box-sizing: border-box;
+        width: 100%;
+
+        margin: 0 0 .6em 0;
+
+        @include border-radius(.3em);
+        @include box-shadow('inset rgba(0,0,0,0.1) 0px 1px 3px');
+
+        &:focus
+        {
+            border-color: #a6a6a6;
+        }
+
+        &:required
+        {
+            &:valid
+            {
+                color: #00802b;
+                border-color: #00b33c;
+                @include box-shadow('inset rgba(0,255,0,0.1) 0px 1px 3px');
+
+                &:focus
+                {
+                    border-color: #00cc44;
+                }
+            }
+
+            &:invalid
+            {
+                color: #cc0000;
+                border-color: #ff4d4d;
+                @include box-shadow('inset rgba(255,0,0,0.1) 0px 1px 3px');
+
+                &:focus
+                {
+                    border-color: #ff1a1a;
+                }
+            }
+        }
+    }
+}
+

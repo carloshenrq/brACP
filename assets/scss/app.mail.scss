@@ -1,0 +1,54 @@
+@import '_mixin';
+@import '_options';
+
+html, body
+{
+    font-family: $App-Font;
+    font-size: 1em;
+    background-color: $App-Bg-Color;
+    padding: 0; margin: 0;
+}
+
+.mail-container
+{
+    display: block;
+    font-size: 1em;
+    width: 80%;
+    margin: 1em auto;
+    background-color: white;
+    border: 1px solid rgba(44, 62, 80, .6);
+    @include border-radius(.2em);
+    @include box-shadow(0 0 .2em .1em rgba(44, 62, 80, .6));
+
+    .mail-header, .mail-body, .mail-footer
+    {
+        padding: 1.3em;
+    }
+
+    .mail-header, .mail-footer
+    {
+        color: white;
+        @include background-gradient($App-Default-Weak, $App-Default-Strong);
+    }
+
+    .mail-header
+    {
+        text-align: center;
+        font-weight: bold;
+        @include border-radius(.2em .2em 0 0);
+    }
+
+    .mail-footer
+    {
+        padding: 1em;
+        font-size: .8em;
+        @include border-radius(0 0 .2em .2em);
+
+        a
+        {
+            text-decoration: none;
+            color: inherit;
+        }
+    }
+}
+

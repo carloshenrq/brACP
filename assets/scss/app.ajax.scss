@@ -1,0 +1,59 @@
+@import '_mixin';
+@import '_options';
+
+.app-http-background
+{
+    display: block;
+    position: fixed;
+    top: 0; left: 0;
+
+    background-color: rgba(44, 62, 80, .3);
+    z-index: 3;
+
+    @include min-size(100%, 100%);
+    @include size(100%, 100%);
+}
+
+.app-http-loading
+{
+    display: block;
+    background-color: white;
+
+    padding: 2em;
+
+    @include border-radius(.4em);
+    @include position-center(fixed);
+    @include box-shadow('-.1em .1em .2em rgba(149, 165, 166, 1.0), .1em -.1em .2em rgba(149, 165, 166, .2)');
+
+    .app-spinner
+    {
+        display: inline-block;
+        height: 2.5em;
+        width: .6em;
+
+        background-color: #34495e;
+        @include border-radius(.4em);
+
+        &+ .app-spinner
+        {
+            margin-left: .4em;
+        }
+
+        // Adiciona a animação a todas as barrinhas de loading.
+        @for $i from 1 through 3 {
+            &.app-spinner-#{$i}
+            {
+                @include animation(app-loading-bar, .8s, infinite, #{($i*2)/10}s);
+            }
+        }
+
+    }
+}
+
+@keyframes app-loading-bar
+{
+    #{'0%'}   { @include transform('scale(1, .6)'); }
+    #{'50%'}  { @include transform('scale(1, 1)'); }
+    #{'100%'} { @include transform('scale(1, .6)');  }
+}
+

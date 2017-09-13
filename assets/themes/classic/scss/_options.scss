@@ -1,0 +1,184 @@
+
+/**
+ * Variaveis padrões para execução do sistema.
+ * Configurações para a aplicação.
+ */
+$App-Font: "Arial Black", Gadget, sans-serif;
+$App-Bg-Color: #f2f2f2;
+
+// Configurações de cores em geral.
+$App-Default-Weak: rgba(47, 208, 114, 1.0);
+$App-Default-Strong: rgba(14, 62, 34, 1.0);
+$App-Default-Shadow: rgba(14, 62, 34, .7);
+
+$App-Success-Default-Weak: #2ecc71;
+$App-Success-Default-Strong: #27ae60;
+$App-Success-Default-Shadow: rgba(39, 174, 96, .7);
+
+$App-Error-Default-Weak: #e74c3c;
+$App-Error-Default-Strong: #c0392b;
+$App-Error-Default-Shadow: rgba(192, 57, 43, .7);
+
+$App-Warning-Default-Weak: #e67e22;
+$App-Warning-Default-Strong: #d35400;
+$App-Warning-Default-Shadow: rgba(211, 84, 0, .7);
+
+$App-Info-Default-Weak: #3498db;
+$App-Info-Default-Strong: #2980b9;
+$App-Info-Default-Shadow: rgba(41, 128, 185, .7);
+
+
+$App-Input-Shadow: $App-Default-Shadow;
+$App-Input-Color: $App-Default-Strong;
+$App-Input-Font: $App-Font;
+
+/**
+ * CONFIGURAÇÃO DE CORES E PADRÕES PARA OS MODAIS
+ * DA APLICAÇÃO.
+ *
+ * -> modal.scss
+ */
+$App-Modal-Bg-Color: white;
+$App-Modal-Font-Color: $App-Default-Strong;
+$App-Modal-Shadow: rgba(0, 0, 0, .4);
+$App-Modal-Title-Font-Color: white;
+$App-Modal-Title-Border: rgba(81, 113, 62, .7);
+$App-Modal-Title-Weak: $App-Default-Weak;
+$App-Modal-Title-Strong: $App-Default-Strong;
+$App-Modal-Footer-Bg-Color: #ecf0f1;
+$App-Modal-Footer-Border: #bdc3c7;
+
+$App-Modal-Success-Font-Color: $App-Success-Default-Strong;
+$App-Modal-Success-Shadow: rgba(39, 174, 96, .4);
+$App-Modal-Success-Title-Border: rgba(39, 174, 96, .3);
+$App-Modal-Success-Title-Weak: $App-Success-Default-Weak;
+$App-Modal-Success-Title-Strong: $App-Success-Default-Strong;
+$App-Modal-Success-Footer-Bg-Color: rgba(39, 174, 96, .1);
+$App-Modal-Success-Footer-Border: rgba(39, 174, 96, .3);
+
+$App-Modal-Error-Font-Color: $App-Error-Default-Strong;
+$App-Modal-Error-Shadow: rgba(192, 57, 43, .4);
+$App-Modal-Error-Title-Border: rgba(192, 57, 43, .3);
+$App-Modal-Error-Title-Weak: $App-Error-Default-Weak;
+$App-Modal-Error-Title-Strong: $App-Error-Default-Strong;
+$App-Modal-Error-Footer-Bg-Color: rgba(192, 57, 43, .1);
+$App-Modal-Error-Footer-Border: rgba(192, 57, 43, .3);
+
+$App-Modal-Warning-Font-Color: $App-Warning-Default-Strong;
+$App-Modal-Warning-Shadow: rgba(211, 84, 0, .4);
+$App-Modal-Warning-Title-Border: rgba(211, 84, 0, .3);
+$App-Modal-Warning-Title-Weak: $App-Warning-Default-Weak;
+$App-Modal-Warning-Title-Strong: $App-Warning-Default-Strong;
+$App-Modal-Warning-Footer-Bg-Color: rgba(211, 84, 0, .1);
+$App-Modal-Warning-Footer-Border: rgba(211, 84, 0, .3);
+
+$App-Modal-Info-Font-Color: $App-Info-Default-Strong;
+$App-Modal-Info-Shadow: rgba(41, 128, 185, .4);
+$App-Modal-Info-Title-Border: rgba(52, 152, 219, .3);
+$App-Modal-Info-Title-Weak: $App-Info-Default-Weak;
+$App-Modal-Info-Title-Strong: $App-Info-Default-Strong;
+$App-Modal-Info-Footer-Bg-Color: rgba(52, 152, 219, .1);
+$App-Modal-Info-Footer-Border: rgba(52, 152, 219, .3);
+
+/**
+ * CONFIGURAÇÃO DE CORES E PADRÕES PARA OS MESSAGES
+ * DA APLICAÇÃO.
+ *
+ * -> message.scss
+ */
+$App-Message-Font-Color: $App-Default-Strong;
+$App-Message-Bg-Color: #ecf0f1;
+$App-Message-Shadow: rgba(44, 62, 80, .5);
+
+$App-Message-Success-Font-Color: $App-Success-Default-Strong;
+$App-Message-Success-Bg-Color: #eafaf1;
+$App-Message-Success-Shadow: rgba(39, 174, 96, .5);
+
+$App-Message-Error-Font-Color: $App-Error-Default-Strong;
+$App-Message-Error-Bg-Color: #f6d9d5;
+$App-Message-Error-Shadow: rgba(192, 57, 43, .5);
+
+$App-Message-Warning-Font-Color: $App-Warning-Default-Strong;
+$App-Message-Warning-Bg-Color: #fef5e7;
+$App-Message-Warning-Shadow: rgba(243, 156, 18, .5);
+
+$App-Message-Info-Font-Color: $App-Info-Default-Weak;
+$App-Message-Info-Bg-Color: #e9f4fb;
+$App-Message-Info-Shadow: rgba(52, 152, 219, .5);
+
+/**
+ * CONFIGURAÇÃO DE CORES E PADRÕES PARA OS LABELS
+ * DA APLICAÇÃO.
+ *
+ * -> label.scss
+ */
+$App-Label-Color-Weak: #ecf0f1;
+$App-Label-Color-Strong: #bdc3c7;
+$App-Label-Color-Shadow: rgba(149, 165, 166, .4);
+$App-Label-Font-Color: rgba(44, 62, 80, 1.0);
+
+$App-Label-Success-Weak: $App-Success-Default-Weak;
+$App-Label-Success-Strong: $App-Success-Default-Strong;
+$App-Label-Success-Font-Color: white;
+
+$App-Label-Error-Weak: $App-Error-Default-Weak;
+$App-Label-Error-Strong: $App-Error-Default-Strong;
+$App-Label-Error-Font-Color: white;
+
+$App-Label-Warning-Weak: $App-Warning-Default-Weak;
+$App-Label-Warning-Strong: $App-Warning-Default-Strong;
+$App-Label-Warning-Font-Color: white;
+
+$App-Label-Info-Weak: $App-Info-Default-Weak;
+$App-Label-Info-Strong: $App-Info-Default-Strong;
+$App-Label-Info-Font-Color: white;
+
+/**
+ * CONFIGURAÇÃO DE CORES E PADRÕES PARA OS BOTÕES
+ * DA APLICAÇÃO.
+ *
+ * -> button.scss
+ */
+$App-Button-Background: #51713e;
+$App-Button-Font-Color: white;
+
+$App-Button-Icon-Bg: rgba(236, 240, 241, 1.0);
+
+$App-Button-Link-Txt-Shadow: rgba(255, 255, 255, 1);
+
+$App-Button-Success-Color-Weak: $App-Success-Default-Weak;
+$App-Button-Success-Color-Strong: $App-Success-Default-Strong;
+$App-Button-Success-Color-Shadow: $App-Success-Default-Shadow;
+$App-Button-Success-Font-Color: $App-Button-Font-Color;
+
+$App-Button-Error-Color-Weak: $App-Error-Default-Weak;
+$App-Button-Error-Color-Strong: $App-Error-Default-Strong;
+$App-Button-Error-Color-Shadow: $App-Error-Default-Shadow;
+$App-Button-Error-Font-Color: $App-Button-Font-Color;
+
+$App-Button-Warning-Color-Weak: $App-Warning-Default-Weak;
+$App-Button-Warning-Color-Strong: $App-Warning-Default-Strong;
+$App-Button-Warning-Color-Shadow: $App-Warning-Default-Shadow;
+$App-Button-Warning-Font-Color: $App-Button-Font-Color;
+
+$App-Button-Info-Color-Weak: $App-Info-Default-Weak;
+$App-Button-Info-Color-Strong: $App-Info-Default-Strong;
+$App-Button-Info-Color-Shadow: $App-Info-Default-Shadow;
+$App-Button-Info-Font-Color: $App-Button-Font-Color;
+
+/**
+ * Variaveis de configuração para o menu
+ */
+$brA-Font-Family: Tahoma, Geneva, Verdana, sans-serif, 'Segoe UI';
+$brA-Body-Background: #f4f6ef;
+
+$brA-Box-Font-Color: #3f3f3f;
+$brA-Box-Background: white;
+$brA-Box-Shadow: '0 0 .4em #{$brA-Box-Font-Color}, inset 0 0 .1em #{$brA-Box-Font-Color}';
+
+$brA-Mail-Background: $brA-Body-Background;
+$brA-Mail-Shadow: $brA-Box-Shadow;
+$brA-Mail-Top-Week: #003300;
+$brA-Mail-Top-Strong: #003300;
+$brA-Mail-Color: #003300;
+
