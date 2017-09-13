@@ -20,9 +20,9 @@
 // Arquivos padrões para serem incluidos durante a execução do brACP.
 $_filesInclude = [
     join(DIRECTORY_SEPARATOR, [__DIR__, 'config.php']),
-    join(DIRECTORY_SEPARATOR, [__DIR__, 'vendor', 'autoload.php']),
     join(DIRECTORY_SEPARATOR, [__DIR__, 'application', 'autoload.php']),
 ];
+$composerFile = join(DIRECTORY_SEPARATOR, [__DIR__, 'vendor', 'autoload.php']);
 
 foreach($_filesInclude as $_fileInclude)
 {
@@ -31,6 +31,32 @@ foreach($_filesInclude as $_fileInclude)
     
     require_once $_fileInclude;
 }
+
+// Verifica se o arquivo do composer não existe para iniciar a execução
+// do programa do composer.
+if(!file_exists($composerFile))
+{
+    // Arquivo do composer para executar os dados de vendor.
+    $composerPhar = join(DIRECTORY_SEPARATOR, [
+        __DIR__,
+        'composer.phar'
+    ]);
+    // Altera o timeout padrão do php.
+    $oldTimeout = ini_set('max_execution_time', '1200');
+    
+    // Faz atualização e instalação das depências do composer...
+    @exec("php {$composerPhar} self-update");
+    @exec("php {$composerPhar} install");
+
+    // Define o tempo de execução.
+    ini_set('max_execution_time', $oldTimeout);
+
+    // Solicita a atualização da tela para o usuário.
+    exit('As depêndencias do composer foram instaladas com sucesso. Por favor, pressione F5 para atualizar.');
+}
+
+// Inclui o arquivo de composer para as dependencias de classes.
+require_once $composerFile;
 
 setlocale(LC_ALL, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
 date_default_timezone_set(APP_DEFAULT_TIMEZONE);
