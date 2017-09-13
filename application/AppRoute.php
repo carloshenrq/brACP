@@ -38,7 +38,8 @@ class AppRoute extends AppMiddleware
     public function __invoke($request, $response, $next)
     {
         $path = $request->getUri()->getPath();
-        if($path != '/') $path = '/' . $path;
+        if(substr($path, 0, 1) !== '/')
+            $path = '/' . $path;
 
         // Se a rota possuir algo pré-configurado para parametrôs
         // Então, substitui a rota e envia com a rota definida.
