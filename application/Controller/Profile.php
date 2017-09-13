@@ -685,6 +685,8 @@ class Profile extends AppController
             $profile->allowMessage = 'M';
             $profile->privileges = 'U';
             $profile->registerDate = new \DateTime();
+            $profile->gaAllowed = false;
+            $profile->gaSecret = null;
 
             // Se o accessToken foi definido, então está criando uma conta
             // Utilizando o facebook.
