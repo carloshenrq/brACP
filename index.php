@@ -17,22 +17,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Arquivos padrões para serem incluidos durante a execução do brACP.
-$_filesInclude = [
-    join(DIRECTORY_SEPARATOR, [__DIR__, 'config.php']),
-    join(DIRECTORY_SEPARATOR, [__DIR__, 'application', 'autoload.php']),
-];
-$composerFile = join(DIRECTORY_SEPARATOR, [__DIR__, 'vendor', 'autoload.php']);
-
-foreach($_filesInclude as $_fileInclude)
-{
-    if(!file_exists($_fileInclude))
-        exit('Arquivo de configuração do sistema não encontrado. Verifique sua instalação.');
-    
-    require_once $_fileInclude;
-}
-
-// Verifica se o arquivo do composer não existe para iniciar a execução
+ // Arquivo de carregamento do composer.
+ $composerFile = join(DIRECTORY_SEPARATOR, [__DIR__, 'vendor', 'autoload.php']);
+ 
+ // Verifica se o arquivo do composer não existe para iniciar a execução
 // do programa do composer.
 if(!file_exists($composerFile))
 {
@@ -46,10 +34,15 @@ if(!file_exists($composerFile))
     
     // Faz atualização e instalação das depências do composer...
     @exec("php {$composerPhar} self-update");
-    @exec("php {$composerPhar} install");
+    @exec("php {$composerPhar} install", $output, $return);
 
     // Define o tempo de execução.
     ini_set('max_execution_time', $oldTimeout);
+
+    // Caso a variavel não seja exatamente igual a 0, então, ocorreu algum erro de execução do composer
+    // Em sua atualização, provavelmente problemas de execução.
+    if($return !== 0)
+        exit('Não foi possível instalar as dependencias do composer. Verifique as permissões e tente novamente.');
 
     // Solicita a atualização da tela para o usuário.
     exit('As depêndencias do composer foram instaladas com sucesso. Por favor, pressione F5 para atualizar.');
@@ -57,6 +50,20 @@ if(!file_exists($composerFile))
 
 // Inclui o arquivo de composer para as dependencias de classes.
 require_once $composerFile;
+
+// Arquivos padrões para serem incluidos durante a execução do brACP.
+$_filesInclude = [
+    join(DIRECTORY_SEPARATOR, [__DIR__, 'config.php']),
+    join(DIRECTORY_SEPARATOR, [__DIR__, 'application', 'autoload.php']),
+];
+
+foreach($_filesInclude as $_fileInclude)
+{
+    if(!file_exists($_fileInclude))
+        exit('Arquivo de configuração do sistema não encontrado. Verifique sua instalação.');
+    
+    require_once $_fileInclude;
+}
 
 setlocale(LC_ALL, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
 date_default_timezone_set(APP_DEFAULT_TIMEZONE);
