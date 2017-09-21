@@ -9,6 +9,7 @@ input[type="text"], input[type="password"], textarea, select
         *display: block;
         padding: .6em;
         font-family: $App-Input-Font;
+        outline: 0;
 
         border: .1em solid #d4d4d4;
         color: #555555;
