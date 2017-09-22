@@ -52,8 +52,30 @@ class Game extends AppController
      */
     public function index_GET($response, $args)
     {
+
+        // Obtém os acessos do usuário logado para exibição
+        $accounts = $this->getRepository()
+                        ->getAccountsFromProfile($this->getLoggedUser());
+                
+        // Monta um array com todos os servidores das contas.
+        $accountServers = [];
+        foreach($accounts as $account)
+        {
+            $accountServers[] = $account->server->id;
+        }
+        
+        // Obtém todos os servidores disponiveis para uso
+        // Servidores que cairam em desuso, não irão aparecer... cuidado aqui =)
+        $servers = $this->getApp()
+                        ->getEntityManager()
+                        ->getRepository('Model\Server')
+                        ->getAllEnabledJSON();
+
         // Informa em tela os dados de perfil.
         return $this->render($response, 'bracp.game.tpl', [
+            'accounts'          => $accounts,
+            'servers'           => $servers,
+            'accountServers'    => json_encode($accountServers),
         ]);
     }
 

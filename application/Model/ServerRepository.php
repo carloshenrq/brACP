@@ -27,6 +27,26 @@ use \Doctrine\ORM\Mapping;
 class ServerRepository extends AppRepository
 {
     /**
+     * Retorna todos os servidores ativos em formato json
+     * Para tratamento do Angular ou qualquer coisa que for usar em tela
+     */
+    public function getAllEnabledJSON()
+    {
+
+        $_tmpServer = [];
+
+        foreach($this->getAllEnabled() as $server)
+        {
+            $_tmpServer[] = (object)[
+                'id'    => $server->id,
+                'name'  => $server->name,
+            ];
+        }
+
+        return $_tmpServer;
+    }
+
+    /**
      * Retorna todos os servidores habilitados.
      *
      * @return array

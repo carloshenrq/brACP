@@ -212,11 +212,13 @@ class GameRepository extends AppRepository
         // Obtém o perfil associado ao perfil indicado.
         $profile = $this->_em->createQuery('
             SELECT
-                game, profile
+                game, profile, server
             FROM
                 Model\Game game
             INNER JOIN
                 game.profile profile
+            INNER JOIN
+                game.server server
             WHERE
                 game.account_id = :account_id
         ')
@@ -356,11 +358,13 @@ class GameRepository extends AppRepository
         // Obtém todos os acessos vinculados ao perfil informado.
         $accounts = $this->_em->createQuery('
             SELECT
-                game, profile
+                game, profile, server
             FROM
                 Model\Game game
             INNER JOIN
                 game.profile profile
+            INNER JOIN
+                game.server server
             WHERE
                 profile.id = :id
         ')
