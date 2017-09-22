@@ -53,9 +53,9 @@ app.controller('game-access', ['$scope', '$interval', 'ajax-request', 'window-lo
 
         $scope.init = function(accounts, servers, serverSelected)
         {
-            this.accounts = parseInt(accounts);
-            this.servers = JSON.parse(atob(servers));
-            this.serverSetted = this.serverSelected = serverSelected;
+            // this.accounts = parseInt(accounts);
+            // this.servers = JSON.parse(atob(servers));
+            // this.serverSetted = this.serverSelected = serverSelected;
         };
 
         $scope.reset = function()

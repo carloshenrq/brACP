@@ -227,14 +227,18 @@ COLLATE='utf8_swedish_ci';
 DROP TABLE IF EXISTS `bracp_profile_accounts`;
 CREATE TABLE `bracp_profile_accounts` (
 
-    `ProfileAccID`      INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    `ProfileID`         INTEGER NOT NULL,
-    `AccountID`         INTEGER NOT NULL,
-    `AccountUserID`     VARCHAR(50) NOT NULL,
-    `AccountSex`        ENUM('M', 'F') NOT NULL,
-    `AccountVerifyDt`   DATETIME NOT NULL,
+    `ProfileAccID`          INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `ProfileID`             INTEGER NOT NULL,
+    `AccountID`             INTEGER NOT NULL,
+    `AccountUserID`         VARCHAR(50) NOT NULL,
+    `AccountSex`            ENUM('M', 'F') NOT NULL,
+    `AccountVerifyDt`       DATETIME NOT NULL,
+    -- Coluna indica o código do último servidor utlizado
+    -- Para gerenciar os personagens. [22-09-2017]
+    `ServerID`              INTEGER NOT NULL,
 
-    CONSTRAINT `bracp_profile_accounts_f01` FOREIGN KEY (`ProfileID`) REFERENCES `bracp_profile` (`ProfileID`)
+    CONSTRAINT `bracp_profile_accounts_f01` FOREIGN KEY (`ProfileID`) REFERENCES `bracp_profile` (`ProfileID`),
+    CONSTRAINT `bracp_profile_accounts_f02` FOREIGN KEY (`ServerID`) REFERENCES `bracp_servers` (`ServerID`)
 
 ) ENGINE=InnoDB
 COLLATE='utf8_swedish_ci';

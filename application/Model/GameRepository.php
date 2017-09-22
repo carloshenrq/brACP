@@ -170,6 +170,13 @@ class GameRepository extends AppRepository
         if(BRACP_RAG_ACCOUNT_LIMIT > 0 && count($this->getAccountsFromProfile($profile)) >= BRACP_RAG_ACCOUNT_LIMIT)
             return false;
         
+        // Obtém o ID do servidor na hora de fazer a gravação
+        // -- Por padrão, obtém o da session e se não for possível
+        //    Obtém 1 por default.
+        $serverId = 1;
+        if(isset($this->getApp()->getSession()->BRACP_SERVER_SELECTED))
+            $serverId = $this->getApp()->getSession()->BRACP_SERVER_SELECTED;
+        
         // Caso esteja tudo correto, realiza o vinculo do perfil com o acesso informado.
         $game = new Game;
         $game->profile = $profile;
@@ -177,6 +184,7 @@ class GameRepository extends AppRepository
         $game->userid = $login->userid;
         $game->sex = $login->sex;
         $game->verifyDt = new \DateTime;
+        $game->server = $this->_em->getRepository('Model\Server')->findOneBy(['id' => $serverId]);
 
         // Salva os dados no banco e retorna verdadeiro.
         $this->save($game);

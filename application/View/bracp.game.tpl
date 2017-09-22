@@ -25,9 +25,7 @@
 {block name="brACP_Container"}
    
 
-    <div class="game-access" ng-controller="game-access" ng-init="init('{$accountCount}', '{$servers}', '{$serverSelected}')">
-
-
+    <div class="game-access" ng-controller="game-access" ng-init="init('', '', '')">
 
         <div style="width: 60%; margin: 0 auto;">
             <div class="game-top-actions">

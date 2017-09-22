@@ -52,40 +52,8 @@ class Game extends AppController
      */
     public function index_GET($response, $args)
     {
-        // Obtém todos os acessos do jogador para o perfil informado.
-        $accounts = $this->getRepository()->getAccountsFromProfile($this->getLoggedUser());
-        $accountReturn = [];
-
-        // Transforma os dados de retorno para exibição em tela
-        foreach($accounts as $account)
-        {
-            $accountReturn[] = (object)array(
-                'account_id'    => $account->account_id,
-                'userid'        => $account->userid,
-                'sex'           => $account->sex,
-                'verifyDt'      => $account->verifyDt->format('Y-m-d H:i:s')
-            );
-        }
-
-        // Obtém todos os servidores disponiveis para seleção.
-        $_tmpServers = $this->getApp()
-                        ->getEntityManager()
-                        ->getRepository('Model\Server')->getAllEnabled();
-        $servers = [];
-        foreach($_tmpServers as $server)
-        {
-            $servers[] = (object)array(
-                'id'    => $server->id,
-                'name'  => $server->name,
-            );
-        }
-
         // Informa em tela os dados de perfil.
         return $this->render($response, 'bracp.game.tpl', [
-            'accounts'          => $accountReturn,
-            'accountCount'      => count($accountReturn),
-            'servers'           => base64_encode(json_encode($servers)),
-            'serverSelected'    => $this->getApp()->getSession()->BRACP_SERVER_SELECTED,
         ]);
     }
 

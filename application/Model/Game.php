@@ -62,4 +62,10 @@ class Game
      * @Column(name="AccountVerifyDt", type="datetime", nullable=false)
      */
     public $verifyDt;
+
+    /**
+     * @ManyToOne(targetEntity="Server")
+     * @JoinColumn(name="ServerID", referencedColumnName="ServerID", nullable=false)
+     */
+    public $server;
 }
