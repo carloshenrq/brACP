@@ -21,6 +21,12 @@ input[type="text"], input[type="password"], textarea, select
         @include border-radius(.3em);
         @include box-shadow('inset rgba(0,0,0,0.1) 0px 1px 3px');
 
+        &.small
+        {
+            padding: .2em;
+            margin: 0;
+        }
+
         &:focus
         {
             border-color: #a6a6a6;

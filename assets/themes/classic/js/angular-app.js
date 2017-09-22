@@ -31,9 +31,7 @@ app.controller('game-access', ['$scope', '$interval', 'ajax-request', 'window-lo
     function($scope, $interval, ajax, location, uri, modal) {
 
         $scope.accounts = 0;
-        $scope.servers = [];
-        $scope.serverSelected = 0;
-        $scope.serverSetted = 0;
+        $scope.serverSelected = [];
 
         $scope.linkData = {
             'userid'    : '',
@@ -51,11 +49,14 @@ app.controller('game-access', ['$scope', '$interval', 'ajax-request', 'window-lo
             'cnf_user_pass' : '',
         };
 
-        $scope.init = function(accounts, servers, serverSelected)
+        $scope.init = function(accounts, servers)
         {
-            // this.accounts = parseInt(accounts);
-            // this.servers = JSON.parse(atob(servers));
-            // this.serverSetted = this.serverSelected = serverSelected;
+            this.accounts = parseInt(accounts);
+
+            // Atribui a lista de servidores por conta
+            for(var i = 0; i < servers.length; i++)
+                this.serverSelected[i] = servers[i].toString();
+
         };
 
         $scope.reset = function()
@@ -75,7 +76,6 @@ app.controller('game-access', ['$scope', '$interval', 'ajax-request', 'window-lo
                 'new_user_pass' : '',
                 'cnf_user_pass' : '',
             };
-            this.serverSetted = 0;
         };
 
         $scope.changePass = function(account_id)
@@ -160,9 +160,12 @@ app.controller('game-access', ['$scope', '$interval', 'ajax-request', 'window-lo
          * 
          * @param account_id
          */
-        $scope.charManage = function(account_id)
+        $scope.charManage = function(account_id, server_id)
         {
-            alert(account_id);
+            /**
+             * @TODO: Fazer a requisição dos personagens
+             *        para o servidor selecionado
+             */
         }
 
         /**
