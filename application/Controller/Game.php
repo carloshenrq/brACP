@@ -125,28 +125,38 @@ class Game extends AppController
      */
     public function create_POST($response, $args)
     {
-        // Dados de retorno
-        $data = ['error' => true];
-
-        // Cria o registro e retorna os dados de retorno.
-        $createResponse = $this->getRepository()->createAccess($this->getLoggedUser(),
-                            $this->post['userid'], $this->post['user_pass'],
-                            $this->post['user_pass_cnf'], $this->post['sex']);
-        
-        
-        if(!$createResponse)
+        try
         {
-            $data = ['success' => true];
+            // Dados de retorno
+            $data = ['error' => true];
+
+            // Cria o registro e retorna os dados de retorno.
+            $createResponse = $this->getRepository()->createAccess($this->getLoggedUser(),
+                                $this->post['userid'], $this->post['user_pass'],
+                                $this->post['user_pass_cnf'], $this->post['sex']);
+            
+            
+            if(!$createResponse)
+            {
+                $data = ['success' => true];
+            }
+            else
+            {
+                $data = [
+                    'error' => true,
+                    'message'   => $this->getRepository()->createError($createResponse)
+                ];
+            }
         }
-        else
+        catch(\Exception $ex)
         {
             $data = [
                 'error' => true,
-                'message'   => $this->getRepository()->createError($createResponse)
+                'message' => $ex->getMessage()
             ];
         }
-
         return $response->withJson($data);
+
     }
 
     /**

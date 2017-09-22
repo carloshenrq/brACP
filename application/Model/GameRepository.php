@@ -133,7 +133,6 @@ class GameRepository extends AppRepository
         $login->state = 0;
         $login->lastlogin = new \DateTime;
         $login->birthdate = $profile->birthdate;
-        $login->unique_id = '';
         $login->unban_time = 0;
         $login->logincount = 0;
         $login->last_ip = '?.?.?.?';

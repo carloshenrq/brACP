@@ -115,9 +115,4 @@ class RAG_Login
      * @Column(name="last_password_change", type="integer", nullable=false, options={"default":0})
      */
     public $last_password_change;
-    
-    /**
-     * @Column(name="unique_id", type="string", length=32, nullable=false)
-     */
-    public $unique_id;
 }
