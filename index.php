@@ -17,8 +17,27 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
- // Arquivo de carregamento do composer.
- $composerFile = join(DIRECTORY_SEPARATOR, [__DIR__, 'vendor', 'autoload.php']);
+// Verifica se está sendo executado em um apache.
+if(!function_exists('apache_get_version')
+    || !preg_match('/^Apache\/([^\s]+)/i', apache_get_version(), $versionMatch)
+    || version_compare($versionMatch[1],  '2.4.0') < 0)
+{
+    echo 'O brACP somente pode ser executado usando Apache 2.4.x ou superior', '<br>',
+            'The brACP only can be executed with Apache 2.4.x or later.';
+    exit;
+}
+
+// Verfica se o mod_rewrite está instalado no apache,
+// Se não estiver, não permite que continue a execução da CP.
+if(!in_array('mod_rewrite', apache_get_modules()))
+{
+    echo 'O <strong>mod_rewrite</strong> deve estar habilitado para continuar.','<br>',
+         'The <strong>mod_rewrite</strong> must be enabled to continue.';
+    exit;
+}
+
+// Arquivo de carregamento do composer.
+$composerFile = join(DIRECTORY_SEPARATOR, [__DIR__, 'vendor', 'autoload.php']);
  
  // Verifica se o arquivo do composer não existe para iniciar a execução
 // do programa do composer.
