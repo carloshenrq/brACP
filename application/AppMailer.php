@@ -52,11 +52,14 @@ class AppMailer extends AppComponent
         ]);
         $mailId = $this->getApp()->getSqlite()->lastInsertId();
 
+		$scheme = 'http';
+		if(isset($_SERVER['REQUEST_SCHEME'])) $scheme = $_SERVER['REQUEST_SCHEME'];
+
         // Renderiza o template com os dados a serem enviados.
         $content = $this->getApp()->getView()->render($template, array_merge($data, [
             'css'       => $css,
             'subject'   => $subject,
-            'urlSender' => $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'],
+            'urlSender' => $scheme . '://' . $_SERVER['HTTP_HOST'],
             'ipAddress' => $this->getApp()->getFirewall()->getIpAddress(),
         ]));
 

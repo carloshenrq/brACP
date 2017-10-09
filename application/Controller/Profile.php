@@ -92,12 +92,15 @@ class Profile extends AppController
 
             $profile = $this->getRepository()->findById(1);
 
+			$scheme = 'http';
+			if(isset($_SERVER['REQUEST_SCHEME'])) $scheme = $_SERVER['REQUEST_SCHEME'];
+
             return $this->render($response, 'mail.profile.notify.blocked.tpl', [
                 'profile'       => $profile,
                 'blocked'       => true,
                 'css'           => $css,
                 'subject'       => 'Teste',
-                'urlSender'     => $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST']
+                'urlSender'     => $scheme . '://' . $_SERVER['HTTP_HOST']
             ]);
         }
         catch(\Exception $ex)

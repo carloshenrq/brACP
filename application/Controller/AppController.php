@@ -325,9 +325,9 @@ class AppController extends \AppComponent
         }
         catch(\Exception $ex)
         {
-            return $app->getView()->render($response, 'bracp.error.tpl', [
+            return $response->write($app->getView()->render('bracp.error.tpl', [
                 'ex'    => $ex
-            ]);
+            ]));
         }
     }
 }
