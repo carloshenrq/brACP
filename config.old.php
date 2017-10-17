@@ -24,22 +24,6 @@ return [
 	'APP_DEFAULT_TIMEZONE'		=> 'America/Sao_Paulo',
 	'APP_URL_PATH'				=> '/bracp',
 
-	// Definição de criptografia de sessão	
-	'APP_SESSION_SECURE'		=> true,
-	'APP_SESSION_ALGO'			=> 'AES-256-ECB',
-	'APP_SESSION_KEY'			=> 'fjPY131yohICvDj5JszAFIgGajZcZ7c3p4EIECbb0ac=',
-	'APP_SESSION_IV'			=> '',
-
-	// Definições de configuração de e-mail
-	'APP_MAILER_ALLOWED'		=> false,
-	'APP_MAILER_HOST'			=> '',
-	'APP_MAILER_PORT'			=> 25,
-	'APP_MAILER_ENCRYPT'		=> '',
-	'APP_MAILER_USER'			=> '',
-	'APP_MAILER_PASS'			=> '',
-	'APP_MAILER_FROM'			=> '',
-	'APP_MAILER_NAME'			=> '',
-
 	// Configuração de diretórios
 	'APP_TEMPLATE_DIR'			=> join(DIRECTORY_SEPARATOR, [
 		__DIR__, 'application', 'View',
@@ -56,15 +40,6 @@ return [
 	'APP_SCHEMA_DIR'			=> join(DIRECTORY_SEPARATOR, [
 		__DIR__, 'schemas'
 	]),
-
-	// Configurações para conexão com o banco de dados. (ELOQUENT)
-	'APP_SQL_DRIVER'			=> 'pdo_mysql',
-	'APP_SQL_HOST'				=> '127.0.0.1',
-	'APP_SQL_USER'				=> 'bracp',
-	'APP_SQL_PASS'				=> 'bracp',
-	'APP_SQL_DATA'				=> 'bracp',
-	'APP_SQL_PERSISTENT'		=> false,
-	'APP_SQL_CONNECTION_STRING'	=> 'mysql:host=%s;dbname=%s', // Montar
 
 	// Configurações de cache local
 	'APP_CACHE_ENABLED'			=> false,

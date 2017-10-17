@@ -107,27 +107,34 @@ class AppSmarty extends Smarty
      */
     public function render($template, $data = [], $cache = false, $expire = APP_CACHE_TIMEOUT, $force = false)
     {
+        $announces = [];
+        $ipAddress = '127.0.0.1';
+
         // Verifica se existem anuncios a serem avisados na tela do usuários
         // Estes anuncios são os anuncios sem perfil vinculado.
-        $announceRepo = $this->getApp()->getEntityManager()->getRepository('Model\Announce');
+        if(!defined('APP_INSTALL_MODE') || !constant('APP_INSTALL_MODE'))
+        {
+            $announces = $this->getApp()->getEntityManager()->getRepository('Model\Announce')->getAllActiveGlobal();
+            $ipAddress = $this->getApp()->getFirewall()->getIpAddress();
+        }
 
         // Adiciona o formatador de campos ao dados de render.
         $data = array_merge($data, [
             // Formatador de campos
             'formatter'     => $this->getApp()->getFormatter(),
             // Endereço ip do usuário.
-            'ipAddress'     => $this->getApp()->getFirewall()->getIpAddress(),
+            'ipAddress'     => $ipAddress,
             // Idiomas que foram carregados. 
             'languages'     => $this->getApp()->getLanguage()->getLangs(),
             'langSelected'  => $this->getApp()->getSession()->APP_LANGUAGE,
             // Dados de sessão
             'session'       => $this->getApp()->getSession(),
             // Dados de anuncio global
-            'announces'     => $announceRepo->getAllActiveGlobal(),
+            'announces'     => $announces,
         ]);
 
         // Verifica se o usuário está logado e o adiciona os dados que serão exibidos.
-        if(\Controller\Profile::isLoggedIn())
+        if(\Controller\Profile::isLoggedIn() && (!defined('APP_INSTALL_MODE') || !constant('APP_INSTALL_MODE')))
         {
             $data = array_merge($data, [
                 'loggedUser'    => \Controller\Profile::getLoggedUser()

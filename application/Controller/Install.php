@@ -29,7 +29,7 @@ class Install extends AppController
      */
     public function index_GET($response, $args)
     {
-    	return $response->write('oi');
+    	return $this->render($response, 'install.tpl');
     }
 }
 

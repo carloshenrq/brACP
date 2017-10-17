@@ -153,13 +153,13 @@ class App extends Slim\App
         $this->add(new AppRoute($this));
         $this->add(new AppHttpClient($this));
         $this->add(new AppCache($this));
+        $this->add(new AppLanguage($this));
 
         // Caso não esteja em modo de instalação, então, permite a execução
         if(!defined('APP_INSTALL_MODE') || !constant('APP_INSTALL_MODE'))
         {
             $this->add(new AppFacebook($this));
             $this->add(new AppDatabase($this));
-            $this->add(new AppLanguage($this));
             $this->add(new AppFirewall($this));
 
             // Executa o método para instalar os plugins.
