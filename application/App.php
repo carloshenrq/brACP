@@ -118,10 +118,13 @@ class App extends Slim\App
         // Marca o horario de para a construção do item.
         $this->startTime = microtime(true);
 
+        // Inicializa a aplicação carregando informações de configuração.
+        $this->init();
+
         // Array de configurações locais.
         $configs = [
             'settings' => [
-                'displayErrorDetails' => true
+                'displayErrorDetails' => APP_DEVELOPER_MODE
             ],
         ];
 
@@ -148,15 +151,152 @@ class App extends Slim\App
 
         // Adiciona os middlewares para a execução.
         $this->add(new AppRoute($this));
-        $this->add(new AppFacebook($this));
         $this->add(new AppHttpClient($this));
-        $this->add(new AppDatabase($this));
         $this->add(new AppCache($this));
-        $this->add(new AppLanguage($this));
-        $this->add(new AppFirewall($this));
 
-        // Executa o método para instalar os plugins.
-        $this->installPlugins();
+        // Caso não esteja em modo de instalação, então, permite a execução
+        if(!defined('APP_INSTALL_MODE') || !constant('APP_INSTALL_MODE'))
+        {
+            $this->add(new AppFacebook($this));
+            $this->add(new AppDatabase($this));
+            $this->add(new AppLanguage($this));
+            $this->add(new AppFirewall($this));
+
+            // Executa o método para instalar os plugins.
+            $this->installPlugins();
+        }
+    }
+
+    /**
+     * Executa configurações iniciais do brACP e permite a inicialização da aplicação.
+     */
+    protected function init()
+    {
+        // Verifica se existe configurações que já foram instaladas.
+        $config = realpath(join(DIRECTORY_SEPARATOR, [
+            __DIR__, '..', 'config.php'
+        ]));
+
+        // Variável temporaria para configuração da aplicação.
+        $_tmpConfig = [];
+
+        // Caso não seja possível localizar o arquivo, então irá carregar configurações
+        // Para instalação apenas.
+        if($config === false || file_exists($config) === false)
+        {
+            // Obtém o URL_PATH atual.
+            $urlPath = substr($_SERVER['PHP_SELF'], 0, -9);
+            if(strlen($urlPath) > 1 && $urlPath !== '/')
+                $urlPath = substr($urlPath, 0, -1);
+
+            // Carrega configurações padrões de instalação para conseguir seguir a instalação do sistema.
+            $_tmpConfig = [
+                // Configurações de localização (pasta) e timezone  
+                'APP_DEVELOPER_MODE'        => true,
+                'APP_DEFAULT_TIMEZONE'      => 'America/Sao_Paulo',
+                'APP_URL_PATH'              => $urlPath,
+                'APP_INSTALL_MODE'          => true,
+
+                // Definição de criptografia de sessão  
+                'APP_SESSION_SECURE'        => true,
+                'APP_SESSION_ALGO'          => 'AES-256-ECB',
+                'APP_SESSION_KEY'           => 'fjPY131yohICvDj5JszAFIgGajZcZ7c3p4EIECbb0ac=',
+                'APP_SESSION_IV'            => '',
+
+                // Definições de configuração de e-mail
+                'APP_MAILER_ALLOWED'        => false,
+                'APP_MAILER_HOST'           => '',
+                'APP_MAILER_PORT'           => 25,
+                'APP_MAILER_ENCRYPT'        => '',
+                'APP_MAILER_USER'           => '',
+                'APP_MAILER_PASS'           => '',
+                'APP_MAILER_FROM'           => '',
+                'APP_MAILER_NAME'           => '',
+
+                // Configuração de diretórios
+                'APP_TEMPLATE_DIR'          => join(DIRECTORY_SEPARATOR, [
+                    __DIR__, '..', 'application', 'View',
+                ]),
+                'APP_MODEL_DIR'             => join(DIRECTORY_SEPARATOR, [
+                    __DIR__, '..', 'application', 'Model',
+                ]),
+                'APP_CACHE_DIR'             => join(DIRECTORY_SEPARATOR, [
+                    __DIR__, '..', 'cache'
+                ]),
+                'APP_PLUGIN_DIR'            => join(DIRECTORY_SEPARATOR, [
+                    __DIR__, '..', 'plugins'
+                ]),
+                'APP_SCHEMA_DIR'            => join(DIRECTORY_SEPARATOR, [
+                    __DIR__, '..', 'schemas'
+                ]),
+
+                // Configurações para conexão com o banco de dados. (ELOQUENT)
+                'APP_SQL_DRIVER'            => 'pdo_mysql',
+                'APP_SQL_HOST'              => '127.0.0.1',
+                'APP_SQL_USER'              => 'bracp',
+                'APP_SQL_PASS'              => 'bracp',
+                'APP_SQL_DATA'              => 'bracp',
+                'APP_SQL_PERSISTENT'        => false,
+                'APP_SQL_CONNECTION_STRING' => 'mysql:host=%s;dbname=%s', // Montar
+
+                // Configurações de cache local
+                'APP_CACHE_ENABLED'         => false,
+                'APP_CACHE_TIMEOUT'         => 600,
+
+                // Configurações de linguagem, temas e plugins
+                'APP_DEFAULT_LANGUAGE'      => 'pt-BR',
+                'APP_DEFAULT_THEME'         => 'classic',
+                'APP_PLUGIN_ALLOWED'        => true,
+
+                // Configurações de RECAPTCHA
+                'APP_RECAPTCHA_ENABLED'     => false,
+                'APP_RECAPTCHA_SITE_KEY'    => '',
+                'APP_RECAPTCHA_PRIV_KEY'    => '',
+
+                // Configurações de firewall
+                'APP_FIREWALL_ALLOWED'      => false,
+                'APP_FIREWALL_RULE_CONFIG'  => false,
+                'APP_FIREWALL_MANAGER'      => false,
+
+                // Configurações de API para o facebook
+                'APP_FACEBOOK_ENABLED'      => false,
+                'APP_FACEBOOK_APP_ID'       => '',
+                'APP_FACEBOOK_APP_SECRET'   => '',
+
+                // Configurações para o google authenticator
+                'APP_GOOGLE_AUTH_MAX_ERRORS'    => 3,
+                'APP_GOOGLE_AUTH_NAME'          => 'brACP',
+
+                // ---------- CONFIGURAÇÕES PARA O RAGNAROK ---------- //
+
+                'BRACP_ACCOUNT_CREATE'                  => true,
+                'BRACP_ACCOUNT_PASSWORD_HASH'           => 'sha512',
+                'BRACP_ACCOUNT_VERIFY'                  => true,
+                'BRACP_ACCOUNT_VERIFY_EXPIRE'           => 7200,
+                'BRACP_ACCOUNT_WRONGPASS_BLOCKCOUNT'    => 5,
+                'BRACP_ACCOUNT_WRONGPASS_BLOCKTIME'     => 900,
+
+                'BRACP_REGEXP_NAME'                     => '^[a-zA-ZÀ-ú0-9\s]{5,256}$',
+                'BRACP_REGEXP_MAIL'                     => '^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$',
+                'BRACP_REGEXP_PASS'                     => '^((?=.*\d)(?=.*[a-zA-Z\s])(?=.*[@#$%])[a-zA-Z0-9\s@$$%]{6,})$',
+
+                'BRACP_SERVER_PING'                     => 500,
+                'BRACP_SERVER_SQL_PERSISTENT'           => false,
+
+                'BRACP_RAG_ACCOUNT_CREATE'              => true,
+                'BRACP_RAG_ACCOUNT_LIMIT'               => 5,
+                'BRACP_RAG_ACCOUNT_PASSWORD_HASH'       => true,
+                'BRACP_RAG_ACCOUNT_PASSWORD_ALGO'       => 'md5',
+            ];
+        }
+        else
+        {
+            $_tmpConfig = (include $config);
+        }
+
+        // Aplica as constantes de configuração.
+        foreach($_tmpConfig as $k => $v)
+            DEFINE($k, $v, false);
     }
 
     /**

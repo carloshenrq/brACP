@@ -266,8 +266,13 @@ class AppController extends \AppComponent
             return !empty($value) && preg_match('/^([a-z0-9_]+)$/i', $value);
         }));
 
+        // Configurações do controller default.
+        $defaultController = 'home';
+        if(defined('APP_INSTALL_MODE') && constant('APP_INSTALL_MODE'))
+            $defaultController = 'install';
+
         // Verifica se o controller foi definido, caso não tenha sido, define como Home
-        $controller = '\\Controller\\' . ucfirst(((isset($routeParams[0])) ? array_shift($routeParams) : 'home'));
+        $controller = '\\Controller\\' . ucfirst(((isset($routeParams[0])) ? array_shift($routeParams) : $defaultController));
 
         // Verifica o action a ser executado.
         $action = ((isset($routeParams[0])) ? implode('_', $routeParams) : 'index') . '_' . strtoupper($request->getMethod());
@@ -295,12 +300,12 @@ class AppController extends \AppComponent
             if(!($obj instanceof \Controller\AppController))
                 throw new \AppException();
 
-
             // Resposta em relação a solicitação.
             $response = $obj->callRoute($action, $response, (object)$args);
 
             // Retorna o tamanho da requisição para os dados.
-            $app->getFirewall()->setResponseLength($response->getBody()->getSize());
+            if(!defined('APP_INSTALL_MODE') || !constant('APP_INSTALL_MODE'))
+                $app->getFirewall()->setResponseLength($response->getBody()->getSize());
 
             // Retorna a resposta do servidor.
             return $response;
