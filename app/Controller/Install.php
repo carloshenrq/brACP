@@ -17,50 +17,32 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-class App extends \CHZApp\Application
+namespace Controller;
+
+class Install extends Controller
 {
 	/**
-	 * This var defines if we are in install mode or running mode.
-	 * @var boolean
-	 */
-	private $installMode;
-
-	/**
-	 * Checks if this is on the install mode
-	 * @return boolean
-	 */
-	public function isInstallMode()
-	{
-		return $this->installMode;
-	}
-
-	/**
-	 * @see \CHZApp\Application::init()
+	 * @see Controller::init()
 	 */
 	protected function init()
 	{
-
-		// Verify if exists the install configuration file.
-		// We write on it to keep the install data safe and easly changeable.
-		$config = join(DIRECTORY_SEPARATOR, [
-			__DIR__, '..', 'config.php'
-		]);
-
-		// If this is not in install mode, then load all config data and
-		// Apply it on us config.
-		if(!($this->installMode = !file_exists($config)))
-		{
-
-		}
-
+		// This install controller and routes only will grant access if the
+		// project is running under install mode.
+		$this->applyRestrictionOnAllRoutes(function() {
+			return $this->getApplication()->isInstallMode();
+		});
 	}
 
 	/**
-	 * @see \CHZApp\Application::installSchema()
+	 * This is the default route install and grant data
+	 *
+	 * @param object $response
+	 * @param array $args
+	 *
+	 * @return object
 	 */
-	public function installSchema($schema)
+	public function index_GET($response, $args)
 	{
-
-	} 
-
+		return $response;
+	}
 }
