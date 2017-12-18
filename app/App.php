@@ -52,6 +52,13 @@ class App extends \CHZApp\Application
 		{
 
 		}
+		else
+		{
+			// Sets Smarty configurations for install...
+			$this->setSmartyConfigs([
+        		'templateDir'	=> join(DIRECTORY_SEPARATOR, [__DIR__, 'View']),
+			]);
+		}
 
 	}
 

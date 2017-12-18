@@ -35,7 +35,7 @@ class Controller extends \CHZApp\Controller
 		// This override is just for installation test. If we are under install
 		// And we aren't in install route... then response with install route...
 		if($this->getApplication()->isInstallMode()
-			&& !($this instanceof Install) )
+			&& !($this instanceof Install || $this instanceof Asset) )
 		{
 			$serverParams = $request->getServerParams();
 			$requestUri = $serverParams['REQUEST_URI'];

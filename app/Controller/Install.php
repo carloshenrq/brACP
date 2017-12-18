@@ -22,6 +22,12 @@ namespace Controller;
 class Install extends Controller
 {
 	/**
+	 * Gets the install-key in the memory for future use and checks.
+	 * @var string
+	 */
+	private $installKey;
+
+	/**
 	 * @see Controller::init()
 	 */
 	protected function init()
@@ -40,6 +46,9 @@ class Install extends Controller
 		if($installKey === false)
 			exit('No install key found, please run "install.php" and try again.');
 
+		// Gets the install key and put it in the memory.
+		$this->installKey = include_once $installKey;
+
 		// This install controller and routes only will grant access if the
 		// project is running under install mode.
 		$this->applyRestrictionOnAllRoutes(function() {
@@ -57,6 +66,6 @@ class Install extends Controller
 	 */
 	public function index_GET($response, $args)
 	{
-		return $response;
+		return $this->response($response, 'install.html');
 	}
 }
