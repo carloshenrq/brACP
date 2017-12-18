@@ -1,0 +1,13 @@
+RewriteEngine On
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ index.php [QSA,L]
+
+<FilesMatch "\.(xml|xsd|db|tpl|json|lock|zip|md|sql|log|cache|index|dist|txt|test|scss|js|png|gif|jpg|jpeg|gitignore|yaml|bat)$">
+    Order allow,deny
+    Deny from all
+    Satisfy All
+</FilesMatch>
+
+Options -Indexes

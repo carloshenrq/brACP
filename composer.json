@@ -1,0 +1,6 @@
+{
+    "require" : {
+        "carloshlfz/framework":"dev-master",
+        "phpgangsta/googleauthenticator":"dev-master"
+    }
+}
