@@ -26,6 +26,20 @@ class Install extends Controller
 	 */
 	protected function init()
 	{
+		// Gets the install-key.php file and writes it on the memory.
+		// If the file it's not present, so, throw a nice error...
+		$installKey = realpath(join(DIRECTORY_SEPARATOR, [
+			__DIR__,
+			'..',
+			'..',
+			'install-key.php'
+		]));
+
+		// If there is no 'install-key.php' file, so, show the error informing
+		// de user needs to run install.php to new key be generated...
+		if($installKey === false)
+			exit('No install key found, please run "install.php" and try again.');
+
 		// This install controller and routes only will grant access if the
 		// project is running under install mode.
 		$this->applyRestrictionOnAllRoutes(function() {

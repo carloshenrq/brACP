@@ -2,5 +2,10 @@
     "require" : {
         "carloshlfz/framework":"dev-master",
         "phpgangsta/googleauthenticator":"dev-master"
+    },
+    "scripts" : {
+    	"post-update-cmd" : [
+    		"@php install.php"
+    	]
     }
 }
