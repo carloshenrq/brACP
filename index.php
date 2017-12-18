@@ -17,11 +17,14 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Test if exists the composer.lock file, if not, can't run... it's needed for
-// correct run
-if(!file_exists('composer.lock'))
-{
-	echo 'Please install composer dependencies';
-	exit;
-}
+// Composer 'autoload' file. This is needed to run everything correctly. if this don't exists, then the project cant go on.
+$composerFile = join(DIRECTORY_SEPARATOR, [
+		__DIR__,
+		'vendor',
+		'autoload.php'
+]);
+
+if(!file_exists($composerFile))
+	exit("Can't find composer dependencies. Please, verify your instalation and try again.");
+
 
