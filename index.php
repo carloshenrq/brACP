@@ -27,4 +27,32 @@ $composerFile = join(DIRECTORY_SEPARATOR, [
 if(!file_exists($composerFile))
 	exit("Can't find composer dependencies. Please, verify your instalation and try again.");
 
+// When the file exists, include it to run properly.
+require_once $composerFile;
 
+// This is a vector with all files needing to be included, if the file can't be find, then we can't run.
+$filesInclude = [
+
+	// Main app file to be included, don't remove it!!!
+	join(DIRECTORY_SEPARATOR, [
+		__DIR__,
+		'app',
+		'autoload.php'
+	]),
+
+	// If you need more files to be loaded, please do it from here and below...
+
+];
+
+// Pass item a item to include and run all programs.
+foreach($filesInclude as $file)
+{
+	if(!file_exists($file))
+		exit("Configuration file needed can't be found. Please verify your install folder.");
+
+	require_once $file;
+}
+
+// Runs the application.
+$app = new App;
+$app->run();
