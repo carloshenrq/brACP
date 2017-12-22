@@ -28,6 +28,12 @@ class Install extends Controller
 	private $installKey;
 
 	/**
+	 * Gets the server-address
+	 * @var string
+	 */
+	private $serverAddress;
+
+	/**
 	 * @see Controller::init()
 	 */
 	protected function init()
@@ -54,6 +60,10 @@ class Install extends Controller
 		$this->applyRestrictionOnAllRoutes(function() {
 			return $this->getApplication()->isInstallMode();
 		});
+
+		// Gets the IP address from the server. May it suggest the mysql
+		// and others ips if the user don't change it...
+		$this->serverAddress = $this->getApplication()->getHttpClient()->getServerIpAddress();
 	}
 
 	/**
