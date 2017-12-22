@@ -76,6 +76,9 @@ class Install extends Controller
 	 */
 	public function index_GET($response, $args)
 	{
-		return $this->response($response, 'install.html');
+		return $this->response($response, 'install.html', [
+			// This is a serverAddress as parameter to mysql and other stuffs
+			'serverAddress'	=> $this->serverAddress,
+		]);
 	}
 }

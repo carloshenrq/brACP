@@ -1,4 +1,4 @@
-{**
+/**
  *  brACP - brAthena Control Panel for Ragnarok Emulators
  *  Copyright (C) 2015  brAthena, CHLFZ
  *
@@ -14,24 +14,4 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *}
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>INSTALL</title>
-
-		{* This are the default js files. Vue and axios to send requests... Don't touch it w(ò_ó)w *}
-		<script src="{$DEFAULT_ROUTE}/asset/js/vue.js"></script>
-		<script src="{$DEFAULT_ROUTE}/asset/js/axios.js"></script>
-
-	</head>
-	<body>
-
-		{$DEFAULT_ROUTE}
-
-	</body>
-
-	{* This are de install js file *}
-	<script src="{$DEFAULT_ROUTE}/asset/js/vue.install.js"></script>
-</html>
-
+ */
